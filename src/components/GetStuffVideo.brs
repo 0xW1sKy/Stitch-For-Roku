@@ -39,14 +39,14 @@ sub extractThumbnailUrl(streamUrl)
                     '? "response code: "; url2.GetToFile("tmp:/thumbnails.jpg")
                     '? "response: "; url2.GetToString()
                     m.top.thumbnailInfo = { count: thumbnailInfo[1].count,
-                                            width: thumbnailInfo[1].width,
-                                            rows: thumbnailInfo[1].rows,
-                                            interval: thumbnailInfo[1].interval,
-                                            cols: thumbnailInfo[1].cols,
-                                            height: thumbnailInfo[1].height,
-                                            info_url: info_url,
-                                            thumbnail_parts: thumbnailInfo[1].images,
-                                            video_id: m.top.videoId }
+                        width: thumbnailInfo[1].width,
+                        rows: thumbnailInfo[1].rows,
+                        interval: thumbnailInfo[1].interval,
+                        cols: thumbnailInfo[1].cols,
+                        height: thumbnailInfo[1].height,
+                        info_url: info_url,
+                        thumbnail_parts: thumbnailInfo[1].images,
+                    video_id: m.top.videoId }
                 else
                     m.top.thumbnailInfo = { video_id: m.top.videoId }
                 end if
@@ -58,8 +58,8 @@ sub extractThumbnailUrl(streamUrl)
     end while
 end sub
 
-function getStreamLink() as Object
-    access_token_url = "https://api.twitch.tv/api/vods/" + m.top.videoId + "/access_token?need_https=true&client_id=jzkbprff40iqj646a697cyrvl0zt2m6&platform=_&player_backend=mediaplayer&player_type=channel_home_live"
+function getStreamLink() as object
+    ' access_token_url = "https://api.twitch.tv/api/vods/" + m.top.videoId + "/access_token?need_https=true&client_id=jzkbprff40iqj646a697cyrvl0zt2m6&platform=_&player_backend=mediaplayer&player_type=channel_home_live"
 
     url = CreateObject("roUrlTransfer")
     url.EnableEncodings(true)
@@ -67,15 +67,17 @@ function getStreamLink() as Object
     url.SetCertificatesFile("common:/certs/ca-bundle.crt")
     url.InitClientCertificates()
 
-    url.SetUrl(access_token_url)
-    response_string = url.GetToString()
-    access_token = ParseJson(response_string)
-    
-    if access_token = invalid
-        return ""
-    end if
+    ' url.SetUrl(access_token_url)
+    ' response_string = url.GetToString()
+    ' access_token = ParseJson(response_string)
 
-    stream_link = "https://usher.ttvnw.net/vod/" + m.top.videoId + ".m3u8?allow_source=true&allow_spectre=true&type=any&playlist_include_framerate=true&token=" + access_token.token + "&sig=" + access_token.sig
+    ' if access_token = invalid
+    '     return ""
+    ' end if
+
+    ' stream_link = "https://usher.ttvnw.net/vod/" + m.top.videoId + ".m3u8?allow_source=true&allow_spectre=true&type=any&playlist_include_framerate=true&token=" + access_token.token + "&sig=" + access_token.sig
+    ? "request vod: "; m.top.videoId
+    stream_link = "https://twitch.k10labs.workers.dev/stream?vod=" + m.top.videoId
 
     url.SetUrl(stream_link.EncodeUri())
 

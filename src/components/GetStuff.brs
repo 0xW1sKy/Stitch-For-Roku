@@ -33,7 +33,8 @@ function getStreamLink() as object
     'stream_link = "http://usher.ttvnw.net/api/channel/hls/" + m.top.streamerRequested + ".m3u8?allow_source=true&fast_bread=true&p=3737804&play_session_id=ea4af70a988073e598e8c1cab7fc6281&player_backend=mediaplayer&playlist_include_framerate=true&reassignments_supported=true&sig=" + access_token.data.streamPlaybackAccessToken.signature + "&supported_codecs=vp09,avc1&token=" + access_token.data.streamPlaybackAccessToken.value + "&cdm=wv" + "&player_version=1.2.0"
 
     stream_link = "https://twitch.k10labs.workers.dev/stream?streamer=" + m.top.streamerRequested
-
+    url.AddHeader("Origin", "https://player.twitch.tv")
+    url.AddHeader("Referer", "https://player.twitch.tv")
     url.SetUrl(stream_link.EncodeUri())
 
     rsp = url.GetToString()
