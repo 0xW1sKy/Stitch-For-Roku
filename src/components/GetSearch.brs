@@ -30,7 +30,7 @@ function getSearchResults() as object
         ? "we using global"
         url.AddHeader("Authorization", m.global.appBearerToken)
     end if
-    ? m.global.userToken
+    ' ? m.global.userToken
     url.AddHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36")
     url.AddHeader("Accept", "application/vnd.twitchtv.v5+json")
     url.InitClientCertificates()
