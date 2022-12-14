@@ -4,7 +4,7 @@ function createUrl()
     url.RetainBodyOnError(true)
     url.SetCertificatesFile("common:/certs/ca-bundle.crt")
     url.InitClientCertificates()
-    url.AddHeader("Client-ID", "w9msa6phhl3u8s2jyjcmshrfjczj2y")
+    url.AddHeader("Client-ID", "kimne78kx3ncx6brgo4mv6wki5h1ko")
     while m.global.appBearerToken = invalid
     end while
     userToken = m.global.userToken
