@@ -26,6 +26,7 @@ sub extractThumbnailUrl(streamUrl)
                 ? "video info url > "; info_url + m.top.videoId + "-info.json"
                 response_string = url.GetToString()
                 thumbnailInfo = ParseJson(response_string)
+                ? "thumbnail info > "; thumbnailInfo
                 if thumbnailInfo <> invalid and thumbnailInfo[0] <> invalid
                     url2 = CreateObject("roUrlTransfer")
                     url2.EnableEncodings(true)
