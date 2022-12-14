@@ -13,13 +13,13 @@ function createUrl()
         ? "we usin " userToken
         url.AddHeader("Authorization", "Bearer " + m.global.userToken)
     else
-        ? "we using global"
-        url.AddHeader("Authorization", m.global.appBearerToken)
+        refreshToken()
+        return createUrl()
     end if
     return url
 end function
 
-function GETJSON(link as String) as Object
+function GETJSON(link as string) as object
     url = createUrl()
     url.SetUrl(link.EncodeUri())
 
@@ -28,7 +28,7 @@ function GETJSON(link as String) as Object
     return ParseJson(response_string)
 end function
 
-function POST(request_url as String, request_payload as String) as String
+function POST(request_url as string, request_payload as string) as string
     url = CreateObject("roUrlTransfer")
     url.EnableEncodings(true)
     url.RetainBodyOnError(true)
@@ -44,7 +44,7 @@ function POST(request_url as String, request_payload as String) as String
     url.SetMessagePort(port)
 
     url.AsyncPostFromString(request_payload)
-    
+
     response = Wait(0, port)
 
     return response.GetString()
@@ -83,7 +83,7 @@ function getRefreshToken()
     return ""
 end function
 
-function saveLogin(access_token, refresh_token, login) as Void
+function saveLogin(access_token, refresh_token, login) as void
     sec = createObject("roRegistrySection", "LoggedInUserData")
     sec.Write("UserToken", access_token)
     sec.Write("RefreshToken", refresh_token)

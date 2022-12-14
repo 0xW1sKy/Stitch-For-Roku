@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <component name="SearchResultItem" extends="Group">
 
@@ -13,17 +13,17 @@
         <MaskGroup
             id="itemIcon"
             maskuri="pkg:/images/profile-mask.png"
-            maskSize="[50,50]" >
-            <Poster 
+            maskSize="[50,50]">
+            <Poster
                 id="image"
                 width="50"
                 height="50" />
         </MaskGroup>
-        
+
         <SimpleLabel
             id="itemTitle"
             translation="[60,10]"
-            fontUri="pkg:/fonts/Roobert-Regular.ttf" />    
+            fontUri="pkg:/fonts/Roobert-Regular.ttf" />
 
     </children>
 
