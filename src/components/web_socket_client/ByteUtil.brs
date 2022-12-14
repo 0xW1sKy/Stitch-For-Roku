@@ -195,7 +195,7 @@ function bit_at_position(a as integer, position as integer) as boolean
     position_num <<= position - 1
     if (a and position_num) > 0
         return true
-    else 
+    else
         return false
     end if
 end function
@@ -313,7 +313,7 @@ function multiply_bytes(a as object, b as object) as object
         if carry > 0
             next_sum.push(carry)
         end if
-       ' ? "multiply_bytes >> next_sum > " next_sum
+        ' ? "multiply_bytes >> next_sum > " next_sum
         if last_sum = invalid
             last_sum = createObject("roByteArray")
             last_sum = next_sum
@@ -463,7 +463,7 @@ function expNN(x as object, y as object, mm as object) as object
 
     ' x^1 mod mm == x mod mm
     if y.count() = 1 and y[0] = 1 and mm.count() <> 0
-        q_r = div(z, x, mm)
+        q_r = func_div(z, x, mm)
         z = q_r.r
         return z
     end if
@@ -496,7 +496,7 @@ function expNNWindowed(z as object, x as object, y as object, mm as object) as o
         p2 = powers[i / 2]
         p = powers[i]
         p1 = powers[i + 1]
-        
+
         i += 2
     end while
 end function
@@ -506,7 +506,7 @@ function expNNMontgomery(z as object, x as object, y as object, mm as object) as
 
     if x.count() > numWords
         nil = createObject("roByteArray")
-        q_r = div(nil, x, mm)
+        q_r = func_div(nil, x, mm)
         x = q_r.r
     end if
     if x.count() < numWords
@@ -530,7 +530,7 @@ function expNNMontgomery(z as object, x as object, y as object, mm as object) as
     nil = createObject("roByteArray")
     zz = shl(nil, rr2, 2 * numWords * 64)
     nil = createObject("roByteArray")
-    q_r = div(rr2, zz, mm)
+    q_r = func_div(rr2, zz, mm)
     rr2 = q_r.r
     if rr2.count() < numWords
         zz = getBig(numWords)
@@ -582,7 +582,7 @@ function expNNMontgomery(z as object, x as object, y as object, mm as object) as
         zz = sub_big(zz, zz, mm)
         if cmp(zz, mm) >= 0
             nil = createObject("roByteArray")
-            q_r = div(nil, zz, mm)
+            q_r = func_div(nil, zz, mm)
             zz = q_r.r
         end if
     end if
@@ -661,18 +661,18 @@ function shl(z as object, x as object, s) as object
 
     n = l + int(s / 64)
     z = getBig(n + 1)
-    z[n] = shlVU(byte_array_sub(z, n - l, n), x, s MOD 64)
+    z[n] = shlVU(byte_array_sub(z, n - l, n), x, s mod 64)
     clearFrom(z, 0, n - l)
-    
+
     return norm(z)
 end function
 
-function div(z2 as object, u as object, v as object) as object
+function func_div(z2 as object, u as object, v as object) as object
     z = createObject("roByteArray")
     if v.count() = 0
         return invalid
     end if
-    
+
     q_r = {}
 
     if cmp(u, v) < 0
@@ -696,7 +696,7 @@ function div(z2 as object, u as object, v as object) as object
     end if
 
     q_r = divLarge(z, z2, u, v)
-    
+
     return q_r
 end function
 
@@ -782,7 +782,7 @@ function divRecursiveStep(z as object, u as object, v as object, depth as intege
     if l < 0
         return invalid
     end if
-    
+
     B = n / 2
     if temps[depth] = invalid
         temps[depth] = getBig(n)
@@ -956,7 +956,7 @@ end function
 
 function karatsuba(z as object, x as object, y as object)
     n = y.count()
-    
+
     if (n and 1) <> 0 or n < 40 or n < 2
         basicMul(z, x, y)
         return invalid
@@ -979,7 +979,7 @@ function karatsuba(z as object, x as object, y as object)
         subVV_g(xd, x0, x1)
     end if
 
-    yd = byte_array_sub(z, 2*n + n2, 3 * n)
+    yd = byte_array_sub(z, 2 * n + n2, 3 * n)
     if subVV_g(yd, y0, y1) <> 0
         s = -s
         subVV_g(yd, y1, y0)
@@ -1048,7 +1048,7 @@ function basicMul(z, x, y)
         end if
         i++
         d++
-    end while 
+    end while
 end function
 
 function addMulVVW_g(z as object, x as object, y as integer) as integer
@@ -1182,7 +1182,7 @@ function addVV_g(z as object, x as object, y as object)
     return c
 end function
 
-function subVV_g(z as object, x as object, y as object) 
+function subVV_g(z as object, x as object, y as object)
     i = 0
     c = 0
     while i < z.count() and i < x.count() and i < y.count()
@@ -1192,7 +1192,7 @@ function subVV_g(z as object, x as object, y as object)
         z[i] = zi
         c = cc
         i++
-    end while 
+    end while
     return c
 end function
 
