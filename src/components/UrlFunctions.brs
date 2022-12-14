@@ -13,8 +13,8 @@ function createUrl()
         ? "we usin " userToken
         url.AddHeader("Authorization", "Bearer " + m.global.userToken)
     else
-        refreshToken()
-        return createUrl()
+        ? "we using global"
+        url.AddHeader("Authorization", m.global.appBearerToken)
     end if
     return url
 end function
