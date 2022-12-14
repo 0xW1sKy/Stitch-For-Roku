@@ -72,8 +72,6 @@ function TlsUtil(socket = invalid as object) as object
     tls_util.ready_state = tls_util.STATE_DISCONNECTED
     tls_util._socket = socket
     tls_util._hostname = invalid
-    tls_util._client_hello_random = invalid
-    tls_util._server_hello_random = invalid
     tls_util._cipher_suite = invalid
     tls_util._handshake_buffer = createObject("roByteArray")
     tls_util._supported_extensions = []
@@ -189,8 +187,7 @@ function TlsUtil(socket = invalid as object) as object
     ' @param frame roByteArray frame
     ' @return potentially empty roByteArray or invalid on error. disconnect state is handled on error
     tls_util._handle_fragment = function (self as object, content_type as integer, fragment as object) as object
-        'printl("VERBOSE", "TlsUtil: Received fragment of type " + content_type.toStr() + ": " + fragment.toHexString())
-        ? "TlsUtil: Received fragment of type " + content_type.toStr() + ": " + fragment.toHexString()
+        printl("VERBOSE", "TlsUtil: Received fragment of type " + content_type.toStr() + ": " + fragment.toHexString())
         decoded_app_data = createObject("roByteArray")
         while fragment.count() > 0
             ' Handshake
@@ -273,11 +270,10 @@ function TlsUtil(socket = invalid as object) as object
             for byte_index = 6 to 33
                 random.push(handshake[byte_index])
             end for
-            self._server_hello_random = random
             session_id = createObject("roByteArray")
             session_id_length = handshake[34]
             for byte_index = 35 to 34 + session_id_length
-                session_id.push(handshake[byte_index])
+                random.push(handshake[byte_index])
             end for
             cipher_suite = createObject("roByteArray")
             cipher_suite.push(handshake[35 + session_id_length])
@@ -333,10 +329,8 @@ function TlsUtil(socket = invalid as object) as object
                     end if
                 end for
             end for
-            'printl("DEBUG", "TlsUtil: Received ServerHello:")
-            ? "TlsUtil: Received ServerHello:"
-            'printl("DEBUG", "  cipher suite: " + cipher_suite.toHexString())
-            ?   "cipher suite: " + cipher_suite.toHexString()
+            printl("DEBUG", "TlsUtil: Received ServerHello:")
+            printl("DEBUG", "  cipher suite: " + cipher_suite.toHexString())
         ' Certificate
         else if handshake_type = self._HANDSHAKE_TYPE.CERTIFICATE
             certificate_list = []
@@ -364,18 +358,15 @@ function TlsUtil(socket = invalid as object) as object
                 certificate_index += 3 + certificate_size
             end while
             self._certificates = certificate_list
-            'printl("DEBUG", "TlsUtil: Received Certificate: " + certificate_list.count().toStr() + " certificates")
-            ? "TlsUtil: Received Certificate: " + certificate_list.count().toStr() + " certificates"
+            printl("DEBUG", "TlsUtil: Received Certificate: " + certificate_list.count().toStr() + " certificates")
         ' ServerKeyExchange
         else if handshake_type = self._HANDSHAKE_TYPE.SERVER_KEY_EXCHANGE
-            'printl("DEBUG", "TlsUtil: Received ServerKeyExchange: " + handshake.toHexString())
-            ? "TlsUtil: Received ServerKeyExchange: " + handshake.toHexString()
+            printl("DEBUG", "TlsUtil: Received ServerKeyExchange: " + handshake.toHexString())
             self._error_handshake(self)
             return false
         ' Certificate Request
         else if handshake_type = self._HANDSHAKE_TYPE.CERTIFICATE_REQUEST
-            'printl("DEBUG", "TlsUtil: Received CertificateRequest: " + handshake.toHexString())
-            ? "TlsUtil: Received CertificateRequest: " + handshake.toHexString()
+            printl("DEBUG", "TlsUtil: Received CertificateRequest: " + handshake.toHexString())
             self._error_handshake(self)
             return false
         ' ServerHelloDone
@@ -386,14 +377,12 @@ function TlsUtil(socket = invalid as object) as object
                 self._error(self, self._ALERT_TYPE.BAD_CERTIFICATE, "Server certificate failed to verify", true)
                 return false
             end if
-            'printl("DEBUG", "TlsUtil: Received ServerHelloDone")
-            ? "TlsUtil: Received ServerHelloDone"
+            printl("DEBUG", "TlsUtil: Received ServerHelloDone")
             self._send_client_key_exchange(self)
             self._send_client_finish(self)
         ' Finished
         else if handshake_type = self._HANDSHAKE_TYPE.FINISHED
-            'printl("DEBUG", "TlsUtil: Received Finished: " + handshake.toHexString())
-            ? "TlsUtil: Received Finished: " + handshake.toHexString()
+            printl("DEBUG", "TlsUtil: Received Finished: " + handshake.toHexString())
         end if
         return true
     end function
@@ -407,21 +396,18 @@ function TlsUtil(socket = invalid as object) as object
     ' Send the client key exchange handshake message
     ' @param self TlsUtil
     tls_util._send_client_key_exchange = function (self as object) as void
-        'printl("EXTRA", "TlsUtil: Generating client key exchange message")
-        ? "TlsUtil: Generating client key exchange message"
+        printl("EXTRA", "TlsUtil: Generating client key exchange message")
         ' TLS_RSA_WITH_AES_128_GCM_SHA256 || TLS_RSA_WITH_AES_256_GCM_SHA384 || TLS_RSA_WITH_AES_128_CBC_SHA256 || TLS_RSA_WITH_AES_256_CBC_SHA256
         if byte_array_equals(byte_array([&h00, &h9c]), self._cipher_suite) or byte_array_equals(byte_array([&h00, &h9d]), self._cipher_suite) or byte_array_equals(byte_array([&h00, &h3c]), self._cipher_suite) or byte_array_equals(byte_array([&h00, &h3d]), self._cipher_suite)
-            'printl("DEBUG", "TlsUtil: Generating RSA premaster secret")
-            ? "TlsUtil: Generating RSA premaster secret"
+            printl("DEBUG", "TlsUtil: Generating RSA premaster secret")
             secret = createObject("roByteArray")
             secret.append(byte_array(self._TLS_VERSION))
             for byte_index = 0 to 45
                 secret.push(rnd(256) - 1)
             end for
-            encrypted_secret = rsa_encrypt(secret, self._server_public_key)
+            encrypted_secret = rsa_encrypt(self._server_public_key, secret)
         else
-            'printl("FATAL", "TlsUtil: Unhandled cipher suite: " + self._cipher_suite.toStr())
-            ? "TlsUtil: Unhandled cipher suite: " + self._cipher_suite.toStr()
+            printl("FATAL", "TlsUtil: Unhandled cipher suite: " + self._cipher_suite.toStr())
         end if
     end function
     
@@ -430,267 +416,9 @@ function TlsUtil(socket = invalid as object) as object
     tls_util._verify_certificate = function (self as object) as boolean
         ' TODO validate the certificate
         self._server_public_key = createObject("roByteArray")
-        
-        certificate = self._certificates[0]
-        print certificate.toHexString()
-
-        current_byte = 0
-
-        ' Certificate
-        if certificate[current_byte] = &h30
-            current_byte++
-            length = 0
-            length_form = bit_at_position(certificate[current_byte], 8)
-            if length_form = false ' short form
-                length = certificate[current_byte] and &h7F
-            else if length_form = true ' long form
-                additional_length_bytes = certificate[current_byte] and &h7F
-                current_byte++
-                length = certificate[current_byte]
-                ? "TlsUtil: length " length " (" current_byte ")" " (" additional_length_bytes ")"
-                for b = 1 to additional_length_bytes - 1
-                    current_byte++
-                    length <<= 8
-                    length = length or certificate[current_byte]
-                    ? "TlsUtil: length " length " (" current_byte ")" " (" additional_length_bytes ")"
-                end for
-            end if
-            current_byte++
-            ' TBSCertificate
-            if certificate[current_byte] = &h30
-                current_byte++
-                length = 0
-                length_form = bit_at_position(certificate[current_byte], 8)
-                if length_form = false ' short form
-                    length = certificate[current_byte] and &h7F
-                else if length_form = true ' long form
-                    additional_length_bytes = certificate[current_byte] and &h7F
-                    current_byte++
-                    length = certificate[current_byte]
-                    ? "TlsUtil: length " length " (" current_byte ")" " (" additional_length_bytes ")"
-                    for b = 1 to additional_length_bytes - 1
-                        current_byte++
-                        length <<= 8
-                        length = length or certificate[current_byte]
-                        ? "TlsUtil: length " length " (" current_byte ")" " (" additional_length_bytes ")"
-                    end for
-                end if
-                current_byte++
-                ' version
-                if certificate[current_byte] = &hA0
-                    current_byte++
-                    length = 0
-                    length_form = bit_at_position(certificate[current_byte], 8)
-                    if length_form = false ' short form
-                        length = certificate[current_byte] and &h7F
-                    else if length_form = true ' long form
-                        additional_length_bytes = certificate[current_byte] and &h7F
-                        current_byte++
-                        length = certificate[current_byte]
-                        ? "TlsUtil: length " length " (" current_byte ")" " (" additional_length_bytes ")"
-                        for b = 1 to additional_length_bytes - 1
-                            current_byte++
-                            length <<= 8
-                            length = length or certificate[current_byte]
-                            ? "TlsUtil: length " length " (" current_byte ")" " (" additional_length_bytes ")"
-                        end for
-                    end if
-                    current_byte++
-                    ' version INTEGER
-                    for b = 1 to length
-                        ? "version INTEGER " certificate[current_byte]
-                        current_byte++
-                    end for
-                    ' serialNumber
-                    current_byte++
-                    length = 0
-                    length_form = bit_at_position(certificate[current_byte], 8)
-                    if length_form = false ' short form
-                        length = certificate[current_byte] and &h7F
-                    else if length_form = true ' long form
-                        additional_length_bytes = certificate[current_byte] and &h7F
-                        current_byte++
-                        length = certificate[current_byte]
-                        ? "TlsUtil: length " length " (" current_byte ")" " (" additional_length_bytes ")"
-                        for b = 1 to additional_length_bytes - 1
-                            current_byte++
-                            length <<= 8
-                            length = length or certificate[current_byte]
-                            ? "TlsUtil: length " length " (" current_byte ")" " (" additional_length_bytes ")"
-                        end for
-                    end if
-                    current_byte++
-                    for b = 1 to length
-                        ? "version INTEGER " certificate[current_byte]
-                        current_byte++
-                    end for
-                    ' signature
-                    current_byte++
-                    length = 0
-                    length_form = bit_at_position(certificate[current_byte], 8)
-                    if length_form = false ' short form
-                        length = certificate[current_byte] and &h7F
-                    else if length_form = true ' long form
-                        additional_length_bytes = certificate[current_byte] and &h7F
-                        current_byte++
-                        length = certificate[current_byte]
-                        ? "TlsUtil: length " length " (" current_byte ")" " (" additional_length_bytes ")"
-                        for b = 1 to additional_length_bytes - 1
-                            current_byte++
-                            length <<= 8
-                            length = length or certificate[current_byte]
-                            ? "TlsUtil: length " length " (" current_byte ")" " (" additional_length_bytes ")"
-                        end for
-                    end if
-                    current_byte++
-                    for b = 1 to length
-                        ? "version INTEGER " certificate[current_byte]
-                        current_byte++
-                    end for
-                    ' issuer
-                    current_byte++
-                    length = 0
-                    length_form = bit_at_position(certificate[current_byte], 8)
-                    if length_form = false ' short form
-                        length = certificate[current_byte] and &h7F
-                    else if length_form = true ' long form
-                        additional_length_bytes = certificate[current_byte] and &h7F
-                        current_byte++
-                        length = certificate[current_byte]
-                        ? "TlsUtil: length " length " (" current_byte ")" " (" additional_length_bytes ")"
-                        for b = 1 to additional_length_bytes - 1
-                            current_byte++
-                            length <<= 8
-                            length = length or certificate[current_byte]
-                            ? "TlsUtil: length " length " (" current_byte ")" " (" additional_length_bytes ")"
-                        end for
-                    end if
-                    current_byte++
-                    for b = 1 to length
-                        ? "version INTEGER " certificate[current_byte]
-                        current_byte++
-                    end for
-                    ' validity
-                    current_byte++
-                    length = 0
-                    length_form = bit_at_position(certificate[current_byte], 8)
-                    if length_form = false ' short form
-                        length = certificate[current_byte] and &h7F
-                    else if length_form = true ' long form
-                        additional_length_bytes = certificate[current_byte] and &h7F
-                        current_byte++
-                        length = certificate[current_byte]
-                        ? "TlsUtil: length " length " (" current_byte ")" " (" additional_length_bytes ")"
-                        for b = 1 to additional_length_bytes - 1
-                            current_byte++
-                            length <<= 8
-                            length = length or certificate[current_byte]
-                            ? "TlsUtil: length " length " (" current_byte ")" " (" additional_length_bytes ")"
-                        end for
-                    end if
-                    current_byte++
-                    for b = 1 to length
-                        ? "version INTEGER " certificate[current_byte]
-                        current_byte++
-                    end for
-                    ' subject
-                    current_byte++
-                    length = 0
-                    length_form = bit_at_position(certificate[current_byte], 8)
-                    if length_form = false ' short form
-                        length = certificate[current_byte] and &h7F
-                    else if length_form = true ' long form
-                        additional_length_bytes = certificate[current_byte] and &h7F
-                        current_byte++
-                        length = certificate[current_byte]
-                        ? "TlsUtil: length " length " (" current_byte ")" " (" additional_length_bytes ")"
-                        for b = 1 to additional_length_bytes - 1
-                            current_byte++
-                            length <<= 8
-                            length = length or certificate[current_byte]
-                            ? "TlsUtil: length " length " (" current_byte ")" " (" additional_length_bytes ")"
-                        end for
-                    end if
-                    current_byte++
-                    for b = 1 to length
-                        ? "version INTEGER " certificate[current_byte]
-                        current_byte++
-                    end for
-                    ' subjectPublicKeyInfo
-                    current_byte++
-                    length = 0
-                    length_form = bit_at_position(certificate[current_byte], 8)
-                    if length_form = false ' short form
-                        length = certificate[current_byte] and &h7F
-                    else if length_form = true ' long form
-                        additional_length_bytes = certificate[current_byte] and &h7F
-                        current_byte++
-                        length = certificate[current_byte]
-                        ? "TlsUtil: length " length " (" current_byte ")" " (" additional_length_bytes ")"
-                        for b = 1 to additional_length_bytes - 1
-                            current_byte++
-                            length <<= 8
-                            length = length or certificate[current_byte]
-                            ? "TlsUtil: length " length " (" current_byte ")" " (" additional_length_bytes ")"
-                        end for
-                    end if
-                    current_byte++
-                    ' algorithm
-                    current_byte++
-                    length = 0
-                    length_form = bit_at_position(certificate[current_byte], 8)
-                    if length_form = false ' short form
-                        length = certificate[current_byte] and &h7F
-                    else if length_form = true ' long form
-                        additional_length_bytes = certificate[current_byte] and &h7F
-                        current_byte++
-                        length = certificate[current_byte]
-                        ? "TlsUtil: length " length " (" current_byte ")" " (" additional_length_bytes ")"
-                        for b = 1 to additional_length_bytes - 1
-                            current_byte++
-                            length <<= 8
-                            length = length or certificate[current_byte]
-                            ? "TlsUtil: length " length " (" current_byte ")" " (" additional_length_bytes ")"
-                        end for
-                    end if
-                    current_byte++
-                    for b = 1 to length
-                        ? "version algorithm " certificate[current_byte]
-                        current_byte++
-                    end for
-                    current_byte++
-                    ' subjectPublicKey
-                    length = 0
-                    length_form = bit_at_position(certificate[current_byte], 8)
-                    if length_form = false ' short form
-                        length = certificate[current_byte] and &h7F
-                    else if length_form = true ' long form
-                        additional_length_bytes = certificate[current_byte] and &h7F
-                        current_byte++
-                        length = certificate[current_byte]
-                        ? "TlsUtil: length " length " (" current_byte ")" " (" additional_length_bytes ")"
-                        for b = 1 to additional_length_bytes - 1
-                            current_byte++
-                            length <<= 8
-                            length = length or certificate[current_byte]
-                            ? "TlsUtil: length " length " (" current_byte ")" " (" additional_length_bytes ")"
-                        end for
-                    end if
-                    current_byte++
-                    current_byte++
-                    public_key = createObject("roByteArray")
-                    for b = 1 to length - 1
-                        public_key.push(certificate[current_byte])
-                        current_byte++
-                    end for
-                    ? "SERVER PUBLIC KEY " public_key.ToBase64String()
-                    self._server_public_key = public_key
-                end if
-            end if
-        end if
-       
+        print self._certificates[0]
         print "--"
-
+        print self._certificates[1]
         return true
     end function
     
@@ -725,8 +453,7 @@ function TlsUtil(socket = invalid as object) as object
         ' Protocol version
         client_hello.append(byte_array([3, 3])) ' TLS 1.2
         ' Random
-        self._client_hello_random = self._Random()
-        client_hello.append(self._client_hello_random)
+        client_hello.append(self._Random())
         ' Session id
         client_hello.push(0) ' Length
         ' Ciphersuites
@@ -892,8 +619,7 @@ function TlsUtil(socket = invalid as object) as object
             record.append(short_to_bytes(fragment.count()))
             ' Payload fragment
             record.append(fragment)
-            'printl("VERBOSE", "TlsUtil: Sending: " + record.toHexString())
-            ? "TlsUtil: Sending: " record.toHexString()
+            printl("VERBOSE", "TlsUtil: Sending: " + record.toHexString())
             ' Send
             sent = self._socket.send(record, 0, record.count())
             if sent = record.count()
