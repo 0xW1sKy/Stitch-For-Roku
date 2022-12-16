@@ -6,9 +6,9 @@ function init()
     for each var in environment_variables
         var_info = var.Split("=")
         if var_info[0] = "CLIENT-ID"
-            m.global.addFields({CLIENT_ID: Left(var_info[1], Len(var_info[1]) - 1)})
+            m.global.addFields({ CLIENT_ID: Left(var_info[1], Len(var_info[1]) - 1) })
         else if var_info[0] = "AUTHORIZATION"
-            m.global.addFields({AUTHORIZATION: var_info[1]})
+            m.global.addFields({ AUTHORIZATION: var_info[1] })
         end if
     end for
 
@@ -49,8 +49,8 @@ function init()
     m.lastScene = ""
     m.lastLastScene = ""
 
-    getInfo = createObject("RoSGNode", "GetInfo")
-    getInfo.control = "RUN"
+    ' getInfo = createObject("RoSGNode", "GetInfo")
+    ' getInfo.control = "RUN"
 
     'pubSub = createObject("RoSGNode", "PubSub")
     'pubSub.control = "RUN"
@@ -84,7 +84,7 @@ function init()
         ? "RESETTED"
         setReset("true")
     end if
-    
+
     ' registry = CreateObject("roRegistry")
     ' registry.Delete("LoggedInUserData")
     ' registry.Delete("VideoSettings")
@@ -98,30 +98,30 @@ function init()
 
     videoQuality = checkSavedVideoQuality()
     if videoQuality <> invalid
-        m.global.addFields({videoQuality: Int(Val(videoQuality))})
+        m.global.addFields({ videoQuality: Int(Val(videoQuality)) })
     else
-        m.global.addFields({videoQuality: 2})
+        m.global.addFields({ videoQuality: 2 })
     end if
 
     videoFramerate = checkSavedVideoFramerate()
     if videoQuality <> invalid
-        m.global.addFields({videoFramerate: Int(Val(videoFramerate))})
+        m.global.addFields({ videoFramerate: Int(Val(videoFramerate)) })
     else
-        m.global.addFields({videoFramerate: 60})
+        m.global.addFields({ videoFramerate: 60 })
     end if
 
     chatOption = checkSavedChatOption()
     if chatOption <> invalid and chatOption = "true"
-        m.global.addFields({chatOption: true})
+        m.global.addFields({ chatOption: true })
     else
-        m.global.addFields({chatOption: false})
+        m.global.addFields({ chatOption: false })
     end if
 
     userToken = checkUserToken()
     if userToken <> invalid and userToken <> ""
-        m.global.addFields({userToken: userToken})
+        m.global.addFields({ userToken: userToken })
     else
-        m.global.addFields({userToken: ""})
+        m.global.addFields({ userToken: "" })
     end if
 
     videoBookmarks = checkVideoBookmarks()
@@ -180,7 +180,7 @@ end sub
 
 sub onBearerTokenReceived()
 
-    m.global.addFields({appBearerToken: m.getToken.appBearerToken})
+    m.global.addFields({ appBearerToken: m.getToken.appBearerToken })
 end sub
 
 sub onStreamChangeFromChannelPage()
@@ -189,18 +189,18 @@ sub onStreamChangeFromChannelPage()
     m.chat.visible = false
     m.videoPlayer.chatIsVisible = m.chat.visible
 
-    m.videoPlayer.videoTitle =  m.homeScene.videoTitle
-    m.videoPlayer.channelUsername =  m.homeScene.channelUsername
+    m.videoPlayer.videoTitle = m.homeScene.videoTitle
+    m.videoPlayer.channelUsername = m.homeScene.channelUsername
     'm.videoPlayer.channelAvatar =  ""
-    m.videoPlayer.channelAvatar =  m.homeScene.channelAvatar
+    m.videoPlayer.channelAvatar = m.homeScene.channelAvatar
 
     m.videoPlayer.width = 0
     m.videoPlayer.height = 0
     m.videoPlayer.setFocus(true)
-    
+
     m.keyboardGroup.visible = false
     ' m.channelPage.visible = false
-    
+
     m.videoPlayer.visible = true
     m.videoPlayer.content = m.stream
     m.videoPlayer.thumbnailInfo = m.homeScene.thumbnailInfo
@@ -291,7 +291,7 @@ function checkSavedVideoQuality()
     return invalid
 end function
 
-function checkIfLoggedIn() as Dynamic
+function checkIfLoggedIn() as dynamic
     sec = createObject("roRegistrySection", "LoggedInUserData")
     if sec.Exists("LoggedInUser")
         return sec.Read("LoggedInUser")
@@ -299,13 +299,13 @@ function checkIfLoggedIn() as Dynamic
     return invalid
 end function
 
-function setReset(word as String) as Void
+function setReset(word as string) as void
     sec = createObject("roRegistrySection", "LoggedInUserData")
     sec.Write("Reset", word)
     sec.Flush()
 end function
 
-function saveLogin() as Void
+function saveLogin() as void
     sec = createObject("roRegistrySection", "LoggedInUserData")
     sec.Write("LoggedInUser", m.homeScene.loggedInUserName)
     sec.Flush()
@@ -383,20 +383,20 @@ function onStreamChange()
     else if m.homeScene.visible
         m.currentScene = "home"
         m.chat.channel = m.homeScene.streamerSelectedName 'm.homeScene.streamerRequested
-        m.videoPlayer.videoTitle =  m.homeScene.videoTitle
-        m.videoPlayer.channelUsername =  m.homeScene.channelUsername
-        m.videoPlayer.channelAvatar =  m.homeScene.channelAvatar
-        m.videoPlayer.streamDurationSeconds =  m.homeScene.streamDurationSeconds
+        m.videoPlayer.videoTitle = m.homeScene.videoTitle
+        m.videoPlayer.channelUsername = m.homeScene.channelUsername
+        m.videoPlayer.channelAvatar = m.homeScene.channelAvatar
+        m.videoPlayer.streamDurationSeconds = m.homeScene.streamDurationSeconds
         m.stream["url"] = m.homeScene.streamUrl
     else if m.categoryScene.visible
         m.currentScene = "category"
         m.chat.channel = m.categoryScene.streamerRequested
         m.stream["url"] = m.categoryScene.streamUrl
-    ' else if m.channelPage.visible
-    '     m.currentScene = "channel"
-    '     m.channelPage.visible = false
-    '     m.chat.channel = m.channelPage.streamerSelectedName
-    '     m.stream["url"] = m.channelPage.streamUrl
+        ' else if m.channelPage.visible
+        '     m.currentScene = "channel"
+        '     m.channelPage.visible = false
+        '     m.chat.channel = m.channelPage.streamerSelectedName
+        '     m.stream["url"] = m.channelPage.streamUrl
     end if
     m.chat.visible = m.global.chatOption
     m.videoPlayer.chatIsVisible = m.chat.visible
@@ -467,10 +467,11 @@ sub onToggleChat()
     end if
 end sub
 
-function onKeyEvent(key, press) as Boolean
+' This needs rework
+function onKeyEvent(key, press) as boolean
     handled = false
     if press
-        if m.videoPlayer.visible = true and key = "back" 
+        if m.videoPlayer.visible = true and key = "back"
             m.videoPlayer.back = true
             handled = true
         else if m.videoPlayer.visible = true and key = "rewind"
@@ -487,7 +488,7 @@ function onKeyEvent(key, press) as Boolean
             m.homeScene.visible = true
             m.homeScene.setFocus(true)
             handled = true
-        'else if (m.keyboardGroup.visible or m.categoryScene.visible or m.channelPage.visible) and key = "back"
+            'else if (m.keyboardGroup.visible or m.categoryScene.visible or m.channelPage.visible) and key = "back"
         else if (m.keyboardGroup.visible or m.categoryScene.visible) and key = "back"
             m.categoryScene.visible = false
             m.keyboardGroup.visible = false
