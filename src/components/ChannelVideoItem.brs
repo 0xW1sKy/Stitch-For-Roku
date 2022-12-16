@@ -21,12 +21,13 @@ end sub
 
 sub showContent()
     itemContent = m.top.itemContent
+    ? "Video Item > Item Content"; itemContent.HDPosterUrl
     m.itemThumbnail.uri = itemContent.HDPosterUrl
     m.itemTitle.text = itemContent.Title
     m.itemStreamer.text = itemContent.Description
     'm.itemCategory.text = itemContent.Categories
     'm.itemViewers.text = itemContent.ShortDescriptionLine2
-    m.itemDuration.text = itemContent.Categories
+    m.itemDuration.text = itemContent.Categories[0]
     m.itemPosted.text = itemContent.ReleaseDate
     m.viewsRect.width = m.itemDuration.localBoundingRect().width + 14
     m.viewsRect.height = m.itemDuration.localBoundingRect().height

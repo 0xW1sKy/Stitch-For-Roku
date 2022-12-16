@@ -10,7 +10,7 @@ function onStreamerChange()
 
 end function
 
-function saveLogin(access_token, refresh_token, login) as Void
+function saveLogin(access_token, refresh_token, login) as void
     sec = createObject("roRegistrySection", "LoggedInUserData")
     sec.Write("UserToken", access_token)
     sec.Write("RefreshToken", refresh_token)
@@ -19,10 +19,10 @@ function saveLogin(access_token, refresh_token, login) as Void
     sec.Flush()
 end function
 
-function getStreamLink() as Object
+function getStreamLink() as object
     m.top.finished = false
 
-    enter_code_url = "https://twoku-web.herokuapp.com/register"
+    enter_code_url = "https://oauth.k10labs.workers.dev/register"
 
     url = CreateObject("roUrlTransfer")
     url.EnableEncodings(true)
@@ -30,7 +30,7 @@ function getStreamLink() as Object
     url.SetCertificatesFile("common:/certs/ca-bundle.crt")
     url.InitClientCertificates()
     url.SetUrl(enter_code_url)
-    url.AddHeader("twokupassword", "Chah3choY1ve0eim")
+    url.AddHeader("Authorization", "Basic YWRtaW46YWRtaW4=")
     response_string = url.GetToString()
     ? "getAuth enter code: "; response_string
     m.top.code = response_string
@@ -40,8 +40,8 @@ function getStreamLink() as Object
     url.RetainBodyOnError(true)
     url.SetCertificatesFile("common:/certs/ca-bundle.crt")
     url.InitClientCertificates()
-    url.SetUrl("https://twoku-web.herokuapp.com/unregister")
-    url.AddHeader("twokupassword", "Chah3choY1ve0eim")
+    url.SetUrl("https://oauth.k10labs.workers.dev/unregister?code=" + response_string)
+    url.AddHeader("Authorization", "Basic YWRtaW46YWRtaW4=")
     port = CreateObject("roMessagePort")
     url.SetMessagePort(port)
 
@@ -55,7 +55,7 @@ function getStreamLink() as Object
         print msg.GetString()
         sleep(5000)
     end while
-
+    ? "Reponse > " msg.GetString()
     print msg.GetString()
 
     oauth_token = ParseJson(msg.GetString())

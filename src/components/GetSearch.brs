@@ -20,7 +20,7 @@ function getSearchResults() as object
     url.SetCertificatesFile("common:/certs/ca-bundle.crt")
     url.AddHeader("Origin", "https://player.twitch.tv")
     url.AddHeader("Referer", "https://player.twitch.tv")
-    url.AddHeader("Client-Id", "w9msa6phhl3u8s2jyjcmshrfjczj2y")
+    url.AddHeader("Client-Id", "cf9fbjz6j9i6k6guz3dwh6qff5dluz")
     userToken = m.global.userToken
     '? "(userToken) " userToken
     if userToken <> invalid and userToken <> ""

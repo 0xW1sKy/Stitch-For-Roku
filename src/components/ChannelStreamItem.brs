@@ -8,7 +8,7 @@ end sub
 
 sub showContent()
     itemContent = m.top.itemContent
-    ? "item content > "; itemContent
+    ' ? "item content > "; itemContent
     m.itemThumbnail.uri = itemContent.HDPosterUrl
     m.itemTitle.text = itemContent.ShortDescriptionLine2
     m.itemGame.text = itemContent.Categories[0]
