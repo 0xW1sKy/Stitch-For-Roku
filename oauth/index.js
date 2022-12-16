@@ -1,7 +1,7 @@
-const BASIC_USER = 'admin';
-const BASIC_PASS = 'admin';
+const BASIC_USER = '';
+const BASIC_PASS = '';
 const client_id = 'cf9fbjz6j9i6k6guz3dwh6qff5dluz';
-const client_secret = 'iwhqcnsy36qldhppbqrif673hq8p1v';
+const client_secret = '';
 const redirect_uri = "https://oauth.k10labs.workers.dev/activate"
 
 async function handleRequest(request) {

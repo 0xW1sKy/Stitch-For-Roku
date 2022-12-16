@@ -1,2 +1,3 @@
 *.zip
 out/
+template.env
