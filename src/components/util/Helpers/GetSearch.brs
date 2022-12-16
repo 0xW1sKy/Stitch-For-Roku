@@ -37,7 +37,6 @@ function getSearchResults() as object
     url.SetUrl(search_results_url)
 
     response_string = url.GetToString()
-    ? response_string
     search = ParseJson(response_string)
 
     result = []

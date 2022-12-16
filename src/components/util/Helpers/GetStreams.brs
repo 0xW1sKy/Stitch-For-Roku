@@ -1,4 +1,3 @@
-'api.twitch.tv/kraken/search/channels?query=${search_text}&limit=5&client_id=jzkbprff40iqj646a697cyrvl0zt2m6
 
 function init()
     m.gameNames = CreateObject("roAssociativeArray")
@@ -36,7 +35,7 @@ function getGameNameFromId(game_ids_url)
     end if
 end function
 
-function getSearchResults() as Object
+function getSearchResults() as object
     'search_results_url = "https://api.twitch.tv/kraken/streams?client_id=jzkbprff40iqj646a697cyrvl0zt2m6&limit=24&offset=" + m.top.offset + "&game="
     search_results_url = "https://api.twitch.tv/helix/streams?first=21"
 
@@ -45,7 +44,7 @@ function getSearchResults() as Object
     end if
 
     url = createUrl()
-    
+
     'url.SetUrl(search_results_url.EncodeUri() + m.top.gameRequested.EncodeUriComponent())
 
     if m.top.pagination <> ""
