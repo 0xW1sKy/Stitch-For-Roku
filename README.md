@@ -35,3 +35,12 @@ Stitch *uncertified* : LL5GKQ (<https://my.roku.com/account/add?channel=LL5GKQ>)
 
 * Ad-blocking
 * View-As-User (removal of ads via subscription/etc)
+
+## Message from the repo owner
+
+Hey There.
+
+I'm not a roku developer, so you might see some weird stuff in this repo. Feel free to submit a PR to fix/improve it!
+there are a couple of folders like [hls_processor](./hls_processor/) and [oauth](./oauth/) that are [CloudFlare Workers](https://workers.cloudflare.com) Functions allowing the web services to be serverless in nature as well as highly performant by distribution via their CDN. Additionally, by handling this part of the service properly, I should be able to keep this as something that doesnt personally cost me money to host for others. If anything starts costing money, I'll let you know.
+
+If you have a more dedicated team interested in maintaining this end to end, open an issue regarding that and I will reach out to you to discuss options. I'm currently maintaining this repo as the original project that this is forked from [Twoku](https://github.com/worldreboot/twitch-reloaded-roku) was the #1 watched thing in my household, and I needed the ability to more easily fix bugs and add new features. Additionally, I wanted to have more development/improvment efforts happening publically and collaboratively via github's contribution systems.
