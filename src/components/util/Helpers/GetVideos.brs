@@ -11,7 +11,7 @@ function onSearchTextChange()
 
 end function
 
-function getRelativeTimePublished(timePublished as String) as String
+function getRelativeTimePublished(timePublished as string) as string
     secondsSincePublished = createObject("roDateTime")
     secondsSincePublished.FromISO8601String(timePublished)
     currentTime = createObject("roDateTime").AsSeconds()
@@ -59,13 +59,13 @@ function getRelativeTimePublished(timePublished as String) as String
     else
         return elapsedTime.ToStr() + " years ago"
     end if
-    
+
 end function
 
-function convertDurationFormat(org_duration as String) as String
+function convertDurationFormat(org_duration as string) as string
     new_duration = ""
     DURATION_REGEX = createObject("roRegex", "h|m|s", "")
-    
+
     values = DURATION_REGEX.Split(org_duration)
     values_length = values.Count()
 
@@ -87,11 +87,11 @@ function convertDurationFormat(org_duration as String) as String
     return new_duration
 end function
 
-function getSearchResults() as Object
+function getSearchResults() as object
     search_results_url = "https://api.twitch.tv/helix/videos?user_id=" + m.top.userId
 
     url = createUrl()
-    
+
     'url.SetUrl(search_results_url.EncodeUri() + m.top.gameRequested.EncodeUriComponent())
 
     if m.top.pagination <> ""
@@ -103,11 +103,11 @@ function getSearchResults() as Object
     response_string = url.GetToString()
     search = ParseJson(response_string)
 
-    if search.status <> invalid and search.status = 401
-        ? "401"
-        refreshToken()
-        return getSearchResults()
-    end if
+    ' if search.status <> invalid and search.status = 401
+    '     ? "401"
+    '     refreshToken()
+    '     return getSearchResults()
+    ' end if
 
     result = []
     if search <> invalid and search.data <> invalid

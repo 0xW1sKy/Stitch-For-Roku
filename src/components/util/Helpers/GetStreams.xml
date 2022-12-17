@@ -10,6 +10,6 @@
     </interface>
 
     <script type="text/brightscript" uri="GetStreams.brs" />
-    <script type="text/brightscript" uri="pkg:/components/util/UrlFunctions.brs" />
+    <script type="text/brightscript" uri="pkg:/components/util/Helpers/UrlFunctions.brs" />
 
 </component>

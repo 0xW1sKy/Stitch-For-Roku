@@ -8,6 +8,6 @@
     </interface>
 
     <script type="text/brightscript" uri="GetStuff.brs" />
-    <script type="text/brightscript" uri="pkg:/components/util/UrlFunctions.brs" />
+    <script type="text/brightscript" uri="pkg:/components/util/Helpers/UrlFunctions.brs" />
 
 </component>

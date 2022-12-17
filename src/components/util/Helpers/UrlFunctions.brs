@@ -63,17 +63,24 @@ function refreshToken()
     msg = port.WaitMessage(0)
     oauth_token = ParseJson(msg.GetString())
     ? oauth_token
+    access_token = oauth_token.access_token
+    refresh_token = oauth_token.refresh_token
+    if access_token = invalid
+        DeleteRegistry()
+        access_token = ""
+        refresh_token = ""
+    else
+        url = CreateObject("roUrlTransfer")
+        url.EnableEncodings(true)
+        url.RetainBodyOnError(true)
+        url.SetCertificatesFile("common:/certs/ca-bundle.crt")
+        url.InitClientCertificates()
+        url.SetUrl("https://id.twitch.tv/oauth2/validate")
+        url.AddHeader("Authorization", "Bearer " + access_token)
+        response = ParseJson(url.GetToString())
+    end if
 
-    url = CreateObject("roUrlTransfer")
-    url.EnableEncodings(true)
-    url.RetainBodyOnError(true)
-    url.SetCertificatesFile("common:/certs/ca-bundle.crt")
-    url.InitClientCertificates()
-    url.SetUrl("https://id.twitch.tv/oauth2/validate")
-    url.AddHeader("Authorization", "Bearer " + oauth_token.access_token)
-    response = ParseJson(url.GetToString())
-
-    saveLogin(oauth_token.access_token, oauth_token.refresh_token, response.login)
+    saveLogin(access_token, refresh_token, response.login)
 end function
 
 function getRefreshToken()
@@ -92,3 +99,35 @@ function saveLogin(access_token, refresh_token, login) as void
     m.global.setField("userToken", access_token)
     sec.Flush()
 end function
+
+sub DeleteRegistry()
+    print "Starting Delete Registry"
+    Registry = CreateObject("roRegistry")
+    i = 0
+    for each section in Registry.GetSectionList()
+        RegistrySection = CreateObject("roRegistrySection", section)
+        for each key in RegistrySection.GetKeyList()
+            i = i + 1
+            print "Deleting " section + ":" key
+            RegistrySection.Delete(key)
+        end for
+        RegistrySection.flush()
+    end for
+    print i.toStr() " Registry Keys Deleted"
+end sub
+' function getBearerToken() as object
+'     access_token_url = "https://oauth.k10labs.workers.dev/bearer"
+
+'     url = CreateObject("roUrlTransfer")
+'     url.EnableEncodings(true)
+'     url.RetainBodyOnError(true)
+'     url.SetCertificatesFile("common:/certs/ca-bundle.crt")
+'     url.InitClientCertificates()
+'     url.AddHeader("Authorization", "Basic YWRtaW46YWRtaW4=")
+'     url.SetUrl(access_token_url)
+
+'     response_string = ParseJSON(url.GetToString())
+
+'     ? "GetToken response: "; response_string
+'     m.top.appBearerToken = "Bearer " + response_string.access_token
+' end function
