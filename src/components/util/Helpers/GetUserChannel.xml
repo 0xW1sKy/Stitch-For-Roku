@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <component name="GetUserChannel" extends="Task">
 
@@ -7,9 +7,9 @@
         <field id="streamDurationSeconds" type="Integer" />
         <field id="searchResults" type="assocarray" />
     </interface>
-    
+
     <script type="text/brightscript" uri="GetUserChannel.brs" />
-    <script type="text/brightscript" uri="UrlFunctions.brs" />
+    <script type="text/brightscript" uri="pkg:/components/util/UrlFunctions.brs" />
     <script type="text/brightscript" uri="pkg:/components/util/StringUtils.brs" />
 
 </component>

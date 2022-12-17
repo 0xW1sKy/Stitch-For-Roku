@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <component name="GetClips" extends="Task">
 
@@ -8,8 +8,8 @@
         <field id="searchResults" type="array" />
         <field id="pagination" type="string" value="" />
     </interface>
-    
+
     <script type="text/brightscript" uri="GetClips.brs" />
-    <script type="text/brightscript" uri="UrlFunctions.brs" />
+    <script type="text/brightscript" uri="pkg:/components/util/UrlFunctions.brs" />
 
 </component>
