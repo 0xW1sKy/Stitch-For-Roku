@@ -5,13 +5,6 @@
 ' BrightScript web socket client (RFC 6455)
 
 ' Create a new WebSocketClient instance
-
-' Logger.brs
-' Copyright (C) 2018 Rolando Islas
-' Released under the MIT license
-'
-' Internal logging utility
-
 function WebSocketClient() as object
     ws = {}
     ' Constants
@@ -617,12 +610,13 @@ function WebSocketClient() as object
         end if
     end function
 
-    ' Generate a 20 character [A-Za-z0-9] random string and base64 encode it
+    ' Generate a 16 character [A-Za-z0-9] random string and base64 encode it
+    ' @link https://tools.ietf.org/html/rfc6455#section-4.1
     ' @param self WebSocketClient
-    ' @return string random 20 character base64 encoded string
+    ' @return string random 16 character base64 encoded string
     ws._generate_sec_ws_key = function () as string
         sec_ws_key = ""
-        for char_index = 0 to 19
+        for char_index = 0 to 15
             char = m._CHARS[rnd(m._CHARS.count()) - 1]
             if rnd(2) = 1
                 char = ucase(char)
