@@ -19,9 +19,9 @@ function getStreamLink() as object
     url.AddHeader("Authorization", "Basic YWRtaW46YWRtaW4=")
     url.SetUrl(access_token_url)
 
-    response_string = url.GetToString()
+    response_string = ParseJSON(url.GetToString())
 
     ? "GetToken response: "; response_string
 
-    return response_string
+    return "Bearer " + response_string.access_token
 end function
