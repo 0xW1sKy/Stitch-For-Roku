@@ -53,7 +53,7 @@ function getStreamLink() as object
             exit while
         end if
         print msg.GetString()
-        sleep(2000)
+        sleep(5000)
     end while
 
     print msg.GetString()

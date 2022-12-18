@@ -75,6 +75,15 @@ function getStreamLink() as object
     if link = ""
         return last_stream_link
     end if
+    preloadUrl = CreateObject("roUrlTransfer")
+    preloadUrl.EnableEncodings(true)
+    preloadUrl.RetainBodyOnError(true)
+    preloadUrl.SetCertificatesFile("common:/certs/ca-bundle.crt")
+    preloadUrl.InitClientCertificates()
+    preloadUrl.SetUrl(link)
+    preload_string = preloadUrl.GetToString()
+    ' The stream needs a couple of seconds to load on AWS's server side before we display back to user.
+    ' The idea is that this will provide a better user experience by removing stuttering.
     return link
 end function
 

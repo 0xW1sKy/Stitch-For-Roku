@@ -3,11 +3,9 @@ function init()
 end function
 
 function onStreamerChange()
-
     stream_link = getStreamLink()
     ' ? "Stream Link: " + stream_link
     m.top.streamUrl = stream_link
-
 end function
 
 sub extractThumbnailUrl(streamUrl)
@@ -26,7 +24,7 @@ sub extractThumbnailUrl(streamUrl)
                 ? "video info url > "; info_url + m.top.videoId + "-info.json"
                 response_string = url.GetToString()
                 thumbnailInfo = ParseJson(response_string)
-                ? "thumbnail info > "; thumbnailInfo
+                ' ? "thumbnail info > "; thumbnailInfo
                 if thumbnailInfo <> invalid and thumbnailInfo[0] <> invalid
                     url2 = CreateObject("roUrlTransfer")
                     url2.EnableEncodings(true)
@@ -34,6 +32,8 @@ sub extractThumbnailUrl(streamUrl)
                     url2.SetCertificatesFile("common:/certs/ca-bundle.crt")
                     url2.InitClientCertificates()
                     url2.SetUrl(info_url + thumbnailInfo[1].images[0])
+                    ' https: //dqrpb9wgowsf5.cloudfront.net / f339ec10e143fbac0b75_hasanabi_41619886427_1671303742 / storyboards / 1681696949 - info.json
+                    ' https: //static - cdn.jtvnw.net / cf_vods / d2nvs31859zcd8 / f339ec10e143fbac0b75_hasanabi_41619886427_1671303742 / /thumb/thumb0 - 320x180.jpg
                     'url2.SetUrl(info_url + thumbnailInfo[0].images[0])
                     'url2.SetUrl("https://i.redd.it/u105ro5rg8o31.jpg")
                     ? "image url: "; info_url + thumbnailInfo[1].images[0]
@@ -160,6 +160,15 @@ function getStreamLink() as object
     end if
 
     extractThumbnailUrl(link)
+    preloadUrl = CreateObject("roUrlTransfer")
+    preloadUrl.EnableEncodings(true)
+    preloadUrl.RetainBodyOnError(true)
+    preloadUrl.SetCertificatesFile("common:/certs/ca-bundle.crt")
+    preloadUrl.InitClientCertificates()
+    preloadUrl.SetUrl(link)
+    preload_string = preloadUrl.GetToString()
+    ' The stream needs a couple of seconds to load on AWS's server side before we display back to user.
+    ' The idea is that this will provide a better user experience by removing stuttering.
     return link
 end function
 
