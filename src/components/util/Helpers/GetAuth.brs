@@ -11,7 +11,7 @@ function onStreamerChange()
 end function
 
 function saveLogin(access_token, refresh_token, login) as void
-    sec = createObject("roRegistrySection", "LoggedInUserData")
+    sec = createObject("roRegistrySection", "StitchUserData")
     sec.Write("UserToken", access_token)
     sec.Write("RefreshToken", refresh_token)
     sec.Write("LoggedInUser", login)

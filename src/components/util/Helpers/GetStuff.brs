@@ -3,9 +3,7 @@ function init()
 end function
 
 function onStreamerChange()
-
-    stream_link = getStreamLink()
-    m.top.streamUrl = stream_link
+    m.top.streamUrl = getStreamLink()
 
 end function
 
@@ -17,32 +15,12 @@ function getStreamLink() as object
     url.RetainBodyOnError(true)
     url.SetCertificatesFile("common:/certs/ca-bundle.crt")
     url.InitClientCertificates()
-    ' 'url.AddHeader("Origin", "https://www.twitch.tv")
-    ' 'url.AddHeader("Referer", "https://www.twitch.tv/")
-
-    ' url.SetUrl(access_token_url)
-    ' response_string = url.GetToString()
-    ' access_token = ParseJson(response_string)
-    ' 'access_token = ParseJson(POST("https://gql.twitch.tv/gql", "{"+Chr(34)+"operationName"+Chr(34)+":"+Chr(34)+"PlaybackAccessToken"+Chr(34)+","+Chr(34)+"variables"+Chr(34)+":{"+Chr(34)+"isLive"+Chr(34)+":true,"+Chr(34)+"login"+Chr(34)+":"+Chr(34)+m.top.streamerRequested+Chr(34)+","+Chr(34)+"isVod"+Chr(34)+":false,"+Chr(34)+"vodID"+Chr(34)+":"+Chr(34)+""+Chr(34)+","+Chr(34)+"playerType"+Chr(34)+":"+Chr(34)+"embed"+Chr(34)+"},"+Chr(34)+"extensions"+Chr(34)+":{"+Chr(34)+"persistedQuery"+Chr(34)+":{"+Chr(34)+"version"+Chr(34)+":1,"+Chr(34)+"sha256Hash"+Chr(34)+":"+Chr(34)+"0828119ded1c13477966434e15800ff57ddacf13ba1911c129dc2200705b0712"+Chr(34)+"}}}"))
-
-    ' if access_token = invalid
-    '     return ""
-    ' end if
-
-    ' stream_link = "http://usher.ttvnw.net/api/channel/hls/" + m.top.streamerRequested + ".m3u8?allow_source=true&allow_spectre=true&type=any&playlist_include_framerate=true&token=" + access_token.token + "&sig=" + access_token.sig
-    'stream_link = "http://usher.ttvnw.net/api/channel/hls/" + m.top.streamerRequested + ".m3u8?allow_source=true&fast_bread=true&p=3737804&play_session_id=ea4af70a988073e598e8c1cab7fc6281&player_backend=mediaplayer&playlist_include_framerate=true&reassignments_supported=true&sig=" + access_token.data.streamPlaybackAccessToken.signature + "&supported_codecs=vp09,avc1&token=" + access_token.data.streamPlaybackAccessToken.value + "&cdm=wv" + "&player_version=1.2.0"
-
     stream_link = "https://twitch.k10labs.workers.dev/stream?streamer=" + m.top.streamerRequested
-    url.AddHeader("Origin", "https://player.twitch.tv")
-    url.AddHeader("Referer", "https://player.twitch.tv")
+    ' url.AddHeader("Origin", "https://player.twitch.tv")
+    ' url.AddHeader("Referer", "https://player.twitch.tv")
     url.SetUrl(stream_link.EncodeUri())
-
     rsp = url.GetToString()
-
-    '? rsp
-
     list = rsp.Split(chr(10))
-
     first_stream_link = ""
     last_stream_link = ""
     link = ""
@@ -93,31 +71,10 @@ function getStreamLink() as object
 
         line += 2
     end for
-    ' for each word in list
-    '     first = word.Left(4)
-    '     if first = "http"
-    '         last_stream_link = word
-    '         if cnt = 1
-    '             first_stream_link = word
-    '             exit for
-    '         end if
-    '         cnt += 1
-    '     end if
-    ' end for
-
-    ' if first_stream_link = ""
-    '     first_stream_link = last_stream_link
-    ' end if
-
-    ' return first_stream_link
 
     if link = ""
         return last_stream_link
     end if
-
-    '? "GetStuff >> token > "; access_token.token
-    '? "GetStuff >> link > "; link
-
     return link
 end function
 

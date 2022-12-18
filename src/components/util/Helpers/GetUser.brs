@@ -36,14 +36,14 @@ function getProfilePicture(link)
     '? "getProfilePicture > ";link.EncodeUri()
     response_string = url.GetToString()
     search = ParseJson(response_string)
+
     if search.data = invalid
-        return ""
+        return "pkg:/images/login.png"
     end if
     for each profile in search.data
         m.userLogins[profile.id] = profile.login
         'uri = search.data[0].profile_image_url
         uri = profile.profile_image_url
-        '? "uri? "; uri
         last = Right(uri, 2)
         if last = "eg"
             m.userProfiles[profile.id] = Left(uri, Len(uri) - 12) + "50x50.jpeg"

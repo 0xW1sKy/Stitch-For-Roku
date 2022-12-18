@@ -2,21 +2,10 @@
 'usher.ttvnw.net/api/channel/hls/${user}.m3u8?allow_source=true&allow_spectre=true&type=any&token=${token}&sig=${sig}
 
 function init()
-    environment_variables = ReadAsciiFile("pkg:/env").Split(Chr(10))
-    for each var in environment_variables
-        var_info = var.Split("=")
-        if var_info[0] = "CLIENT-ID"
-            m.global.addFields({ CLIENT_ID: Left(var_info[1], Len(var_info[1]) - 1) })
-        else if var_info[0] = "AUTHORIZATION"
-            m.global.addFields({ AUTHORIZATION: var_info[1] })
-        end if
-    end for
-
     m.videoPlayer = m.top.findNode("videoPlayer")
     m.keyboardGroup = m.top.findNode("keyboardGroup")
     m.homeScene = m.top.findNode("homeScene")
     m.categoryScene = m.top.findNode("categoryScene")
-    ' m.channelPage = m.top.findNode("channelPage")
     m.loginPage = m.top.findNode("loginPage")
 
     m.keyboardGroup.observeField("streamUrl", "onStreamChange")
@@ -34,8 +23,6 @@ function init()
     m.categoryScene.observeField("streamerSelectedThumbnail", "onStreamerSelected")
     m.categoryScene.observeField("clipUrl", "onClipChange")
 
-    ' m.channelPage.observeField("videoUrl", "onStreamChangeFromChannelPage")
-    ' m.channelPage.observeField("streamUrl", "onStreamChange")
 
     m.loginPage.observeField("finished", "onLoginFinish")
 
@@ -77,17 +64,13 @@ function init()
     m.testtimer.ObserveField("fire", "refreshFollows")
 
     if checkReset() = "false"
-        sec = createObject("roRegistrySection", "LoggedInUserData")
+        sec = createObject("roRegistrySection", "StitchUserData")
         sec.Write("UserToken", "")
         sec.Write("RefreshToken", "")
         sec.Write("LoggedInUser", "")
         ? "RESETTED"
         setReset("true")
     end if
-
-    ' registry = CreateObject("roRegistry")
-    ' registry.Delete("LoggedInUserData")
-    ' registry.Delete("VideoSettings")
 
     loggedInUser = checkIfLoggedIn()
     if loggedInUser <> invalid
@@ -244,7 +227,7 @@ sub onStreamerSelected()
 end sub
 
 function checkReset()
-    sec = createObject("roRegistrySection", "LoggedInUserData")
+    sec = createObject("roRegistrySection", "StitchUserData")
     if sec.Exists("Reset")
         return sec.Read("Reset")
     end if
@@ -252,7 +235,7 @@ function checkReset()
 end function
 
 function checkUserToken()
-    sec = createObject("roRegistrySection", "LoggedInUserData")
+    sec = createObject("roRegistrySection", "StitchUserData")
     if sec.Exists("UserToken")
         return sec.Read("UserToken")
     end if
@@ -292,7 +275,7 @@ function checkSavedVideoQuality()
 end function
 
 function checkIfLoggedIn() as dynamic
-    sec = createObject("roRegistrySection", "LoggedInUserData")
+    sec = createObject("roRegistrySection", "StitchUserData")
     if sec.Exists("LoggedInUser")
         return sec.Read("LoggedInUser")
     end if
@@ -300,13 +283,13 @@ function checkIfLoggedIn() as dynamic
 end function
 
 function setReset(word as string) as void
-    sec = createObject("roRegistrySection", "LoggedInUserData")
+    sec = createObject("roRegistrySection", "StitchUserData")
     sec.Write("Reset", word)
     sec.Flush()
 end function
 
 function saveLogin() as void
-    sec = createObject("roRegistrySection", "LoggedInUserData")
+    sec = createObject("roRegistrySection", "StitchUserData")
     sec.Write("LoggedInUser", m.homeScene.loggedInUserName)
     sec.Flush()
 end function

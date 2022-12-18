@@ -5,7 +5,7 @@ end function
 function onStreamerChange()
 
     stream_link = getStreamLink()
-
+    ' ? "Stream Link: " + stream_link
     m.top.streamUrl = stream_link
 
 end function

@@ -8,16 +8,16 @@ function onSearchTextChange()
     m.top.offlineFollowedUsers = getSearchResults()
 end function
 
-function getRecentChannels() as Boolean
-    sec = createObject("roRegistrySection", "LoggedInUserData")
+function getRecentChannels() as boolean
+    sec = createObject("roRegistrySection", "StitchUserData")
     if sec.Exists("RecentChannels")
-        m.global.addFields({recentChannels: ParseJson(sec.Read("RecentChannels"))})
+        m.global.addFields({ recentChannels: ParseJson(sec.Read("RecentChannels")) })
         return true
     end if
     return false
 end function
 
-function getSearchResults() as Object
+function getSearchResults() as object
     current_user_info = GETJSON("https://api.twitch.tv/helix/users?login=" + m.top.loginRequested)
     followed_streamers = GETJSON("https://api.twitch.tv/helix/users/follows?first=100&from_id=" + current_user_info.data[0].id)
     addedUsers = 0
@@ -86,7 +86,7 @@ function getSearchResults() as Object
     if successfullyLoadedRecentChannels
         for each channel_login in m.global.recentChannels
             if addedChannelLogins[channel_login]
-                
+
             end if
         end for
     end if

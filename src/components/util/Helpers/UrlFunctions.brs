@@ -62,10 +62,10 @@ function refreshToken()
     url.AsyncPostFromString("code=" + getRefreshToken())
     msg = port.WaitMessage(0)
     oauth_token = ParseJson(msg.GetString())
-    ? oauth_token
+    ? "OAUTH TOKEN: "; oauth_token
     access_token = oauth_token.access_token
     refresh_token = oauth_token.refresh_token
-    if access_token = invalid
+    if refresh_token = invalid
         DeleteRegistry()
         access_token = ""
         refresh_token = ""
@@ -79,12 +79,15 @@ function refreshToken()
         url.AddHeader("Authorization", "Bearer " + access_token)
         response = ParseJson(url.GetToString())
     end if
-
+    sec = createObject("roRegistrySection", "StitchUserData")
+    sec.Write("UserToken", access_token)
+    sec.Write("RefreshToken", refresh_token)
+    sec.Write("LoggedInUser", response.login)
     saveLogin(access_token, refresh_token, response.login)
 end function
 
 function getRefreshToken()
-    sec = createObject("roRegistrySection", "LoggedInUserData")
+    sec = createObject("roRegistrySection", "StitchUserData")
     if sec.Exists("RefreshToken")
         return sec.Read("RefreshToken")
     end if
@@ -92,7 +95,7 @@ function getRefreshToken()
 end function
 
 function saveLogin(access_token, refresh_token, login) as void
-    sec = createObject("roRegistrySection", "LoggedInUserData")
+    sec = createObject("roRegistrySection", "StitchUserData")
     sec.Write("UserToken", access_token)
     sec.Write("RefreshToken", refresh_token)
     sec.Write("LoggedInUser", login)
