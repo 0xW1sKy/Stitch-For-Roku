@@ -1,0 +1,30 @@
+{
+    "providerName": "Twitch",
+    "lastUpdated": "2015-11-11T22:21:37+00:00",
+    "language": "en",
+    "liveFeeds": [{
+        "id": "1509428502953",
+        "title": "Sample Stream",
+        "content": {
+            "dateAdded": "2019-11-11T22:21:37+00:00",
+            "videos": [{
+                "url": "https://mnmedias.api.telequebec.tv/m3u8/29880.m3u8",
+                "quality": "HD",
+                "videoType": "MP4"
+            }],
+            "duration": 3600,
+            "captions": [],
+            "language": "en"
+
+        },
+        "thumbnail": "https://example.org/cdn/thumbnails/1509428502952/1",
+        "brandedThumbnail": "https://example.org/cdn/thumbnails/1509428502952/1",
+        "shortDescription": "A live description",
+        "longDescription": "A longer description of a live stream",
+        "tags": [
+            "linear",
+            "news",
+            "celebrity"
+        ]
+    }]
+}

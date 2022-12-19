@@ -1,0 +1,10 @@
+schema: ./schema.graphql
+extensions:
+  codegen:
+    generates:
+      ./generated-backend.ts:
+        plugins:
+          - typescript
+          - typescript-resolvers
+  diff:
+    baseSchema: your-base-schema-here

@@ -27,8 +27,15 @@ async function handleRequest(request) {
     }
 
     var isLive = false
-
-
+    if (request.headers) {
+        let headersObject = Object.fromEntries(request.headers)
+        if (headersObject["client-id"]) {
+            if (headersObject["authorization"]) {
+                clientId = headersObject["client-id"]
+                authHeader = headersObject["authorization"]
+            }
+        }
+    }
     // Usage example
     var channel = getParameterByName('streamer')
     var vodRequest = getParameterByName('vod')
@@ -42,14 +49,24 @@ async function handleRequest(request) {
         isVod = true
         resource = vodRequest
     }
-
-    let accessToken = await getAccessToken(resource, isVod)
-    let playlist = await getPlaylist(resource, accessToken, isVod)
-    if (!raw) playlist = JSON.stringify(parsePlaylist(playlist))
-    return new Response(playlist, { status: 200 })
+    var searchRequest = getParameterByName('search')
+    if (searchRequest) {
+        clientId = "kimne78kx3ncx6brgo4mv6wki5h1ko"; // generic
+        let searchResult = await getSearchResults(searchRequest)
+        return new Response(searchResult, { status: 200 })
+    }
+    if (channel || vodRequest) {
+        let accessToken = await getAccessToken(resource, isVod)
+        let playlist = await getPlaylist(resource, accessToken, isVod)
+        if (!raw) playlist = JSON.stringify(parsePlaylist(playlist))
+        return new Response(playlist, { status: 200 })
+    } else {
+        return new Response("OK", { status: 200 })
+    }
 }
+var authHeader = ""
 
-const clientId = "kimne78kx3ncx6brgo4mv6wki5h1ko"; // generic
+var clientId = "kimne78kx3ncx6brgo4mv6wki5h1ko"; // generic
 
 async function getAccessToken(id, isVod) {
     const data = {
@@ -65,7 +82,42 @@ async function getAccessToken(id, isVod) {
             login: (isVod ? "" : id),
             isVod: isVod,
             vodID: (isVod ? id : ""),
-            playerType: "embed"
+            playerType: (isVod ? "embed" : "roku")
+        }
+    };
+    var headers = {
+        'Client-id': clientId
+    }
+    let res = await fetch('https://gql.twitch.tv/gql', {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(data),
+        }).then((response) => response.json())
+        // console.log(JSON.stringify(res))
+    try {
+        if (isVod) {
+            return res.data.videoPlaybackAccessToken
+        } else {
+            return res.data.streamPlaybackAccessToken
+        }
+    } catch {
+        return res
+    }
+
+}
+
+
+async function getSearchResults(query) {
+    const data = {
+        "operationName": "SearchResultsPage_SearchResults",
+        "variables": {
+            "query": `${query}`
+        },
+        "extensions": {
+            "persistedQuery": {
+                "version": 1,
+                "sha256Hash": "6ea6e6f66006485e41dbe3ebd69d5674c5b22896ce7b595d7fce6411a3790138"
+            }
         }
     };
     let res = await fetch('https://gql.twitch.tv/gql', {
@@ -75,17 +127,11 @@ async function getAccessToken(id, isVod) {
         },
         body: JSON.stringify(data),
     }).then((response) => response.json())
-    if (isVod) {
-        return res.data.videoPlaybackAccessToken
-    } else {
-        return res.data.streamPlaybackAccessToken
-    }
-
+    return JSON.stringify(res)
 }
 
-
 async function getPlaylist(id, accessToken, vod) {
-    var uri = encodeURI(`https://usher.ttvnw.net/${vod ? 'vod' : 'api/channel/hls'}/${id}.m3u8?client_id=${clientId}&token=${accessToken.value}&sig=${accessToken.signature}&allow_source=true&allow_audio_only=true`)
+    var uri = encodeURI(`https://usher.ttvnw.net/${vod ? 'vod' : 'api/channel/hls'}/${id}.m3u8?client_id=${clientId}&token=${accessToken.value}&sig=${accessToken.signature}&allow_source=true&allow_audio_only=true&allow_spectre=true&type=any&playlist_include_framerate=true&player_backend=mediaplayer&player_type=channel_home_live`)
     let response = await fetch(uri, {
         method: 'GET', // or 'PUT'
     }).then(processChunkedResponse)

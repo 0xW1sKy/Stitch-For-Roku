@@ -1,0 +1,15 @@
+{
+    "files": [
+        "source/**/*",
+        "components/**/*",
+        "images/**/*",
+        "fonts/**/*",
+        "vendor/**/*",
+        "manifest",
+        "env"
+    ],
+    "diagnosticFilters": [{
+        "src": "vendor/**/*",
+        "codes": [1000, 1011, 1013, 1045] //ignore these specific codes from vendor libraries
+    }]
+}
