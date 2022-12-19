@@ -36,6 +36,23 @@ Stitch *uncertified* : LL5GKQ (<https://my.roku.com/account/add?channel=LL5GKQ>)
 * Ad-blocking
 * View-As-User (removal of ads via subscription/etc)
 
+## URLs used by app (may need to be allowed in pihole, etc)
+
+* <https://*.hls.ttvnw.net>               # Twitch Stream Server
+* <https://usher.ttvnw.net>               # Twitch Stream Server
+* <https://gql.twitch.tv>                 # Twitch Stream Access
+* <https://id.twitch.tv>                  # Twitch Login
+* <https://cdnjs.cloudflare.com>          # BootStrap for Web Auth
+* <https://vod-secure.twitch.tv>          # Missing VOD Image
+* <https://static-cdn.jtvnw.net>          # Twitch Emotes
+* <https://cdn.betterttv.net>             # BetterTTV Emotes
+* <https://api.twitch.tv>                 # Twitch API
+* <https://badges.twitch.tv>              # Badges for Chat
+* <https://api.betterttv.net>             # BetterTTV Emotes
+* <irc.chat.twitch.ttv:6667>              # Twitch Chat
+* <https://twitch.k10labs.workers.dev>    # Stream Broker
+* <https://oauth.k10labs.workers.dev>     # Authentication Broker
+
 ## Message from the repo owner
 
 Hey There.
