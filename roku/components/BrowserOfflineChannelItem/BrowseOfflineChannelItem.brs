@@ -4,6 +4,7 @@ sub init()
 end sub
 
 sub showContent()
+    ? "Browse Offline Channel Item > showContent"
     itemContent = m.top.itemContent
     'm.itemId = itemContent.id
     m.itemThumbnail.uri = itemContent.HDPosterUrl

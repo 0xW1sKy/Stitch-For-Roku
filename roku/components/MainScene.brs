@@ -2,6 +2,8 @@
 'usher.ttvnw.net/api/channel/hls/${user}.m3u8?allow_source=true&allow_spectre=true&type=any&token=${token}&sig=${sig}
 
 function init()
+    m.top.backgroundUri = ""
+    m.top.backgroundColor = "0x020202FF"
     m.videoPlayer = m.top.findNode("videoPlayer")
     m.keyboardGroup = m.top.findNode("keyboardGroup")
     m.homeScene = m.top.findNode("homeScene")
@@ -10,7 +12,8 @@ function init()
 
     m.keyboardGroup.observeField("streamUrl", "onStreamChange")
     m.keyboardGroup.observeField("streamerSelectedName", "onStreamerSelected")
-
+    m.categoryScene.observeField("streamerSelectedThumbnail", "onStreamerSelected")
+    m.homeScene.observeField("backgroundImageUri", "onBackgroundChange")
     m.homeScene.observeField("streamUrl", "onStreamChange")
     m.homeScene.observeField("streamerSelectedName", "onStreamerSelected")
     m.homeScene.observeField("categorySelected", "onCategoryItemSelect")
@@ -20,7 +23,7 @@ function init()
     m.keyboardGroup.observeField("categorySelected", "onCategoryItemSelectFromSearch")
 
     m.categoryScene.observeField("streamUrl", "onStreamChange")
-    m.categoryScene.observeField("streamerSelectedThumbnail", "onStreamerSelected")
+
     m.categoryScene.observeField("clipUrl", "onClipChange")
 
 
@@ -29,9 +32,6 @@ function init()
     m.videoPlayer.observeField("back", "onVideoPlayerBack")
     m.videoPlayer.observeField("toggleChat", "onToggleChat")
 
-
-    m.top.backgroundUri = ""
-    m.top.backgroundColor = "0x020202FF"
 
     m.currentScene = "home"
     m.lastScene = ""
@@ -120,12 +120,18 @@ function init()
 end function
 
 sub onChatDoneFocus()
+    ? "Main Scene > onChatDoneFocus"
     if m.chat.doneFocus
         m.videoPlayer.setFocus(true)
         m.chat.doneFocus = false
     end if
 end sub
 
+sub onBackgroundChange()
+    ? "Main Scene > onBackgroundChange"
+    m.top.backgroundUri = m.homeScene.backgroundImageUri
+
+end sub
 ' function on_open(event as object) as void
 '     m.ws.send = ["Hello World"]
 ' end function
@@ -135,6 +141,7 @@ end sub
 ' end function
 
 sub onLoginFinish()
+    ? "Main Scene > onLoginFinish"
     if m.loginPage.finished = true
         loggedInUser = checkIfLoggedIn()
         if loggedInUser <> invalid
@@ -151,10 +158,12 @@ sub onLoginFinish()
 end sub
 
 sub onBearerTokenReceived()
+    ? "Main Scene > onBearerTokenReceived"
     m.global.addFields({ appBearerToken: m.getToken.appBearerToken })
 end sub
 
 sub onStreamChangeFromChannelPage()
+    ? "Main Scene > onStreamChangeFromChannelPage"
     m.stream["streamFormat"] = "hls"
     m.stream["url"] = m.homeScene.videoUrl
     m.chat.visible = false
@@ -186,7 +195,9 @@ sub onStreamChangeFromChannelPage()
 end sub
 
 sub onStreamerSelected()
+    ? "Main Scene > onStreamerSelected"
     if m.homeScene.visible
+        ? "MainScene > Streamer"
         'm.channelPage.streamerSelectedName = m.homeScene.streamerSelectedName
         'm.channelPage.streamerSelectedThumbnail = m.homeScene.streamerSelectedThumbnail
         m.lastScene = "home"
@@ -215,6 +226,7 @@ sub onStreamerSelected()
 end sub
 
 function checkReset()
+    ? "Main Scene > checkReset"
     sec = createObject("roRegistrySection", "StitchUserData")
     if sec.Exists("Reset")
         return sec.Read("Reset")
@@ -223,6 +235,7 @@ function checkReset()
 end function
 
 function checkUserToken()
+    ? "Main Scene > checkUserToken"
     sec = createObject("roRegistrySection", "StitchUserData")
     if sec.Exists("UserToken")
         return sec.Read("UserToken")
@@ -231,6 +244,7 @@ function checkUserToken()
 end function
 
 function checkVideoBookmarks()
+    ? "Main Scene > checkVideoBookmarks"
     sec = createObject("roRegistrySection", "VideoSettings")
     if sec.Exists("VideoBookmarks")
         return sec.Read("VideoBookmarks")
@@ -239,6 +253,7 @@ function checkVideoBookmarks()
 end function
 
 function checkSavedChatOption()
+    ? "Main Scene > checkSavedChatOption"
     sec = createObject("roRegistrySection", "VideoSettings")
     if sec.Exists("ChatOption")
         return sec.Read("ChatOption")
@@ -247,6 +262,7 @@ function checkSavedChatOption()
 end function
 
 function checkSavedVideoFramerate()
+    ? "Main Scene > checkSavedVideoFramerate"
     sec = createObject("roRegistrySection", "VideoSettings")
     if sec.Exists("VideoFramerate")
         return sec.Read("VideoFramerate")
@@ -255,6 +271,7 @@ function checkSavedVideoFramerate()
 end function
 
 function checkSavedVideoQuality()
+    ? "Main Scene > checkSavedVideoQuality"
     sec = createObject("roRegistrySection", "VideoSettings")
     if sec.Exists("VideoQuality")
         return sec.Read("VideoQuality")
@@ -263,6 +280,7 @@ function checkSavedVideoQuality()
 end function
 
 function checkIfLoggedIn() as dynamic
+    ? "Main Scene > checkIfLoggedIn"
     sec = createObject("roRegistrySection", "StitchUserData")
     if sec.Exists("LoggedInUser")
         return sec.Read("LoggedInUser")
@@ -271,18 +289,21 @@ function checkIfLoggedIn() as dynamic
 end function
 
 function setReset(word as string) as void
+    ? "Main Scene > setReset"
     sec = createObject("roRegistrySection", "StitchUserData")
     sec.Write("Reset", word)
     sec.Flush()
 end function
 
 function saveLogin() as void
+    ? "Main Scene > saveLogin"
     sec = createObject("roRegistrySection", "StitchUserData")
     sec.Write("LoggedInUser", m.homeScene.loggedInUserName)
     sec.Flush()
 end function
 
 function onHeaderButtonPress()
+    ? "Main Scene > onHeaderButtonPress"
     if m.homeScene.buttonPressed = "search"
         m.homeScene.visible = false
         m.keyboardGroup.visible = true
@@ -301,6 +322,7 @@ function onHeaderButtonPress()
 end function
 
 function onUserLogin()
+    ? "Main Scene > onUserLogin"
     m.homeScene.loggedInUserName = m.getUser.searchResults.display_name
     if m.getUser.searchResults.profile_image_url <> invalid
         m.homeScene.loggedInUserProfileImage = m.getUser.searchResults.profile_image_url
@@ -315,6 +337,7 @@ function onUserLogin()
 end function
 
 function onCategoryItemSelectFromSearch()
+    ? "Main Scene > onCategoryItemSelectFromSearch"
     m.categoryScene.currentCategory = m.keyboardGroup.categorySelected
     m.homeScene.visible = false
     m.keyboardGroup.visible = false
@@ -324,6 +347,7 @@ function onCategoryItemSelectFromSearch()
 end function
 
 function onCategoryItemSelect()
+    ? "Main Scene > onCategoryItemSelect"
     m.categoryScene.currentCategory = m.homeScene.categorySelected
     m.homeScene.visible = false
     m.keyboardGroup.visible = false
@@ -332,6 +356,7 @@ function onCategoryItemSelect()
 end function
 
 function onClipChange()
+    ? "Main Scene > onClipChange"
     m.categoryScene.fromClip = true
     m.stream["streamFormat"] = "mp4"
     if m.categoryScene.visible = true
@@ -349,6 +374,7 @@ function onClipChange()
 end function
 
 function onStreamChange()
+    ? "Main Scene > onStreamChange"
     m.stream["streamFormat"] = "hls"
     if m.keyboardGroup.visible
         m.currentScene = "search"
@@ -391,6 +417,7 @@ function onStreamChange()
 end function
 
 function refreshFollows()
+    ? "Main Scene > refreshFollows"
     if m.login <> ""
         m.getUser.loginRequested = m.login
         m.getUser.control = "RUN"
@@ -398,6 +425,7 @@ function refreshFollows()
 end function
 
 function onLogin()
+    ? "Main Scene > onLogin"
     m.login = m.top.dialog.text
     '? "login > "; m.login
     m.top.dialog.close = true
@@ -406,6 +434,7 @@ function onLogin()
 end function
 
 sub onVideoPlayerBack()
+    ? "Main Scene > onVideoPlayerBack"
     if m.videoPlayer.back = true
         m.videoPlayer.control = "stop"
         m.videoPlayer.visible = false
@@ -434,6 +463,7 @@ sub onVideoPlayerBack()
 end sub
 
 sub onToggleChat()
+    ? "Main Scene > onToggleChat"
     if m.videoPlayer.toggleChat = true
         m.chat.visible = not m.chat.visible
         m.videoPlayer.chatIsVisible = m.chat.visible
@@ -443,6 +473,7 @@ end sub
 
 ' This needs rework
 function onKeyEvent(key, press) as boolean
+    ' ? "Main Scene > onKeyEvent"
     handled = false
     if press
         if m.videoPlayer.visible = true and key = "back"

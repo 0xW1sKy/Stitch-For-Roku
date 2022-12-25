@@ -12,6 +12,7 @@ sub init()
 end sub
 
 sub onItemHasFocus()
+    ? "Channel Video Item > onItemHasFocus"
     if m.top.itemHasFocus
         m.itemTitle.repeatCount = -1
     else
@@ -20,6 +21,7 @@ sub onItemHasFocus()
 end sub
 
 sub showContent()
+    ' ? "Channel Video Item > showContent"
     itemContent = m.top.itemContent
     m.itemThumbnail.uri = itemContent.HDPosterUrl
     m.itemTitle.text = itemContent.Title

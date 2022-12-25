@@ -7,6 +7,7 @@ sub init()
 end sub
 
 sub showContent()
+    ' ? "Channel Stream Item > showContent"
     itemContent = m.top.itemContent
     m.itemThumbnail.uri = itemContent.HDPosterUrl
     m.itemTitle.text = itemContent.ShortDescriptionLine2
