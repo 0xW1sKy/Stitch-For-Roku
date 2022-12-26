@@ -7,6 +7,12 @@ So if you can contribute, please do.
 
 Issues, Feature Requests, Etc should all be done via github issues for public tracking.
 
+## Discord
+
+Because people have been asking for it, here is a discord server you can join for discussion and announcements
+
+[![Discord](https://discordapp.com/api/guilds/1056784102084313179/widget.png?style=banner4)](https://discord.gg/KsdejA43SD)
+
 ## Support
 
 Best way to support Stitch is interaction with this project. Contributions are welcome.
@@ -67,8 +73,3 @@ If you have a more dedicated team interested in maintaining this end to end, ope
 Please see our FAQ [here](./FAQ.md)
 
 
-## Discord
-
-Because people have been asking for it, here is a discord server you can join for discussion and announcements
-
-![![](https://discordapp.com/api/guilds/1056784102084313179/widget.png?style=banner4)](https://discord.gg/KsdejA43SD)
