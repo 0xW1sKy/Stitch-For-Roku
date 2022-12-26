@@ -65,3 +65,10 @@ If you have a more dedicated team interested in maintaining this end to end, ope
 ## FAQ
 
 Please see our FAQ [here](./FAQ.md)
+
+
+## Discord
+
+Because people have been asking for it, here is a discord server you can join for discussion and announcements
+
+![Discord Banner 4](<<https://discordapp.com/api/guilds/1056784102084313179/widget.png?style=banner4>)
