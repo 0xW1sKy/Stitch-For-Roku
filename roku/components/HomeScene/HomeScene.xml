@@ -38,7 +38,7 @@
                     id="headerRect"
                     color="0x222222FF"
                     width="2000"
-                    height="75"
+                    height="80"
                     translation="[0,0]" />
                 <!-- <Poster translation="[5,10]" uri="pkg:/images/logo.png" /> -->
                 <!--<SimpleLabel
@@ -47,9 +47,13 @@
                 text="Browse"
                     fontSize="48"
                 fontUri="pkg:/fonts/Roobert-Bold.ttf" /> -->
+                <!-- <Overhang
+                    logoUri="pkg:/images/logo.png"
+                    showClock="true"
+                title="Stitch for Roku" /> -->
                 <SimpleLabel
                     id="categoryButton"
-                    translation="[163,24]"
+                    translation="[13,24]"
                     text="Categories"
                     color="0xEFEFF1FF"
                     fontSize="24"
@@ -64,7 +68,7 @@
                 </SimpleLabel>
                 <SimpleLabel
                     id="liveButton"
-                    translation="[313,24]"
+                    translation="[163,24]"
                     text="Live Channels"
                     color="0x9146FFCC"
                     fontSize="24"
@@ -79,7 +83,7 @@
                 </SimpleLabel>
                 <SimpleLabel
                     id="followingButton"
-                    translation="[498,24]"
+                    translation="[348,24]"
                     text="Following"
                     color="0xEFEFF1FF"
                     fontSize="24"

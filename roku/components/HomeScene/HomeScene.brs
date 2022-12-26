@@ -1,7 +1,7 @@
 sub init()
+    m.focusSelectionColor = "0x9146FFFF" 'Twitch Purple'
     m.activeSelectionColor = m.focusSelectionColor 'Cyan`
     m.inactiveSelectionColor = m.inactiveSelectionColor 'Grey'
-    m.focusSelectionColor = "0x9146FFFF" 'Twitch Purple'
     m.browseList = m.top.findNode("browseList")
     m.browseCategoryList = m.top.findNode("browseCategoryList")
     m.browseFollowingList = m.top.findNode("browseFollowingList")
@@ -557,7 +557,7 @@ sub onKeyEvent(key, press) as boolean
                     m.liveButton.color = m.activeSelectionColor
                     m.liveLine.visible = true
                     m.categoryLine.visible = false
-                    m.categoryButton.color = m.activeSelectionColor
+                    m.categoryButton.color = m.inactiveSelectionColor
                     m.followingLine.visible = false
                     m.getCategories.pagination = ""
                     m.browseList.setFocus(true)

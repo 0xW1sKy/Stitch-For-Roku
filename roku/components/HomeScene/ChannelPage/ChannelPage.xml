@@ -25,7 +25,7 @@
             <Group id="profile" translation="[0,0]">
                 <Rectangle
                     visible="true"
-                    color="0x010101FE"
+                    color="0x010101F0"
                     width="1358"
                     height="80"
                     translation="[0,0]" />

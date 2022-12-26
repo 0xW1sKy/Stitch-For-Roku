@@ -27,7 +27,7 @@ function getStreamLink() as object
     ' url.AddHeader("Referer", "https://player.twitch.tv")
     url.SetUrl(stream_link.EncodeUri())
     rsp = url.GetToString()
-    ? "rsp: "; rsp
+    ' ? "rsp: "; rsp
     list = rsp.Split(chr(10))
     first_stream_link = ""
     last_stream_link = ""

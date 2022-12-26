@@ -17,7 +17,7 @@
             color="0x010101FE"
             width="78"
             height="1000"
-            translation="[0,0]" />
+            translation="[0,5]" />
 
         <Poster
             uri="pkg:/images/live_rectangle.9.png"
@@ -28,7 +28,7 @@
                 text="LIVE"
                 horizAlign="left"
                 color="0xFFFFFFFF"
-                translation="[17,1]">
+                translation="[15,0]">
                 <Font role="font" uri="pkg:/fonts/Inter-Regular.ttf" size="12" />
             </Label>
             <Poster

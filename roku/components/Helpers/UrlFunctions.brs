@@ -71,45 +71,36 @@ function POST(request_url as string, request_payload as string) as string
     return response.GetString()
 end function
 
-function refreshToken()
-    oauth_token = getOauthCode()
-    ' ? "OAUTH TOKEN: "; oauth_token
-    if oauth_token.access_token <> invalid
-        '     access_token = oauth_token.access_token
-        '     refresh_token = oauth_token.refresh_token
-        url = CreateObject("roUrlTransfer")
-        url.EnableEncodings(true)
-        url.RetainBodyOnError(true)
-        url.SetCertificatesFile("common:/certs/ca-bundle.crt")
-        url.InitClientCertificates()
-        url.SetUrl("https://id.twitch.tv/oauth2/validate")
-        url.AddHeader("Authorization", "OAuth " + oauth_token.access_token)
-        response = ParseJson(url.GetToString())
-        saveLogin(oauth_token.access_token, oauth_token.refresh_token, response.login)
-    end if
-end function
 
-function getOauthCode()
+function refreshToken()
+    ? "Client Asked to Refresh Token"
+    sec = createObject("roRegistrySection", "StitchUserData")
+    if sec.Exists("RefreshToken")
+        refresh_token = sec.Read("RefreshToken")
+    end if
+    if sec.Exists("UserToken")
+        userToken = sec.Read("UserToken")
+    end if
     url = CreateObject("roUrlTransfer")
     url.EnableEncodings(true)
     url.RetainBodyOnError(true)
     url.SetCertificatesFile("common:/certs/ca-bundle.crt")
     url.InitClientCertificates()
-    url.SetUrl("https://oauth.k10labs.workers.dev/refresh")
-    port = CreateObject("roMessagePort")
-    url.SetMessagePort(port)
-    url.AsyncPostFromString("code=" + getRefreshToken())
-    msg = port.WaitMessage(0)
-    oauth_token = ParseJson(msg.GetString())
-    return oauth_token
-end function
-
-function getRefreshToken()
-    sec = createObject("roRegistrySection", "StitchUserData")
-    if sec.Exists("RefreshToken")
-        return sec.Read("RefreshToken")
+    url.SetUrl("https://id.twitch.tv/oauth2/validate")
+    url.AddHeader("Authorization", "Bearer " + userToken)
+    response_string = ParseJson(url.GetToString())
+    if response_string.status <> invalid and response_string.status = 401 and refresh_token <> invalid and refresh_token <> ""
+        ? "URL Functions > refreshToken > 401"
+        url = CreateObject("roUrlTransfer")
+        url.EnableEncodings(true)
+        url.RetainBodyOnError(true)
+        url.SetCertificatesFile("common:/certs/ca-bundle.crt")
+        url.InitClientCertificates()
+        refresh_url = "https://oauth.k10labs.workers.dev/refresh?code=" + refresh_token
+        url.SetUrl(refresh_url)
+        oauth_token = ParseJson(url.GetToString())
+        saveLogin(oauth_token.access_token, oauth_token.refresh_token, response_string.login)
     end if
-    return ""
 end function
 
 function saveLogin(access_token, refresh_token, login) as void
@@ -118,37 +109,6 @@ function saveLogin(access_token, refresh_token, login) as void
     sec.Write("RefreshToken", refresh_token)
     sec.Write("LoggedInUser", login)
     m.global.setField("userToken", access_token)
+    m.global.setField("refreshToken", refresh_token)
     sec.Flush()
 end function
-
-' sub DeleteRegistry()
-'     print "Starting Delete Registry"
-'     Registry = CreateObject("roRegistry")
-'     i = 0
-'     for each section in Registry.GetSectionList()
-'         RegistrySection = CreateObject("roRegistrySection", section)
-'         for each key in RegistrySection.GetKeyList()
-'             i = i + 1
-'             print "Deleting " section + ":" key
-'             RegistrySection.Delete(key)
-'         end for
-'         RegistrySection.flush()
-'     end for
-'     print i.toStr() " Registry Keys Deleted"
-' end sub
-' function getBearerToken() as object
-'     access_token_url = "https://oauth.k10labs.workers.dev/bearer"
-
-'     url = CreateObject("roUrlTransfer")
-'     url.EnableEncodings(true)
-'     url.RetainBodyOnError(true)
-'     url.SetCertificatesFile("common:/certs/ca-bundle.crt")
-'     url.InitClientCertificates()
-'     url.AddHeader("Authorization", "Basic YWRtaW46YWRtaW4=")
-'     url.SetUrl(access_token_url)
-
-'     response_string = ParseJSON(url.GetToString())
-
-'     ? "GetToken response: "; response_string
-'     m.top.appBearerToken = "Bearer " + response_string.access_token
-' end function
