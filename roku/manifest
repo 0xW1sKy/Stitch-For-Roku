@@ -1,15 +1,24 @@
+# Channel Details
 title=stitch
 
-major_version=1
-minor_version=6
-build_version=00000
+major_version=2
+minor_version=0
+build_version=0
 
-mm_icon_focus_hd=pkg:/images/channel-icon_HD.png
+# Channel Assets
 mm_icon_focus_sd=pkg:/images/channel-poster_sd.png
+mm_icon_focus_hd=pkg:/images/channel-poster_hd.png
+mm_icon_focus_fhd=pkg:/images/channel-poster_fhd.png
+# Splash Screen + Loading Screen Artwork
+splash_screen_sd=pkg:/images/splash-screen_sd.jpg
+splash_screen_hd=pkg:/images/splash-screen_hd.jpg
+splash_screen_fhd=pkg:/images/splash-screen_fhd.jpg
+splash_color=#808080
+splash_min_time=0
 
-splash_screen_hd=pkg:/images/splash-screen_HD.png
-splash_screen_sd=pkg:/images/splash-screen_sd.png
+# Resolution
+ui_resolutions=fhd
 
+
+# Options
 supports_input_launch=1
-
-ui_resolutions=hd

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<component name="MenuScreen" extends="Group">
+
+  <interface>
+    <field id="rowItemSelected" type="node" alwaysNotify="true" alias="list.rowItemSelected"
+      onchange="onRowItemSelected" />
+    <field id="focused" type="bool" alwaysNotify="true" onchange="onFocused" />
+  </interface>
+
+
+  <script type="text/brightscript" uri="pkg:/components/SlidingMenu/MenuScreen.brs" />
+  <children>
+
+    <Rectangle
+      id="listContainer"
+      translation="[ -300, 0 ]"
+      height="1280"
+      color="0x000000FF"
+      opacity="0.5"
+      width="400">
+      <RowList
+        id="list"
+        translation="[300, 160 ]"
+        itemComponentName="ListItem"
+        numRows="4"
+        itemSize="[ 100, 80 ]"
+        rowItemSize="[ [100, 80] ]"
+        itemSpacing="[ 0, 2 ]"
+        showRowLabel="[ false ]"
+        drawFocusFeedback="false"
+        vertFocusAnimationStyle="floatingFocus"
+        rowFocusAnimationStyle="floatingFocus" />
+
+    </Rectangle>
+    <ParallelAnimation id="openMenuAnimation">
+      <Animation id="transAnimationIn"
+        duration="0.2"
+        repeat="false"
+        easeFunction="linear">
+        <Vector2DFieldInterpolator id="translateInInterp"
+          key="[0.0, 1.0]"
+          keyValue="[ [-300, 0.0], [-250.0, 0.0] ]"
+          fieldToInterp="listContainer.translation" />
+        <Vector2DFieldInterpolator id="expandRowItemSizeInterp"
+          key="[0.0, 1.0]"
+          keyValue="[ [100.0, 80.0], [200.0, 80.0] ]"
+          fieldToInterp="list.itemSize" />
+        <FloatFieldInterpolator id="expandRectangleInterp"
+          key="[0.0, 1.0]"
+          keyValue="[ 400,500 ]"
+          fieldToInterp="listContainer.width" />
+        <FloatFieldInterpolator id="opacityInterp"
+          key="[0.0, 1.0]"
+          keyValue="[ 0.50,0.90 ]"
+          fieldToInterp="listContainer.opacity" />
+      </Animation>
+
+    </ParallelAnimation>
+
+    <ParallelAnimation id="closeMenuAnimation">
+
+      <Animation id="transAnimationOut"
+        duration="0.2"
+        repeat="false"
+        easeFunction="linear">
+        <Vector2DFieldInterpolator id="translateOutInterp"
+          key="[0.0, 1.0]"
+          keyValue="[ [-250.0, 0.0] , [-300, 0.0] ]"
+          fieldToInterp="listContainer.translation" />
+        <Vector2DFieldInterpolator id="shrinkRowItemSizeInterp"
+          key="[0.0, 1.0]"
+          keyValue="[ [200.0, 80.0] , [100.0, 80.0]]"
+          fieldToInterp="list.itemSize" />
+        <FloatFieldInterpolator id="shrinkRectangleInterp"
+          key="[0.0, 1.0]"
+          keyValue="[ 500,400 ]"
+          fieldToInterp="listContainer.width" />
+        <FloatFieldInterpolator id="reduceOpacityInterp"
+          key="[0.0, 1.0]"
+          keyValue="[ 0.90 ,0.50]"
+          fieldToInterp="listContainer.opacity" />
+      </Animation>
+
+    </ParallelAnimation>
+
+  </children>
+
+</component>

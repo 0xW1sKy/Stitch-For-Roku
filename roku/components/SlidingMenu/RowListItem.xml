@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<component name="ListItem" extends="Group">
+
+  <interface>
+    <field id="itemContent" type="node" onChange="showcontent" />
+    <field id="rowHasFocus" type="boolean" onChange="onItemFocused" />
+    <field id="rowFocusPercent" type="float" onChange="showRowfocus" />
+    <field id="rowIndex" type="int" />
+
+  </interface>
+
+  <script type="text/brightscript" uri="pkg:/components/SlidingMenu/RowListItem.brs" />
+
+
+  <children>
+    <Poster
+      id="itemPoster"
+      translation="[ 30, 20 ]"
+      width="32.0"
+      opacity="0.50"
+      height="32.0" />
+
+    <Rectangle
+      id="indicatorRect"
+      translation="[ 30, 20]"
+      height="5"
+      visible="false"
+      color="0xFF000000"
+      opacity="1"
+      width="400" />
+
+    <Label
+      id="itemLabel"
+      translation="[ -300, 25 ]"
+      horizAlign="center"
+      vertAlign="top"
+      color="0xFFFFFF"
+      opacity="0.5"
+      visible="false"
+      width="150" font="font:SmallestSystemFont" />
+
+    <Animation id="transAnimationIn"
+      duration="0.2"
+      repeat="false"
+      easeFunction="linear">
+      <Vector2DFieldInterpolator id="translateInInterp"
+        key="[0.0, 1.0]"
+        keyValue="[ [-300, 25.0], [60.0, 25.0] ]"
+        fieldToInterp="itemLabel.translation" />
+    </Animation>
+
+    <Animation id="transAnimationOut"
+      duration="0.2"
+      repeat="false"
+      easeFunction="linear">
+      <Vector2DFieldInterpolator id="translateOutInterp"
+        key="[0.0, 1.0]"
+        keyValue="[ [60, 25.0], [-300.0, 25.0] ]"
+        fieldToInterp="itemLabel.translation" />
+      <FloatFieldInterpolator id="reduceIconOpacityInterp"
+        key="[0.0, 1.0]"
+        keyValue="[ 1.0,0.50 ]"
+        fieldToInterp="itemPoster.opacity" />
+      <FloatFieldInterpolator id="reduceIndicatorOpacityInterp"
+        key="[0.0, 1.0]"
+        keyValue="[ 1.0,0.50 ]"
+        fieldToInterp="indicatorRect.opacity" />
+    </Animation>
+  </children>
+
+</component>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2016 Roku Corp.  All Rights Reserved. -->
+
+<component name="customItem" extends="Group">
+
+  <interface>
+    <field id="width" type="float" onChange="updateLayout" />
+    <field id="height" type="float" onChange="updateLayout" />
+    <field id="itemContent" type="node" onChange="itemContentChanged" />
+  </interface>
+
+  <script type="text/brightscript" uri="pkg:/components/Item/customItem.brs" />
+
+  <children>
+    <Poster id="poster">
+      <Label
+        id="itemTitle"
+        horizAlign="left"
+        vertAlign="bottom"
+      />
+
+      <EmojiLabel
+        id="itemShortDescription"
+        visible="true"
+        height="30"
+      />
+
+
+      <Label
+        id="itemSubtitle"
+        height="30"
+        horizAlign="left"
+      />
+    </Poster>
+  </children>
+
+</component>

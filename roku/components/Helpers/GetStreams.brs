@@ -35,67 +35,100 @@ function getGameNameFromId(game_ids_url)
     end if
 end function
 
-function getSearchResults() as object
-    'search_results_url = "https://api.twitch.tv/kraken/streams?client_id=jzkbprff40iqj646a697cyrvl0zt2m6&limit=24&offset=" + m.top.offset + "&game="
-    search_results_url = "https://api.twitch.tv/helix/streams?first=21"
 
-    if m.top.gameRequested <> ""
-        search_results_url = search_results_url + "&game_id=" + m.top.gameRequested
-    end if
-
-    url = createUrlNorm()
-
-    'url.SetUrl(search_results_url.EncodeUri() + m.top.gameRequested.EncodeUriComponent())
-
-    if m.top.pagination <> ""
-        search_results_url = search_results_url + m.top.pagination
-    end if
-
-    url.SetUrl(search_results_url.EncodeUri())
-
-    response_string = url.GetToString()
-    search = ParseJson(response_string)
-
-    if search.status <> invalid and search.status = 401
-        ? "401"
-        return []
-    end if
-
+function formatItem(stream, first)
+    ? "GetStreams > FormatItem"
     game_ids_url = "https://api.twitch.tv/helix/games?id="
     user_ids_url = "https://api.twitch.tv/helix/users?id="
-    first = true
-    result = []
-    if search <> invalid and search.data <> invalid
-        for each stream in search.data
-            item = {}
-            item.id = stream.user_id
-            item.display_name = stream.user_name
-            item.game_id = stream.game_id
-            if first = false
-                game_ids_url += "&id=" + stream.game_id
-                user_ids_url += "&id=" + stream.user_id
-            else
-                game_ids_url += stream.game_id
-                user_ids_url += stream.user_id
-            end if
-            item.title = stream.title
-            item.viewers = stream.viewer_count
-            item.thumbnail = Left(stream.thumbnail_url, Len(stream.thumbnail_url) - 20) + "320x180.jpg"
-            result.push(item)
-            first = false
-        end for
-        getGameNameFromId(game_ids_url)
-        getLoginFromId(user_ids_url)
-        for each stream in result
-            stream.game = m.gameNames[stream.game_id]
-            '? "login > "; m.loginNames[stream.id]
-            stream.name = m.loginNames[stream.id]
-        end for
+    if first = false
+        game_ids_url += "&id=" + stream.game_id
+        user_ids_url += "&id=" + stream.user_id
+    else
+        game_ids_url += stream.game_id
+        user_ids_url += stream.user_id
     end if
+    thumbnail_url = Left(stream.thumbnail_url, Len(stream.thumbnail_url) - 21)
 
-    if search.pagination.cursor <> invalid
-        m.top.pagination = "&after=" + search.pagination.cursor
-    end if
+    ' thumbnail_url = "https://static-cdn.jtvnw.net/previews-ttv/live_user_" + stream.name + ".jpg"
+    item = {
+        description: stream.title
+        guid: stream.user_id
+        hdbackgroundimageurl: thumbnail_url + "-854x480.jpg"
+        hdposterurl: thumbnail_url + "-854x480.jpg"
+        link: ""
+        "media:content": ""
+        pubDate: ""
+        stream: { url: thumbnail_url }
+        streamformat: "hls"
+        title: stream.user_name
+        subtitle: stream.viewer_count
+        typename: "stream"
+        uri: [
+        ]
 
-    return result
+    }
+    return item
 end function
+
+' function getBearerToken() as object
+'     access_token_url = "https://oauth.k10labs.workers.dev/bearer"
+
+'     url = CreateObject("roUrlTransfer")
+'     url.EnableEncodings(true)
+'     url.RetainBodyOnError(true)
+'     url.SetCertificatesFile("common:/certs/ca-bundle.crt")
+'     url.InitClientCertificates()
+'     url.AddHeader("Authorization", "Basic YWRtaW46YWRtaW4=")
+'     url.SetUrl(access_token_url)
+
+'     response_string = ParseJSON(url.GetToString())
+
+'     ? "GetToken response: "; response_string
+
+'     return "Bearer " + response_string.access_token
+' end function
+
+
+
+
+
+' function getCategorySearchResults()
+'     search_results_url = "https://api.twitch.tv/helix/games/top?first=24"
+'     url = CreateObject("roUrlTransfer")
+'     url.EnableEncodings(true)
+'     url.RetainBodyOnError(true)
+'     url.SetCertificatesFile("common:/certs/ca-bundle.crt")
+'     url.InitClientCertificates()
+'     url.AddHeader("Client-ID", "cf9fbjz6j9i6k6guz3dwh6qff5dluz") 'Used for API
+'     ? "we using global"
+'     url.AddHeader("Authorization", getBearerToken())
+'     ? "getSearchResults >>> 2"
+'     url.SetUrl(search_results_url.EncodeUri())
+'     response_string = url.GetToString()
+'     search = ParseJson(response_string)
+
+'     result = []
+'     if search.data <> invalid
+'         for each category in search.data
+'             item = {
+'                 descrption: ""
+'                 guid: category.id
+'                 hdbackgroundimageurl: Left(category.box_art_url, Len(category.box_art_url) - 20) + "136x190.jpg"
+'                 hdposterurl: Left(category.box_art_url, Len(category.box_art_url) - 20) + "136x190.jpg"
+'                 link: ""
+'                 "media:content": ""
+'                 pubDate: ""
+'                 stream: { url: "" }
+'                 streamformat: "hls"
+'                 title: category.name
+'                 typename: "category"
+'                 uri: [
+'                     Left(category.box_art_url, Len(category.box_art_url) - 20) + "136x190.jpg"
+'                 ]
+
+'             }
+'             result.push(item)
+'         end for
+'     end if
+'     return result
+' end function

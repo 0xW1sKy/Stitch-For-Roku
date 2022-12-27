@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<component name="RowListContent" extends="ContentNode">
+
+  <children>
+
+    <ContentNode>
+      <ContentNode
+        title="Home" />
+    </ContentNode>
+
+    <ContentNode>
+      <ContentNode
+        title="Movies" />
+    </ContentNode>
+
+    <ContentNode>
+      <ContentNode
+        title="Shows" />
+    </ContentNode>
+
+    <ContentNode>
+      <ContentNode
+        title="Login" />
+    </ContentNode>
+
+  </children>
+
+</component>
