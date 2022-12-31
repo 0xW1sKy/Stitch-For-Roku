@@ -10,7 +10,7 @@ function onSearchTextChange()
 
 end function
 
-function getGameNameFromId(id as String)
+function getGameNameFromId(id as string)
     game_info = GETJSON("https://api.twitch.tv/helix/games?id=" + id)
     if game_info <> invalid and game_info.data <> invalid and game_info.data[0] <> invalid
         return game_info.data[0].name
@@ -18,15 +18,15 @@ function getGameNameFromId(id as String)
     return id
 end function
 
-function convertToTimeFormat(timestamp as String) as String
+function convertToTimeFormat(timestamp as string) as string
     secondsSincePublished = createObject("roDateTime")
     secondsSincePublished.FromISO8601String(timestamp)
     currentTime = createObject("roDateTime").AsSeconds()
     elapsedTime = currentTime - secondsSincePublished.AsSeconds()
     m.top.streamDurationSeconds = elapsedTime
     hours = Int(elapsedTime / 60 / 60)
-    mins = elapsedTime / 60 MOD 60
-    secs = elapsedTime MOD 60
+    mins = elapsedTime / 60 mod 60
+    secs = elapsedTime mod 60
     if mins < 10
         mins = mins.ToStr()
         mins = "0" + mins
@@ -42,7 +42,7 @@ function convertToTimeFormat(timestamp as String) as String
     return hours.ToStr() + ":" + mins + ":" + secs
 end function
 
-function getSearchResults() as Object
+function getSearchResults() as object
     search_results_url = "https://api.twitch.tv/helix/users?login=" + m.top.loginRequested
 
     url = createUrl()
@@ -118,7 +118,7 @@ function getSearchResults() as Object
 
     if search <> invalid and search.total <> invalid
         result.followers = numberToText(search.total) + " followers"
-    else    
+    else
         result.followers = "0 followers"
     end if
 

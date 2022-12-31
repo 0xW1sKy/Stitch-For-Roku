@@ -58,7 +58,8 @@ function getSearchResults() as object
 
     if search.status <> invalid and search.status = 401
         ? "401"
-        return []
+        refreshToken()
+        return getSearchResults()
     end if
 
     game_ids_url = "https://api.twitch.tv/helix/games?id="

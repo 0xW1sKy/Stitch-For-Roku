@@ -89,12 +89,28 @@ function init()
         m.global.addFields({ chatOption: false })
     end if
 
-    userToken = checkUserToken()
-    if userToken <> invalid and userToken <> ""
-        m.global.addFields({ userToken: userToken })
+    userData = getTokenFromRegistry()
+    if userdata.access_token <> invalid and userdata.access_token <> ""
+        m.global.addFields({ userToken: userdata.access_token })
     else
         m.global.addFields({ userToken: "" })
     end if
+    ? "User Token is "; m.global.userToken
+
+    if userdata.refresh_token <> invalid and userdata.refresh_token <> ""
+        m.global.addFields({ refreshToken: userdata.refresh_token })
+    else
+        m.global.addFields({ refreshToken: "" })
+    end if
+    ? "Refresh Token is "; m.global.refreshToken
+    if userdata.login <> invalid and userdata.login <> ""
+        m.global.addFields({ loggedInUser: userdata.login })
+    else
+        m.global.addFields({ loggedInUser: "" })
+    end if
+    ? "LoggedInUser is "; userData
+
+
 
     videoBookmarks = checkVideoBookmarks()
     ? "MainScene >> videoBookmarks > " videoBookmarks
@@ -243,6 +259,33 @@ function checkUserToken()
     return ""
 end function
 
+function getTokenFromRegistry()
+    sec = createObject("roRegistrySection", "StitchUserData")
+    if sec.Exists("RefreshToken")
+        refresh_token = sec.Read("RefreshToken")
+    end if
+    if sec.Exists("UserToken")
+        userToken = sec.Read("UserToken")
+    end if
+    if sec.Exists("LoggedInUser")
+        userLogin = sec.Read("LoggedInUser")
+    end if
+    if refresh_token = invalid or refresh_token = ""
+        refresh_token = ""
+    end if
+    if userToken = invalid or userToken = ""
+        userToken = ""
+    end if
+    if userLogin = invalid or userLogin = ""
+        userLogin = ""
+    end if
+    return {
+        access_token: userToken
+        refresh_token: refresh_token
+        login: userLogin
+    }
+end function
+
 function checkVideoBookmarks()
     ? "Main Scene > checkVideoBookmarks"
     sec = createObject("roRegistrySection", "VideoSettings")
@@ -295,12 +338,12 @@ function setReset(word as string) as void
     sec.Flush()
 end function
 
-function saveLogin() as void
-    ? "Main Scene > saveLogin"
-    sec = createObject("roRegistrySection", "StitchUserData")
-    sec.Write("LoggedInUser", m.homeScene.loggedInUserName)
-    sec.Flush()
-end function
+' function saveLogin() as void
+'     ? "Main Scene > saveLogin"
+'     sec = createObject("roRegistrySection", "StitchUserData")
+'     sec.Write("LoggedInUser", m.homeScene.loggedInUserName)
+'     sec.Flush()
+' end function
 
 function onHeaderButtonPress()
     ? "Main Scene > onHeaderButtonPress"
@@ -322,18 +365,19 @@ function onHeaderButtonPress()
 end function
 
 function onUserLogin()
+    userdata = getTokenFromRegistry()
     ? "Main Scene > onUserLogin"
-    m.homeScene.loggedInUserName = m.getUser.searchResults.display_name
+    ?"USERDATA: "; userdata
+    m.homeScene.loggedInUserName = userdata.login
     if m.getUser.searchResults.profile_image_url <> invalid
         m.homeScene.loggedInUserProfileImage = m.getUser.searchResults.profile_image_url
-        m.chat.loggedInUsername = m.getUser.searchResults.login
+        m.chat.loggedInUsername = userdata.login
     else
         m.homeScene.loggedInUserProfileImage = ""
         m.homeScene.loggedInUserName = "Login"
     end if
     m.homeScene.followedStreams = m.getUser.searchResults.followed_users
     m.homeScene.currentlyLiveStreamerIds = m.getUser.currentlyLiveStreamerIds
-    saveLogin()
 end function
 
 function onCategoryItemSelectFromSearch()
@@ -544,4 +588,21 @@ function onKeyEvent(key, press) as boolean
 
     '? "MAINSCENE > handled " handled " > (" key ", " press ")"
     return handled
+end function
+
+function saveLogin(access_token, refresh_token, login) as void
+    sec = createObject("roRegistrySection", "StitchUserData")
+    if access_token <> invalid and access_token <> ""
+        sec.Write("UserToken", access_token)
+        m.global.setField("UserToken", access_token)
+    end if
+    if access_token <> invalid and access_token <> ""
+        sec.Write("RefreshToken", refresh_token)
+        m.global.setField("RefreshToken", refresh_token)
+    end if
+    if access_token <> invalid and access_token <> ""
+        sec.Write("LoggedInUser", login)
+        m.global.setField("LoggedInUser", login)
+    end if
+    sec.Flush()
 end function

@@ -10,13 +10,21 @@ function onStreamerChange()
 
 end function
 
+
 function saveLogin(access_token, refresh_token, login) as void
     sec = createObject("roRegistrySection", "StitchUserData")
-    sec.Write("UserToken", access_token)
-    sec.Write("RefreshToken", refresh_token)
-    sec.Write("LoggedInUser", login)
-    m.global.setField("userToken", access_token)
-    m.global.setField("refreshToken", refresh_token)
+    if access_token <> invalid and access_token <> ""
+        sec.Write("UserToken", access_token)
+        m.global.setField("UserToken", access_token)
+    end if
+    if access_token <> invalid and access_token <> ""
+        sec.Write("RefreshToken", refresh_token)
+        m.global.setField("RefreshToken", refresh_token)
+    end if
+    if access_token <> invalid and access_token <> ""
+        sec.Write("LoggedInUser", login)
+        m.global.setField("LoggedInUser", login)
+    end if
     sec.Flush()
 end function
 
@@ -67,11 +75,11 @@ function getStreamLink() as object
     url.SetCertificatesFile("common:/certs/ca-bundle.crt")
     url.InitClientCertificates()
     url.SetUrl("https://id.twitch.tv/oauth2/validate")
-    url.AddHeader("Authorization", "Bearer " + oauth_token.access_token)
+    url.AddHeader("Authorization", "OAuth " + oauth_token.access_token)
+    url.AddHeader("Client-ID", "cf9fbjz6j9i6k6guz3dwh6qff5dluz")
     response_string = ParseJson(url.GetToString())
 
     ? "oauth_token.refresh_token "; oauth_token.refresh_token
     saveLogin(oauth_token.access_token, oauth_token.refresh_token, response_string.login)
-
     return ""
 end function
