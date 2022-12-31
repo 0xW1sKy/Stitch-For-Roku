@@ -1,4 +1,4 @@
-# 🔮 Stitch (for Roku)
+# Stitch (for Roku)
 
 An Improvable™ Twitch app for Roku. Still buggy, so feel free to suggest improvements (and code and features). U
 
