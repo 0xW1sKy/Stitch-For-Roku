@@ -1,7 +1,6 @@
 function init()
     ' bump
     m.progressBar = m.top.findNode("progressBar")
-    m.busyspinner = m.top.findNode("busyspinner")
     m.progressBar.visible = false
     m.progressBarBase = m.top.findNode("progressBarBase")
     m.progressBarProgress = m.top.findNode("progressBarProgress")
@@ -45,11 +44,9 @@ function init()
 
     m.progressBarFocused = false
 
-    m.busyspinner = m.top.findNode("busyspinner")
     m.top.observeField("state", "onvideoStateChange")
     m.top.observeField("channelAvatar", "onChannelAvatarChange")
     m.top.observeField("chatIsVisible", "onChatVisibilityChange")
-    m.top.observeField("busySpinner", "onvideoStateChange")
     m.uiResolution = createObject("roDeviceInfo").GetUIResolution()
     m.uiResolutionWidth = m.uiResolution.width
     if m.uiResolutionWidth = 1920
@@ -74,9 +71,6 @@ function init()
     m.buttonHeld = invalid
     m.scrollInterval = 10
     ' m.progressBar.state = 2
-    m.busyspinner = m.top.findNode("BusySpinner")
-    m.busyspinner.poster.uri = "pkg:/images/spinner.png"
-    m.loadingtext = m.top.findNode("loading")
 
 end function
 
@@ -103,27 +97,19 @@ end sub
 ' m.controlButton.translation = [634, 53]
 sub onVideoStateChange()
     ? "State is: "; m.top.state
-    centerx = (m.uiResolution.width - m.busyspinner.poster.bitmapwidth) / 2
-    centery = (m.uiResolution.height - m.busyspinner.poster.bitmapheight) / 2
-    m.busyspinner.translation = [centerx, centery]
-    m.busyspinner.visible = true
-    m.busyspinner.setFocus(true)
-    centerx = (m.uiResolution.width / 2) - (m.busyspinner.poster.bitmapwidth / 4)
-    centery = (m.uiResolution.height / 2) - (m.busyspinner.poster.bitmapheight / 12)
-    m.loadingtext.translation = [centerx, centery]
-    m.loadingtext.visible = true
-    m.loadingtext.setFocus(true)
     ' if m.top.state = "buffering"
     ' end if
     if m.top.state = "playing"
         ' showSpinner()
-        m.busyspinner.visible = false
-        m.loadingtext.visible = false
     end if
 end sub
 
 sub onButtonHold()
-    if m.buttonHeld <> invalid and m.top.thumbnailInfo <> invalid
+    ? "Detected Button Hold"
+    ? "button held: "; m.buttonHeld
+    ? "scroll interval: "; m.scrollInterval
+    ? "currentPositionSeconds: "; m.currentPositionSeconds
+    if m.buttonHeld <> invalid
         if m.buttonHeld = "right"
             m.currentPositionSeconds += m.scrollInterval
             m.progressBarProgress.width = m.progressBarBase.width * (m.currentPositionSeconds / m.top.duration)
@@ -131,15 +117,17 @@ sub onButtonHold()
             if m.currentPositionSeconds > m.top.duration
                 m.currentPositionSeconds = m.top.duration
             end if
-            if m.top.thumbnailInfo.width <> invalid
-                if m.progressBarProgress.width + m.top.thumbnailInfo.width / 2 <= m.progressBarBase.width
-                    if m.progressBarProgress.width - m.top.thumbnailInfo.width / 2 >= 0
-                        m.thumbnails.translation = [m.progressBarProgress.width - m.top.thumbnailInfo.width / 2, -150]
+            if m.top.thumbnailInfo <> invalid
+                if m.top.thumbnailInfo.width <> invalid
+                    if m.progressBarProgress.width + m.top.thumbnailInfo.width / 2 <= m.progressBarBase.width
+                        if m.progressBarProgress.width - m.top.thumbnailInfo.width / 2 >= 0
+                            m.thumbnails.translation = [m.progressBarProgress.width - m.top.thumbnailInfo.width / 2, -150]
+                        else
+                            m.thumbnails.translation = [0, -150]
+                        end if
                     else
-                        m.thumbnails.translation = [0, -150]
+                        m.thumbnails.translation = [m.progressBarBase.width - m.top.thumbnailInfo.width, -150]
                     end if
-                else
-                    m.thumbnails.translation = [m.progressBarBase.width - m.top.thumbnailInfo.width, -150]
                 end if
             end if
         else if m.buttonHeld = "left"
@@ -149,26 +137,30 @@ sub onButtonHold()
             if m.currentPositionSeconds < 0
                 m.currentPositionSeconds = 0
             end if
-            if m.top.thumbnailInfo.width <> invalid
-                if m.progressBarProgress.width - m.top.thumbnailInfo.width / 2 >= 0
-                    if m.progressBarProgress.width + m.top.thumbnailInfo.width / 2 <= m.progressBarBase.width
-                        m.thumbnails.translation = [m.progressBarProgress.width - m.top.thumbnailInfo.width / 2, -150]
+            if m.top.thumbnailInfo <> invalid
+                if m.top.thumbnailInfo.width <> invalid
+                    if m.progressBarProgress.width - m.top.thumbnailInfo.width / 2 >= 0
+                        if m.progressBarProgress.width + m.top.thumbnailInfo.width / 2 <= m.progressBarBase.width
+                            m.thumbnails.translation = [m.progressBarProgress.width - m.top.thumbnailInfo.width / 2, -150]
+                        else
+                            m.thumbnails.translation = [m.progressBarBase.width - m.top.thumbnailInfo.width, -150]
+                        end if
                     else
-                        m.thumbnails.translation = [m.progressBarBase.width - m.top.thumbnailInfo.width, -150]
+                        m.thumbnails.translation = [0, -150]
                     end if
-                else
-                    m.thumbnails.translation = [0, -150]
+                end if
+                if m.top.thumbnailInfo.width <> invalid
+                    showThumbnail()
                 end if
             end if
         end if
-
-        m.timeProgress.text = convertToReadableTimeFormat(m.currentPositionSeconds)
-        m.timeDuration.text = convertToReadableTimeFormat(m.top.duration)
-        if m.top.thumbnailInfo.width <> invalid
-            showThumbnail()
-        end if
-        m.scrollInterval += 10
     end if
+    ? "Ending Seconds; "; m.currentPositionSeconds
+    ? "Ending Duration; "; m.top.duration
+    ? "Ending Interval; "; m.scrollInterval
+    m.timeProgress.text = convertToReadableTimeFormat(m.currentPositionSeconds)
+    m.timeDuration.text = convertToReadableTimeFormat(m.top.duration)
+    m.scrollInterval += 10
 end sub
 
 function convertToReadableTimeFormat(time) as string
@@ -298,6 +290,7 @@ sub onChannelAvatarChange()
 end sub
 
 function onKeyEvent(key, press) as boolean
+    ?"KEY: "; key press
     handled = false
     if press
         if key = "up"
@@ -538,6 +531,7 @@ function onKeyEvent(key, press) as boolean
             end if
             'return true
         else if key = "fastforward"
+            ? "In Fast Forward"
             m.progressBar.visible = true
             w = m.controlButton.width
             h = m.controlButton.height
@@ -545,13 +539,17 @@ function onKeyEvent(key, press) as boolean
             m.controlButton.blendColor = "0xBD00FFFF"
             m.currentProgressBarState = 2
             if m.currentPositionUpdated = false
+                ? "In Fast Forward currentPositionUpdated = False"
                 m.currentPositionSeconds = m.top.position
                 m.currentPositionUpdated = true
                 m.top.control = "pause"
                 m.controlButton.uri = "pkg:/images/play.png"
             end if
             m.currentPositionSeconds += 10
+            ? "Position"; m.currentPositionSeconds
+            ? "Duration: "; m.top.duration
             if m.currentPositionSeconds > m.top.duration
+                ?"This should be true"
                 m.currentPositionSeconds = m.top.duration
             end if
             m.progressBarProgress.width = m.progressBarBase.width * (m.currentPositionSeconds / m.top.duration)
@@ -575,6 +573,8 @@ function onKeyEvent(key, press) as boolean
             end if
             m.buttonHeld = "right"
             m.buttonHoldTimer.control = "start"
+            ' m.buttonHeld = "right"
+            ' m.buttonHoldTimer.control = "start"
         else if key = "rewind"
             m.progressBar.visible = true
             w = m.controlButton.width
@@ -634,6 +634,7 @@ function onKeyEvent(key, press) as boolean
         end if
     else if not press
         if key = "rewind" or key = "fastforward"
+            ?"key: " key " press: " press
             m.scrollInterval = 10
             m.buttonHeld = invalid
             m.buttonHoldTimer.control = "stop"

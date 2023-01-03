@@ -18,184 +18,174 @@
     <script type="text/brightscript" uri="CustomVideo.brs" />
 
     <children>
-        <BusySpinner id="BusySpinner" visible="false" spinInterval="4">
-            <Poster
-                id="timeTravelRect"
-                uri="pkg:/images/timeTravelRect.png"
-                width="500"
-                height="300"
-                visible="false"
-                translation="[390,210]">
-                <SimpleLabel
-                    translation="[203,34]"
-                    text="Timetravel"
-                    color="0xFFFFFFFF"
-                    fontSize="18"
-                    fontUri="pkg:/fonts/Inter-Regular.ttf" />
-                <SimpleLabel
-                    translation="[110,59]"
-                    text="Fast forward to a select time in your video."
-                    color="0xC4C4C4FF"
-                    fontSize="14"
-                    fontUri="pkg:/fonts/Inter-Regular.ttf" />
-                <SimpleLabel
-                    translation="[120,180]"
-                    text="Move with your arrows to each number, and"
-                    color="0xC4C4C4FF"
-                    fontSize="12"
-                    fontUri="pkg:/fonts/Inter-Regular.ttf" />
-                <SimpleLabel
-                    translation="[120,195]"
-                    text="press up/down to change the desired time."
-                    color="0xC4C4C4FF"
-                    fontSize="12"
-                    fontUri="pkg:/fonts/Inter-Regular.ttf" />
-
-                <Group id="arrows">
-                    <Poster
-                        uri="pkg:/images/arrow-up.png"
-                        width="15.67"
-                        height="4.36"
-                        blendColor="0xDC79FFFF"
-                        translation="[-8,0]" />
-                    <Poster
-                        uri="pkg:/images/arrow-down.png"
-                        width="15.67"
-                        height="4.36"
-                        blendColor="0xDC79FFFF"
-                        translation="[-8,50]" />
-                </Group>
-
-                <Poster
-                    id="hour0"
-                    uri="pkg:/images/unfocusedTimeSlot.png"
-                    width="36"
-                    height="42"
-                    translation="[120,107]">
-                    <SimpleLabel
-                        translation="[8,4]"
-                        text="0"
-                        color="0x3F3F3FFF"
-                        fontSize="32"
-                        fontUri="pkg:/fonts/JetBrainsMono-Bold.ttf" />
-                </Poster>
-                <Poster
-                    id="hour1"
-                    uri="pkg:/images/unfocusedTimeSlot.png"
-                    width="36"
-                    height="42"
-                    translation="[158,107]">
-                    <SimpleLabel
-                        translation="[8,4]"
-                        text="0"
-                        color="0x3F3F3FFF"
-                        fontSize="32"
-                        fontUri="pkg:/fonts/JetBrainsMono-Bold.ttf" />
-                </Poster>
-                <Poster
-                    id="minute0"
-                    uri="pkg:/images/unfocusedTimeSlot.png"
-                    width="36"
-                    height="42"
-                    translation="[213,107]">
-                    <SimpleLabel
-                        translation="[8,4]"
-                        text="0"
-                        color="0x3F3F3FFF"
-                        fontSize="32"
-                        fontUri="pkg:/fonts/JetBrainsMono-Bold.ttf" />
-                </Poster>
-                <Poster
-                    id="minute1"
-                    uri="pkg:/images/unfocusedTimeSlot.png"
-                    width="36"
-                    height="42"
-                    translation="[251,107]">
-                    <SimpleLabel
-                        translation="[8,4]"
-                        text="0"
-                        color="0x3F3F3FFF"
-                        fontSize="32"
-                        fontUri="pkg:/fonts/JetBrainsMono-Bold.ttf" />
-                </Poster>
-                <Poster
-                    id="second0"
-                    uri="pkg:/images/unfocusedTimeSlot.png"
-                    width="36"
-                    height="42"
-                    translation="[306,107]">
-                    <SimpleLabel
-                        translation="[8,4]"
-                        text="0"
-                        color="0x3F3F3FFF"
-                        fontSize="32"
-                        fontUri="pkg:/fonts/JetBrainsMono-Bold.ttf" />
-                </Poster>
-                <Poster
-                    id="second1"
-                    uri="pkg:/images/unfocusedTimeSlot.png"
-                    width="36"
-                    height="42"
-                    translation="[344,107]">
-                    <SimpleLabel
-                        translation="[8,4]"
-                        text="0"
-                        color="0x3F3F3FFF"
-                        fontSize="32"
-                        fontUri="pkg:/fonts/JetBrainsMono-Bold.ttf" />
-                </Poster>
-
-                <SimpleLabel
-                    translation="[196,114]"
-                    text=":"
-                    color="0xFFFFFFFF"
-                    fontSize="24"
-                    fontUri="pkg:/fonts/JetBrainsMono-Bold.ttf" />
-                <SimpleLabel
-                    translation="[289,114]"
-                    text=":"
-                    color="0xFFFFFFFF"
-                    fontSize="24"
-                    fontUri="pkg:/fonts/JetBrainsMono-Bold.ttf" />
-
-                <Rectangle
-                    id="cancelButton"
-                    color="0xC4C4C4FF"
-                    width="200"
-                    height="42"
-                    opacity="0.5"
-                    translation="[45,230]">
-                    <SimpleLabel
-                        translation="[50,14]"
-                        text="CANCEL"
-                        color="0x060609FF"
-                        fontSize="12"
-                        fontUri="pkg:/fonts/Inter-Regular.ttf" />
-                </Rectangle>
-                <Rectangle
-                    id="acceptButton"
-                    color="0xDC79FFFF"
-                    width="200"
-                    height="42"
-                    opacity="0.5"
-                    translation="[255,230]">
-                    <SimpleLabel
-                        translation="[50,14]"
-                        text="ACCEPT"
-                        color="0x060609FF"
-                        fontSize="12"
-                        fontUri="pkg:/fonts/Inter-Regular.ttf" />
-                </Rectangle>
-            </Poster>
-        </BusySpinner>
-        <SimpleLabel
-            id="loading"
+        <Poster
+            id="timeTravelRect"
+            uri="pkg:/images/timeTravelRect.png"
+            width="500"
+            height="300"
             visible="false"
-            translation="[120,195]"
-            text="Loading..."
-            color="0xC4C4C4FF"
-            fontSize="12"
-            fontUri="pkg:/fonts/Inter-Regular.ttf" />
+            translation="[390,210]">
+            <SimpleLabel
+                translation="[203,34]"
+                text="Timetravel"
+                color="0xFFFFFFFF"
+                fontSize="18"
+                fontUri="pkg:/fonts/Inter-Regular.ttf" />
+            <SimpleLabel
+                translation="[110,59]"
+                text="Fast forward to a select time in your video."
+                color="0xC4C4C4FF"
+                fontSize="14"
+                fontUri="pkg:/fonts/Inter-Regular.ttf" />
+            <SimpleLabel
+                translation="[120,180]"
+                text="Move with your arrows to each number, and"
+                color="0xC4C4C4FF"
+                fontSize="12"
+                fontUri="pkg:/fonts/Inter-Regular.ttf" />
+            <SimpleLabel
+                translation="[120,195]"
+                text="press up/down to change the desired time."
+                color="0xC4C4C4FF"
+                fontSize="12"
+                fontUri="pkg:/fonts/Inter-Regular.ttf" />
+
+            <Group id="arrows">
+                <Poster
+                    uri="pkg:/images/arrow-up.png"
+                    width="15.67"
+                    height="4.36"
+                    blendColor="0xDC79FFFF"
+                    translation="[-8,0]" />
+                <Poster
+                    uri="pkg:/images/arrow-down.png"
+                    width="15.67"
+                    height="4.36"
+                    blendColor="0xDC79FFFF"
+                    translation="[-8,50]" />
+            </Group>
+
+            <Poster
+                id="hour0"
+                uri="pkg:/images/unfocusedTimeSlot.png"
+                width="36"
+                height="42"
+                translation="[120,107]">
+                <SimpleLabel
+                    translation="[8,4]"
+                    text="0"
+                    color="0x3F3F3FFF"
+                    fontSize="32"
+                    fontUri="pkg:/fonts/JetBrainsMono-Bold.ttf" />
+            </Poster>
+            <Poster
+                id="hour1"
+                uri="pkg:/images/unfocusedTimeSlot.png"
+                width="36"
+                height="42"
+                translation="[158,107]">
+                <SimpleLabel
+                    translation="[8,4]"
+                    text="0"
+                    color="0x3F3F3FFF"
+                    fontSize="32"
+                    fontUri="pkg:/fonts/JetBrainsMono-Bold.ttf" />
+            </Poster>
+            <Poster
+                id="minute0"
+                uri="pkg:/images/unfocusedTimeSlot.png"
+                width="36"
+                height="42"
+                translation="[213,107]">
+                <SimpleLabel
+                    translation="[8,4]"
+                    text="0"
+                    color="0x3F3F3FFF"
+                    fontSize="32"
+                    fontUri="pkg:/fonts/JetBrainsMono-Bold.ttf" />
+            </Poster>
+            <Poster
+                id="minute1"
+                uri="pkg:/images/unfocusedTimeSlot.png"
+                width="36"
+                height="42"
+                translation="[251,107]">
+                <SimpleLabel
+                    translation="[8,4]"
+                    text="0"
+                    color="0x3F3F3FFF"
+                    fontSize="32"
+                    fontUri="pkg:/fonts/JetBrainsMono-Bold.ttf" />
+            </Poster>
+            <Poster
+                id="second0"
+                uri="pkg:/images/unfocusedTimeSlot.png"
+                width="36"
+                height="42"
+                translation="[306,107]">
+                <SimpleLabel
+                    translation="[8,4]"
+                    text="0"
+                    color="0x3F3F3FFF"
+                    fontSize="32"
+                    fontUri="pkg:/fonts/JetBrainsMono-Bold.ttf" />
+            </Poster>
+            <Poster
+                id="second1"
+                uri="pkg:/images/unfocusedTimeSlot.png"
+                width="36"
+                height="42"
+                translation="[344,107]">
+                <SimpleLabel
+                    translation="[8,4]"
+                    text="0"
+                    color="0x3F3F3FFF"
+                    fontSize="32"
+                    fontUri="pkg:/fonts/JetBrainsMono-Bold.ttf" />
+            </Poster>
+
+            <SimpleLabel
+                translation="[196,114]"
+                text=":"
+                color="0xFFFFFFFF"
+                fontSize="24"
+                fontUri="pkg:/fonts/JetBrainsMono-Bold.ttf" />
+            <SimpleLabel
+                translation="[289,114]"
+                text=":"
+                color="0xFFFFFFFF"
+                fontSize="24"
+                fontUri="pkg:/fonts/JetBrainsMono-Bold.ttf" />
+
+            <Rectangle
+                id="cancelButton"
+                color="0xC4C4C4FF"
+                width="200"
+                height="42"
+                opacity="0.5"
+                translation="[45,230]">
+                <SimpleLabel
+                    translation="[50,14]"
+                    text="CANCEL"
+                    color="0x060609FF"
+                    fontSize="12"
+                    fontUri="pkg:/fonts/Inter-Regular.ttf" />
+            </Rectangle>
+            <Rectangle
+                id="acceptButton"
+                color="0xDC79FFFF"
+                width="200"
+                height="42"
+                opacity="0.5"
+                translation="[255,230]">
+                <SimpleLabel
+                    translation="[50,14]"
+                    text="ACCEPT"
+                    color="0x060609FF"
+                    fontSize="12"
+                    fontUri="pkg:/fonts/Inter-Regular.ttf" />
+            </Rectangle>
+        </Poster>
         <Group id="progressBar" translation="[0,620]">
             <MaskGroup maskuri="pkg:/images/vertical-mask-down.png" masksize="[2,200]"
                 translation="[0,-620]">
