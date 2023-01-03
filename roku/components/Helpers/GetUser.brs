@@ -79,6 +79,7 @@ function convertToTimeFormat(timestamp as string) as string
 end function
 
 function getSearchResults() as object
+    refreshToken()
     'search_results_url = "https://api.twitch.tv/kraken/streams?client_id=jzkbprff40iqj646a697cyrvl0zt2m6&limit=24&offset=" + m.top.offset + "&game="
     search_results_url = "https://api.twitch.tv/helix/users?login=" + m.top.loginRequested
 
