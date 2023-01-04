@@ -133,6 +133,8 @@ function init()
     m.top.appendChild(m.options)
 
     m.homeScene.setFocus(true)
+    m.videoPlayer.notificationInterval = 1
+    m.plyrTask = invalid
 end function
 
 sub onChatDoneFocus()
@@ -187,21 +189,10 @@ sub onStreamChangeFromChannelPage()
 
     m.videoPlayer.videoTitle = m.homeScene.videoTitle
     m.videoPlayer.channelUsername = m.homeScene.channelUsername
-    'm.videoPlayer.channelAvatar =  ""
     m.videoPlayer.channelAvatar = m.homeScene.channelAvatar
-
-    m.videoPlayer.width = 0
-    m.videoPlayer.height = 0
-    m.videoPlayer.setFocus(true)
-
-    m.keyboardGroup.visible = false
-    ' m.channelPage.visible = false
-
-    m.videoPlayer.visible = true
-    m.videoPlayer.content = m.stream
     m.videoPlayer.thumbnailInfo = m.homeScene.thumbnailInfo
     m.homeScene.thumbnailInfo = invalid
-    m.videoPlayer.control = "play"
+    playVideo(m.stream)
     if m.videoPlayer.thumbnailInfo <> invalid
         if m.videoPlayer.videoBookmarks.DoesExist(m.videoPlayer.thumbnailInfo.video_id.ToStr())
             ? "MainScene >> position > " m.videoPlayer.videoBookmarks[m.videoPlayer.thumbnailInfo.video_id.ToStr()]
@@ -407,14 +398,8 @@ function onClipChange()
         m.currentScene = "category"
         m.stream["url"] = m.categoryScene.clipUrl
     end if
-    m.videoPlayer.setFocus(true)
     m.categoryScene.visible = false
-    m.keyboardGroup.visible = false
-    m.videoPlayer.width = 0
-    m.videoPlayer.height = 0
-    m.videoPlayer.visible = true
-    m.videoPlayer.content = m.stream
-    m.videoPlayer.control = "play"
+    playVideo(m.stream)
 end function
 
 function onStreamChange()
@@ -444,20 +429,41 @@ function onStreamChange()
     end if
     m.chat.visible = m.global.chatOption
     m.videoPlayer.chatIsVisible = m.chat.visible
-    ' if not m.global.chatOption
-    '     m.videoPlayer.width = 0
-    '     m.videoPlayer.height = 0
-    ' else
-    '     m.videoPlayer.width = 896
-    '     m.videoPlayer.height = 504
-    ' end if
+    playVideo(m.stream)
+end function
+
+function playVideo(stream as object)
     m.videoPlayer.width = 0
     m.videoPlayer.height = 0
     m.videoPlayer.setFocus(true)
-    m.keyboardGroup.visible = false
-    m.videoPlayer.visible = true
-    m.videoPlayer.content = m.stream
-    m.videoPlayer.control = "play"
+    if m.keyboardGroup.visible
+        m.keyboardGroup.visible = false
+    end if
+    if not m.videoPlayer.visible
+        m.videoPlayer.visible = true
+    end if
+    if invalid = m.plyrTask
+        m.plyrTask = createObject("roSGNode", "playerTask")
+        m.plyrTask.observeField("state", "onTaskStateUpdated")
+    end if
+    streamConfig = {
+        title: ""
+        streamformat: stream["streamFormat"]
+        useStitched: true
+        live: false
+        url: stream["url"]
+        type: "vod"
+        streamtype: "vod"
+        player: { sgnode: m.videoPlayer }
+    }
+    if stream["streamFormat"] = "hls"
+        streamConfig.live = true
+        streamConfig.type = "live"
+        streamConfig.streamtype = "live"
+    end if
+    m.plyrTask.streamConfig = streamConfig
+    m.plyrTask.video = m.videoPlayer
+    m.plyrTask.control = "run"
 end function
 
 function refreshFollows()
