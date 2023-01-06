@@ -11,7 +11,7 @@ function onSearchTextChange()
 end function
 
 function getGameNameFromId(id as string)
-    game_info = GETJSON("https://api.twitch.tv/helix/games?id=" + id)
+    game_info = getjsondata("https://api.twitch.tv/helix/games?id=" + id)
     if game_info <> invalid and game_info.data <> invalid and game_info.data[0] <> invalid
         return game_info.data[0].name
     end if

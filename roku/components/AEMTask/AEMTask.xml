@@ -4,6 +4,7 @@
 <component name="playerTask" extends="Task">
     <interface>
         <field id="streamConfig" type="assocarray" />
+        <field id="blockAds" type="bool" />
         <field id="video" type="Node" />
         <field id="errors" type="stringarray" />
         <field id="adPlaying" type="boolean" />

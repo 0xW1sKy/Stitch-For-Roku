@@ -40,12 +40,10 @@ function createUrlNorm()
     return url
 end function
 
-function GETJSON(link as string) as object
+function getjsondata(link as string) as object
     url = createUrl()
     url.SetUrl(link.EncodeUri())
-
     response_string = url.GetToString()
-
     return ParseJson(response_string)
 end function
 

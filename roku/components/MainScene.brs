@@ -449,10 +449,9 @@ function playVideo(stream as object)
     streamConfig = {
         title: ""
         streamformat: stream["streamFormat"]
-        useStitched: true
         live: false
         url: stream["url"]
-        type: "vod"
+        "type": "vod"
         streamtype: "vod"
         player: { sgnode: m.videoPlayer }
     }
@@ -461,6 +460,7 @@ function playVideo(stream as object)
         streamConfig.type = "live"
         streamConfig.streamtype = "live"
     end if
+    m.plyrTask.blockAds = false
     m.plyrTask.streamConfig = streamConfig
     m.plyrTask.video = m.videoPlayer
     m.plyrTask.control = "run"

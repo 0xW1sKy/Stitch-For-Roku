@@ -18,8 +18,8 @@ function getRecentChannels() as boolean
 end function
 
 function getSearchResults() as object
-    current_user_info = GETJSON("https://api.twitch.tv/helix/users?login=" + m.top.loginRequested)
-    followed_streamers = GETJSON("https://api.twitch.tv/helix/users/follows?first=100&from_id=" + current_user_info.data[0].id)
+    current_user_info = getjsondata("https://api.twitch.tv/helix/users?login=" + m.top.loginRequested)
+    followed_streamers = getjsondata("https://api.twitch.tv/helix/users/follows?first=100&from_id=" + current_user_info.data[0].id)
     addedUsers = 0
     totalUsers = followed_streamers.total
     appended = false
@@ -39,7 +39,7 @@ function getSearchResults() as object
                 end if
             end if
             if addedUsers = 100
-                offline_streamer_info = GETJSON(streamer_info_url)
+                offline_streamer_info = getjsondata(streamer_info_url)
                 for each offline_streamer in offline_streamer_info.data
                     streamer_info = {}
                     streamer_info.login = offline_streamer.login
@@ -55,11 +55,11 @@ function getSearchResults() as object
         'addedUsers = 0
         if followed_streamers.pagination.cursor <> invalid
             '? "GetOfflineFollowedChannels > next > " "https://api.twitch.tv/helix/users/follows?first=100&from_id=" + current_user_info.data[0].id + "&after=" + followed_streamers.pagination.cursor
-            followed_streamers = GETJSON("https://api.twitch.tv/helix/users/follows?first=100&from_id=" + current_user_info.data[0].id + "&after=" + followed_streamers.pagination.cursor)
+            followed_streamers = getjsondata("https://api.twitch.tv/helix/users/follows?first=100&from_id=" + current_user_info.data[0].id + "&after=" + followed_streamers.pagination.cursor)
         else
             if appended = false
                 '? "GetOfflineFollowedChannels > last round > " streamer_info_url
-                offline_streamer_info = GETJSON(streamer_info_url)
+                offline_streamer_info = getjsondata(streamer_info_url)
                 for each offline_streamer in offline_streamer_info.data
                     streamer_info = {}
                     streamer_info.login = offline_streamer.login

@@ -19,11 +19,11 @@ end function
 function main()
     'messagePort = CreateObject("roMessagePort")
     if m.global.globalBadges = invalid
-        m.global.addFields({ globalBadges: GETJSON("https://badges.twitch.tv/v1/badges/global/display") })
+        m.global.addFields({ globalBadges: getjsondata("https://badges.twitch.tv/v1/badges/global/display") })
     end if
 
     if m.global.globalTTVEmotes = invalid
-        temp = GETJSON("https://api.betterttv.net/3/cached/emotes/global")
+        temp = getjsondata("https://api.betterttv.net/3/cached/emotes/global")
         assocEmotes = {}
         for each emote in temp
             assocEmotes[emote.code] = emote.id
@@ -69,12 +69,12 @@ function main()
         channel_id = getChannelBadges()
 
         if m.global.channelBadges = invalid
-            m.global.addFields({ channelBadges: GETJSON("https://badges.twitch.tv/v1/badges/channels/" + channel_id + "/display") })
+            m.global.addFields({ channelBadges: getjsondata("https://badges.twitch.tv/v1/badges/channels/" + channel_id + "/display") })
         else
-            m.global.setField("channelBadges", GETJSON("https://badges.twitch.tv/v1/badges/channels/" + channel_id + "/display"))
+            m.global.setField("channelBadges", getjsondata("https://badges.twitch.tv/v1/badges/channels/" + channel_id + "/display"))
         end if
 
-        temp = GETJSON("https://api.betterttv.net/3/cached/users/twitch/" + channel_id)
+        temp = getjsondata("https://api.betterttv.net/3/cached/users/twitch/" + channel_id)
         assocEmotes = {}
         if temp.sharedEmotes <> invalid
             for each emote in temp.sharedEmotes
@@ -87,7 +87,7 @@ function main()
             m.global.setField("channelTTVEmotes", assocEmotes)
         end if
 
-        temp = GETJSON("https://api.betterttv.net/3/cached/frankerfacez/users/twitch/" + channel_id)
+        temp = getjsondata("https://api.betterttv.net/3/cached/frankerfacez/users/twitch/" + channel_id)
         assocEmotes = {}
         for each emote in temp
             assocEmotes[emote.code] = emote.images["1x"]
