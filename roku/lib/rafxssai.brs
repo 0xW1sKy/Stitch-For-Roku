@@ -1162,13 +1162,13 @@ function RAFX_getAdobeHLSPlugin(params as object) as object
     end function
     strmMgr.rgx_id = createObject("roRegEx", "ID=" + chr(34) + "([A-z0-9-\w+]+)" + chr(34), "")
     strmMgr.rgx_xtype = createObject("roRegEx", "CLASS=" + chr(34) + "([0-9A-z-\w+]+)" + chr(34), "")
-    strmMgr.rgx_duration = createObject("roRegEx", "DURATION=" + chr(34) + "([\d+[\.\d+]*)" + chr(34), "")
+    strmMgr.rgx_duration = createObject("roRegEx", "DURATION=([\d+[\.\d+]*)", "")
     strmMgr.rgx_offset = createObject("roRegEx", "ID=" + chr(34) + "quartile-([\d+[\.\d+]*)-\d" + chr(34), "")
-    strmMgr.rgx_podduration = createObject("roRegEx", "DURATION=" + chr(34) + "([\d+[\.\d+]*)" + chr(34), "")
+    strmMgr.rgx_podduration = createObject("roRegEx", "DURATION=([\d+[\.\d+]*)", "")
     strmMgr.rgx_adcount = createObject("roRegEx", "X-TV-TWITCH-AD-POD-LENGTH=" + chr(34) + "(\d+)" + chr(34), "")
     strmMgr.rgx_data = createObject("roRegEx", "X-TV-TWITCH-AD-ADVERIFICATIONS=" + chr(34) + "([\w+/=\+]+)" + chr(34), "")
     strmMgr.rgx_outer = createObject("roRegEx", "</?AdTrackingFragments?></?AdTrackingFragments?>", "")
-    strmMgr.rgx_adseq = createObject("roRegEx", "X-TV-TWITCH-AD-QUARTITLE=" + chr(34) + "(\d+)" + chr(34), "")
+    strmMgr.rgx_adseq = createObject("roRegEx", "X-TV-TWITCH-AD-POD-POSITION=" + chr(34) + "([\d+[\.\d+]*)" + chr(34), "")
     strmMgr.VASTToRAFEvent = {
         "PREROLL": "Impression"
         "twitch-ad-quartile": "FirstQuartile"

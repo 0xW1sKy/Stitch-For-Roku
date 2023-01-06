@@ -454,6 +454,7 @@ function playVideo(stream as object)
         "type": "vod"
         streamtype: "vod"
         player: { sgnode: m.videoPlayer }
+        blockAds: true
     }
     if stream["streamFormat"] = "hls"
         streamConfig.live = true
