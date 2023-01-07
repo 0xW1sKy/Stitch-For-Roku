@@ -238,7 +238,7 @@ function podsCallback(podsInfo as object)
     adPods = podsInfo["adPods"] ' New list of adPods found
     print " Pod count: ";adPods.count()
     for each adPod in adPods
-        print "   RenderTime: ";adPod.renderTime;"   Ad count: ";adPod.ads.count()
+        print "" adPod
     end for
 end function
 function podStartCallback(podInfo as object)
