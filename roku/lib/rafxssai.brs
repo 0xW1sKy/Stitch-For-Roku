@@ -347,8 +347,6 @@ function RAFX_getSSAIPluginBase(params as object) as object
             timeToEvtMap[brkTimeKey] = [m.sdk.AdEvent.POD_START]
             timeToBreakMap[brkTimeKey] = adBreak
             adRenderTime = adBreak.renderTime
-            ? "AD BREAK"; adBreak.ads[1]
-            ? "AD BREAK"; adBreak.ads[2]
             for each rAd in adBreak.ads
                 hasCompleteEvent = false
                 for each evt in rAd.tracking
@@ -766,7 +764,7 @@ function RAFX_getAdobeSimplePlugin(params as object) as object
                     end if
                     renderTime = pod.renderTime
                     for each ad in pod.ads
-                        ? "AD: "; ad
+                        ' ? "AD: "; ad
                         m.sdk.setTrackingTime(renderTime, ad)
                         renderTime += ad.duration
                     end for
@@ -1048,9 +1046,9 @@ function RAFX_getAdobeHLSPlugin(params as object) as object
                     if 0 < adbreak.duration
                         adRenderTime += adbreak.duration
                     end if
-                    ? "marker"
-                    ' ? newAd 'quartile-1673060571-0'
-                    ' ? adRenderTime '0.033
+                    ' ? "marker"
+                    ' ' ? newAd 'quartile-1673060571-0'
+                    ' ' ? adRenderTime '0.033
                     ' order = right(newAd, 1)
                     timeOffset = val(m.extract(adBreak.xid, m.rgx_offset_offset, ""))
                     newAd = { tracking: [{ event: "0", duration: adRenderTime }] }
@@ -1093,24 +1091,24 @@ function RAFX_getAdobeHLSPlugin(params as object) as object
             m.sdk.log(["X-Marker at position: ", position.tostr(), "  current strm pos: ", m.crrntPosSec.tostr()], 20)
             xobj = m.parseXMarker(ext_x_marker)
             if m.isPodBegin(xobj.xtype)
-                ? "********"
-                ? "********"
-                ? "********"
-                ? "********"
-                ? "********"
+                ' ? "********"
+                ' ? "********"
+                ' ? "********"
+                ' ? "********"
+                ' ? "********"
                 m.sdk.logToRAF("Request", { retry: 0, url: m["mediaURL"] })
                 if invalid <> xobj.data
                     adBreak = xobj
-                    adBreak.duration = "0"
+                    adBreak.duration = 0
                     adBreak["BREAKDUR"] = xobj.podduration
                     if 15 < abs(position - sgnode.position)
                         m.sdk.log(["WARNING: PodBegin X-Marker position: ", position.tostr(), " video.position: ", sgnode.position.tostr(), " diff more than 15sec"], 10)
                     end if
-                    ' ? adBreak
-                    adBreak.renderTime = obj["position"]
+                    ' ' ? adBreak
+                    adBreak.renderTime = 0
                     if int(position) <= m.crrntPosSec
                         adBreak.renderTime = m.crrntPosSec + 1
-                        adBreak.duration -= (adBreak.renderTime - position)
+                        adBreak.duration -= (xobj.podduration)
                     end if
                     m.adBreaks[0] = adBreak
                     ' m.sdk.log(["Pod renderTime: ", adBreak.renderTime.tostr(), "  dur: ", adBreak.BREAKDUR.tostr()], 20)
@@ -1123,14 +1121,14 @@ function RAFX_getAdobeHLSPlugin(params as object) as object
             else if "twitch-ad-quartile" = xobj.xtype
                 m.onMetadataAdBegin(position, xobj)
             else if m.isPodEnd(xobj.xtype)
-                ? "****************"
-                ? "////////////////"
-                ? "THE END"
-                ? "THE END"
-                ? "THE END"
-                ? "THE END"
-                ? "////////////////"
-                ? "****************"
+                ' ? "****************"
+                ' ? "////////////////"
+                ' ? "THE END"
+                ' ? "THE END"
+                ' ? "THE END"
+                ' ? "THE END"
+                ' ? "////////////////"
+                ' ? "****************"
                 eopByMarker = position
                 if 0 < xobj.offset
                     if invalid <> sgnode.streamingSegment and sgnode.streamingSegment.doesExist("segStartTime")
@@ -1172,7 +1170,7 @@ function RAFX_getAdobeHLSPlugin(params as object) as object
                     m.adTimeToEventMap = timeToEvtMap
                 end if
                 if useStitched and abEnding <> invalid
-                    ? "abEnding"; abEnding
+                    ' ? "abEnding"; abEnding
                     eopByPodBegin = abEnding.renderTime
                     if eopByMarker < eopByPodBegin
                         abEnding.podduration -= (eopByPodBegin - eopByMarker)
@@ -1229,15 +1227,15 @@ function RAFX_getAdobeHLSPlugin(params as object) as object
         return defaultval
     end function
     strmMgr.parseXMarker = function(ext_x_marker as string) as object
-        ' ? "marker: "; ext_x_marker
-        ? "ID: " m.extract(ext_x_marker, m.rgx_id, "")
-        ? "XTYPE: " m.extract(ext_x_marker, m.rgx_xtype, "")
-        ? "Duration: " m.extract(ext_x_marker, m.rgx_duration, "")
-        ? "Offset: " m.extract(ext_x_marker, m.rgx_offset, "")
-        ? "PODDURATION: "m.extract(ext_x_marker, m.rgx_podduration, "")
-        ? "ADCOUNT: " m.extract(ext_x_marker, m.rgx_adcount, "")
-        ? "DATA: " m.extract(ext_x_marker, m.rgx_data, "")
-        ? "ADSEQ: " m.extract(ext_x_marker, m.rgx_adseq, "")
+        ' ' ? "marker: "; ext_x_marker
+        ' ? "ID: " m.extract(ext_x_marker, m.rgx_id, "")
+        ' ? "XTYPE: " m.extract(ext_x_marker, m.rgx_xtype, "")
+        ' ? "Duration: " m.extract(ext_x_marker, m.rgx_duration, "")
+        ' ? "Offset: " m.extract(ext_x_marker, m.rgx_offset, "")
+        ' ? "PODDURATION: "m.extract(ext_x_marker, m.rgx_podduration, "")
+        ' ? "ADCOUNT: " m.extract(ext_x_marker, m.rgx_adcount, "")
+        ' ? "DATA: " m.extract(ext_x_marker, m.rgx_data, "")
+        ' ? "ADSEQ: " m.extract(ext_x_marker, m.rgx_adseq, "")
         xobj = {
             id: m.extract(ext_x_marker, m.rgx_id, "")
             xtype: m.extract(ext_x_marker, m.rgx_xtype, "")
@@ -1253,10 +1251,10 @@ function RAFX_getAdobeHLSPlugin(params as object) as object
         m.setXid(xobj, xdata)
         ba = createObject("roByteArray")
         ba.fromBase64String(xdata)
-        xmlstr = ba.toAsciiString() '? Actually a JSON string from twitch
+        xmlstr = ba.toAsciiString() '' ? Actually a JSON string from twitch
         ' xmlstr = m.rgx_outer.replaceAll(xmlstr, "")
         if invalid <> xmlstr and xmlstr <> ""
-            ? "XMLstr: "; xmlstr
+            ' ? "XMLstr: "; xmlstr
             jsonstr = ParseJson(xmlstr)
         end if
         if "twitch-ad-quartile" = xobj.xtype
@@ -1313,13 +1311,13 @@ function RAFX_getAdobeHLSPlugin(params as object) as object
         ' end if
         adBreak["duration"] = 0
         adBreak["xid"] = m.getXid(xobj)
-        ?"***********"
-        ?"***********"
-        ?"***********"
-        ? ""; xobj
-        ?"***********"
-        ?"***********"
-        ?"***********"
+        ' ?"***********"
+        ' ?"***********"
+        ' ?"***********"
+        ' ? ""; xobj
+        ' ?"***********"
+        ' ?"***********"
+        ' ?"***********"
         if 0 <> xobj.adcount
             adCount = xobj.adcount
             adBreak.ads = createObject("roArray", adCount, true)
@@ -1405,12 +1403,12 @@ function RAFX_getAdobeHLSPlugin(params as object) as object
         end if
         if invalid <> ab and m.PLACEHOLDERPOD = ab.xid
             m.sdk.log("parsePodEnd() stream must have begun in the middle of AdPod", 17)
-            ? "ab: "; ab
-            ? "xobj; "; xobj
+            ' ? "ab: "; ab
+            ' ? "xobj; "; xobj
             podend = ab 'm.parseMultiVMAP(xmlstr)
             if 0 < podend.tracking.count()
                 for each trck in podend.tracking
-                    ? trck
+                    ' ? trck
                     if "VerificationNotExecuted" = trck.event
                         ab.tracking.push(trck)
                     end if

@@ -115,7 +115,9 @@ function loadStream(adapter as object) as void
     '   2.4  other RAF settings
     '
     request = {
-        url: m.top.streamConfig.url ' Required, masterURL
+        url: m.top.streamConfig.url
+        adParams: ["skip", "exitPod"]
+        ' Required, masterURL
         '  Either kbps or callback is required bellow when trackingmode: simple
         ' Max kbps to select URL from multiple bit rate streams.
         '  callback : function(m3u8str as string) as string
@@ -243,6 +245,7 @@ function podsCallback(podsInfo as object)
 end function
 function podStartCallback(podInfo as object)
     print "At ";podInfo.position;" from Adapter -- " ; podInfo.event
+    m.top.video.MaxVideoDecodeResolution = "[640, 480]"
     if not m.top.adPlaying
         m.top.adPlaying = True
         m.top.video.enableTrickPlay = false
@@ -271,6 +274,7 @@ function adEventCallback(adInfo as object) as void
 end function
 function podEndCallback(podInfo as object)
     print "At ";podInfo.position;" from Adapter -- " ; podInfo.event
+    m.top.video.MaxVideoDecodeResolution = "[0, 0]"
     m.top.adPlaying = False
     m.top.video.enableTrickPlay = true
     m.top.video.setFocus(true)
