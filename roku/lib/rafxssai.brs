@@ -723,7 +723,7 @@ function RAFX_getAdobeSimplePlugin(params as object) as object
         end if
         return {}
     end function
-    impl.parseTrackingXML = function(xmlstr as string, adpods as object)
+    impl.parseTrackingXML = function(xmlstr, adpods as object)
         for each pod in adpods
             if invalid = pod["tracking"] then pod.tracking = []
         end for
@@ -1003,21 +1003,21 @@ function RAFX_getAdobeHLSPlugin(params as object) as object
     strmMgr.adBreakID = invalid
     strmMgr.xid = "data"
     strmMgr.getXid = function(xobj as object) as string
-        if "data" = m.xid then
+        if xobj.xdata <> xobj.id and xobj.xdata <> invalid
             return xobj.xdata
         else
             return xobj.id
         end if
     end function
     strmMgr.setXid = function(xobj as object, xdata as string) as void
-        if "data" = m.xid then
-            xobj.xdata = xdata
+        if xdata <> invalid and xdata <> ""
+            xobj.data = xdata
         else
-            xobj.xdata = xobj.id
+            xobj.data = xobj.id
         end if
     end function
     strmMgr.isPodBegin = function(podbegin as string) as boolean
-        return (podbegin <> invalid and podbegin = "twitch-trigger")
+        return (podbegin <> invalid and podbegin = "twitch-stitched-ad")
     end function
     strmMgr.isPodEnd = function(podend as string) as boolean
         return (podend <> invalid and podend = "twitch-stream-source")
@@ -1082,8 +1082,12 @@ function RAFX_getAdobeHLSPlugin(params as object) as object
         if invalid <> ext_x_marker
             m.sdk.log(["X-Marker at position: ", position.tostr(), "  current strm pos: ", m.crrntPosSec.tostr()], 20)
             xobj = m.parseXMarker(ext_x_marker)
-            ? "XOBJ: " xobj
             if m.isPodBegin(xobj.xtype)
+                ? "********"
+                ? "********"
+                ? "********"
+                ? "********"
+                ? "********"
                 m.sdk.logToRAF("Request", { retry: 0, url: m["mediaURL"] })
                 if invalid <> xobj.data
                     adBreak = xobj.data
@@ -1105,9 +1109,17 @@ function RAFX_getAdobeHLSPlugin(params as object) as object
                     m.sdk.logToRAF("ErrorResponse", { error: "invalid xml", time: 0,
                         label: "XMarker", url: m["mediaURL"] })
                 end if
-            else if "AdBegin" = xobj.xtype
+            else if "twitch-ad-quartile" = xobj.xtype
                 m.onMetadataAdBegin(position, xobj)
             else if m.isPodEnd(xobj.xtype)
+                ? "****************"
+                ? "////////////////"
+                ? "THE END"
+                ? "THE END"
+                ? "THE END"
+                ? "THE END"
+                ? "////////////////"
+                ? "****************"
                 eopByMarker = position
                 if 0 < xobj.offset
                     if invalid <> sgnode.streamingSegment and sgnode.streamingSegment.doesExist("segStartTime")
@@ -1172,8 +1184,8 @@ function RAFX_getAdobeHLSPlugin(params as object) as object
     strmMgr.VASTToRAFEvent = {
         "PREROLL": "Impression"
         "twitch-ad-quartile": "FirstQuartile"
-        "midpoint": "Midpoint"
-        "thirdquartile": "ThirdQuartile"
+        "twitch-ad-quartile": "Midpoint"
+        "twitch-ad-quartile": "ThirdQuartile"
         "complete": "Complete"
         "_mute": "Mute"
         "mute": "Mute"
@@ -1204,7 +1216,7 @@ function RAFX_getAdobeHLSPlugin(params as object) as object
         return defaultval
     end function
     strmMgr.parseXMarker = function(ext_x_marker as string) as object
-        ? "marker: "; ext_x_marker
+        ' ? "marker: "; ext_x_marker
         ? "ID: " m.extract(ext_x_marker, m.rgx_id, "")
         ? "XTYPE: " m.extract(ext_x_marker, m.rgx_xtype, "")
         ? "Duration: " m.extract(ext_x_marker, m.rgx_duration, "")
@@ -1217,6 +1229,7 @@ function RAFX_getAdobeHLSPlugin(params as object) as object
             id: m.extract(ext_x_marker, m.rgx_id, "")
             xtype: m.extract(ext_x_marker, m.rgx_xtype, "")
             data: invalid
+            sequenceNum: m.extract(ext_x_marker, m.rgx_adseq, "")
         }
         m.sdk.log(["X-Marker ", ext_x_marker.left(80), "..."], 50)
         xdata = m.extract(ext_x_marker, m.rgx_data, "")
@@ -1227,20 +1240,23 @@ function RAFX_getAdobeHLSPlugin(params as object) as object
         ba = createObject("roByteArray")
         ba.fromBase64String(xdata)
         xmlstr = ba.toAsciiString() '? Actually a JSON string from twitch
-        if invalid = xmlstr then return xobj
-        xmlstr = m.rgx_outer.replaceAll(xmlstr, "")
+        ' xmlstr = m.rgx_outer.replaceAll(xmlstr, "")
+        if invalid <> xmlstr and xmlstr <> ""
+            ? "XMLstr: "; xmlstr
+            jsonstr = ParseJson(xmlstr)
+        end if
         if m.isPodBegin(xobj.xtype)
-            xobj.adcount = m.extract(ext_x_marker, m.rgx_adcount, 0)
+            xobj.adcount = val(m.extract(ext_x_marker, m.rgx_adcount, "0"))
             xobj.podduration = val(m.extract(ext_x_marker, m.rgx_podduration, "0"))
             for each ab in m.adBreaks
-                if ab.xid = m.getXid(xobj) then
+                if ab.xid = xobj.id
                     m.sdk.log(["Duplicate PodBegin. ID: ", xobj.id], 30)
                     xobj.xtype = "dupPodBegin"
                     return xobj
                 end if
             end for
-            m.parsePodBegin(xmlstr, xobj)
-        else if "AdBegin" = xobj.xtype
+            m.parsePodBegin(jsonstr, xobj)
+        else if "twitch-ad-quartile" = xobj.xtype
             if invalid <> m.adBreaks
                 adBreak = m.adBreaks[0]
                 for each ad in adBreak.ads
@@ -1252,16 +1268,16 @@ function RAFX_getAdobeHLSPlugin(params as object) as object
                 end for
             end if
             xobj.duration = val(m.extract(ext_x_marker, m.rgx_duration, "0"))
-            m.parseAdBegin(xmlstr, xobj)
+            m.parseAdBegin(jsonstr, xobj)
         else if m.isPodEnd(xobj.xtype)
             xobj.offset = val(m.extract(ext_x_marker, m.rgx_offset, "0"))
-            m.parsePodEnd(xmlstr, xobj)
+            m.parsePodEnd(jsonstr, xobj)
         end if
         return xobj
     end function
     strmMgr.PLACEHOLDERPOD = "placeholder"
     strmMgr.setEmptyAdBreak = function(position)
-        xobj = { id: m.PLACEHOLDERPOD, adcount: "3", data: invalid, xdata: m.PLACEHOLDERPOD }
+        xobj = { id: m.PLACEHOLDERPOD, adcount: 3, data: invalid, xdata: m.PLACEHOLDERPOD }
         m.parsePodBegin("", xobj)
         if invalid <> xobj.data
             adBreak = xobj.data
@@ -1274,13 +1290,20 @@ function RAFX_getAdobeHLSPlugin(params as object) as object
             m.adBreakID = adBreak["xid"]
         end if
     end function
-    strmMgr.parsePodBegin = function(xmlstr as string, xobj as object) as void
+    strmMgr.parsePodBegin = function(xmlstr, xobj as object) as void
         adBreak = { rendersequence: "midroll", renderTime: 0, tracking: [], viewed: false, ads: [] }
-        if "" <> xmlstr then
-            adBreak = m.parseMultiVMAP(xmlstr)
-        end if
+        ' if "" <> xmlstr and invalid <> xmlstr
+        '     adBreak = m.parseMultiVMAP(xmlstr)
+        ' end if
         adBreak["duration"] = 0
         adBreak["xid"] = m.getXid(xobj)
+        ?"***********"
+        ?"***********"
+        ?"***********"
+        ? ""; xobj
+        ?"***********"
+        ?"***********"
+        ?"***********"
         if 0 <> xobj.adcount
             adCount = xobj.adcount
             adBreak.ads = createObject("roArray", adCount, true)
@@ -1294,17 +1317,8 @@ function RAFX_getAdobeHLSPlugin(params as object) as object
         end if
         xobj.data = adBreak
     end function
-    strmMgr.parseAdBegin = function(data as string, xobj as object) as void
-        vasts = data.split("</VAST>")
-        vast = vasts[0]
-        mtch = m.rgx_adseq.match(vast)
-        if invalid <> mtch and 1 < mtch.count()
-            sequence = mtch[1]
-            vast = vast.replace(sequence, "sequence=""1""")
-            xobj["sequenceNum"] = mtch[2].toInt()
-        end if
-        vastxml = vast + "</VAST>"
-        m.parseAdBeginRAF(vastxml, xobj)
+    strmMgr.parseAdBegin = function(data, xobj as object) as void
+        m.parseAdBeginRAF(data, xobj)
         events = []
         for i = 1 to vasts.count() - 1
             vast = vasts[i] + "</VAST>"
@@ -1342,7 +1356,7 @@ function RAFX_getAdobeHLSPlugin(params as object) as object
             end if
         end if
     end function
-    strmMgr.parseAdBeginRAF = function(xmlstr as string, xobj as object) as void
+    strmMgr.parseAdBeginRAF = function(xmlstr, xobj as object) as void
         adIface = m.sdk.getRokuAds()
         validvast = xmlstr.split("</VAST>")[0] + "</VAST>"
         obj = adIface.parser.parse(validvast, "")
@@ -1362,7 +1376,7 @@ function RAFX_getAdobeHLSPlugin(params as object) as object
         xobj.data[0].xid = m.getXid(xobj)
         xobj.data[0].idid = xobj.id
     end function
-    strmMgr.parsePodEnd = function(xmlstr as string, xobj as object) as void
+    strmMgr.parsePodEnd = function(xmlstr, xobj as object) as void
         ab = invalid
         if invalid <> m.adBreakID and invalid <> m.adBreaks
             ab = m.adBreaks[0]
@@ -1372,7 +1386,7 @@ function RAFX_getAdobeHLSPlugin(params as object) as object
         end if
         if invalid <> ab and m.PLACEHOLDERPOD = ab.xid
             m.sdk.log("parsePodEnd() stream must have begun in the middle of AdPod", 17)
-            podend = m.parseMultiVMAP(xmlstr)
+            podend = xmlstr 'm.parseMultiVMAP(xmlstr)
             if 0 < podend.tracking.count()
                 for each trck in podend.tracking
                     if "PodComplete" = trck.event
@@ -1386,6 +1400,7 @@ function RAFX_getAdobeHLSPlugin(params as object) as object
     end function
     strmMgr.parseMultiVMAP = function(xmlstr) as object
         adBreak = { rendersequence: "midroll", renderTime: 0, tracking: [], viewed: false, ads: [] }
+        if xmlstr = invalid then return adBreak
         token = "</vmap:VMAP>"
         vmaps = xmlstr.split(token)
         m.sdk.log(["parseMultiVMAP() XML: ", xmlstr], 19)

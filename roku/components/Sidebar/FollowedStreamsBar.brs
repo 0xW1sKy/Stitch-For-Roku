@@ -53,6 +53,7 @@ sub onKeyEvent(key, press) as boolean
     if press
         if key = "up"
             if m.focusedItem = m.min
+                return false
                 'tofix: add behaviour to move to top bar'
             end if
             if m.focusedItem - 1 >= m.min

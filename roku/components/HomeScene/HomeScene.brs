@@ -450,18 +450,30 @@ sub onGetOfflineFollowed()
 end sub
 
 sub onKeyEvent(key, press) as boolean
-    ' ? "Home Scene > onKeyEvent"
+    if press
+        ? "Home Scene > onKeyEvent > "; key
+    end if
     handled = false
     if m.top.visible = true and press
-        if (m.browseList.hasFocus() = true or m.browseCategoryList.hasFocus() = true or m.browseFollowingList.hasFocus() = true) and key = "up"
+        if key = "up"
             ' Reset focused button when user goes on button header
-            if m.currentlyFocusedButton = 0
-                m.actualBrowseButtons[1].color = m.focusSelectionColor
-                m.currentlyFocusedButton = 1
-            else
-                m.actualBrowseButtons[0].color = m.focusSelectionColor
-                m.currentlyFocusedButton = 0
+            if m.followBar.hasFocus() = true
+                m.followBar.focused = false
+                m.browseMain.translation = "[0, 0]"
+                if m.currentlyFocusedButton <> 0
+                    m.actualBrowseButtons[m.currentlyFocusedButton].color = m.inactiveSelectionColor
+                    m.actualBrowseButtons[0].color = m.activeSelectionColor
+                    m.currentlyFocusedButton = 0
+                end if
             end if
+            ' if m.currentlyFocusedButton <> 0
+            '     m.actualBrowseButtons[m.currentlyFocusedButton].color = m.inactiveSelectionColor
+            '     m.actualBrowseButtons[0].color = m.activeSelectionColor
+            '     m.currentlyFocusedButton = 0
+            '     ' else
+
+            '     '     m.currentlyFocusedButton = 0
+            ' end if
 
             m.browseButtons.setFocus(true)
             handled = true
@@ -474,9 +486,6 @@ sub onKeyEvent(key, press) as boolean
                 end if
                 if m.currentlyFocusedButton < 5
                     m.currentlyFocusedButton += 1
-                    if m.currentlyFocusedButton = m.currentlySelectedButton and m.currentlyFocusedButton < 5
-                        m.currentlyFocusedButton += 1
-                    end if
                 end if
                 'm.actualBrowseButtons[m.currentlyFocusedButton].color =  m.focusSelectionColor
                 if m.currentlyFocusedButton <> 3 and m.currentlyFocusedButton <> 4
@@ -494,9 +503,6 @@ sub onKeyEvent(key, press) as boolean
                 end if
                 if m.currentlyFocusedButton > 0 and not (m.currentlyFocusedButton = 1 and m.currentlySelectedButton = 0)
                     m.currentlyFocusedButton -= 1
-                    if m.currentlyFocusedButton = m.currentlySelectedButton and m.currentlyFocusedButton > 0
-                        m.currentlyFocusedButton -= 1
-                    end if
                 end if
                 'm.actualBrowseButtons[m.currentlyFocusedButton].color =  m.focusSelectionColor
                 if m.currentlyFocusedButton <> 3 and m.currentlyFocusedButton <> 4
@@ -514,7 +520,6 @@ sub onKeyEvent(key, press) as boolean
                         m.actualBrowseButtons[button].blendColor = m.inactiveSelectionColor
                     end if
                 end for
-
                 if m.currentlySelectedButton = 0
                     m.categoryButton.color = m.activeSelectionColor
                     'm.liveButton.color =  m.inactiveSelectionColor
@@ -535,8 +540,14 @@ sub onKeyEvent(key, press) as boolean
                     m.currentlyFocusedButton = 2
                     handled = true
                 end if
-
+                if m.channelPage.visible
+                    m.channelPage.visible = false
+                    m.channelPage.visible = true
+                end if
             else if key = "OK"
+                if m.channelPage.visible
+                    m.channelPage.visible = false
+                end if
                 if m.currentlyFocusedButton = 3
                     m.top.buttonPressed = "search"
                     m.searchLabel.blendColor = m.inactiveSelectionColor
@@ -632,6 +643,9 @@ sub onKeyEvent(key, press) as boolean
             m.followingListIsFocused = false
             handled = true
             'else if m.browseOfflineFollowingList.hasFocus() = true and key = "up"
+            ' else if m.browseFollowingList.hasFocus() = true and key = "up"
+            '     m.browseButtons.setFocus(true)
+            '     handled = true
         else if m.offlineChannelList.hasFocus() and key = "up"
             m.browseFollowingList.setFocus(true)
             m.followingListIsFocused = true

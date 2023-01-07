@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright Kasper Gammeltoft and other contributors. Licensed under MIT
+https://github.com/KasperGam/EmojiOnRoku/blob/main/LICENSE -->
+
+<!-- EmojiLabel- Component used to display text that includes emoji in Scenegraph.
+Use as an
+ordinary Scenegraph Label node, with the following exceptions:
+* You should set an explict height
+on
+this node, otherwise the emojis will default to their 72x72 size.
+* This label can not handle
+multi-line text. You can only use EmojiLabel for single lines at a time. -->
+<component name="EmojiLabel" extends="Group">
+    <script type="text/brightscript" uri="EmojiLabel.brs" />
+    <script type="text/brightscript" uri="EmojiLabelRegex.brs" />
+    <script type="text/brightscript" uri="EmojiLabelUtil.brs" />
+
+    <interface>
+        <!-- Set to the text to display. The text will be searched for emoji characters, and those
+        characters will be
+        replaced with posters referencing the Twemoji character instead.
+        See Twemoji project for more information:
+
+        https://twemoji.twitter.com/-->
+        <field id="text" type="String" />
+        <field id="runnning" type="bool" value="false" />
+        <field id="repeatCount" type="Integer" />
+        <!-- The color for the text. Does not change the emojis. -->
+        <field id="color" type="Color" value="0xddddddff" />
+        <!-- The font to use for text rendering. Has no effect on the emojis. -->
+        <field id="font" type="Node" />
+        <!-- Same as horizAlign field on a label scenegraph node. -->
+        <field id="horizAlign" type="String" value="left" />
+        <!-- Same as vertAlign field on a label scenegraph node. -->
+        <field id="vertAlign" type="String" value="center" />
+        <!-- The total width for the label to take up. If the components exceede this width, the
+        last label will use an
+        ellipsis. If there is not enough space and an emoji
+        character
+        is the last component, it will not display. -->
+        <field id="width" type="Integer" value="600" />
+        <field id="maxWidth" type="Integer" value="0" />
+        <!-- The total height to use for displaying this label. Set to 0 to have the label size
+        itself to fit the text
+        contents. Note that multi-line text labels are not
+        supported
+        with EmojiLabel.
+        If no value is set for emojiSize, the emojis will be
+        re-sized
+        to fit this height. If both emojiSize and height
+        are not set, then the
+        emojis
+        will be re-sized to fit the maximum height needed for the other text labels. -->
+        <field id="height" type="Integer" value="0" />
+        <!-- The size to use for emoji rendering in the label. Note that emojis are always square
+        icons, so this value
+        will be used for both the width and height. See height value
+        above for more detail. -->
+        <field id="emojiSize" type="Integer" value="16" />
+
+        <!-- Returns all label and poster nodes used to render the EmojiLabel. This allows finer
+        tuned properties if needed,
+        such as substituting the emoji poster's uri path for
+        your own. -->
+        <function name="getAllComponents" />
+    </interface>
+    <children>
+        <Timer
+            id='timer'
+            repeat='true' />
+        <LayoutGroup
+            id="layout"
+            layoutDirection="horiz"
+            vertAlignment="bottom" />
+        <Animation
+            id="testAnimation"
+            duration="10"
+            repeat="false"
+            control="stop"
+            easeFunction="linear">
+            <Vector2DFieldInterpolator
+                id="testVector2D"
+                key="[0.0, 1.0]"
+                keyValue="[ [0, 0], [600.0, 0] ]"
+                fieldToInterp="layout.translation" />
+        </Animation>
+    </children>
+</component>
