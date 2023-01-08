@@ -442,29 +442,31 @@ function playVideo(stream as object)
     if not m.videoPlayer.visible
         m.videoPlayer.visible = true
     end if
-    if invalid = m.plyrTask
-        m.plyrTask = createObject("roSGNode", "playerTask")
-        m.plyrTask.observeField("state", "onTaskStateUpdated")
-    end if
-    streamConfig = {
-        title: ""
-        streamformat: stream["streamFormat"]
-        live: false
-        url: stream["url"]
-        "type": "vod"
-        streamtype: "vod"
-        player: { sgnode: m.videoPlayer }
-        blockAds: false
-    }
-    if stream["streamFormat"] = "hls"
-        streamConfig.live = true
-        streamConfig.type = "live"
-        streamConfig.streamtype = "live"
-    end if
-    m.plyrTask.blockAds = false
-    m.plyrTask.streamConfig = streamConfig
-    m.plyrTask.video = m.videoPlayer
-    m.plyrTask.control = "run"
+    m.videoPlayer.content = stream
+    m.videoPlayer.control = "play"
+    ' if invalid = m.plyrTask
+    '     m.plyrTask = createObject("roSGNode", "playerTask")
+    '     m.plyrTask.observeField("state", "onTaskStateUpdated")
+    ' end if
+    ' streamConfig = {
+    '     title: ""
+    '     streamformat: stream["streamFormat"]
+    '     live: false
+    '     url: stream["url"]
+    '     "type": "vod"
+    '     streamtype: "vod"
+    '     player: { sgnode: m.videoPlayer }
+    '     blockAds: false
+    ' }
+    ' if stream["streamFormat"] = "hls"
+    '     streamConfig.live = true
+    '     streamConfig.type = "live"
+    '     streamConfig.streamtype = "live"
+    ' end if
+    ' m.plyrTask.blockAds = false
+    ' m.plyrTask.streamConfig = streamConfig
+    ' m.plyrTask.video = m.videoPlayer
+    ' m.plyrTask.control = "run"
 end function
 
 function refreshFollows()

@@ -138,6 +138,11 @@ function saveLogin(access_token, refresh_token, login) as void
     sec.Flush()
 end function
 
+function UrlEncode(str as string) as string
+    o = CreateObject("roUrlTransfer")
+    return o.Escape(str)
+end function
+
 function validateUserToken(oauth_token = invalid)
     refreshToken()
     if oauth_token = invalid

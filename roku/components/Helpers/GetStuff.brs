@@ -6,28 +6,108 @@ function onStreamerChange()
     m.top.streamUrl = getStreamLink()
 
 end function
+' "Client-ID": "cf9fbjz6j9i6k6guz3dwh6qff5dluz"
+' "Authorization": "OAuth " + userToken
+' "Client-ID": "kimne78kx3ncx6brgo4mv6wki5h1ko"
+
+function getPlaybackAccessToken()
+    token = getTokenFromRegistry()
+    userToken = token.access_token
+    req = HttpRequest({
+        url: "https://gql.twitch.tv/gql"
+        headers: {
+            "Accept": "*/*"
+            ' "Accept-Encoding": "gzip, deflate, br"
+            ' "Accept-Language": "en-US"
+            ' "Authorization": "OAuth uk5seeh033g141pr69vdw7f8s1y0b7"
+            ' "Cache-Control": "no-cache"
+            "Client-Id": "kimne78kx3ncx6brgo4mv6wki5h1ko"
+            ' "Content-Type": "text/plain; charset=UTF-8"
+            ' "Device-ID": getDeviceId()
+            ' "Host": "gql.twitch.tv"
+            ' "Origin": "https://www.twitch.tv"
+            ' "Pragma": "no-cache"
+            ' "Referer": "https://www.twitch.tv/"
+            ' "Sec-Fetch-Site": "same-site"
+            ' "Sec-Fetch-Mode": "cors"
+            ' "Sec-Fetch-Dest": "empty"
+            ' "User-Agent": "Mozilla/5.0 (Linux; Android 5.1; AFTS Build/LMY47O) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/41.99900.2250.0242 Safari/537.36"
+        }
+        method: "POST"
+        data: {
+            operationName: "PlaybackAccessToken_Template"
+            query: "query PlaybackAccessToken_Template($login: String!, $isLive: Boolean!, $vodID: ID!, $isVod: Boolean!, $playerType: String!) { streamPlaybackAccessToken(channelName: $login, params: { platform: " + Chr(34) + "web" + Chr(34) + ", playerBackend: " + Chr(34) + "mediaplayer" + chr(34) + ", playerType: $playerType }) @include(if: $isLive) { value signature __typename } videoPlaybackAccessToken(id: $vodID, params: { platform: " + chr(34) + "web" + chr(34) + ", playerBackend: " + chr(34) + "mediaplayer" + chr(34) + ", playerType: $playerType }) @include(if: $isVod) { value signature __typename } }"
+            variables: {
+                "isLive": true
+                "login": m.top.streamerRequested
+                "isVod": false
+                "vodID": ""
+                "playerType": "site"
+            }
+        }
+    })
+    data = req.send()
+    ? "RESPONSE: "; data
+    response = ParseJSON(data)
+    isVod = false
+
+    if isVod
+        return response.data.videoPlaybackAccessToken
+    else
+        return response.data.streamPlaybackAccessToken
+    end if
+end function
+
+function getMd5Hash(s as string)
+    ba = CreateObject("roByteArray")
+    ba.FromAsciiString(s)
+    digest = CreateObject("roEVPDigest")
+    digest.Setup("md5")
+    result = digest.Process(ba)
+    return result
+end function
+
+function getDeviceId()
+    di = CreateObject("roDeviceInfo")
+    uniqueId = di.GetChannelClientId()
+    return uniqueId
+end function
 
 function getStreamLink() as object
-    ' access_token_url = "http://api.twitch.tv/api/channels/" + m.top.streamerRequested + "/access_token?client_id=jzkbprff40iqj646a697cyrvl0zt2m6&platform=_"
-
-    url = CreateObject("roUrlTransfer")
-    url.EnableEncodings(true)
-    url.RetainBodyOnError(true)
-    url.SetCertificatesFile("common:/certs/ca-bundle.crt")
-    url.InitClientCertificates()
     userToken = m.global.userToken
-    ? "(userToken) " userToken
-    if userToken <> invalid and userToken <> ""
-        ? "we usin " userToken
-        url.AddHeader("authorization", "OAuth " + userToken)
+    playbackAccessToken = getPlaybackAccessToken()
+    baseurl = "https://usher.ttvnw.net/"
+    isVod = false
+    if isVod
+        middle = "vod/"
+    else
+        middle = "api/channel/hls/"
     end if
-    url.AddHeader("client-id", "cf9fbjz6j9i6k6guz3dwh6qff5dluz")
-    stream_link = "https://twitch.k10labs.workers.dev/stream?streamer=" + m.top.streamerRequested
-    ' url.AddHeader("Origin", "https://player.twitch.tv")
-    ' url.AddHeader("Referer", "https://player.twitch.tv")
-    url.SetUrl(stream_link.EncodeUri())
-    rsp = url.GetToString()
-    ' ? "rsp: "; rsp
+    id = m.top.streamerRequested
+    fullUrl = baseurl + middle + id + ".m3u8"
+    date = CreateObject("roDateTime")
+    actionid = getDeviceId() + m.top.streamerRequested + playbackAccessToken.value + date.AsSeconds().toStr()
+    play_session_id = getMd5Hash(actionid)
+    usherUrl = fullUrl + "?client_id=kimne78kx3ncx6brgo4mv6wki5h1ko&allow_source=true&fast_bread=true&player_backend=mediaplayer&playlist_include_framerate=true&reassignments_supported=true&supported_codecs=avc1&cdm=wv&player_version=1.16.0&token=" + UrlEncode(playbackAccessToken.value) + "&sig=" + UrlEncode(playbackAccessToken.signature) '+ "&play_session_id=" + play_session_id
+    '
+    req = HttpRequest({
+        url: usherUrl
+        headers: {
+            "Client-id": "kimne78kx3ncx6brgo4mv6wki5h1ko"
+            "Referer": ""
+            "Accept": "application/x-mpegURL, application/vnd.apple.mpegurl, application/json, text/plain"
+            "User-Agent": "Mozilla/5.0 (Linux; Android 5.1; AFTS Build/LMY47O) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/41.99900.2250.0242 Safari/537.36"
+            ' "Origin": "https://www.twitch.tv"
+            ' "Accept-Language": "en-US,en;q=0.9"
+        }
+        method: "GET"
+    })
+    ' ' acmb= Base64({"BrowseItemTrackingId":"1af69f74-e5a2-40a6-8226-9a8fc8040605:0"}) ' this is BS click tracking stuff
+    ' ' &p=8799414 ' probably not needed? i'm guessing its another activity tracking thing for ads.
+    ' ' "&play_session_id=be830c5df7b6c134c9e0eee23c82968b" I feel like this is needed. seems like an md5 hash start by trying generating my own random
+    ' return usherUrl
+
+    rsp = req.send().getString()
     list = rsp.Split(chr(10))
     first_stream_link = ""
     last_stream_link = ""
@@ -83,17 +163,8 @@ function getStreamLink() as object
     if link = ""
         return last_stream_link
     end if
-    preloadUrl = CreateObject("roUrlTransfer")
-    preloadUrl.EnableEncodings(true)
-    preloadUrl.RetainBodyOnError(true)
-    preloadUrl.SetCertificatesFile("common:/certs/ca-bundle.crt")
-    preloadUrl.InitClientCertificates()
-    preloadUrl.SetUrl(link)
-    preload_string = preloadUrl.GetToString()
     ' The stream needs a couple of seconds to load on AWS's server side before we display back to user.
     ' The idea is that this will provide a better user experience by removing stuttering.
     return link
+    ' return usherUrl
 end function
-
-'https://usher.ttvnw.net/api/channel/hls/nickmercs.m3u8?allow_source=true&fast_bread=true&p=6274977&play_session_id=587e886acefc28722ef9db20d471d9e9&player_backend=mediaplayer&playlist_include_framerate=true&reassignments_supported=true&sig=cfa200674bab75075ee0d9a5eaec941095033e24&supported_codecs=avc1&token=%7B%22adblock%22%3Atrue%2C%22authorization%22%3A%7B%22forbidden%22%3Afalse%2C%22reason%22%3A%22%22%7D%2C%22blackout_enabled%22%3Afalse%2C%22channel%22%3A%22nickmercs%22%2C%22channel_id%22%3A15564828%2C%22chansub%22%3A%7B%22restricted_bitrates%22%3A%5B%5D%2C%22view_until%22%3A1924905600%7D%2C%22ci_gb%22%3Afalse%2C%22geoblock_reason%22%3A%22%22%2C%22device_id%22%3A%22f3f26ea3cdfea02a%22%2C%22expires%22%3A1594268273%2C%22extended_history_allowed%22%3Afalse%2C%22game%22%3A%22%22%2C%22hide_ads%22%3Afalse%2C%22https_required%22%3Atrue%2C%22mature%22%3Afalse%2C%22partner%22%3Afalse%2C%22platform%22%3A%22_%22%2C%22player_type%22%3A%22site%22%2C%22private%22%3A%7B%22allowed_to_view%22%3Atrue%7D%2C%22privileged%22%3Afalse%2C%22server_ads%22%3Afalse%2C%22show_ads%22%3Atrue%2C%22subscriber%22%3Afalse%2C%22turbo%22%3Afalse%2C%22user_id%22%3A60049647%2C%22user_ip%22%3A%2272.136.77.60%22%2C%22version%22%3A2%7D&cdm=wv&player_version=0.9.80
-'https://usher.ttvnw.net/vod/682807996.m3u8?allow_source=true&p=732898&playlist_include_framerate=true&reassignments_supported=true&sig=8aead6f4649e407fdd3f872c44d8d798386bdafc&supported_codecs=avc1&token=%7B%22authorization%22%3A%7B%22forbidden%22%3Afalse%2C%22reason%22%3A%22%22%7D%2C%22chansub%22%3A%7B%22restricted_bitrates%22%3A%5B%5D%7D%2C%22device_id%22%3A%22f3f26ea3cdfea02a%22%2C%22expires%22%3A1595201031%2C%22https_required%22%3Atrue%2C%22privileged%22%3Afalse%2C%22user_id%22%3A60049647%2C%22version%22%3A2%2C%22vod_id%22%3A682807996%7D&cdm=wv&player_version=1.0.0
