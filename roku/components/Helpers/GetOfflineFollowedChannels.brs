@@ -9,7 +9,7 @@ function onSearchTextChange()
 end function
 
 function getRecentChannels() as boolean
-    sec = createObject("roRegistrySection", "StitchUserData")
+    sec = createObject("roRegistrySection", "SavedUserData")
     if sec.Exists("RecentChannels")
         m.global.addFields({ recentChannels: ParseJson(sec.Read("RecentChannels")) })
         return true

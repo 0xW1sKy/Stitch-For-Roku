@@ -55,7 +55,7 @@ function init()
     m.testtimer.ObserveField("fire", "refreshFollows")
 
     if checkReset() = "false"
-        sec = createObject("roRegistrySection", "StitchUserData")
+        sec = createObject("roRegistrySection", "SavedUserData")
         sec.Write("UserToken", "")
         sec.Write("RefreshToken", "")
         sec.Write("LoggedInUser", "")
@@ -237,7 +237,7 @@ end sub
 
 function checkReset()
     ? "Main Scene > checkReset"
-    sec = createObject("roRegistrySection", "StitchUserData")
+    sec = createObject("roRegistrySection", "SavedUserData")
     if sec.Exists("Reset")
         return sec.Read("Reset")
     end if
@@ -246,7 +246,7 @@ end function
 
 function checkUserToken()
     ? "Main Scene > checkUserToken"
-    sec = createObject("roRegistrySection", "StitchUserData")
+    sec = createObject("roRegistrySection", "SavedUserData")
     if sec.Exists("UserToken")
         return sec.Read("UserToken")
     end if
@@ -254,7 +254,7 @@ function checkUserToken()
 end function
 
 function getTokenFromRegistry()
-    sec = createObject("roRegistrySection", "StitchUserData")
+    sec = createObject("roRegistrySection", "SavedUserData")
     if sec.Exists("RefreshToken")
         refresh_token = sec.Read("RefreshToken")
     end if
@@ -318,7 +318,7 @@ end function
 
 function checkIfLoggedIn() as dynamic
     ? "Main Scene > checkIfLoggedIn"
-    sec = createObject("roRegistrySection", "StitchUserData")
+    sec = createObject("roRegistrySection", "SavedUserData")
     if sec.Exists("LoggedInUser")
         return sec.Read("LoggedInUser")
     end if
@@ -327,14 +327,14 @@ end function
 
 function setReset(word as string) as void
     ? "Main Scene > setReset"
-    sec = createObject("roRegistrySection", "StitchUserData")
+    sec = createObject("roRegistrySection", "SavedUserData")
     sec.Write("Reset", word)
     sec.Flush()
 end function
 
 ' function saveLogin() as void
 '     ? "Main Scene > saveLogin"
-'     sec = createObject("roRegistrySection", "StitchUserData")
+'     sec = createObject("roRegistrySection", "SavedUserData")
 '     sec.Write("LoggedInUser", m.homeScene.loggedInUserName)
 '     sec.Flush()
 ' end function
@@ -603,7 +603,7 @@ function onKeyEvent(key, press) as boolean
 end function
 
 function saveLogin(access_token, refresh_token, login) as void
-    sec = createObject("roRegistrySection", "StitchUserData")
+    sec = createObject("roRegistrySection", "SavedUserData")
     if access_token <> invalid and access_token <> ""
         sec.Write("UserToken", access_token)
         m.global.setField("UserToken", access_token)

@@ -72,7 +72,7 @@ end function
 
 
 function getTokenFromRegistry()
-    sec = createObject("roRegistrySection", "StitchUserData")
+    sec = createObject("roRegistrySection", "SavedUserData")
     if sec.Exists("RefreshToken")
         refresh_token = sec.Read("RefreshToken")
     end if
@@ -123,7 +123,7 @@ end function
 
 
 function saveLogin(access_token, refresh_token, login) as void
-    sec = createObject("roRegistrySection", "StitchUserData")
+    sec = createObject("roRegistrySection", "SavedUserData")
     if access_token <> invalid and access_token <> ""
         sec.Write("UserToken", access_token)
         m.global.setField("UserToken", access_token)
