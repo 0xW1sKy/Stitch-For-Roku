@@ -19,12 +19,12 @@ function getSearchResults() as object
     url.SetUrl(search_results_url)
     response_string = url.GetToString()
     search = ParseJson(response_string)
-    refreshToken()
-    if search.status <> invalid and search.status = 401
-        ? "401"
-        refreshToken()
-        return getSearchResults()
-    end if
+    ' refreshToken()
+    ' if search.status <> invalid and search.status = 401
+    '     ? "401"
+    '     refreshToken()
+    '     return getSearchResults()
+    ' end if
 
     result = []
     if search.data <> invalid

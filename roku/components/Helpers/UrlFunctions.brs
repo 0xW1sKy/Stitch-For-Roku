@@ -182,7 +182,7 @@ function validateUserToken(oauth_token = invalid)
     if response <> invalid
         if response.status = 401 and refresh_token <> invalid and refresh_token <> ""
             ? "USED FIRST ONE!!!"
-            refreshToken()
+            ' refreshToken()
             return ""
         end if
         if response.login <> invalid and response.login <> ""
