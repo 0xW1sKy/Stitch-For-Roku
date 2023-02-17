@@ -1,7 +1,7 @@
 sub init()
     m.code = m.top.findNode("code")
     m.top.observeField("visible", "onVisible")
-    m.getAuth = createObject("RoSGNode", "GetAuth")
+    m.getAuth = createObject("RoSGNode", "GetSwitchAuth")
     m.getAuth.observeField("code", "setUserCode")
     m.getAuth.observeField("finished", "whenFinished")
 end sub

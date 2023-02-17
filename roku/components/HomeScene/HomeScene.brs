@@ -54,7 +54,7 @@ sub init()
     m.getStreams = createObject("roSGNode", "GetStreams")
     m.getStreams.observeField("searchResults", "onSearchResultChange")
 
-    m.getStuff = createObject("roSGNode", "GetStuff")
+    m.getStuff = createObject("roSGNode", "GetSwitchStuff")
     m.getStuff.observeField("streamUrl", "onStreamUrlChange")
 
     m.getCategories = createObject("roSGNode", "GetCategories")

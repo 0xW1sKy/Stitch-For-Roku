@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<component name="GetSwitchStuff" extends="Task">
+
+    <interface>
+        <field id="playbackAccessToken" type="assocarray" />
+        <field id="streamerRequested" type="string" />
+        <field id="streamUrl" type="uri" />
+    </interface>
+
+    <script type="text/brightscript" uri="GetSwitchStuff.brs" />
+    <script type="text/brightscript" uri="pkg:/components/Helpers/UrlFunctions.brs" />
+
+</component>

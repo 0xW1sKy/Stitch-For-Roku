@@ -7,11 +7,10 @@
     </interface>
 
     <script type="text/brightscript" uri="LoginPage.brs" />
-
     <children>
         <SimpleLabel
             translation="[100,72]"
-            text="Go to https://oauth.k10labs.workers.dev and type the following code:"
+            text="Go to https://www.twitch.tv/activate and type the following code:"
             color="0xEFEFF1FF"
             fontSize="18"
             fontUri="pkg:/fonts/Roobert-SemiBold.ttf" />

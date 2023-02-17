@@ -25,7 +25,7 @@ function init()
     m.getCategorySearch = createObject("roSGNode", "GetCategorySearch")
     m.getCategorySearch.observeField("searchResults", "onSearchResultChange")
 
-    m.getStuff = createObject("roSGNode", "GetStuff")
+    m.getStuff = createObject("roSGNode", "GetSwitchStuff")
     m.getStuff.observeField("streamUrl", "onStreamUrlChange")
 
     m.top.observeField("visible", "onGetFocus")
@@ -105,7 +105,7 @@ function onStreamUrlChange()
     m.top.streamUrl = m.getStuff.streamUrl
 end function
 
-function onKeyEvent(key, press) as Boolean
+function onKeyEvent(key, press) as boolean
     handled = false
 
     'okHasFocus = m.okButton.hasFocus()
@@ -114,14 +114,14 @@ function onKeyEvent(key, press) as Boolean
     browseButtonsHasFocus = m.browseButtons.hasFocus()
 
     if m.top.visible = true and press
-        if key = "right" and searchResultsHasFocus = false and searchCategoryResultsHasFocus = false and browseButtonsHasFocus = false 
+        if key = "right" and searchResultsHasFocus = false and searchCategoryResultsHasFocus = false and browseButtonsHasFocus = false
             if m.categoryLine.visible = true
                 m.resultCategoryList.setFocus(true)
             else if m.liveLine.visible = true
                 m.searchResultList.setFocus(true)
             end if
             handled = true
-        else if key ="left" and (searchResultsHasFocus = true or searchCategoryResultsHasFocus = true)
+        else if key = "left" and (searchResultsHasFocus = true or searchCategoryResultsHasFocus = true)
             m.keyboard.setFocus(true)
             handled = true
         else if key = "up" and browseButtonsHasFocus = false

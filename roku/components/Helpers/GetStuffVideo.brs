@@ -73,7 +73,7 @@ function getStreamLink() as object
         ? "we usin " userToken
         url.AddHeader("authorization", "OAuth " + userToken)
     end if
-    url.AddHeader("client-id", "cf9fbjz6j9i6k6guz3dwh6qff5dluz")
+    url.AddHeader("client-id", "ue6666qo983tsx6so1t0vnawi233wa")
     ' url.SetUrl(access_token_url)
     ' response_string = url.GetToString()
     ' access_token = ParseJson(response_string)

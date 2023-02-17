@@ -9,7 +9,9 @@ function init()
     m.homeScene = m.top.findNode("homeScene")
     m.categoryScene = m.top.findNode("categoryScene")
     m.loginPage = m.top.findNode("loginPage")
-
+    m.global.addFields({ switchUserToken: "" })
+    m.global.addFields({ switchDeviceId: "" })
+    m.global.addFields({ switchRefreshToken: "" })
     m.keyboardGroup.observeField("streamUrl", "onStreamChange")
     m.keyboardGroup.observeField("streamerSelectedName", "onStreamerSelected")
     m.categoryScene.observeField("streamerSelectedThumbnail", "onStreamerSelected")
@@ -57,6 +59,7 @@ function init()
         sec.Write("UserToken", "")
         sec.Write("RefreshToken", "")
         sec.Write("LoggedInUser", "")
+        sec.Write("DeviceId", "")
         ? "RESETTED"
         setReset("true")
     end if

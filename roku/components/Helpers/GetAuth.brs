@@ -76,7 +76,7 @@ function getStreamLink() as object
     url.InitClientCertificates()
     url.SetUrl("https://id.twitch.tv/oauth2/validate")
     url.AddHeader("Authorization", "OAuth " + oauth_token.access_token)
-    url.AddHeader("Client-ID", "cf9fbjz6j9i6k6guz3dwh6qff5dluz")
+    url.AddHeader("Client-ID", "ue6666qo983tsx6so1t0vnawi233wa")
     response_string = ParseJson(url.GetToString())
 
     ? "oauth_token.refresh_token "; oauth_token.refresh_token

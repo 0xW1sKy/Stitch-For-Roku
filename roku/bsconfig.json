@@ -5,6 +5,7 @@
         "images/**/*",
         "fonts/**/*",
         "vendor/**/*",
+        "lib/**/*",
         "manifest",
         "env"
     ],

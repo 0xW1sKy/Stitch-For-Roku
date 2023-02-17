@@ -4,7 +4,7 @@ function createUrl()
     url.RetainBodyOnError(true)
     url.SetCertificatesFile("common:/certs/ca-bundle.crt")
     url.InitClientCertificates()
-    url.AddHeader("Client-ID", "cf9fbjz6j9i6k6guz3dwh6qff5dluz") 'Used for API
+    url.AddHeader("Client-ID", "ue6666qo983tsx6so1t0vnawi233wa") 'Used for API
     while m.global.appBearerToken = invalid
     end while
     userToken = m.global.userToken
@@ -25,18 +25,19 @@ function createUrlNorm()
     url.RetainBodyOnError(true)
     url.SetCertificatesFile("common:/certs/ca-bundle.crt")
     url.InitClientCertificates()
-    url.AddHeader("Client-ID", "cf9fbjz6j9i6k6guz3dwh6qff5dluz") 'Used for API
     while m.global.appBearerToken = invalid
     end while
-    ' userToken = m.global.userToken
-    '? "(userToken) " userToken
-    ' if userToken <> invalid and userToken <> ""
-    '     ? "we usin " userToken
-    '     url.AddHeader("Authorization", "Bearer " + m.global.userToken)
-    ' else
-    ? "we using global"
-    url.AddHeader("Authorization", m.global.appBearerToken)
-    ' end if
+    userToken = m.global.userToken
+    ? "(userToken) " userToken
+    if userToken <> invalid and userToken <> ""
+        ? "we usin " userToken
+        url.AddHeader("Client-ID", "ue6666qo983tsx6so1t0vnawi233wa") 'Used for API
+        url.AddHeader("Authorization", "Bearer " + m.global.userToken)
+    else
+        ? "we using global"
+        url.AddHeader("Client-ID", "cf9fbjz6j9i6k6guz3dwh6qff5dluz") 'Used for API
+        url.AddHeader("Authorization", m.global.appBearerToken)
+    end if
     return url
 end function
 
@@ -144,7 +145,7 @@ function UrlEncode(str as string) as string
 end function
 
 function validateUserToken(oauth_token = invalid)
-    refreshToken()
+    ' refreshToken()
     if oauth_token = invalid
         token = getTokenFromRegistry()
         userToken = token.access_token
@@ -156,7 +157,7 @@ function validateUserToken(oauth_token = invalid)
     req = HttpRequest({
         url: "https://id.twitch.tv/oauth2/validate"
         headers: {
-            "Client-ID": "cf9fbjz6j9i6k6guz3dwh6qff5dluz"
+            "Client-ID": "ue6666qo983tsx6so1t0vnawi233wa"
             "Authorization": "OAuth " + userToken
         }
         method: "GET"
@@ -166,7 +167,7 @@ function validateUserToken(oauth_token = invalid)
     if response <> invalid
         if response.status = 401 and refresh_token <> invalid and refresh_token <> ""
             ? "USED FIRST ONE!!!"
-            refreshToken()
+            ' refreshToken()
             return ""
         end if
         if response.login <> invalid and response.login <> ""

@@ -11,7 +11,7 @@ function onSearchTextChange()
 
 end function
 
-function getStartDate() as Object
+function getStartDate() as object
     date = createObject("roDateTime")
     day = date.GetDayOfMonth()
     month = date.GetMonth()
@@ -39,7 +39,7 @@ function getStartDate() as Object
     return return_string
 end function
 
-function getSearchResults() as Object
+function getSearchResults() as object
     'search_results_url = "https://api.twitch.tv/kraken/streams?client_id=jzkbprff40iqj646a697cyrvl0zt2m6&limit=24&offset=" + m.top.offset + "&game="
     search_results_url = "https://api.twitch.tv/helix/clips?first=21&started_at=" + getStartDate()
 
@@ -48,7 +48,7 @@ function getSearchResults() as Object
     end if
 
     url = createUrl()
-    
+
     'url.SetUrl(search_results_url.EncodeUri() + m.top.gameRequested.EncodeUriComponent())
 
     if m.top.pagination <> ""
@@ -60,11 +60,11 @@ function getSearchResults() as Object
     response_string = url.GetToString()
     search = ParseJson(response_string)
 
-    if search.status <> invalid and search.status = 401
-        ? "401"
-        refreshToken()
-        return getSearchResults()
-    end if
+    ' if search.status <> invalid and search.status = 401
+    '     ? "401"
+    '     refreshToken()
+    '     return getSearchResults()
+    ' end if
 
     game_ids_url = "https://api.twitch.tv/helix/games?id="
     result = []
