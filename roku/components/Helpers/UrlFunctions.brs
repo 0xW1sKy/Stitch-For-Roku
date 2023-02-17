@@ -119,21 +119,21 @@ function refreshToken()
     ' queryString = "client_id=ue6666qo983tsx6so1t0vnawi233wa&device_code=" + response.device_code + "&grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Adevice_code"
     ' oauth_token = ParseJson(msg.GetString())
 
-    if refresh_token <> invalid and refresh_token <> ""
-        req = HttpRequest({
-            url: "https://id.twitch.tv/oauth2/token?grant_type=refresh_token&refresh_token=" + refresh_token + "&client_id=ue6666qo983tsx6so1t0vnawi233wa" + "&device_code=" + deviceCode
-            headers: {
-                "content-type": "application/x-www-form-urlencoded"
-                "origin": "https://switch.tv.twitch.tv"
-                "referer": "https://switch.tv.twitch.tv/"
-                "accept": "application/json"
-            }
-            method: "POST"
-        })
-        oauth_token = ParseJSON(req.send())
-        ? "REFRESHED OAUTH TOKEN IS: "; oauth_token
-        saveLogin(oauth_token.access_token, oauth_token.refresh_token, userLogin)
-    end if
+    ' if refresh_token <> invalid and refresh_token <> ""
+    '     req = HttpRequest({
+    '         url: "https://id.twitch.tv/oauth2/token?grant_type=refresh_token&refresh_token=" + refresh_token + "&client_id=ue6666qo983tsx6so1t0vnawi233wa" + "&device_code=" + deviceCode
+    '         headers: {
+    '             "content-type": "application/x-www-form-urlencoded"
+    '             "origin": "https://switch.tv.twitch.tv"
+    '             "referer": "https://switch.tv.twitch.tv/"
+    '             "accept": "application/json"
+    '         }
+    '         method: "POST"
+    '     })
+    '     oauth_token = ParseJSON(req.send())
+    '     ? "REFRESHED OAUTH TOKEN IS: "; oauth_token
+    '     saveLogin(oauth_token.access_token, oauth_token.refresh_token, userLogin)
+    ' end if
 end function
 
 
