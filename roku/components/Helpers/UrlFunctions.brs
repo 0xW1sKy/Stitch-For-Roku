@@ -82,6 +82,11 @@ function getTokenFromRegistry()
     if sec.Exists("LoggedInUser")
         userLogin = sec.Read("LoggedInUser")
     end if
+    if sec.Exists("DeviceId")
+        device_id = sec.Read("DeviceId")
+    else
+        device_id = ""
+    end if
     if refresh_token = invalid or refresh_token = ""
         refresh_token = ""
     end if
@@ -91,10 +96,14 @@ function getTokenFromRegistry()
     if userLogin = invalid or userLogin = ""
         userLogin = ""
     end if
+    if device_id = invalid or device_id = ""
+        device_id = ""
+    end if
     return {
         access_token: userToken
         refresh_token: refresh_token
         login: userLogin
+        device_id: device_id
     }
 end function
 
@@ -104,19 +113,25 @@ function refreshToken()
     userLogin = userdata.login
     refresh_token = userdata.refresh_token
     userToken = userdata.access_token
+    deviceCode = userdata.device_id
+
     ? "Client Asked to Refresh Token"
+    ' queryString = "client_id=ue6666qo983tsx6so1t0vnawi233wa&device_code=" + response.device_code + "&grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Adevice_code"
+    ' oauth_token = ParseJson(msg.GetString())
+
     if refresh_token <> invalid and refresh_token <> ""
         req = HttpRequest({
-            url: "https://oauth.k10labs.workers.dev/refresh?code=" + refresh_token
+            url: "https://id.twitch.tv/oauth2/token?grant_type=refresh_token&refresh_token=" + refresh_token + "&client_id=ue6666qo983tsx6so1t0vnawi233wa" + "&device_code=" + deviceCode
             headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
-                "Accept": "*/*"
+                "content-type": "application/x-www-form-urlencoded"
+                "origin": "https://switch.tv.twitch.tv"
+                "referer": "https://switch.tv.twitch.tv/"
+                "accept": "application/json"
             }
             method: "POST"
-            data: ""
         })
         oauth_token = ParseJSON(req.send())
-        ' ? "OAUTH TOKEN IS: "; oauth_token
+        ? "REFRESHED OAUTH TOKEN IS: "; oauth_token
         saveLogin(oauth_token.access_token, oauth_token.refresh_token, userLogin)
     end if
 end function
@@ -167,7 +182,7 @@ function validateUserToken(oauth_token = invalid)
     if response <> invalid
         if response.status = 401 and refresh_token <> invalid and refresh_token <> ""
             ? "USED FIRST ONE!!!"
-            ' refreshToken()
+            refreshToken()
             return ""
         end if
         if response.login <> invalid and response.login <> ""
