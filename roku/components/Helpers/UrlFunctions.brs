@@ -132,7 +132,7 @@ function refreshToken()
     '     })
     '     oauth_token = ParseJSON(req.send())
     '     ? "REFRESHED OAUTH TOKEN IS: "; oauth_token
-    '     saveLogin(oauth_token.access_token, oauth_token.refresh_token, userLogin)
+    '     saveLogin(oauth_token.access_token, oauth_oken.refresh_token, userLogin)
     ' end if
 end function
 

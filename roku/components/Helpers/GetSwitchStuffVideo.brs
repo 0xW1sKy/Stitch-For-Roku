@@ -60,13 +60,14 @@ sub extractThumbnailUrl(streamUrl)
 end sub
 
 function getVodLink() as object
+    userdata = getTokenFromRegistry()
     req = HttpRequest({
         url: "https://gql.twitch.tv/gql"
         headers: {
             "Accept": "*/*"
-            "Authorization": "OAuth " + m.global.switchUserToken
+            "Authorization": "OAuth " + userdata.access_token
             "Client-Id": "ue6666qo983tsx6so1t0vnawi233wa"
-            "Device-ID": m.global.switchDeviceId
+            "Device-ID": userdata.device_id
             "Origin": "https://switch.tv.twitch.tv"
             "Referer": "https://switch.tv.twitch.tv/"
         }
