@@ -213,8 +213,10 @@ function getSearchResults() as object
         streamer.login = m.userLogins[streamer.profile_image_url]
         streamer.profile_image_url = m.userProfiles[streamer.profile_image_url]
     end for
-
-    result.followed_users.SortBy("viewer_count", "r")
+    ? "follows"
+    if result.followed_users <> invalid
+        result.followed_users.SortBy("viewer_count", "r")
+    end if
 
     m.top.currentlyLiveStreamerIds = live_streamer_ids
     '? "currentlyLiveStreamerIds getuser " m.top.currentlyLiveStreamerIds

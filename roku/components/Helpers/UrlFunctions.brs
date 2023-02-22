@@ -116,6 +116,7 @@ function refreshToken()
     deviceCode = userdata.device_id
 
     ? "Client Asked to Refresh Token"
+    validateUserToken()
     ' queryString = "client_id=ue6666qo983tsx6so1t0vnawi233wa&device_code=" + response.device_code + "&grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Adevice_code"
     ' oauth_token = ParseJson(msg.GetString())
 
@@ -178,7 +179,19 @@ function validateUserToken(oauth_token = invalid)
         method: "GET"
     })
     response = ParseJSON(req.send())
-    ? "Response: "; response
+    ? "VALIDATION Response: "; response
+    data = getTokenFromRegistry()
+    req = HttpRequest({
+        url: "https://id.twitch.tv/oauth2/validate"
+        headers: {
+            "Client-ID": "ue6666qo983tsx6so1t0vnawi233wa"
+            "Authorization": "OAuth " + userToken
+            "Device-Id": data.device_id
+        }
+        method: "GET"
+    })
+    response = ParseJSON(req.send())
+    ? "VALIDATION Response: "; response
     if response <> invalid
         if response.status = 401 and refresh_token <> invalid and refresh_token <> ""
             ? "USED FIRST ONE!!!"

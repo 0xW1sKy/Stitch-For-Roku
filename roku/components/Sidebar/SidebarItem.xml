@@ -3,7 +3,7 @@
 <component name="SidebarItem" extends="Group">
 
      <interface>
-          <field id="itemContent" type="roAssociativeArray" onChange="showContent" />
+          <field id="itemContent" type="assocarray" onChange="showContent" />
           <field id="focusPercent" type="float" onChange="showfocus" />
           <field id="streamLink" type="string" />
      </interface>
