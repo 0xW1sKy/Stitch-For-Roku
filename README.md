@@ -39,7 +39,10 @@ Stitch *uncertified* : LL5GKQ (<https://my.roku.com/account/add?channel=LL5GKQ>)
 
 ## Notable Unsupported Features
 
-* Ad-blocking
+* indiscriminate Ad-blocking
+
+## Notabke Supported Features
+
 * View-As-User (removal of ads via subscription/etc)
 
 ## URLs used by app (may need to be allowed in pihole, etc)
