@@ -1,5 +1,5 @@
 sub init()
-    m.focusSelectionColor = "0x9146FFFF" 'Twitch Purple'
+    m.focusSelectionColor = "0xa970ffff" 'Twitch Purple'
     m.activeSelectionColor = m.focusSelectionColor 'Cyan`
     m.inactiveSelectionColor = m.inactiveSelectionColor 'Grey'
     m.browseList = m.top.findNode("browseList")

@@ -15,7 +15,7 @@
         <Rectangle
             visible="true"
             color="0x1f1f23FF"
-            width="78"
+            width="70"
             height="1000"
             translation="[0,5]" />
 
