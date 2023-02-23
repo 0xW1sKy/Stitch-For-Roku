@@ -129,7 +129,7 @@ function saveSwitchLogin(access_token, refresh_token, login, device_id) as void
     end if
     if access_token <> invalid and access_token <> ""
         sec.Write("DeviceId", device_id)
-        m.global.setField("DeviceId", device_id)
+        ' m.global.setField("DeviceId", device_id)
     end if
     sec.Flush()
 end function

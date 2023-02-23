@@ -1,4 +1,3 @@
-Library "Roku_Ads.brs"
 sub Main(input as dynamic)
     ' Add deep linking support here. Input is an associative array containing
     ' parameters that the client defines. Examples include "options, contentID, etc."

@@ -113,8 +113,6 @@ function init()
     end if
     ? "LoggedInUser is "; userData
 
-
-
     videoBookmarks = checkVideoBookmarks()
     ? "MainScene >> videoBookmarks > " videoBookmarks
     if videoBookmarks <> ""

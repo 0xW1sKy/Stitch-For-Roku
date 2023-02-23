@@ -36,11 +36,22 @@
                 <Rectangle
                     visible="true"
                     id="headerRect"
-                    color="0x222222FF"
+                    color="0x26262cFF"
                     width="2000"
                     height="80"
                     translation="[0,0]" />
-                <!-- <Poster translation="[5,10]" uri="pkg:/images/logo.png" /> -->
+                <Rectangle
+                    visible="true"
+                    id="headerRect"
+                    color="0x26262cFF"
+                    width="2000"
+                    height="2"
+                    translation="[0,78]" />
+                <Poster
+                    translation="[15,16]"
+                    uri="pkg:/images/logo.png"
+                    width="48px"
+                    height="56" />
                 <!--<SimpleLabel
                     id="searchHeader"
                     translation="[100,50]"
@@ -53,7 +64,7 @@
                 title="Stitch for Roku" /> -->
                 <SimpleLabel
                     id="categoryButton"
-                    translation="[13,24]"
+                    translation="[88,24]"
                     text="Categories"
                     color="0xEFEFF1FF"
                     fontSize="24"
@@ -68,7 +79,7 @@
                 </SimpleLabel>
                 <SimpleLabel
                     id="liveButton"
-                    translation="[163,24]"
+                    translation="[238,24]"
                     text="Live Channels"
                     color="0x9146FFCC"
                     fontSize="24"
@@ -83,7 +94,7 @@
                 </SimpleLabel>
                 <SimpleLabel
                     id="followingButton"
-                    translation="[348,24]"
+                    translation="[423,24]"
                     text="Following"
                     color="0xEFEFF1FF"
                     fontSize="24"

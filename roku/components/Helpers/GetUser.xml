@@ -6,6 +6,7 @@
         <field id="loginRequested" type="string" />
         <field id="searchResults" type="assocarray" />
         <field id="currentlyLiveStreamerIds" type="assocarray" />
+        <field id="currentUser" type="assocarray" />
     </interface>
 
     <script type="text/brightscript" uri="GetUser.brs" />
