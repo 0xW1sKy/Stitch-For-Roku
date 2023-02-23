@@ -6,6 +6,7 @@
         <field id="loginRequested" type="string" />
         <field id="streamDurationSeconds" type="Integer" />
         <field id="searchResults" type="assocarray" />
+        <field id="isLive" type="bool" />
     </interface>
 
     <script type="text/brightscript" uri="GetUserChannel.brs" />
