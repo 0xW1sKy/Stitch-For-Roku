@@ -67,7 +67,9 @@ function getSearchResults() as object
     channelData = ParseJSON(req.send())
     ? "DATA"
     ? channelData
-    ? "stop"
+    testvar = m.top.loginRequested
+    ? testvar
+
     result = {}
     result.display_name = channelData.data.channel.login
     result.profile_image_url = channelData.data.channel.profileImageUrl
@@ -130,7 +132,6 @@ function getSearchResults() as object
 
     if search <> invalid and search.data <> invalid and search.data[0] <> invalid
         stream = search.data[0]
-
         result.title = stream.title
         result.thumbnail_url = Left(stream.thumbnail_url, Len(stream.thumbnail_url) - 20) + "896x504.jpg"
         ' result.game = getGameNameFromId(stream.game_id)

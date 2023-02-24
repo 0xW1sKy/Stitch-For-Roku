@@ -157,6 +157,7 @@ function getSearchResults() as object
         item.user_name = streamer.node.displayName
         item.game_id = streamer.node.stream.game.displayName
         item.title = streamer.node.stream.broadcaster.broadcastSettings.title
+        item.shortDescriptionLine1 = streamer.node.stream.broadcaster.login
         item.thumbnail = Left(streamer.node.stream.previewImageUrl, Len(streamer.node.stream.previewImageUrl) - 20) + "320x180.jpg"
         item.profile_image_url = streamer.node.stream.broadcaster.profileImageUrl
         result.followed_users.push(item)

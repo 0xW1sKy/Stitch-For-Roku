@@ -47,12 +47,6 @@ function getSearchResults() as object
     })
     test_data = ParseJSON(req.send())
     current_user_id = test_data.data.user.id
-    ? "TEST DATA: "
-    ? "live"
-    ? test_data.data.user.followedLiveUsers.edges[0].node
-    ? test_data.data.user.followedLiveUsers.edges[0].node.stream
-    ? "follows"
-    ? test_data.data.user.follows.edges[0].node
     followed_streamers = test_data.data.user.follows.edges
 
     offlineFollowedStreamers = []

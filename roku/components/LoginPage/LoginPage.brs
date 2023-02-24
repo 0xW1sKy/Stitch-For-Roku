@@ -16,10 +16,10 @@ end sub
 
 sub onVisible()
     if m.top.visible = true
-        ? "RUN"
+        ' ? "RUN"
         m.getAuth.control = "RUN"
     else
-        ? "STOP"
+        ' ? "STOP"
         m.getAuth.control = "STOP"
     end if
 end sub

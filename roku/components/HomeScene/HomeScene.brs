@@ -175,7 +175,6 @@ sub onBrowseItemSelect()
         'm.getStuff.control = "RUN"
         m.top.streamerSelectedThumbnail = ""
         m.top.streamerSelectedName = m.followBar.streamerSelected
-        ? "selected: "; m.top.streamerSelectedName
     else if m.browseList.visible = true
         'm.getStuff.streamerRequested = m.browseList.content.getChild(m.browseList.rowItemSelected[0]).getChild(m.browseList.rowItemSelected[1]).ShortDescriptionLine1
         'm.getStuff.control = "RUN"
@@ -368,13 +367,14 @@ sub onGetFollowedStreams()
         alreadyAppended = false
         cnt = 0
         for each stream in m.top.followedStreams
+            ?"stop"
             alreadyAppended = false
             rowItem = createObject("RoSGNode", "ContentNode")
             rowItem.Title = stream.title
             rowItem.Description = stream.user_name
             rowItem.Categories = stream.game_id
             rowItem.HDPosterUrl = stream.thumbnail
-            rowItem.ShortDescriptionLine1 = stream.login
+            rowItem.ShortDescriptionLine1 = stream.shortdescriptionline1
             rowItem.ShortDescriptionLine2 = numberToText(stream.viewer_count) + " viewers"
             row.appendChild(rowItem)
             cnt += 1
