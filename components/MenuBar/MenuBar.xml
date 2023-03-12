@@ -1,0 +1,53 @@
+<component name="MenuBar" extends="Group">
+    <children>
+        <Group id="browseButtons">
+            <Rectangle
+                visible="true"
+                id="headerRect"
+                color="0x26262cFF"
+                width="2000"
+                height="80"
+                translation="[0,0]" />
+            <Rectangle
+                visible="true"
+                id="headerRect"
+                color="0x26262cFF"
+                width="2000"
+                height="2"
+                translation="[0,78]" />
+            <Poster
+                translation="[15,16]"
+                uri="pkg:/images/logo.png"
+                width="48px"
+                height="56" />
+            <Poster
+                id="searchLabel"
+                height="32"
+                width="32"
+                translation="[1080,24]"
+                uri="pkg:/images/search.png"
+                blendColor="0xEFEFF1FF" />
+            <Poster
+                id="optionsButton"
+                height="32"
+                width="32"
+                translation="[1145,24]"
+                uri="pkg:/images/options.png"
+                blendColor="0xEFEFF1FF" />
+        </Group>
+        <Group id="loggedUserGroup" translation="[1220,15]" visible="true">
+            <MaskGroup id="profileImageMask" maskuri="pkg:/images/profile-mask.png"
+                masksize="[50,50]">
+                <Poster id="profileImage" width="50" height="50" />
+            </MaskGroup>
+            <SimpleLabel id="loggedUserName" translation="[0,20]" fontSize="16"
+                fontUri="pkg:/fonts/Roobert-SemiBold.ttf" text="Login" />
+        </Group>
+    </children>
+    <interface>
+        <field id="content" type="node" onChange="OnChangeContent" />
+        <field id="rowItemSelected" type="intarray" alwaysNotify="true" onChange="OnRowItemSelected" />
+        <field id="itemFocused" type="intarray" onChange="OnItemFocused" />
+    </interface>
+    <script type="text/brightscript" uri="MenuBar.brs" />
+</component>

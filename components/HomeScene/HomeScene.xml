@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<component name="HomeScene" extends="Group">
+
+    <interface>
+        <field id="streamUrl" type="uri" />
+        <field id="videoUrl" type="string" alwaysNotify="true" alias="channelPage.videoUrl" />
+        <field id="thumbnailInfo" type="assocarray" alias="channelPage.thumbnailInfo" />
+
+        <field id="streamerRequested" type="string" />
+        <field id="categorySelected" type="string" alwaysNotify="true" />
+        <field id="followedStreams" type="array" alias="followBar.followedStreams" />
+        <field id="followBarFocused" type="bool" alias="followBar.focused" />
+        <field id="loggedInUserName" type="string" />
+        <field id="loggedInUserProfileImage" type="uri" onChange="onNewUser" />
+        <field id="buttonPressed" type="string" alwaysNotify="true" value="" />
+        <field id="currentlyLiveStreamerIds" type="assocarray" />
+
+        <field id="lastScene" type="string" value="" />
+
+        <field id="streamerSelectedName" type="string" value="" alwaysNotify="true" />
+        <field id="streamerSelectedThumbnail" type="string" value="" />
+        <field id="backgroundImageUri" type="uri" value="" />
+        <field id="channelAvatar" type="string" alias="channelPage.channelAvatar" />
+        <field id="channelUsername" type="string" alias="channelPage.channelUsername" />
+        <field id="videoTitle" type="string" alias="channelPage.videoTitle" />
+        <field id="streamDurationSeconds" type="Integer" alias="channelPage.streamDurationSeconds" />
+    </interface>
+
+    <script type="text/brightscript" uri="HomeScene.brs" />
+    <script type="text/brightscript" uri="pkg:/components/Helpers/StringUtils.brs" />
+
+    <children>
+        <MenuBar id="browseMain" translation="[0,0]" />
+        <ChannelPage
+            id="channelPage"
+            translation="[78,78]"
+            visible="false" />
+
+        <OfflineChannelList
+            id="offlineChannelList"
+            visible="false"
+            translation="[100,500]" />
+
+        <FollowedStreamsBar
+            id="followBar"
+            translation="[0,78]" />
+    </children>
+
+</component>

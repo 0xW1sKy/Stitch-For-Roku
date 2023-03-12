@@ -9,9 +9,9 @@
             "request": "launch",
             "name": "BrightScript Debug: Launch",
             "stopOnEntry": false,
-            "host": "10.0.0.150",
+            "host": "192.168.2.44",
             "password": "1111",
-            "rootDir": "${workspaceFolder}/roku",
+            "rootDir": "${workspaceFolder}",
             "injectRdbOnDeviceComponent": true,
             "enableDebuggerAutoRecovery": true,
             "stopDebuggerOnAppExit": true

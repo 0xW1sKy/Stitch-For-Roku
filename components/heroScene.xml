@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Copyright 2016 Roku Corp.  All Rights Reserved. -->
+
+<component name="HeroScene" extends="Scene">
+
+  <children>
+    <!-- RowList on HeroScene -->
+    <MenuBar
+      id="MenuBar"
+      visible="true"
+      translation="[0,0]"
+    />
+
+  </children>
+  <script type="text/brightscript">
+
+    <![CDATA[
+    sub init()
+      m.top.backgroundUri = ""
+      m.top.backgroundColor = "0x020202FF"
+      m.menu = m.top.findNode("MenuBar")
+      m.menu.setFocus(true)
+    end sub
+    ]]>
+
+  </script>
+</component>

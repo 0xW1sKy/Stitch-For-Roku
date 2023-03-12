@@ -30,7 +30,7 @@ sub RunUserInterface()
     screen = CreateObject("roSGScreen")
     m.port = CreateObject("roMessagePort")
     screen.setMessagePort(m.port)
-    scene = screen.CreateScene("MainScene")
+    scene = screen.CreateScene("HeroScene")
     screen.show()
 
     while(true)
