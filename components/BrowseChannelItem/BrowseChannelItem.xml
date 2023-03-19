@@ -46,7 +46,7 @@
         </Label>
         <Poster
             id="viewsRect"
-            uri="pkg:/locale/images/live_rectangle.9.png"
+            uri="pkg:/images/live_rectangle.9.png"
             translation="[2,157]">
             <!---
             <Label
@@ -60,7 +60,7 @@
             />
             </Label>-->
             <Poster
-                uri="pkg:/locale/images/live.png"
+                uri="pkg:/images/live.png"
                 translation="[5,5]" />
         </Poster>
         <!--

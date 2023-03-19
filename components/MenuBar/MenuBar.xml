@@ -17,7 +17,7 @@
         <Poster
             id="logo"
             translation="[15,16]"
-            uri="pkg:/locale/images/logo.png"
+            uri="pkg:/images/logo.png"
             width="48px"
             height="56" />
         <ButtonGroup id="MenuOptions" layoutDirection="horiz"

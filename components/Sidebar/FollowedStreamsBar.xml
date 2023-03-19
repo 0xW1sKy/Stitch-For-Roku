@@ -20,7 +20,7 @@
             translation="[0,5]" />
 
         <Poster
-            uri="pkg:/locale/images/live_rectangle.9.png"
+            uri="pkg:/images/live_rectangle.9.png"
             width="48"
             height="20"
             translation="[10,10]">
@@ -32,7 +32,7 @@
                 <Font role="font" uri="pkg:/fonts/Inter-Regular.ttf" size="12" />
             </Label>
             <Poster
-                uri="pkg:/locale/images/live.png"
+                uri="pkg:/images/live.png"
                 translation="[5,5]" />
         </Poster>
 

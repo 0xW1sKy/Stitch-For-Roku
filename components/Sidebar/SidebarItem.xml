@@ -15,7 +15,7 @@
                id="itemGroup">
                <MaskGroup
                     id="itemMask"
-                    maskUri="pkg:/locale/images/profile-mask.png">
+                    maskUri="pkg:/images/profile-mask.png">
                     <Poster
                          id="streamerProfile"
                          uri=""
@@ -29,7 +29,7 @@
                     opacity="0.0">
                     <Poster
                          id="boundingBox"
-                         uri="pkg:/locale/images/barFocusIndicator.9.png"
+                         uri="pkg:/images/barFocusIndicator.9.png"
                          width="240"
                          height="50"
                          translation="[64,-5]" />
@@ -49,7 +49,7 @@
                     </Label>
                     <Poster
                          id="selectionIndicator"
-                         uri="pkg:/locale/images/purple_circle.png"
+                         uri="pkg:/images/purple_circle.png"
                          width="51"
                          height="51"
                          translation="[0,0]" />

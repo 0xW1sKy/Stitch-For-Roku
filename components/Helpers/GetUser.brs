@@ -38,7 +38,7 @@ function getProfilePicture(link)
     search = ParseJson(response_string)
 
     if search.data = invalid
-        return "pkg:/locale/images/login.png"
+        return "pkg:/images/login.png"
     end if
     for each profile in search.data
         m.userLogins[profile.id] = profile.login

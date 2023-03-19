@@ -46,7 +46,7 @@
 
             <Poster
                 id="viewsRect"
-                uri="pkg:/locale/images/live_rectangle.9.png"
+                uri="pkg:/images/live_rectangle.9.png"
                 opacity="0.8"
                 translation="[235,160]">
                 <!---

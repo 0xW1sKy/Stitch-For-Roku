@@ -12,7 +12,7 @@
 
         <MaskGroup
             id="itemIcon"
-            maskuri="pkg:/locale/images/profile-mask.png"
+            maskuri="pkg:/images/profile-mask.png"
             maskSize="[50,50]">
             <Poster
                 id="image"

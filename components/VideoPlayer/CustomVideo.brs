@@ -349,10 +349,10 @@ function onKeyEvent(key, press) as boolean
                 m.controlButton.blendColor = "0xBD00FFFF"
             else if m.currentProgressBarState = 6
                 if m.focusedTimeSlot <> -1 and m.focusedTimeSlot + 1 <= 5
-                    m.timeTravelTimeSlot[m.focusedTimeSlot].uri = "pkg:/locale/images/unfocusedTimeSlot.png"
+                    m.timeTravelTimeSlot[m.focusedTimeSlot].uri = "pkg:/images/unfocusedTimeSlot.png"
                     m.timeTravelTimeSlot[m.focusedTimeSlot].getChild(0).color = "0x3F3F3FFF"
                     m.focusedTimeSlot += 1
-                    m.timeTravelTimeSlot[m.focusedTimeSlot].uri = "pkg:/locale/images/focusedTimeSlot.png"
+                    m.timeTravelTimeSlot[m.focusedTimeSlot].uri = "pkg:/images/focusedTimeSlot.png"
                     m.timeTravelTimeSlot[m.focusedTimeSlot].getChild(0).color = "0xDC79FFFF"
                     m.arrows.translation = [m.timeTravelTimeSlot[m.focusedTimeSlot].translation[0] + 18, m.timeTravelTimeSlot[m.focusedTimeSlot].translation[1] - 6]
                 else if m.focusedTimeSlot = -1
@@ -366,7 +366,7 @@ function onKeyEvent(key, press) as boolean
                     m.currentPositionSeconds = m.top.position
                     m.currentPositionUpdated = true
                     m.top.control = "pause"
-                    m.controlButton.uri = "pkg:/locale/images/play.png"
+                    m.controlButton.uri = "pkg:/images/play.png"
                 end if
                 m.currentPositionSeconds += 10
                 if m.currentPositionSeconds > m.top.duration
@@ -414,10 +414,10 @@ function onKeyEvent(key, press) as boolean
                 m.timeTravelButton.blendColor = "0xBD00FFFF"
             else if m.currentProgressBarState = 6
                 if m.focusedTimeSlot <> -1 and m.focusedTimeSlot - 1 >= 0
-                    m.timeTravelTimeSlot[m.focusedTimeSlot].uri = "pkg:/locale/images/unfocusedTimeSlot.png"
+                    m.timeTravelTimeSlot[m.focusedTimeSlot].uri = "pkg:/images/unfocusedTimeSlot.png"
                     m.timeTravelTimeSlot[m.focusedTimeSlot].getChild(0).color = "0x3F3F3FFF"
                     m.focusedTimeSlot -= 1
-                    m.timeTravelTimeSlot[m.focusedTimeSlot].uri = "pkg:/locale/images/focusedTimeSlot.png"
+                    m.timeTravelTimeSlot[m.focusedTimeSlot].uri = "pkg:/images/focusedTimeSlot.png"
                     m.timeTravelTimeSlot[m.focusedTimeSlot].getChild(0).color = "0xDC79FFFF"
                     m.arrows.translation = [m.timeTravelTimeSlot[m.focusedTimeSlot].translation[0] + 18, m.timeTravelTimeSlot[m.focusedTimeSlot].translation[1] - 6]
                 else if m.focusedTimeSlot = -1
@@ -471,16 +471,16 @@ function onKeyEvent(key, press) as boolean
             if m.currentProgressBarState = 1
                 if m.top.state = "paused"
                     m.top.control = "resume"
-                    m.controlButton.uri = "pkg:/locale/images/pause.png"
+                    m.controlButton.uri = "pkg:/images/pause.png"
                     m.currentPositionUpdated = false
                 else
                     m.top.control = "pause"
-                    m.controlButton.uri = "pkg:/locale/images/play.png"
+                    m.controlButton.uri = "pkg:/images/play.png"
                 end if
                 return true
             else if m.currentProgressBarState = 2
                 m.top.seek = m.currentPositionSeconds
-                m.controlButton.uri = "pkg:/locale/images/pause.png"
+                m.controlButton.uri = "pkg:/images/pause.png"
                 m.currentPositionUpdated = false
                 m.currentProgressBarState = 1
                 'm.progressBarFocused = not m.progressBarFocused
@@ -488,7 +488,7 @@ function onKeyEvent(key, press) as boolean
             else if m.currentProgressBarState = 3
                 m.currentProgressBarState = 6
                 m.focusedTimeSlot = 0
-                m.timeTravelTimeSlot[m.focusedTimeSlot].uri = "pkg:/locale/images/focusedTimeSlot.png"
+                m.timeTravelTimeSlot[m.focusedTimeSlot].uri = "pkg:/images/focusedTimeSlot.png"
                 m.timeTravelTimeSlot[m.focusedTimeSlot].getChild(0).color = "0xDC79FFFF"
                 m.arrows.translation = [m.timeTravelTimeSlot[m.focusedTimeSlot].translation[0] + 18, m.timeTravelTimeSlot[m.focusedTimeSlot].translation[1] - 6]
                 m.timeTravelRect.visible = true
@@ -510,14 +510,14 @@ function onKeyEvent(key, press) as boolean
                 return true
             else if m.currentProgressBarState = 6
                 if m.focusedTimeSlot <> -1
-                    m.timeTravelTimeSlot[m.focusedTimeSlot].uri = "pkg:/locale/images/unfocusedTimeSlot.png"
+                    m.timeTravelTimeSlot[m.focusedTimeSlot].uri = "pkg:/images/unfocusedTimeSlot.png"
                     m.timeTravelTimeSlot[m.focusedTimeSlot].getChild(0).color = "0x3F3F3FFF"
                     m.timeTravelButtons[m.focusedTimeButton].opacity = 1
                     m.focusedTimeSlot = -1
                 else
                     if m.focusedTimeButton = 1
                         m.top.seek = getTimeTravelTime()
-                        m.controlButton.uri = "pkg:/locale/images/pause.png"
+                        m.controlButton.uri = "pkg:/images/pause.png"
                         m.currentPositionUpdated = false
                     end if
                     for timeSlot = 0 to 5
@@ -543,7 +543,7 @@ function onKeyEvent(key, press) as boolean
                 m.currentPositionSeconds = m.top.position
                 m.currentPositionUpdated = true
                 m.top.control = "pause"
-                m.controlButton.uri = "pkg:/locale/images/play.png"
+                m.controlButton.uri = "pkg:/images/play.png"
             end if
             m.currentPositionSeconds += 10
             ? "Position"; m.currentPositionSeconds
@@ -586,7 +586,7 @@ function onKeyEvent(key, press) as boolean
                 m.currentPositionSeconds = m.top.position
                 m.currentPositionUpdated = true
                 m.top.control = "pause"
-                m.controlButton.uri = "pkg:/locale/images/play.png"
+                m.controlButton.uri = "pkg:/images/play.png"
             end if
             m.currentPositionSeconds -= 10
             if m.currentPositionSeconds < 0
@@ -617,18 +617,18 @@ function onKeyEvent(key, press) as boolean
         else if key = "play"
             if m.currentProgressBarState = 2
                 m.top.seek = m.currentPositionSeconds
-                m.controlButton.uri = "pkg:/locale/images/pause.png"
+                m.controlButton.uri = "pkg:/images/pause.png"
                 m.currentPositionUpdated = false
                 m.currentProgressBarState = 1
                 'm.progressBarFocused = not m.progressBarFocused
             else
                 if m.top.state = "paused"
                     m.top.control = "resume"
-                    m.controlButton.uri = "pkg:/locale/images/pause.png"
+                    m.controlButton.uri = "pkg:/images/pause.png"
                     m.currentPositionUpdated = false
                 else
                     m.top.control = "pause"
-                    m.controlButton.uri = "pkg:/locale/images/play.png"
+                    m.controlButton.uri = "pkg:/images/play.png"
                 end if
             end if
         end if

@@ -40,8 +40,8 @@ sub updateMenuOptions()
         newItem.iconUri = ""
         newItem.focusedIconUri = ""
         newItem.height = 80
-        newItem.focusFootprintBitmapUri = "pkg:/locale/images/FocusFootprint.9.png"
-        newItem.focusBitmapUri = "pkg:/locale/images/FocusIndicator.9.png"
+        newItem.focusFootprintBitmapUri = "pkg:/images/FocusFootprint.9.png"
+        newItem.focusBitmapUri = "pkg:/images/FocusIndicator.9.png"
         newItem.showFocusFootprint = false
         m.menuOptions.appendChild(newItem)
     end for

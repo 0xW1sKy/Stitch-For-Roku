@@ -26,7 +26,7 @@ sub onOfflineChannelsChange()
         group.translation = [x_translation, y_translation]
 
         mask_group = createObject("roSGNode", "MaskGroup")
-        mask_group.maskuri = "pkg:/locale/images/profile-mask-150.png"
+        mask_group.maskuri = "pkg:/images/profile-mask-150.png"
         mask_group.opacity = 0.5
         mask_group.masksize = m.maskSize
 
@@ -46,7 +46,7 @@ sub onOfflineChannelsChange()
         stream_user.fontUri = "pkg:/fonts/Inter-SemiBold.ttf"
 
         ' indicator = createObject("roSGNode", "Poster")
-        ' indicator.uri = "pkg:/locale/images/verticalFocusIndicator.9.png"
+        ' indicator.uri = "pkg:/images/verticalFocusIndicator.9.png"
         ' indicator.appendChild(stream_user)
         ' '? "image > "; profile_image.uri
         ' width = stream_user.localBoundingRect().width + 10
@@ -88,12 +88,12 @@ sub onOfflineChannelsChange()
     m.indicator.visible = false
 
     circle = createObject("roSGNode", "Poster")
-    circle.uri = "pkg:/locale/images/offlineChannelIndicator.png"
+    circle.uri = "pkg:/images/offlineChannelIndicator.png"
     circle.translation = [0, -165]
     circle.visible = false
 
     nameBox = createObject("roSGNode", "Poster")
-    nameBox.uri = "pkg:/locale/images/verticalFocusIndicator.9.png"
+    nameBox.uri = "pkg:/images/verticalFocusIndicator.9.png"
     nameBox.visible = true
 
     stream_user = createObject("roSGNode", "SimpleLabel")
