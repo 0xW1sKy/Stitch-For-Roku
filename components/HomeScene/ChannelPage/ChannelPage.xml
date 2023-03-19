@@ -29,7 +29,7 @@
                     width="1358"
                     height="80"
                     translation="[0,0]" />
-                <MaskGroup id="profileImageMask" maskuri="pkg:/images/profile-mask.png"
+                <MaskGroup id="profileImageMask" maskuri="pkg:/locale/images/profile-mask.png"
                     masksize="[50,50]" translation="[15,15]">
                     <Poster id="avatar" width="50" height="50" />
                 </MaskGroup>
@@ -75,7 +75,7 @@
             rowItemSize="[[320,180]]"
             rowItemSpacing="[[30,0]]"
             itemSize="[320,250]"
-            focusBitmapUri="pkg:/images/focusIndicator.9.png"
+            focusBitmapUri="pkg:/locale/images/focusIndicator.9.png"
             visible="true" />
         <SimpleLabel
             id="recentVideosLabel"
@@ -92,7 +92,7 @@
             rowItemSize="[[320,180]]"
             rowItemSpacing="[[30,0]]"
             itemSize="[1200, 275]"
-            focusBitmapUri="pkg:/images/focusIndicator.9.png"
+            focusBitmapUri="pkg:/locale/images/focusIndicator.9.png"
             rowFocusAnimationStyle="floatingFocus"
             visible="true" />
     </children>

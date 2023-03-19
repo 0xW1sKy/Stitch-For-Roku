@@ -10,7 +10,7 @@
     <script type="text/brightscript"
         uri="./UILogic/ScreenStackLogic.brs" />
     <children>
-        <!-- <MaskGroup maskuri="pkg:/images/vertical-mask-down.png" masksize="[2,720]"
+        <!-- <MaskGroup maskuri="pkg:/locale/images/vertical-mask-down.png" masksize="[2,720]"
         translation="[0,0]"> -->
         <Rectangle width="1280" height="720" color="0x0e0e10FF"
         />

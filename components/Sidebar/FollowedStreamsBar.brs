@@ -46,7 +46,7 @@ sub onFollowedStreamsChange()
         group.translation = "[5," + translation.ToStr() + "]"
 
         mask_group = createObject("roSGNode", "MaskGroup")
-        mask_group.maskuri = "pkg:/images/profile-mask.png"
+        mask_group.maskuri = "pkg:/locale/images/profile-mask.png"
         mask_group.masksize = m.maskSize
         'mask_group.maskOffset = "[0,0]"
         'mask_group.visible = true
@@ -87,7 +87,7 @@ sub onFollowedStreamsChange()
         stream_viewers.fontUri = "pkg:/fonts/Inter-Regular.ttf"
 
         red_rectangle = createObject("roSGNode", "Poster")
-        red_rectangle.uri = "pkg:/images/red_rectangle.9.png"
+        red_rectangle.uri = "pkg:/locale/images/red_rectangle.9.png"
         red_rectangle.width = stream_viewers.localBoundingRect().width + 23
         red_rectangle.height = 28 'stream_viewers.localBoundingRect().height + 5
         red_rectangle.translation = "[285,5]"
@@ -98,14 +98,14 @@ sub onFollowedStreamsChange()
         login_name.visible = false
 
         live = createObject("roSGNode", "Poster")
-        live.uri = "pkg:/images/live.png"
+        live.uri = "pkg:/locale/images/live.png"
         live.width = 8
         live.height = 8
         live.translation = "[290,15]"
         live.visible = false
 
         purple_circle = createObject("roSGNode", "Poster")
-        purple_circle.uri = "pkg:/images/purple_circle.png"
+        purple_circle.uri = "pkg:/locale/images/purple_circle.png"
         purple_circle.width = 52
         purple_circle.height = 52
         'purple_circle.translation = "[290,15]"
@@ -120,7 +120,7 @@ sub onFollowedStreamsChange()
 
         selected = createObject("roSGNode", "Poster")
         selected.translation = "[64,-5]"
-        selected.uri = "pkg:/images/barFocusIndicator.9.png"
+        selected.uri = "pkg:/locale/images/barFocusIndicator.9.png"
         selected.height = 50
         '? "WIDTHS: " stream_user.localBoundingRect().width " " stream_game.localBoundingRect().width
         if stream_user.localBoundingRect().width >= stream_game.localBoundingRect().width

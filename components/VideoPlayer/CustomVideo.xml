@@ -20,7 +20,7 @@
     <children>
         <Poster
             id="timeTravelRect"
-            uri="pkg:/images/timeTravelRect.png"
+            uri="pkg:/locale/images/timeTravelRect.png"
             width="500"
             height="300"
             visible="false"
@@ -52,13 +52,13 @@
 
             <Group id="arrows">
                 <Poster
-                    uri="pkg:/images/arrow-up.png"
+                    uri="pkg:/locale/images/arrow-up.png"
                     width="15.67"
                     height="4.36"
                     blendColor="0xDC79FFFF"
                     translation="[-8,0]" />
                 <Poster
-                    uri="pkg:/images/arrow-down.png"
+                    uri="pkg:/locale/images/arrow-down.png"
                     width="15.67"
                     height="4.36"
                     blendColor="0xDC79FFFF"
@@ -67,7 +67,7 @@
 
             <Poster
                 id="hour0"
-                uri="pkg:/images/unfocusedTimeSlot.png"
+                uri="pkg:/locale/images/unfocusedTimeSlot.png"
                 width="36"
                 height="42"
                 translation="[120,107]">
@@ -80,7 +80,7 @@
             </Poster>
             <Poster
                 id="hour1"
-                uri="pkg:/images/unfocusedTimeSlot.png"
+                uri="pkg:/locale/images/unfocusedTimeSlot.png"
                 width="36"
                 height="42"
                 translation="[158,107]">
@@ -93,7 +93,7 @@
             </Poster>
             <Poster
                 id="minute0"
-                uri="pkg:/images/unfocusedTimeSlot.png"
+                uri="pkg:/locale/images/unfocusedTimeSlot.png"
                 width="36"
                 height="42"
                 translation="[213,107]">
@@ -106,7 +106,7 @@
             </Poster>
             <Poster
                 id="minute1"
-                uri="pkg:/images/unfocusedTimeSlot.png"
+                uri="pkg:/locale/images/unfocusedTimeSlot.png"
                 width="36"
                 height="42"
                 translation="[251,107]">
@@ -119,7 +119,7 @@
             </Poster>
             <Poster
                 id="second0"
-                uri="pkg:/images/unfocusedTimeSlot.png"
+                uri="pkg:/locale/images/unfocusedTimeSlot.png"
                 width="36"
                 height="42"
                 translation="[306,107]">
@@ -132,7 +132,7 @@
             </Poster>
             <Poster
                 id="second1"
-                uri="pkg:/images/unfocusedTimeSlot.png"
+                uri="pkg:/locale/images/unfocusedTimeSlot.png"
                 width="36"
                 height="42"
                 translation="[344,107]">
@@ -187,11 +187,11 @@
             </Rectangle>
         </Poster>
         <Group id="progressBar" translation="[0,620]">
-            <MaskGroup maskuri="pkg:/images/vertical-mask-down.png" masksize="[2,200]"
+            <MaskGroup maskuri="pkg:/locale/images/vertical-mask-down.png" masksize="[2,200]"
                 translation="[0,-620]">
                 <Rectangle width="1280" height="200" color="0x000000BB" />
             </MaskGroup>
-            <MaskGroup maskuri="pkg:/images/vertical-mask.png" masksize="[2,200]"
+            <MaskGroup maskuri="pkg:/locale/images/vertical-mask.png" masksize="[2,200]"
                 translation="[0,-100]">
                 <Rectangle width="1280" height="200" color="0x000000BB" />
             </MaskGroup>
@@ -219,21 +219,21 @@
                 translation="[40,83]" />
             <Poster
                 id="bg-glow"
-                uri="pkg:/images/bg-glow.png"
+                uri="pkg:/locale/images/bg-glow.png"
                 width="60"
                 height="60"
                 visible="true"
                 translation="[611,31]" />
             <Poster
                 id="progressDot"
-                uri="pkg:/images/progressDot.png"
+                uri="pkg:/locale/images/progressDot.png"
                 width="14"
                 height="13"
                 visible="true"
                 translation="[40,83]" />
             <Poster
                 id="controlButton"
-                uri="pkg:/images/pause.png"
+                uri="pkg:/locale/images/pause.png"
                 width="14"
                 height="16"
                 translation="[634,53]" />
@@ -245,25 +245,25 @@
                 translation="[60,45]" />-->
             <Poster
                 id="timeTravelButton"
-                uri="pkg:/images/TimeTravel.png"
+                uri="pkg:/locale/images/TimeTravel.png"
                 width="25"
                 height="21"
                 translation="[548,51]" />
             <Poster
                 id="messagesButton"
-                uri="pkg:/images/messages.png"
+                uri="pkg:/locale/images/messages.png"
                 width="24.84"
                 height="20.04"
                 translation="[710,52]" />
             <!--<Poster
                 id="backButton"
-                uri="pkg:/images/back.png"
+                uri="pkg:/locale/images/back.png"
             width="16.32"
                 height="13.32"
                 translation="[50,-605]"
             />-->
 
-            <MaskGroup id="profileImageMask" maskuri="pkg:/images/profile-mask.png"
+            <MaskGroup id="profileImageMask" maskuri="pkg:/locale/images/profile-mask.png"
                 masksize="[50,50]" translation="[15,-603]">
                 <Poster id="avatar" width="50" height="50" />
             </MaskGroup>

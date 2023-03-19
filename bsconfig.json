@@ -12,6 +12,7 @@
         "components/**/*",
         "images/**/*",
         "fonts/**/*",
+        "locale/**/*",
         "manifest"
     ],
     "diagnosticFilters": [{

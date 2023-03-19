@@ -1,53 +1,71 @@
-<component name="MenuBar" extends="Group">
+<component name="MenuBar" extends="Group" initialFocus="MenuOptions">
     <children>
-        <Group id="browseButtons">
-            <Rectangle
-                visible="true"
-                id="headerRect"
-                color="0x26262cFF"
-                width="2000"
-                height="80"
-                translation="[0,0]" />
-            <Rectangle
-                visible="true"
-                id="headerRect"
-                color="0x26262cFF"
-                width="2000"
-                height="2"
-                translation="[0,78]" />
+        <Rectangle
+            visible="true"
+            id="headerRect"
+            color="0x26262cFF"
+            width="1280"
+            height="80"
+            translation="[0,0]" />
+        <Rectangle
+            visible="true"
+            id="headerRectShadow"
+            color="0x26262cFF"
+            width="1280"
+            height="2"
+            translation="[0,78]" />
+        <Poster
+            id="logo"
+            translation="[15,16]"
+            uri="pkg:/locale/images/logo.png"
+            width="48px"
+            height="56" />
+        <ButtonGroup id="MenuOptions" layoutDirection="horiz"
+            horizAlignment="left">
+        </ButtonGroup>
+        <Group id="Icons">
             <Poster
-                translation="[15,16]"
-                uri="pkg:/images/logo.png"
-                width="48px"
-                height="56" />
-            <Poster
-                id="searchLabel"
+                id="searchIcon"
                 height="32"
                 width="32"
                 translation="[1080,24]"
-                uri="pkg:/images/search.png"
                 blendColor="0xEFEFF1FF" />
             <Poster
-                id="optionsButton"
+                id="settingsIcon"
                 height="32"
                 width="32"
                 translation="[1145,24]"
-                uri="pkg:/images/options.png"
                 blendColor="0xEFEFF1FF" />
-        </Group>
-        <Group id="loggedUserGroup" translation="[1220,15]" visible="true">
-            <MaskGroup id="profileImageMask" maskuri="pkg:/images/profile-mask.png"
-                masksize="[50,50]">
-                <Poster id="profileImage" width="50" height="50" />
-            </MaskGroup>
-            <SimpleLabel id="loggedUserName" translation="[0,20]" fontSize="16"
-                fontUri="pkg:/fonts/Roobert-SemiBold.ttf" text="Login" />
+            <Poster
+                id="loginIcon"
+                height="32"
+                width="32"
+                translation="[1210,24]"
+                blendColor="0xEFEFF1FF" />
         </Group>
     </children>
     <interface>
+        <field id="initialSelection" type="string" value="" />
+        <field id="currentlySelectedItem" type="string" onChange="onSelectedItemChange" />
+        <field id="menuOptionsText" type="stringarray"
+            value="[]" onChange="updateMenuOptions" />
+        <field id="menuTextColor" type="color" value="0xEFEFF1FF" />
+        <field id="menuFocusColor" type="color" value="0x9146FFCC" />
+        <field id="menuOptionsSpacing" type="int" value="36" />
+        <field id="menuOptionsTranslation" type="vector2d" value="[10,0]"
+            alias="MenuOptions.translation" />
+        <field id="menuFontSize" type="int" value="24" />
+        <field id="menuFontUri" type="uri" value="pkg:/fonts/Inter-SemiBold.ttf" />
+        <field id="showSearchIcon" type="bool" value="true" />
+        <field id="showSettingsIcon" type="bool" value="true" />
+        <field id="showLoginIcon" type="bool" value="true" />
+        <field id="searchIconUri" type="uri" value="pkg:/components/MenuBar/iconSearch.png"
+            alias="searchIcon.uri" />
+        <field id="settingsIconUri" type="uri" value="pkg:/components/MenuBar/iconSettings.png"
+            alias="settingsIcon.uri" />
+        <field id="loginIconUri" type="uri" value="pkg:/components/MenuBar/iconLogin.png"
+            alias="loginIcon.uri" />
         <field id="content" type="node" onChange="OnChangeContent" />
-        <field id="rowItemSelected" type="intarray" alwaysNotify="true" onChange="OnRowItemSelected" />
-        <field id="itemFocused" type="intarray" onChange="OnItemFocused" />
     </interface>
     <script type="text/brightscript" uri="MenuBar.brs" />
 </component>

@@ -8,21 +8,12 @@
     <!-- RowList on HeroScene -->
     <MenuBar
       id="MenuBar"
+      menuOptionsText="[&quot;My Option 1&quot;, &quot;Menu Option 2&quot;, &quot;Menu Option 3&quot;, &quot;Menu Option 4&quot;]"
       visible="true"
+      focusable="true"
       translation="[0,0]"
     />
 
   </children>
-  <script type="text/brightscript">
-
-    <![CDATA[
-    sub init()
-      m.top.backgroundUri = ""
-      m.top.backgroundColor = "0x020202FF"
-      m.menu = m.top.findNode("MenuBar")
-      m.menu.setFocus(true)
-    end sub
-    ]]>
-
-  </script>
+  <script type="text/brightscript" uri="heroScene.brs" />
 </component>
