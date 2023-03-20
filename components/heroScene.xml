@@ -8,7 +8,7 @@
     <!-- RowList on HeroScene -->
     <MenuBar
       id="MenuBar"
-      menuOptionsText="[&quot;My Option 1&quot;, &quot;Menu Option 2&quot;, &quot;Menu Option 3&quot;, &quot;Menu Option 4&quot;]"
+      menuOptionsText="[&quot;MenuOptionA&quot;, &quot;MenuOptionB&quot;, &quot;MenuOptionC&quot;, &quot;MenuOptionD&quot;]"
       visible="true"
       focusable="true"
       translation="[0,0]"

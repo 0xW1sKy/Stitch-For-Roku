@@ -14,7 +14,16 @@
             "rootDir": "${workspaceFolder}",
             "injectRdbOnDeviceComponent": true,
             "enableDebuggerAutoRecovery": true,
-            "stopDebuggerOnAppExit": true
+            "stopDebuggerOnAppExit": true,
+            "files": [
+                "components/**/*",
+                "fonts/**/*",
+                "images/**/*",
+                "locale/**/*",
+                "settings/**/*",
+                "source/**/*",
+                "manifest"
+            ]
         }
     ]
 }

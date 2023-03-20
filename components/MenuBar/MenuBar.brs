@@ -5,18 +5,7 @@ sub init()
     m.logo = m.top.findNode("logo")
     m.headerRect = m.top.findNode("headerRect")
     m.menuOptions = m.top.findNode("MenuOptions")
-    m.searchIcon = m.top.findNode("searchIcon")
-    m.settingsIcon = m.top.findNode("settingsIcon")
-    m.loginIcon = m.top.findNode("loginIcon")
-    '*******************'
-    '* Update Visiblity
-    '*******************'
-    m.searchIcon.visible = m.top.showSearchIcon
-    m.settingsIcon.visible = m.top.showSettingsIcon
-    m.loginIcon.visible = m.top.showLoginIcon
-    m.top.observeField("focusedChild", "onFocusedItem")
 end sub
-
 
 sub updateMenuOptions()
     '*******************'
@@ -28,60 +17,77 @@ sub updateMenuOptions()
         m.menuOptions.translation = "[" + xoffset.ToStr() + "," + yoffset.ToStr() + "]"
     end if
     for i = 0 to (m.top.menuOptionsText.count() - 1)
-        newItem = createObject("roSGNode", "Button")
-        newItem.text = m.top.menuOptionsText[i]
+        newItem = createObject("roSGNode", "JFButton")
         font = CreateObject("roSGNode", "Font")
         font.size = m.top.menuFontSize
         font.uri = m.top.menuFontUri
         newItem.textFont = font
+        newItem.minChars = 30
         newItem.focusedTextFont = font
         newItem.textColor = m.top.menuTextColor
         newItem.focusedTextColor = m.top.menuTextColor
         newItem.iconUri = ""
         newItem.focusedIconUri = ""
-        newItem.height = 80
+        newItem.height = m.top.menuOptionsHeight
         newItem.focusFootprintBitmapUri = "pkg:/images/FocusFootprint.9.png"
         newItem.focusBitmapUri = "pkg:/images/FocusIndicator.9.png"
         newItem.showFocusFootprint = false
+        newItem.text = tr(m.top.menuOptionsText[i])
         m.menuOptions.appendChild(newItem)
     end for
-end sub
-
-sub onFocusedItem()
-    ? "CurrentlyFocusedChild: "; m.top.focusedChild.id
-
-    print "MenuBar Focused"
-end sub
-
-sub onSelectedItemChange()
-    print ""
-end sub
-
-function getLabelWidthPx(text)
-    FontPixels = text.textFont.size * 0.5
-    width = text.translation[0] + Len(text.text) * FontPixels
-    return width
-end function
-
-sub OnChangeContent()
-    print "##onChangeContent"
-end sub
-
-function onKeyEvent(key as string, press as boolean) as boolean
-    ?"MenuBar KeyEvent: "; key press
-    if press
-        if key = "right"
-            m.menuOptions.focusButton = m.menuOptions.buttonFocused + 1
-            return true
-        end if
-        if key = "left"
-            m.menuOptions.focusButton = m.menuOptions.buttonFocused - 1
-            return true
-        end if
+    if m.top.showSearchIcon
+        newItem = createObject("roSGNode", "JFButton")
+        newItem.textColor = m.top.menuTextColor
+        newItem.focusedTextColor = m.top.menuTextColor
+        newItem.iconUri = "pkg:/images/iconSearch.png"
+        newItem.focusedIconUri = "pkg:/images/iconSearch.png"
+        newItem.height = m.top.menuOptionsHeight
+        newItem.focusFootprintBitmapUri = "pkg:/images/FocusFootprint.9.png"
+        newItem.focusBitmapUri = "pkg:/images/null.png"
+        newItem.showFocusFootprint = false
+        newItem.getchild(3).blendColor = m.top.menuTextColor
+        newItem.getchild(3).width = m.top.menuFontSize * 2
+        newItem.getchild(3).height = m.top.menuFontSize * 2
+        newItem.getchild(4).blendColor = m.top.menuFocusColor
+        newItem.getchild(4).width = m.top.menuFontSize * 2
+        newItem.getchild(4).height = m.top.menuFontSize * 2
+        m.menuOptions.appendChild(newItem)
     end if
-    if key = "down"
-        parent = m.top.getParent()
-        parent.setFocus(true)
-        return true
+    if m.top.showSettingsIcon
+        newItem = createObject("roSGNode", "JFButton")
+        newItem.textColor = m.top.menuTextColor
+        newItem.focusedTextColor = m.top.menuTextColor
+        newItem.iconUri = "pkg:/images/iconSettings.png"
+        newItem.focusedIconUri = "pkg:/images/iconSettings.png"
+        newItem.height = m.top.menuOptionsHeight
+        newItem.focusFootprintBitmapUri = "pkg:/images/FocusFootprint.9.png"
+        newItem.focusBitmapUri = "pkg:/images/null.png"
+        newItem.showFocusFootprint = false
+        newItem.getchild(3).blendColor = m.top.menuTextColor
+        newItem.getchild(3).width = m.top.menuFontSize * 2
+        newItem.getchild(3).height = m.top.menuFontSize * 2
+        newItem.getchild(4).blendColor = m.top.menuFocusColor
+        newItem.getchild(4).width = m.top.menuFontSize * 2
+        newItem.getchild(4).height = m.top.menuFontSize * 2
+        m.menuOptions.appendChild(newItem)
     end if
-end function
+    if m.top.showLoginIcon
+        newItem = createObject("roSGNode", "JFButton")
+        newItem.textColor = m.top.menuTextColor
+        newItem.focusedTextColor = m.top.menuTextColor
+        newItem.iconUri = "pkg:/images/iconLogin.png"
+        newItem.focusedIconUri = "pkg:/images/iconLogin.png"
+        newItem.height = m.top.menuOptionsHeight
+        newItem.focusFootprintBitmapUri = "pkg:/images/FocusFootprint.9.png"
+        newItem.focusBitmapUri = "pkg:/images/null.png"
+        newItem.showFocusFootprint = false
+        newItem.getchild(3).blendColor = m.top.menuTextColor
+        newItem.getchild(3).width = m.top.menuFontSize * 2
+        newItem.getchild(3).height = m.top.menuFontSize * 2
+        newItem.getchild(4).blendColor = m.top.menuFocusColor
+        newItem.getchild(4).width = m.top.menuFontSize * 2
+        newItem.getchild(4).height = m.top.menuFontSize * 2
+        m.menuOptions.appendChild(newItem)
+    end if
+end sub
+

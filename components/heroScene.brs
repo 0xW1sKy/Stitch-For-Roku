@@ -5,6 +5,12 @@ sub init()
     m.top.setFocus(true)
 end sub
 
+function gsCallback()
+    twitchAsyncResponse = m.TwitchAsync.response
+    ? "STOP"
+end function
+
+
 function onKeyEvent(key, press) as boolean
     ? "KEY EVENT: "; key press
     handled = false
@@ -14,5 +20,13 @@ function onKeyEvent(key, press) as boolean
             handled = true
         end if
     end if
+    if key = "OK"
+        ? "Menu Button Selected"; m.menu.buttonSelected
+        if m.menu.buttonSelected = 6
+            ? "stop"
+        end if
+        handled = true
+    end if
     return handled
 end function
+

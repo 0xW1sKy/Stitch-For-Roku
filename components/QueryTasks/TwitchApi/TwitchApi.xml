@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2016 Roku Corp.  All Rights Reserved. -->
+
+<component name="TwitchApi" extends="Task">
+    <interface>
+        <!-- Field to issue a request to the handler -->
+        <field id="request" type="assocarray" />
+        <field id="response" type="assocarray" />
+    </interface>
+    <script type="text/brightscript" uri="TwitchApi.brs" />
+    <script type="text/brightscript" uri="http.brs" />
+</component>

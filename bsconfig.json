@@ -8,11 +8,12 @@
     "deploy": true,
     "createPackage": true,
     "files": [
-        "source/**/*",
         "components/**/*",
-        "images/**/*",
         "fonts/**/*",
+        "images/**/*",
         "locale/**/*",
+        "settings/**/*",
+        "source/**/*",
         "manifest"
     ],
     "diagnosticFilters": [{

@@ -1,4 +1,5 @@
 sub Main(input as dynamic)
+
     ' Add deep linking support here. Input is an associative array containing
     ' parameters that the client defines. Examples include "options, contentID, etc."
     ' See guide here: https://sdkdocs.roku.com/display/sdkdoc/External+Control+Guide
@@ -27,11 +28,15 @@ end sub
 ' Initializes the scene and shows the main homepage.
 ' Handles closing of the channel.
 sub RunUserInterface()
-    screen = CreateObject("roSGScreen")
+    ' The main function that runs when the application is launched.
+    m.screen = CreateObject("roSGScreen")
     m.port = CreateObject("roMessagePort")
-    screen.setMessagePort(m.port)
-    scene = screen.CreateScene("HeroScene")
-    screen.show()
+    ' Set global constants
+    setConstants()
+    m.screen.setMessagePort(m.port)
+    m.scene = m.screen.CreateScene("HeroScene")
+    m.screen.show()
+    m.global = m.screen.getGlobalNode()
 
     while(true)
         msg = wait(0, m.port)

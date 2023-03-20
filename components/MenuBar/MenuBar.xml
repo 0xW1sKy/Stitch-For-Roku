@@ -20,52 +20,26 @@
             uri="pkg:/images/logo.png"
             width="48px"
             height="56" />
-        <ButtonGroup id="MenuOptions" layoutDirection="horiz"
+        <ButtonGroupHoriz id="MenuOptions" layoutDirection="horiz"
             horizAlignment="left">
-        </ButtonGroup>
-        <Group id="Icons">
-            <Poster
-                id="searchIcon"
-                height="32"
-                width="32"
-                translation="[1080,24]"
-                blendColor="0xEFEFF1FF" />
-            <Poster
-                id="settingsIcon"
-                height="32"
-                width="32"
-                translation="[1145,24]"
-                blendColor="0xEFEFF1FF" />
-            <Poster
-                id="loginIcon"
-                height="32"
-                width="32"
-                translation="[1210,24]"
-                blendColor="0xEFEFF1FF" />
-        </Group>
+        </ButtonGroupHoriz>
     </children>
     <interface>
-        <field id="initialSelection" type="string" value="" />
-        <field id="currentlySelectedItem" type="string" onChange="onSelectedItemChange" />
+        <field id="buttonFocused" alias="MenuOptions.buttonFocused" />
+        <field id="buttonSelected" alias="MenuOptions.buttonSelected" />
         <field id="menuOptionsText" type="stringarray"
             value="[]" onChange="updateMenuOptions" />
         <field id="menuTextColor" type="color" value="0xEFEFF1FF" />
         <field id="menuFocusColor" type="color" value="0x9146FFCC" />
-        <field id="menuOptionsSpacing" type="int" value="36" />
-        <field id="menuOptionsTranslation" type="vector2d" value="[10,0]"
+        <field id="menuOptionsSpacing" type="int" value="0" />
+        <field id="menuOptionsHeight" type="int" value="80" />
+        <field id="menuOptionsTranslation" type="vector2d" value="[15,0]"
             alias="MenuOptions.translation" />
-        <field id="menuFontSize" type="int" value="24" />
+        <field id="menuFontSize" type="int" value="20" />
         <field id="menuFontUri" type="uri" value="pkg:/fonts/Inter-SemiBold.ttf" />
         <field id="showSearchIcon" type="bool" value="true" />
         <field id="showSettingsIcon" type="bool" value="true" />
         <field id="showLoginIcon" type="bool" value="true" />
-        <field id="searchIconUri" type="uri" value="pkg:/components/MenuBar/iconSearch.png"
-            alias="searchIcon.uri" />
-        <field id="settingsIconUri" type="uri" value="pkg:/components/MenuBar/iconSettings.png"
-            alias="settingsIcon.uri" />
-        <field id="loginIconUri" type="uri" value="pkg:/components/MenuBar/iconLogin.png"
-            alias="loginIcon.uri" />
-        <field id="content" type="node" onChange="OnChangeContent" />
     </interface>
     <script type="text/brightscript" uri="MenuBar.brs" />
 </component>
