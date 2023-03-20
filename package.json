@@ -1,19 +1,10 @@
 {
-  "scripts": {
-    "graphql:codegen": "graphql codegen",
-    "graphql:diff": "graphql diff",
-    "graphql:similar": "graphql similar"
-  },
-  "devDependencies": {
-    "@graphql-cli/codegen": "2.4.21",
-    "@graphql-cli/diff": "2.1.0",
-    "@graphql-cli/similar": "2.1.0",
-    "@graphql-codegen/typescript": "2.8.5",
-    "@graphql-codegen/typescript-resolvers": "2.7.10",
-    "graphql-cli": "4.1.0"
-  },
-  "dependencies": {
-    "@rokucommunity/bslib": "^0.1.1",
-    "bslib": "npm:@rokucommunity/bslib@^0.1.1"
-  }
+    "devDependencies": {
+        "ghooks": "^2.0.4",
+        "ropm": "^0.10.12"
+    },
+    "dependencies": {
+        "@rokucommunity/bslib": "^0.1.1",
+        "bslib": "npm:@rokucommunity/bslib@^0.1.1"
+    }
 }
