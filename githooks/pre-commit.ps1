@@ -19,3 +19,4 @@ $manifest | ForEach-Object {
     }
 }
 Set-Content ./manifest -Value $output
+git add ./manifest
