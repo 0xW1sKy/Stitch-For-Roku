@@ -1,4 +1,5 @@
 {
+    "name": "@0xw1sky/stitch-for-roku",
     "devDependencies": {
         "ghooks": "^2.0.4",
         "ropm": "^0.10.12"
@@ -6,5 +7,10 @@
     "dependencies": {
         "@rokucommunity/bslib": "^0.1.1",
         "bslib": "npm:@rokucommunity/bslib@^0.1.1"
+    },
+    "config": {
+        "ghooks": {
+            "pre-commit": ""
+        }
     }
 }
