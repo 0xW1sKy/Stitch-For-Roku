@@ -1,2 +1,3 @@
 #!/bin/sh
-pwsh -ExecutionPolicy Unrestricted -File 'pre-commit.ps1'
+pwd
+pwsh -ExecutionPolicy Unrestricted -File './githooks/pre-commit.ps1'
