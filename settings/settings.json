@@ -4,20 +4,6 @@
         "description": "Settings related to playback and supported codec and media types",
         "children": [
             {
-                "title": "MPEG 2 Support",
-                "description": "Support direct play of MPEG 2 content (e.g. Live TV). This will prevent transcoding of MPEG 2 content, but uses significantly more bandwidth",
-                "settingName": "playback.mpeg2",
-                "type": "bool",
-                "default": "false"
-            },
-            {
-                "title": "Attempt Direct Play (Profile Lvl)",
-                "description": "Attempt Direct Play for h264 media with unsupported profile levels (> 4.2) before falling back to trancoding if it fails.",
-                "settingName": "playback.tryDirect.h264ProfileLevel",
-                "type": "bool",
-                "default": "true"
-            },
-            {
                 "title": "Cinema mode",
                 "description": "Cinema mode brings the theater experience straight to your living room with the ability to play custom intros before the main feature.",
                 "settingName": "playback.cinemamode",

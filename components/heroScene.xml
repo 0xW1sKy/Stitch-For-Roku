@@ -2,7 +2,7 @@
 
 <!-- Copyright 2016 Roku Corp.  All Rights Reserved. -->
 
-<component name="HeroScene" extends="Scene">
+<component name="HeroScene" extends="SceneManagerScene" initialFocus="MenuBar">
 
   <children>
     <!-- RowList on HeroScene -->
@@ -10,10 +10,12 @@
       id="MenuBar"
       menuOptionsText="[&quot;MenuOptionA&quot;, &quot;MenuOptionB&quot;, &quot;MenuOptionC&quot;, &quot;MenuOptionD&quot;]"
       visible="true"
-      focusable="true"
       translation="[0,0]"
     />
-
+    <Settings
+      id="SettingsMenu"
+      visible="false"
+    />
   </children>
   <script type="text/brightscript" uri="heroScene.brs" />
 </component>

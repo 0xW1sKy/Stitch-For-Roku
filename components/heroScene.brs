@@ -2,8 +2,8 @@ sub init()
     m.top.backgroundUri = ""
     m.top.backgroundColor = "0x020202FF"
     m.menu = m.top.findNode("MenuBar")
-    m.top.setFocus(true)
     m.menu.observeField("buttonSelected", "onMenuSelection")
+    m.settingsMenu = m.top.findNode("SettingsMenu")
 end sub
 
 function gsCallback()
@@ -13,6 +13,10 @@ end function
 
 function onMenuSelection()
     ? "Menu Button Selected"; m.menu.buttonSelected
+    if m.menu.buttonSelected = 5
+        m.settingsMenu.visible = true
+        m.settingsMenu.setFocus(true)
+    end if
     if m.menu.buttonSelected = 6
         newItem = createObject("roSGNode", "LoginPage")
         newItem.translation = "[280, 160]"
@@ -22,12 +26,13 @@ end function
 
 
 function onKeyEvent(key, press) as boolean
+    if not press return false
     ? "KEY EVENT: "; key press
-    handled = false
     if press
         if key = "up"
+            ? ""; m.top.focusedChild
             m.menu.setFocus(true)
-            handled = true
+            return true
         end if
     end if
 end function

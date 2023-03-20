@@ -90,4 +90,3 @@ sub updateMenuOptions()
         m.menuOptions.appendChild(newItem)
     end if
 end sub
-

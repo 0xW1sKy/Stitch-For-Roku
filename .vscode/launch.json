@@ -17,7 +17,7 @@
             "stopDebuggerOnAppExit": true,
             "files": [
                 "components/**/*",
-                "lib/**/*",
+                "modules/**/*",
                 "fonts/**/*",
                 "images/**/*",
                 "locale/**/*",
