@@ -121,8 +121,9 @@ end function
 
 
 function getOauthToken()
+    if m.top.request.params.device_code = invalid return invalid
     req = HttpRequest({
-        url: "https://id.twitch.tv/oauth2/token" + "?client_id=ue6666qo983tsx6so1t0vnawi233wa&device_code=" + device_code + "&grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Adevice_code"
+        url: "https://id.twitch.tv/oauth2/token" + "?client_id=ue6666qo983tsx6so1t0vnawi233wa&device_code=" + m.top.request.params.device_code + "&grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Adevice_code"
         headers: {
             "content-type": "application/x-www-form-urlencoded"
             "origin": "https://switch.tv.twitch.tv"
@@ -133,10 +134,9 @@ function getOauthToken()
     })
     while true
         rsp = ParseJSON(req.send())
-        if rsp <> invalid and res.DoesExist("access_token")
+        if rsp <> invalid and rsp.DoesExist("access_token")
             exit while
         end if
-        print msg.GetString()
         sleep(5000)
     end while
     writeResponse(rsp)
