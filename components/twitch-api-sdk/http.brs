@@ -1,3 +1,8 @@
+function UrlEncode(str as string) as string
+    o = CreateObject("roUrlTransfer")
+    return o.Escape(str)
+end function
+
 function HttpRequest(params = invalid as dynamic) as object
     url = invalid
     method = invalid

@@ -21,14 +21,24 @@ function GetRandomUUID()
     return di.GetRandomUUID()
 end function
 
+
 function TwitchGraphQLRequest(data)
+    access_token = ""
+    device_code = ""
+    ' doubled up here in stead of defaulting to "" because access_token is dependent on device_code
+    if get_user_setting("device_code") <> invalid
+        device_code = get_user_setting("device_code")
+        if get_user_setting("access_token") <> invalid
+            access_token = "OAuth " + get_user_setting("access_token")
+        end if
+    end if
     req = HttpRequest({
         url: "https://gql.twitch.tv/gql"
         headers: {
             "Accept": "*/*"
-            "Authorization": ""
+            "Authorization": access_token
             "Client-Id": "ue6666qo983tsx6so1t0vnawi233wa"
-            "Device-ID": ""
+            "Device-ID": device_code
             "Origin": "https://switch.tv.twitch.tv"
             "Referer": "https://switch.tv.twitch.tv/"
         }
@@ -42,7 +52,7 @@ end function
 function getHomePageQuery() as object
     TwitchGraphQLRequest({
         query: "query Homepage_Query(" + chr(10) + "  $itemsPerRow: Int!" + chr(10) + "  $limit: Int!" + chr(10) + "  $platform: String!" + chr(10) + "  $requestID: String!" + chr(10) + ") {" + chr(10) + "  currentUser {" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "    login" + chr(10) + "    roles {" + chr(10) + "      isStaff" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "  shelves(itemsPerRow: $itemsPerRow, first: $limit, platform: $platform, requestID: $requestID) {" + chr(10) + "    edges {" + chr(10) + "      node {" + chr(10) + "        id" + chr(10) + "        __typename" + chr(10) + "        title {" + chr(10) + "          fallbackLocalizedTitle" + chr(10) + "          localizedTitleTokens {" + chr(10) + "            node {" + chr(10) + "              __typename" + chr(10) + "              ... on Game {" + chr(10) + "                __typename" + chr(10) + "                displayName" + chr(10) + "                name" + chr(10) + "              }" + chr(10) + "              ... on TextToken {" + chr(10) + "                __typename" + chr(10) + "                text" + chr(10) + "                location" + chr(10) + "              }" + chr(10) + "            }" + chr(10) + "          }" + chr(10) + "        }" + chr(10) + "        trackingInfo {" + chr(10) + "          reasonTarget" + chr(10) + "          reasonTargetType" + chr(10) + "          reasonType" + chr(10) + "          rowName" + chr(10) + "        }" + chr(10) + "        content {" + chr(10) + "          edges {" + chr(10) + "            trackingID" + chr(10) + "            node {" + chr(10) + "              __typename" + chr(10) + "              __isShelfContent: __typename" + chr(10) + "              ... on Stream {" + chr(10) + "                id" + chr(10) + "                __typename" + chr(10) + "                previewImageURL" + chr(10) + "                broadcaster {" + chr(10) + "                  displayName" + chr(10) + "                  broadcastSettings {" + chr(10) + "                    title" + chr(10) + "                    id" + chr(10) + "                    __typename" + chr(10) + "                  }" + chr(10) + "                  id" + chr(10) + "                  __typename" + chr(10) + "                }" + chr(10) + "                game {" + chr(10) + "                  displayName" + chr(10) + "                  boxArtURL" + chr(10) + "                  id" + chr(10) + "                  __typename" + chr(10) + "                }" + chr(10) + "                ...FocusableStreamCard_stream" + chr(10) + "              }" + chr(10) + "              ... on Game {" + chr(10) + "                ...FocusableCategoryCard_category" + chr(10) + "                id" + chr(10) + "                __typename" + chr(10) + "                streams(first: 1) {" + chr(10) + "                  edges {" + chr(10) + "                    node {" + chr(10) + "                      id" + chr(10) + "                      __typename" + chr(10) + "                      previewImageURL" + chr(10) + "                      broadcaster {" + chr(10) + "                        displayName" + chr(10) + "                        broadcastSettings {" + chr(10) + "                          title" + chr(10) + "                          id" + chr(10) + "                          __typename" + chr(10) + "                        }" + chr(10) + "                        id" + chr(10) + "                        __typename" + chr(10) + "                      }" + chr(10) + "                      game {" + chr(10) + "                        displayName" + chr(10) + "                        boxArtURL" + chr(10) + "                        id" + chr(10) + "                        __typename" + chr(10) + "                      }" + chr(10) + "                    }" + chr(10) + "                  }" + chr(10) + "                }" + chr(10) + "              }" + chr(10) + "            }" + chr(10) + "          }" + chr(10) + "        }" + chr(10) + "      }" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment FocusableCategoryCard_category on Game {" + chr(10) + "  name" + chr(10) + "  id" + chr(10) + "  __typename" + chr(10) + "  displayName" + chr(10) + "  viewersCount" + chr(10) + "  boxArtURL" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment FocusableStreamCard_stream on Stream {" + chr(10) + "  broadcaster {" + chr(10) + "    displayName" + chr(10) + "    login" + chr(10) + "    hosting {" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "    }" + chr(10) + "    broadcastSettings {" + chr(10) + "      title" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "    }" + chr(10) + "    profileImageURL(width: 50)" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "  game {" + chr(10) + "    displayName" + chr(10) + "    name" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "  id" + chr(10) + "  __typename" + chr(10) + "  previewImageURL" + chr(10) + "  type" + chr(10) + "  viewersCount" + chr(10) + "}" + chr(10) + ""
-        variable: {
+        variables: {
             "itemsPerRow": 50,
             "limit": 50,
             "platform": "switch_web_tv",
@@ -51,11 +61,21 @@ function getHomePageQuery() as object
     })
 end function
 
+function getCategoryQuery() as object
+    TwitchGraphQLRequest({
+        query: "query GameDirectory_Query(" + chr(34) + "  $gameAlias: String!" + chr(34) + "  $channelsCount: Int!" + chr(34) + ") {" + chr(34) + "  currentUser {" + chr(34) + "    id" + chr(34) + "    __typename" + chr(34) + "    login" + chr(34) + "    roles {" + chr(34) + "      isStaff" + chr(34) + "    }" + chr(34) + "  }" + chr(34) + "  game(name: $gameAlias) {" + chr(34) + "    boxArtURL" + chr(34) + "    displayName" + chr(34) + "    name" + chr(34) + "    streams(first: $channelsCount) {" + chr(34) + "      edges {" + chr(34) + "        node {" + chr(34) + "          id" + chr(34) + "          __typename" + chr(34) + "          previewImageURL" + chr(34) + "          ...FocusableStreamCard_stream" + chr(34) + "        }" + chr(34) + "      }" + chr(34) + "    }" + chr(34) + "    id" + chr(34) + "    __typename" + chr(34) + "  }" + chr(34) + "}" + chr(34) + "" + chr(34) + "fragment FocusableStreamCard_stream on Stream {" + chr(34) + "  broadcaster {" + chr(34) + "    displayName" + chr(34) + "    login" + chr(34) + "    hosting {" + chr(34) + "      id" + chr(34) + "      __typename" + chr(34) + "    }" + chr(34) + "    broadcastSettings {" + chr(34) + "      title" + chr(34) + "      id" + chr(34) + "      __typename" + chr(34) + "    }" + chr(34) + "    profileImageURL(width: 50)" + chr(34) + "    id" + chr(34) + "    __typename" + chr(34) + "  }" + chr(34) + "  game {" + chr(34) + "    displayName" + chr(34) + "    name" + chr(34) + "    id" + chr(34) + "    __typename" + chr(34) + "  }" + chr(34) + "  id" + chr(34) + "  __typename" + chr(34) + "  previewImageURL" + chr(34) + "  type" + chr(34) + "  viewersCount" + chr(34) + "}" + chr(34) + ""
+        variables: {
+            "channelsCount": 40
+            "gameAlias": m.top.request.params.id
+        }
+    })
+end function
+
 function getStreamPlayerQuery()
     TwitchGraphQLRequest({
         query: "query StreamPlayer_Query(" + chr(10) + "  $login: String!" + chr(10) + "  $playerType: String!" + chr(10) + "  $platform: String!" + chr(10) + "  $skipPlayToken: Boolean!" + chr(10) + ") {" + chr(10) + "  ...StreamPlayer_token" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment StreamPlayer_token on Query {" + chr(10) + "  user(login: $login) {" + chr(10) + "    login" + chr(10) + "    stream @skip(if: $skipPlayToken) {" + chr(10) + "      playbackAccessToken(params: {platform: $platform, playerType: $playerType}) {" + chr(10) + "        signature" + chr(10) + "        value" + chr(10) + "      }" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "    }" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "}" + chr(10) + ""
         variables: {
-            "login": m.top.streamerRequested
+            "login": m.top.request.params.id
             "platform": "switch_web_tv"
             "playerType": "pulsar"
             "skipPlayToken": false
@@ -67,7 +87,7 @@ function getVodPlayerWrapperQuery() as object
     TwitchGraphQLRequest({
         query: "query VodPlayerWrapper_Query(" + chr(10) + "  $videoId: ID!" + chr(10) + "  $platform: String!" + chr(10) + "  $playerType: String!" + chr(10) + "  $skipPlayToken: Boolean!" + chr(10) + ") {" + chr(10) + "  ...VodPlayerWrapper_token" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment VodPlayerWrapper_token on Query {" + chr(10) + "  video(id: $videoId) @skip(if: $skipPlayToken) {" + chr(10) + "    playbackAccessToken(params: {platform: $platform, playerType: $playerType}) {" + chr(10) + "      signature" + chr(10) + "      value" + chr(10) + "    }" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "}" + chr(10) + ""
         variables: {
-            "videoId": m.top.videoId
+            "videoId": m.top.request.params.id
             "platform": "switch_web_tv"
             "playerType": "pulsar"
             "skipPlayToken": false
@@ -80,7 +100,7 @@ function getChannelInterstitialQuery() as object
     TwitchGraphQLRequest({
         query: "query ChannelInterstitial_Query(" + chr(10) + "  $login: String!" + chr(10) + "  $platform: String!" + chr(10) + "  $playerType: String!" + chr(10) + "  $skipPlayToken: Boolean!" + chr(10) + ") {" + chr(10) + "  channel: user(login: $login) {" + chr(10) + "    ...InterstitialLayout_channel" + chr(10) + "    ...StreamDetails_channel" + chr(10) + "    ...StreamPlayer_channel" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "    login" + chr(10) + "    displayName" + chr(10) + "    broadcastSettings {" + chr(10) + "      isMature" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "    }" + chr(10) + "    stream {" + chr(10) + "      restrictionType" + chr(10) + "      self {" + chr(10) + "        canWatch" + chr(10) + "      }" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "      type" + chr(10) + "    }" + chr(10) + "    hosting {" + chr(10) + "      displayName" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "      login" + chr(10) + "      stream {" + chr(10) + "        id" + chr(10) + "        __typename" + chr(10) + "        type" + chr(10) + "      }" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "  currentUser {" + chr(10) + "    ...StreamPlayer_currentUser" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "    login" + chr(10) + "    roles {" + chr(10) + "      isStaff" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "  ...StreamPlayer_token" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment BroadcasterOverview_channel on User {" + chr(10) + "  login" + chr(10) + "  displayName" + chr(10) + "  followers {" + chr(10) + "    totalCount" + chr(10) + "  }" + chr(10) + "  primaryColorHex" + chr(10) + "  primaryTeam {" + chr(10) + "    displayName" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "  profileImageURL(width: 70)" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment ChannelDescription_channel on User {" + chr(10) + "  description" + chr(10) + "  displayName" + chr(10) + "  login" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment FocusableFollowButton_channel on User {" + chr(10) + "  login" + chr(10) + "  id" + chr(10) + "  __typename" + chr(10) + "  self {" + chr(10) + "    follower {" + chr(10) + "      followedAt" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment InterstitialButtonRow_channel on User {" + chr(10) + "  ...FocusableFollowButton_channel" + chr(10) + "  login" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment InterstitialLayout_channel on User {" + chr(10) + "  ...BroadcasterOverview_channel" + chr(10) + "  ...ChannelDescription_channel" + chr(10) + "  ...InterstitialButtonRow_channel" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment StreamDetails_channel on User {" + chr(10) + "  broadcastSettings {" + chr(10) + "    game {" + chr(10) + "      boxArtURL" + chr(10) + "      displayName" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "    }" + chr(10) + "    title" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "  stream {" + chr(10) + "    viewersCount" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment StreamPlayer_channel on User {" + chr(10) + "  id" + chr(10) + "  __typename" + chr(10) + "  login" + chr(10) + "  roles {" + chr(10) + "    isPartner" + chr(10) + "  }" + chr(10) + "  self {" + chr(10) + "    subscriptionBenefit {" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "  stream {" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "    game {" + chr(10) + "      name" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "    }" + chr(10) + "    previewImageURL" + chr(10) + "  }" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment StreamPlayer_currentUser on User {" + chr(10) + "  hasTurbo" + chr(10) + "  id" + chr(10) + "  __typename" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment StreamPlayer_token on Query {" + chr(10) + "  user(login: $login) {" + chr(10) + "    login" + chr(10) + "    stream @skip(if: $skipPlayToken) {" + chr(10) + "      playbackAccessToken(params: {platform: $platform, playerType: $playerType}) {" + chr(10) + "        signature" + chr(10) + "        value" + chr(10) + "      }" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "    }" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "}" + chr(10) + ""
         variables: {
-            "login": m.top.loginRequested
+            "login": m.top.request.params.id
             "platform": "switch_web_tv"
             "playerType": "pulsar"
             "skipPlayToken": true
@@ -143,6 +163,36 @@ function getOauthToken()
 end function
 
 
+function TwitchHelixApiRequest()
+    access_token = ""
+    device_code = ""
+    ' doubled up here in stead of defaulting to "" because access_token is dependent on device_code
+    if get_user_setting("device_code") <> invalid
+        device_code = get_user_setting("device_code")
+        if get_user_setting("access_token") <> invalid
+            access_token = "Bearer " + get_user_setting("access_token")
+        end if
+    end if
+    requestParams = {
+        url: "https://api.twitch.tv/helix/" + m.top.request.params.endpoint + "?" + m.top.request.params.args
+        headers: {
+            "Accept": "*/*"
+            "Authorization": access_token
+            "Client-Id": "ue6666qo983tsx6so1t0vnawi233wa"
+            "Device-ID": device_code
+            "Origin": "https://switch.tv.twitch.tv"
+            "Referer": "https://switch.tv.twitch.tv/"
+        }
+        method: m.top.request.params.method
+    }
+    if m.top.request.params.data <> invalid
+        requestParams["data"] = m.top.request.params.data
+    end if
+    req = HttpRequest(requestParams)
+    rsp = ParseJSON(req.send())
+    writeResponse(rsp)
+end function
+
 sub main()
     ' Holds requests by id
     m.jobsById = {}
@@ -177,6 +227,12 @@ sub main()
                 end if
                 if rtype = "getOauthToken"
                     getOauthToken()
+                end if
+                if rtype = "getCategoryQuery"
+                    getCategoryQuery()
+                end if
+                if rtype = "HelixApiRequest"
+                    TwitchHelixApiRequest()
                 end if
             end if
         end if

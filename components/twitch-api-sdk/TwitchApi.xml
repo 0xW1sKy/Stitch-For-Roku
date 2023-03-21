@@ -9,4 +9,5 @@
     </interface>
     <script type="text/brightscript" uri="TwitchApi.brs" />
     <script type="text/brightscript" uri="http.brs" />
+    <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
 </component>

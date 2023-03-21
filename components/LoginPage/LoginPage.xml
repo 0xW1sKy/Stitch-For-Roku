@@ -4,6 +4,8 @@
 
     <interface>
         <field id="finished" type="bool" />
+        <field id="login" type="string" />
+        <field id="backPressed" type="bool" />
     </interface>
 
     <script type="text/brightscript" uri="LoginPage.brs" />
@@ -28,5 +30,5 @@
             fontSize="18"
             fontUri="pkg:/fonts/Roobert-SemiBold.ttf" />
     </children>
-
+    <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
 </component>

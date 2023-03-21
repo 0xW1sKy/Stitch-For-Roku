@@ -16,17 +16,20 @@ sub init()
     m.settingsMenu.setFocus(true)
     m.settingsMenu.observeField("itemFocused", "settingFocused")
     m.settingsMenu.observeField("itemSelected", "settingSelected")
-
     m.boolSetting.observeField("checkedItem", "boolSettingChanged")
-
+    m.settingsMenu.observeField("focusedChild", "onGetfocus")
     ' Load Configuration Tree
     m.configTree = GetConfigTree()
     LoadMenu({ children: m.configTree })
 end sub
 
+sub onGetfocus()
+    if m.settingDetail.focusedChild = invalid
+        m.settingsMenu.setFocus(true)
+    end if
+end sub
 
 sub LoadMenu(configSection)
-
     if configSection.children = invalid
         ' Load parent menu
         m.userLocation.pop()
@@ -61,7 +64,6 @@ end sub
 
 
 sub settingFocused()
-
     selectedSetting = m.userLocation.peek().children[m.settingsMenu.itemFocused]
     m.settingDesc.text = tr(selectedSetting.Description)
     m.settingTitle.text = tr(selectedSetting.Title)
@@ -88,7 +90,6 @@ end sub
 
 
 sub settingSelected()
-
     selectedItem = m.userLocation.peek().children[m.settingsMenu.itemFocused]
 
 
@@ -109,7 +110,6 @@ end sub
 
 
 sub boolSettingChanged()
-
     if m.boolSetting.focusedChild = invalid then return
     selectedSetting = m.userLocation.peek().children[m.settingsMenu.itemFocused]
 
@@ -124,7 +124,7 @@ end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
     if not press then return false
-
+    ? "KeyPress in Settings: "; key
     if (key = "back" or key = "left") and m.settingsMenu.focusedChild <> invalid and m.userLocation.Count() > 1
         LoadMenu({})
         return true
@@ -132,10 +132,12 @@ function onKeyEvent(key as string, press as boolean) as boolean
         m.settingsMenu.setFocus(true)
         return true
     end if
-
     if key = "right"
         settingSelected()
     end if
-
+    if key = "up"
+        m.top.backPressed = true
+        return true
+    end if
     return false
 end function

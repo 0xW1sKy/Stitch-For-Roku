@@ -37,6 +37,7 @@ sub RunUserInterface()
     m.scene = m.screen.CreateScene("HeroScene")
     m.screen.show()
     m.global = m.screen.getGlobalNode()
+    ' vscode_rdb_on_device_component_entry
 
     while(true)
         msg = wait(0, m.port)

@@ -29,19 +29,19 @@ sub registry_delete(key, section = invalid)
 end sub
 
 
-' "Jellyfin" registry accessors for the default global settings
+' "StitchForRoku" registry accessors for the default global settings
 function get_setting(key, default = invalid)
-    value = registry_read(key, "Jellyfin")
+    value = registry_read(key, "StitchForRoku")
     if value = invalid then return default
     return value
 end function
 
 sub set_setting(key, value)
-    registry_write(key, value, "Jellyfin")
+    registry_write(key, value, "StitchForRoku")
 end sub
 
 sub unset_setting(key)
-    registry_delete(key, "Jellyfin")
+    registry_delete(key, "StitchForRoku")
 end sub
 
 

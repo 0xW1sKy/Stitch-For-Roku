@@ -40,6 +40,9 @@
         <field id="showSearchIcon" type="bool" value="true" />
         <field id="showSettingsIcon" type="bool" value="true" />
         <field id="showLoginIcon" type="bool" value="true" />
+        <field id="updateUserIcon" type="bool" value="false" onChange="handleUserLogin" />
     </interface>
     <script type="text/brightscript" uri="MenuBar.brs" />
+    <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
+    <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
 </component>

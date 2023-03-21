@@ -5,7 +5,38 @@ sub init()
     m.logo = m.top.findNode("logo")
     m.headerRect = m.top.findNode("headerRect")
     m.menuOptions = m.top.findNode("MenuOptions")
+    m.top.observeField("focusedChild", "onGetfocus")
 end sub
+
+sub onGetfocus()
+    if m.top.focusedChild <> invalid and m.top.focusedChild.id = "MenuBar"
+        m.menuOptions.setFocus(true)
+    end if
+end sub
+
+function buildIcon(icon)
+    map = {
+        "search": "pkg:/images/iconSearch.png"
+        "settings": "pkg:/images/iconSettings.png"
+        "login": get_user_setting("profile_image_url", "pkg:/images/iconLogin.png")
+    }
+    newItem = createObject("roSGNode", "JFButton")
+    newItem.textColor = m.top.menuTextColor
+    newItem.focusedTextColor = m.top.menuTextColor
+    newItem.iconUri = map[icon]
+    newItem.focusedIconUri = map[icon]
+    newItem.height = m.top.menuOptionsHeight
+    newItem.focusFootprintBitmapUri = "pkg:/images/FocusFootprint.9.png"
+    newItem.focusBitmapUri = "pkg:/images/FocusFootprint.9.png"
+    newItem.showFocusFootprint = true
+    newItem.getchild(3).blendColor = m.top.menuTextColor
+    newItem.getchild(3).width = m.top.menuFontSize * 2
+    newItem.getchild(3).height = m.top.menuFontSize * 2
+    newItem.getchild(4).blendColor = m.top.menuFocusColor
+    newItem.getchild(4).width = m.top.menuFontSize * 2
+    newItem.getchild(4).height = m.top.menuFontSize * 2
+    m.menuOptions.appendChild(newItem)
+end function
 
 sub updateMenuOptions()
     '*******************'
@@ -36,57 +67,44 @@ sub updateMenuOptions()
         m.menuOptions.appendChild(newItem)
     end for
     if m.top.showSearchIcon
-        newItem = createObject("roSGNode", "JFButton")
-        newItem.textColor = m.top.menuTextColor
-        newItem.focusedTextColor = m.top.menuTextColor
-        newItem.iconUri = "pkg:/images/iconSearch.png"
-        newItem.focusedIconUri = "pkg:/images/iconSearch.png"
-        newItem.height = m.top.menuOptionsHeight
-        newItem.focusFootprintBitmapUri = "pkg:/images/FocusFootprint.9.png"
-        newItem.focusBitmapUri = "pkg:/images/null.png"
-        newItem.showFocusFootprint = false
-        newItem.getchild(3).blendColor = m.top.menuTextColor
-        newItem.getchild(3).width = m.top.menuFontSize * 2
-        newItem.getchild(3).height = m.top.menuFontSize * 2
-        newItem.getchild(4).blendColor = m.top.menuFocusColor
-        newItem.getchild(4).width = m.top.menuFontSize * 2
-        newItem.getchild(4).height = m.top.menuFontSize * 2
-        m.menuOptions.appendChild(newItem)
+        buildIcon("search")
     end if
     if m.top.showSettingsIcon
-        newItem = createObject("roSGNode", "JFButton")
-        newItem.textColor = m.top.menuTextColor
-        newItem.focusedTextColor = m.top.menuTextColor
-        newItem.iconUri = "pkg:/images/iconSettings.png"
-        newItem.focusedIconUri = "pkg:/images/iconSettings.png"
-        newItem.height = m.top.menuOptionsHeight
-        newItem.focusFootprintBitmapUri = "pkg:/images/FocusFootprint.9.png"
-        newItem.focusBitmapUri = "pkg:/images/null.png"
-        newItem.showFocusFootprint = false
-        newItem.getchild(3).blendColor = m.top.menuTextColor
-        newItem.getchild(3).width = m.top.menuFontSize * 2
-        newItem.getchild(3).height = m.top.menuFontSize * 2
-        newItem.getchild(4).blendColor = m.top.menuFocusColor
-        newItem.getchild(4).width = m.top.menuFontSize * 2
-        newItem.getchild(4).height = m.top.menuFontSize * 2
-        m.menuOptions.appendChild(newItem)
+        buildIcon("settings")
     end if
     if m.top.showLoginIcon
-        newItem = createObject("roSGNode", "JFButton")
-        newItem.textColor = m.top.menuTextColor
-        newItem.focusedTextColor = m.top.menuTextColor
-        newItem.iconUri = "pkg:/images/iconLogin.png"
-        newItem.focusedIconUri = "pkg:/images/iconLogin.png"
-        newItem.height = m.top.menuOptionsHeight
-        newItem.focusFootprintBitmapUri = "pkg:/images/FocusFootprint.9.png"
-        newItem.focusBitmapUri = "pkg:/images/null.png"
-        newItem.showFocusFootprint = false
-        newItem.getchild(3).blendColor = m.top.menuTextColor
-        newItem.getchild(3).width = m.top.menuFontSize * 2
-        newItem.getchild(3).height = m.top.menuFontSize * 2
-        newItem.getchild(4).blendColor = m.top.menuFocusColor
-        newItem.getchild(4).width = m.top.menuFontSize * 2
-        newItem.getchild(4).height = m.top.menuFontSize * 2
-        m.menuOptions.appendChild(newItem)
+        buildIcon("login")
+    end if
+end sub
+
+sub handleUserLoginResponse()
+    ? "[MenuBar] - handleUserLoginResponse()"
+    search = m.loginIconTask.response
+    result = { raw: search }
+    if search <> invalid and search.data <> invalid
+        for each stream in search.data
+            set_user_setting("id", stream.id)
+            set_user_setting("display_name", stream.display_name)
+            set_user_setting("profile_image_url", stream.profile_image_url)
+        end for
+        m.menuOptions.getChild(6).iconUri = get_user_setting("profile_image_url")
+        m.menuOptions.getChild(6).focusedIconUri = get_user_setting("profile_image_url")
+        m.top.updateUserIcon = false
+    end if
+end sub
+
+sub handleUserLogin()
+    if m.top.updateUserIcon
+        ? "[MenuBar] - handleUserLogin()"
+        m.loginIconTask = CreateObject("roSGNode", "TwitchApi") ' create task for feed retrieving
+        m.loginIconTask.observeField("response", "handleUserLoginResponse")
+        m.loginIconTask.request = {
+            type: "HelixApiRequest"
+            params: {
+                endpoint: "users"
+                args: "login=" + get_user_setting("login")
+                method: "GET"
+            }
+        }
     end if
 end sub
