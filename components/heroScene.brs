@@ -5,7 +5,9 @@ sub init()
     m.menu = m.top.findNode("MenuBar")
     m.menu.observeField("buttonSelected", "onMenuSelection")
     m.menu.setFocus(true)
-    set_setting("active_user", "default")
+    if get_setting("active_user") = invalid
+        set_setting("active_user", "default")
+    end if
 end sub
 
 function gsCallback()

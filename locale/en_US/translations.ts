@@ -6,11 +6,11 @@
         <name>default</name>
         <message>
             <source>MenuOptionA</source>
-            <translation>Categories</translation>
+            <translation>Home</translation>
         </message>
         <message>
             <source>MenuOptionB</source>
-            <translation>Live Channels</translation>
+            <translation>Categories</translation>
         </message>
         <message>
             <source>MenuOptionC</source>

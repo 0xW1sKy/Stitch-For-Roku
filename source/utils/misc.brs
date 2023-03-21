@@ -297,3 +297,71 @@ sub stopLoadingSpinner()
         m.scene.dialog.close = true
     end if
 end sub
+
+function select(arr, start = invalid, finish = invalid, step_ = 1):
+    if step_ = 0 then print "ValueError: slice step cannot be zero" : stop
+    if start = invalid then if step_ > 0 then start = 0 else start = arr.count() - 1
+    if finish = invalid then if step_ > 0 then finish = arr.count() - 1 else finish = 0
+    if start < 0 then start = arr.count() + start 'negative counts backwards from the end
+    if finish < 0 then finish = arr.count() + finish
+    res = []
+    for i = start to finish step step_:
+        res.push(arr[i])
+    end for
+    return res
+end function
+
+
+' Helper function to add and set fields of a content node
+function AddAndSetFields(node as object, aa as object)
+    'This gets called for every content node -- no logging since it's pretty verbose
+    addFields = {}
+    setFields = {}
+    for each field in aa
+        if node.hasField(field)
+            setFields[field] = aa[field]
+        else
+            addFields[field] = aa[field]
+        end if
+    end for
+    node.setFields(setFields)
+    node.addFields(addFields)
+end function
+
+
+'Create a row of content
+function createRow(list as object, num as integer)
+    Parent = createObject("RoSGNode", "ContentNode")
+    row = createObject("RoSGNode", "ContentNode")
+    row.Title = list[num].Title
+    for each itemAA in list[num].ContentList
+        item = createObject("RoSGNode", "ContentNode")
+        AddAndSetFields(item, itemAA)
+        row.appendChild(item)
+    end for
+    Parent.appendChild(row)
+    return Parent
+end function
+
+'Create a grid of content - simple splitting of a feed to different rows
+'with the title of the row hidden.
+'Set the for loop parameters to adjust how many columns there
+'should be in the grid.
+function createGrid(list as object)
+    Parent = createObject("RoSGNode", "ContentNode")
+    for i = 0 to list.count() step 5
+        row = createObject("RoSGNode", "ContentNode")
+        if i = 0
+            row.Title = "Followed Channels"
+        end if
+        for j = i to i + 4
+            if list[j] <> invalid
+                item = createObject("RoSGNode", "ContentNode")
+                AddAndSetFields(item, list[j])
+                row.appendChild(item)
+            end if
+        end for
+        Parent.appendChild(row)
+    end for
+    return Parent
+end function

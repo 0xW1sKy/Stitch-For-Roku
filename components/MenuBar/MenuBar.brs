@@ -20,6 +20,7 @@ function buildIcon(icon)
         "settings": "pkg:/images/iconSettings.png"
         "login": get_user_setting("profile_image_url", "pkg:/images/iconLogin.png")
     }
+    ? "User Setting Response: "; get_user_setting("profile_image_url")
     newItem = createObject("roSGNode", "JFButton")
     newItem.textColor = m.top.menuTextColor
     newItem.focusedTextColor = m.top.menuTextColor
