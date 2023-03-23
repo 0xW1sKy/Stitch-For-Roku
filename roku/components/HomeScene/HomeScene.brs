@@ -281,7 +281,7 @@ sub onCategoryResultChange()
             rowItem = createObject("RoSGNode", "ContentNode")
             rowItem.Title = stream.name
             rowItem.Description = numberToText(stream.viewers) + " viewers"
-            rowItem.ShortDescriptionLine1 = stream.id
+            rowItem.ShortDescriptionLine1 = stream.name
             rowItem.HDPosterUrl = stream.logo
             row.appendChild(rowItem)
             cnt += 1
@@ -374,7 +374,7 @@ sub onGetFollowedStreams()
             rowItem.Description = stream.user_name
             rowItem.Categories = stream.game_id
             rowItem.HDPosterUrl = stream.thumbnail
-            rowItem.ShortDescriptionLine1 = stream.shortdescriptionline1
+            rowItem.ShortDescriptionLine1 = stream.login
             rowItem.ShortDescriptionLine2 = numberToText(stream.viewer_count) + " viewers"
             row.appendChild(rowItem)
             cnt += 1

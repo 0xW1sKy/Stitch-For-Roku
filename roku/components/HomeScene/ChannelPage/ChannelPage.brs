@@ -118,7 +118,7 @@ end sub
 
 sub onGetUserInfo()
     ? "Home Scene > Channel Page > onGetUserInfo"
-    m.username.text = m.getUserChannel.searchResults.display_name
+    m.username.text = m.getUserChannel.searchResults.login
     m.avatar.uri = m.getUserChannel.searchResults.profile_image_url
     tempDescription = createObject("roSGNode", "SimpleLabel")
     if m.getUserChannel.searchResults.description <> ""

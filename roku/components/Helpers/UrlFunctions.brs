@@ -4,18 +4,16 @@ function createUrl()
     url.RetainBodyOnError(true)
     url.SetCertificatesFile("common:/certs/ca-bundle.crt")
     url.InitClientCertificates()
-    url.AddHeader("Client-ID", "ue6666qo983tsx6so1t0vnawi233wa") 'Used for API
-    while m.global.appBearerToken = invalid
-    end while
-    userToken = get_user_setting("access_token")
-    '? "(userToken) " userToken
-    if userToken <> invalid and userToken <> ""
-        ? "we usin " userToken
-        url.AddHeader("Authorization", "Bearer " + get_user_setting("access_token"))
-    else
-        ? "we using global"
-        url.AddHeader("Authorization", m.global.appBearerToken)
-    end if
+    ' userToken = get_user_setting("access_token")
+    ' '? "(userToken) " userToken
+    ' if userToken <> invalid and userToken <> ""
+    '     ? "we usin " userToken
+    '     url.AddHeader("Authorization", "Bearer " + get_user_setting("access_token"))
+    ' else
+    ? "we using global"
+    url.AddHeader("Client-ID", "cf9fbjz6j9i6k6guz3dwh6qff5dluz") 'Used for API
+    url.AddHeader("Authorization", m.global.appBearerToken)
+    ' end if
     return url
 end function
 
