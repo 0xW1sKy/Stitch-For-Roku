@@ -9,7 +9,11 @@
         <field id="pagination" type="string" value="" />
     </interface>
 
-    <script type="text/brightscript" uri="GetStreams.brs" />
-    <script type="text/brightscript" uri="pkg:/components/Helpers/UrlFunctions.brs" />
+    <script
+        type="text/brightscript" uri="GetStreams.brs" />
+    <script type="text/brightscript"
+        uri="pkg:/components/Helpers/UrlFunctions.brs" />
+    <script type="text/brightscript"
+        uri="pkg:/source/utils/config.brs" />
 
 </component>

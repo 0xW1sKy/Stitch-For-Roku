@@ -11,7 +11,11 @@
         <field id="sendMessage" type="string" />
     </interface>
 
-    <script type="text/brightscript" uri="ChatTest.brs" />
-    <script type="text/brightscript" uri="pkg:/components/Helpers/UrlFunctions.brs" />
+    <script type="text/brightscript"
+        uri="ChatTest.brs" />
+    <script type="text/brightscript"
+        uri="pkg:/components/Helpers/UrlFunctions.brs" />
+    <script type="text/brightscript"
+        uri="pkg:/source/utils/config.brs" />
 
 </component>

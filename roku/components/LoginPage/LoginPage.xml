@@ -28,5 +28,8 @@
             fontSize="18"
             fontUri="pkg:/fonts/Roobert-SemiBold.ttf" />
     </children>
+    <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
+    <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
+
 
 </component>

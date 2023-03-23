@@ -54,16 +54,6 @@ function init()
     m.testtimer.control = "start"
     m.testtimer.ObserveField("fire", "refreshFollows")
 
-    if checkReset() = "false"
-        sec = createObject("roRegistrySection", "SavedUserData")
-        sec.Write("UserToken", "")
-        sec.Write("RefreshToken", "")
-        sec.Write("LoggedInUser", "")
-        sec.Write("DeviceId", "")
-        ? "RESETTED"
-        setReset("true")
-    end if
-
     loggedInUser = checkIfLoggedIn()
     if loggedInUser <> invalid
         m.getUser.loginRequested = loggedInUser
@@ -98,14 +88,14 @@ function init()
     else
         m.global.addFields({ userToken: "" })
     end if
-    ? "User Token is "; m.global.userToken
+    ? "User Token is "; get_user_setting("access_token")
 
     if userdata.refresh_token <> invalid and userdata.refresh_token <> ""
         m.global.addFields({ refreshToken: userdata.refresh_token })
     else
         m.global.addFields({ refreshToken: "" })
     end if
-    ? "Refresh Token is "; m.global.refreshToken
+    ? "Refresh Token is "; get_user_setting("refresh_token")
     if userdata.login <> invalid and userdata.login <> ""
         m.global.addFields({ loggedInUser: userdata.login })
     else
@@ -162,7 +152,7 @@ end sub
 sub onLoginFinish()
     ? "Main Scene > onLoginFinish"
     if m.loginPage.finished = true
-        loggedInUser = checkIfLoggedIn()
+        loggedInUser = get_user_setting("login", invalid)
         if loggedInUser <> invalid
             m.getUser.loginRequested = loggedInUser
             m.getUser.control = "RUN"
@@ -234,49 +224,13 @@ sub onStreamerSelected()
 end sub
 
 function checkReset()
-    ? "Main Scene > checkReset"
-    sec = createObject("roRegistrySection", "SavedUserData")
-    if sec.Exists("Reset")
-        return sec.Read("Reset")
-    end if
     return "false"
 end function
 
 function checkUserToken()
-    ? "Main Scene > checkUserToken"
-    sec = createObject("roRegistrySection", "SavedUserData")
-    if sec.Exists("UserToken")
-        return sec.Read("UserToken")
-    end if
-    return ""
+    return get_user_setting("access_token", "")
 end function
 
-function getTokenFromRegistry()
-    sec = createObject("roRegistrySection", "SavedUserData")
-    if sec.Exists("RefreshToken")
-        refresh_token = sec.Read("RefreshToken")
-    end if
-    if sec.Exists("UserToken")
-        userToken = sec.Read("UserToken")
-    end if
-    if sec.Exists("LoggedInUser")
-        userLogin = sec.Read("LoggedInUser")
-    end if
-    if refresh_token = invalid or refresh_token = ""
-        refresh_token = ""
-    end if
-    if userToken = invalid or userToken = ""
-        userToken = ""
-    end if
-    if userLogin = invalid or userLogin = ""
-        userLogin = ""
-    end if
-    return {
-        access_token: userToken
-        refresh_token: refresh_token
-        login: userLogin
-    }
-end function
 
 function checkVideoBookmarks()
     ? "Main Scene > checkVideoBookmarks"
@@ -315,27 +269,13 @@ function checkSavedVideoQuality()
 end function
 
 function checkIfLoggedIn() as dynamic
-    ? "Main Scene > checkIfLoggedIn"
-    sec = createObject("roRegistrySection", "SavedUserData")
-    if sec.Exists("LoggedInUser")
-        return sec.Read("LoggedInUser")
-    end if
-    return invalid
+    return get_user_setting("login", invalid)
 end function
 
 function setReset(word as string) as void
     ? "Main Scene > setReset"
-    sec = createObject("roRegistrySection", "SavedUserData")
-    sec.Write("Reset", word)
-    sec.Flush()
 end function
 
-' function saveLogin() as void
-'     ? "Main Scene > saveLogin"
-'     sec = createObject("roRegistrySection", "SavedUserData")
-'     sec.Write("LoggedInUser", m.homeScene.loggedInUserName)
-'     sec.Flush()
-' end function
 
 function onHeaderButtonPress()
     ? "Main Scene > onHeaderButtonPress"
@@ -472,18 +412,18 @@ end function
 
 function refreshFollows()
     ? "Main Scene > refreshFollows"
-    if m.login <> ""
-        m.getUser.loginRequested = m.login
+    if get_user_setting("login", "") <> ""
+        m.getUser.loginRequested = get_user_setting("login")
         m.getUser.control = "RUN"
     end if
 end function
 
 function onLogin()
     ? "Main Scene > onLogin"
-    m.login = m.top.dialog.text
+    m.login = get_user_setting("login")
     '? "login > "; m.login
     m.top.dialog.close = true
-    m.getUser.loginRequested = m.login
+    m.getUser.loginRequested = get_user_setting("login")
     m.getUser.control = "RUN"
 end function
 
@@ -598,21 +538,4 @@ function onKeyEvent(key, press) as boolean
 
     '? "MAINSCENE > handled " handled " > (" key ", " press ")"
     return handled
-end function
-
-function saveLogin(access_token, refresh_token, login) as void
-    sec = createObject("roRegistrySection", "SavedUserData")
-    if access_token <> invalid and access_token <> ""
-        sec.Write("UserToken", access_token)
-        m.global.setField("UserToken", access_token)
-    end if
-    if access_token <> invalid and access_token <> ""
-        sec.Write("RefreshToken", refresh_token)
-        m.global.setField("RefreshToken", refresh_token)
-    end if
-    if access_token <> invalid and access_token <> ""
-        sec.Write("LoggedInUser", login)
-        m.global.setField("LoggedInUser", login)
-    end if
-    sec.Flush()
 end function

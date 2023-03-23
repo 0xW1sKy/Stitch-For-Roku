@@ -63,6 +63,7 @@ function getOauthToken() as object
     ' url.AddHeader("Authorization", "OAuth " + oauth_token.access_token)
     ' url.AddHeader("Client-ID", "ue6666qo983tsx6so1t0vnawi233wa")
     ' response_string = ParseJson(url.GetToString())
+
     m.top.access_token = oauth_token.access_token
     m.global.switchUserToken = oauth_token.access_token
     m.top.refresh_token = oauth_token.refresh_token
@@ -70,8 +71,8 @@ function getOauthToken() as object
     m.top.device_id = response.device_code
     m.global.switchDeviceId = response.device_code
     login = getUserLogin()
-    saveSwitchLogin(oauth_token.access_token, oauth_token.refresh_token, login, response.device_code)
-    saveLogin(oauth_token.access_token, oauth_token.refresh_token, login)
+    ' saveSwitchLogin(oauth_token.access_token, oauth_token.refresh_token, login, response.device_code)
+    ' saveLogin(oauth_token.access_token, oauth_token.refresh_token, login)
 end function
 
 

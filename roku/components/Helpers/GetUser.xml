@@ -9,7 +9,11 @@
         <field id="currentUser" type="assocarray" />
     </interface>
 
-    <script type="text/brightscript" uri="GetUser.brs" />
-    <script type="text/brightscript" uri="pkg:/components/Helpers/UrlFunctions.brs" />
+    <script type="text/brightscript"
+        uri="GetUser.brs" />
+    <script type="text/brightscript"
+        uri="pkg:/components/Helpers/UrlFunctions.brs" />
+    <script type="text/brightscript"
+        uri="pkg:/source/utils/config.brs" />
 
 </component>

@@ -42,6 +42,25 @@ function convertToTimeFormat(timestamp as string) as string
     return hours.ToStr() + ":" + mins + ":" + secs
 end function
 
+
+
+
+' sub handleRendezvouzToken()
+'     if m.RendezvouzTask <> invalid
+'         response = m.RendezvouzTask.response
+'         ? "Response "; response
+'         set_user_setting("temp_device_code", response.device_code)
+'         m.code.text = response.user_code
+'         m.OauthTask = CreateObject("roSGNode", "TwitchApi") ' create task for feed retrieving
+'         m.OauthTask.observeField("response", "handleOauthToken")
+'         m.OauthTask.request = {
+'             type: "getOauthToken"
+'             params: response
+'         }
+'     end if
+' end sub
+' ' m.top.finished = true
+
 function getSearchResults() as object
     userdata = getTokenFromRegistry()
     req = HttpRequest({

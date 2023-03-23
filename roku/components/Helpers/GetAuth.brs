@@ -10,24 +10,6 @@ function onStreamerChange()
 
 end function
 
-
-function saveLogin(access_token, refresh_token, login) as void
-    sec = createObject("roRegistrySection", "SavedUserData")
-    if access_token <> invalid and access_token <> ""
-        sec.Write("UserToken", access_token)
-        m.global.setField("UserToken", access_token)
-    end if
-    if access_token <> invalid and access_token <> ""
-        sec.Write("RefreshToken", refresh_token)
-        m.global.setField("RefreshToken", refresh_token)
-    end if
-    if access_token <> invalid and access_token <> ""
-        sec.Write("LoggedInUser", login)
-        m.global.setField("LoggedInUser", login)
-    end if
-    sec.Flush()
-end function
-
 function getStreamLink() as object
     m.top.finished = false
 
@@ -79,7 +61,5 @@ function getStreamLink() as object
     url.AddHeader("Client-ID", "ue6666qo983tsx6so1t0vnawi233wa")
     response_string = ParseJson(url.GetToString())
 
-    ? "oauth_token.refresh_token "; oauth_token.refresh_token
-    saveLogin(oauth_token.access_token, oauth_token.refresh_token, response_string.login)
     return ""
 end function
