@@ -172,7 +172,6 @@ sub onSelectedStreamerChange()
     m.streamItem.setFocus(true)
 
     m.pastBroadcastsList.content = invalid
-
     m.getUserChannel.loginRequested = m.top.streamerSelectedName
     m.getUserChannel.control = "RUN"
 end sub

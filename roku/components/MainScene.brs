@@ -4,6 +4,9 @@
 function init()
     m.top.backgroundUri = ""
     m.top.backgroundColor = "0x020202FF"
+    if get_setting("active_user", invalid) = invalid
+        set_setting("active_user", "default")
+    end if
     validateDeviceCode()
     m.videoPlayer = m.top.findNode("videoPlayer")
     m.keyboardGroup = m.top.findNode("keyboardGroup")
@@ -131,8 +134,7 @@ function init()
 end function
 
 sub handleDevicecode()
-    ? m.Task.response
-    ? "STOP"
+    set_user_setting("device_code", m.task.response.device_code)
 end sub
 
 sub validateDeviceCode()
@@ -142,7 +144,7 @@ sub validateDeviceCode()
         ' observe content so we can know when feed content will be parsed
         m.Task.observeField("response", "handleDeviceCode")
         m.Task.request = {
-            type: "getHomePageQuery"
+            type: "getRendezvouzToken"
         }
     end if
 end sub

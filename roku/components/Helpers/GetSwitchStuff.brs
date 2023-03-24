@@ -7,18 +7,26 @@ function onStreamerChange()
 end function
 
 function getStreamUrl()
-    userdata = getTokenFromRegistry()
+    access_token = ""
+    device_code = ""
+    ' doubled up here in stead of defaulting to "" because access_token is dependent on device_code
+    if get_user_setting("device_code") <> invalid
+        device_code = get_user_setting("device_code")
+        if get_user_setting("access_token") <> invalid
+            access_token = "OAuth " + get_user_setting("access_token")
+        end if
+    end if
     req = HttpRequest({
         url: "https://gql.twitch.tv/gql"
         headers: {
             "Accept": "*/*"
             ' "Accept-Encoding": "gzip, deflate, br"
             ' "Accept-Language": "en-US"
-            "Authorization": "OAuth " + userdata.access_token
+            "Authorization": access_token
             ' "Cache-Control": "no-cache"
             "Client-Id": "ue6666qo983tsx6so1t0vnawi233wa"
             ' "Content-Type": "text/plain; charset=UTF-8"
-            "Device-ID": userdata.device_id
+            "Device-ID": device_code
             ' "Host": "gql.twitch.tv"
             "Origin": "https://switch.tv.twitch.tv"
             ' "Pragma": "no-cache"

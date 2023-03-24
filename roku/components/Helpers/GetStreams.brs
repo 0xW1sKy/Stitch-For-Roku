@@ -72,6 +72,7 @@ function getSearchResults() as object
             item.id = stream.user_id
             item.display_name = stream.user_name
             item.game_id = stream.game_id
+            item.login = stream.user_login
             if first = false
                 game_ids_url += "&id=" + stream.game_id
                 user_ids_url += "&id=" + stream.user_id
@@ -93,7 +94,7 @@ function getSearchResults() as object
             stream.name = m.loginNames[stream.id]
         end for
     end if
-
+    ? "stop"
     if search.pagination.cursor <> invalid
         m.top.pagination = "&after=" + search.pagination.cursor
     end if

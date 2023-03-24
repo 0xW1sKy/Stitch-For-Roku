@@ -43,17 +43,28 @@ function convertToTimeFormat(timestamp as string) as string
 end function
 
 function getSearchResults() as object
-    userdata = getTokenFromRegistry()
+    access_token = ""
+    device_code = ""
+    ' doubled up here in stead of defaulting to "" because access_token is dependent on device_code
+    if get_user_setting("device_code", invalid) <> invalid
+        device_code = get_user_setting("device_code")
+        if get_user_setting("access_token", invalid) <> invalid
+            access_token = "OAuth " + get_user_setting("access_token")
+        end if
+    end if
+    headers = {
+        "Accept": "*/*"
+        "Client-Id": "ue6666qo983tsx6so1t0vnawi233wa"
+        "Device-ID": device_code
+        "Origin": "https://switch.tv.twitch.tv"
+        "Referer": "https://switch.tv.twitch.tv/"
+    }
+    if access_token <> ""
+        headers["Authorization"] = access_token
+    end if
     req = HttpRequest({
         url: "https://gql.twitch.tv/gql"
-        headers: {
-            "Accept": "*/*"
-            "Authorization": "OAuth " + userdata.access_token
-            "Client-Id": "ue6666qo983tsx6so1t0vnawi233wa"
-            "Device-ID": userdata.device_id
-            "Origin": "https://switch.tv.twitch.tv"
-            "Referer": "https://switch.tv.twitch.tv/"
-        }
+        headers: headers
         method: "POST"
         data: {
             query: "query ChannelInterstitial_Query(" + chr(10) + "  $login: String!" + chr(10) + "  $platform: String!" + chr(10) + "  $playerType: String!" + chr(10) + "  $skipPlayToken: Boolean!" + chr(10) + ") {" + chr(10) + "  channel: user(login: $login) {" + chr(10) + "    ...InterstitialLayout_channel" + chr(10) + "    ...StreamDetails_channel" + chr(10) + "    ...StreamPlayer_channel" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "    login" + chr(10) + "    displayName" + chr(10) + "    broadcastSettings {" + chr(10) + "      isMature" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "    }" + chr(10) + "    stream {" + chr(10) + "      restrictionType" + chr(10) + "      self {" + chr(10) + "        canWatch" + chr(10) + "      }" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "      type" + chr(10) + "    }" + chr(10) + "    hosting {" + chr(10) + "      displayName" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "      login" + chr(10) + "      stream {" + chr(10) + "        id" + chr(10) + "        __typename" + chr(10) + "        type" + chr(10) + "      }" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "  currentUser {" + chr(10) + "    ...StreamPlayer_currentUser" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "    login" + chr(10) + "    roles {" + chr(10) + "      isStaff" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "  ...StreamPlayer_token" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment BroadcasterOverview_channel on User {" + chr(10) + "  login" + chr(10) + "  displayName" + chr(10) + "  followers {" + chr(10) + "    totalCount" + chr(10) + "  }" + chr(10) + "  primaryColorHex" + chr(10) + "  primaryTeam {" + chr(10) + "    displayName" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "  profileImageURL(width: 70)" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment ChannelDescription_channel on User {" + chr(10) + "  description" + chr(10) + "  displayName" + chr(10) + "  login" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment FocusableFollowButton_channel on User {" + chr(10) + "  login" + chr(10) + "  id" + chr(10) + "  __typename" + chr(10) + "  self {" + chr(10) + "    follower {" + chr(10) + "      followedAt" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment InterstitialButtonRow_channel on User {" + chr(10) + "  ...FocusableFollowButton_channel" + chr(10) + "  login" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment InterstitialLayout_channel on User {" + chr(10) + "  ...BroadcasterOverview_channel" + chr(10) + "  ...ChannelDescription_channel" + chr(10) + "  ...InterstitialButtonRow_channel" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment StreamDetails_channel on User {" + chr(10) + "  broadcastSettings {" + chr(10) + "    game {" + chr(10) + "      boxArtURL" + chr(10) + "      displayName" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "    }" + chr(10) + "    title" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "  stream {" + chr(10) + "    viewersCount" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment StreamPlayer_channel on User {" + chr(10) + "  id" + chr(10) + "  __typename" + chr(10) + "  login" + chr(10) + "  roles {" + chr(10) + "    isPartner" + chr(10) + "  }" + chr(10) + "  self {" + chr(10) + "    subscriptionBenefit {" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "  stream {" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "    game {" + chr(10) + "      name" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "    }" + chr(10) + "    previewImageURL" + chr(10) + "  }" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment StreamPlayer_currentUser on User {" + chr(10) + "  hasTurbo" + chr(10) + "  id" + chr(10) + "  __typename" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment StreamPlayer_token on Query {" + chr(10) + "  user(login: $login) {" + chr(10) + "    login" + chr(10) + "    stream @skip(if: $skipPlayToken) {" + chr(10) + "      playbackAccessToken(params: {platform: $platform, playerType: $playerType}) {" + chr(10) + "        signature" + chr(10) + "        value" + chr(10) + "      }" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "    }" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "}" + chr(10) + ""
