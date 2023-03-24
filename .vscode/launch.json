@@ -25,6 +25,28 @@
                 "source/**/*",
                 "manifest"
             ]
+        },
+            {
+            "type": "brightscript",
+            "request": "launch",
+            "name": "BrightScript Package: Run",
+            "stopOnEntry": false,
+            "host": "192.168.2.44",
+            "password": "1111",
+            "rootDir": "${workspaceFolder}/roku",
+            "injectRdbOnDeviceComponent": false,
+            "enableDebuggerAutoRecovery": false,
+            "stopDebuggerOnAppExit": false,
+            "files": [
+                "components/**/*",
+                "modules/**/*",
+                "fonts/**/*",
+                "images/**/*",
+                "locale/**/*",
+                "settings/**/*",
+                "source/**/*",
+                "manifest"
+            ]
         }
     ]
 }
