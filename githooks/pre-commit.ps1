@@ -18,5 +18,5 @@ $manifest | ForEach-Object {
         $output += "$($_)`n"
     }
 }
-Set-Content ./manifest -Value $output
-git add ./manifest
+Set-Content ./roku/manifest -Value $output
+git add ./roku/manifest
