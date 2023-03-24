@@ -57,7 +57,7 @@ function init()
     m.testtimer = m.top.findNode("testTimer")
     m.testtimer.control = "start"
     m.testtimer.ObserveField("fire", "refreshFollows")
-
+    m.videoPlayer.observeField("streamLayoutMode", "onToggleStreamLayout")
 
     loggedInUser = checkIfLoggedIn()
     if loggedInUser <> invalid
@@ -506,6 +506,29 @@ sub onToggleChat()
         m.chat.visible = not m.chat.visible
         m.videoPlayer.chatIsVisible = m.chat.visible
         m.videoPlayer.toggleChat = false
+    end if
+end sub
+
+
+sub onToggleStreamLayout()
+    ? "Layout Mode is "; m.videoPlayer.streamLayoutMode
+    if m.videoPlayer.streamLayoutMode = 0 'stream is shrinked
+        m.videoPlayer.width = 1030
+        m.videoPlayer.height = 720
+        m.chat.getchild(0).opacity = "1"
+        m.chat.visible = true
+        m.videoPlayer.chatIsVisible = m.chat.visible
+    else if m.videoPlayer.streamLayoutMode = 1 'layout with chat on top of stream
+        m.videoPlayer.width = 0
+        m.videoPlayer.height = 0
+        m.chat.getchild(0).opacity = "0.85"
+        m.chat.visible = true
+        m.videoPlayer.chatIsVisible = m.chat.visible
+    else if m.videoPlayer.streamLayoutMode = 2 'no chat layout fullscreen
+        m.videoPlayer.width = 0
+        m.videoPlayer.height = 0
+        m.chat.visible = false
+        m.videoPlayer.chatIsVisible = m.chat.visible
     end if
 end sub
 

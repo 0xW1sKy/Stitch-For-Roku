@@ -422,7 +422,7 @@ sub onNewComment()
     end if
 
     group.appendChild(username)
-    group.appendChild(colon)
+    ' group.appendChild(colon)
 
     m.chatPanel.appendChild(group)
 

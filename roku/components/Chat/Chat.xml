@@ -16,7 +16,6 @@
     <script type="text/brightscript" uri="Chat.brs" />
     <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
     <children>
-
         <Rectangle
             visible="true"
             color="0x18181BFF"

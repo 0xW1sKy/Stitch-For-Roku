@@ -70,6 +70,7 @@ function init()
 
     m.buttonHeld = invalid
     m.scrollInterval = 10
+    m.top.streamLayoutMode = 0
     ' m.progressBar.state = 2
 
 end function
@@ -494,7 +495,8 @@ function onKeyEvent(key, press) as boolean
                 m.timeTravelRect.visible = true
                 return true
             else if m.currentProgressBarState = 4
-                m.top.toggleChat = true
+                ' m.top.toggleChat = true
+                m.top.streamLayoutMode = (m.top.streamLayoutMode + 1) mod 3
                 return true
             else if m.currentProgressBarState = 5
                 m.currentPositionSeconds = 0
