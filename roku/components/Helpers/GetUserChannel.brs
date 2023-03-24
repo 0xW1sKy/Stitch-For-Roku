@@ -42,25 +42,6 @@ function convertToTimeFormat(timestamp as string) as string
     return hours.ToStr() + ":" + mins + ":" + secs
 end function
 
-
-
-
-' sub handleRendezvouzToken()
-'     if m.RendezvouzTask <> invalid
-'         response = m.RendezvouzTask.response
-'         ? "Response "; response
-'         set_user_setting("temp_device_code", response.device_code)
-'         m.code.text = response.user_code
-'         m.OauthTask = CreateObject("roSGNode", "TwitchApi") ' create task for feed retrieving
-'         m.OauthTask.observeField("response", "handleOauthToken")
-'         m.OauthTask.request = {
-'             type: "getOauthToken"
-'             params: response
-'         }
-'     end if
-' end sub
-' ' m.top.finished = true
-
 function getSearchResults() as object
     userdata = getTokenFromRegistry()
     req = HttpRequest({
@@ -94,18 +75,21 @@ function getSearchResults() as object
     result.profile_image_url = channelData.data.channel.profileImageUrl
     result.description = channelData.data.channel.broadcastSettings.title
     result.live_duration = ""
-    result.thumbnail_url = channelData.data.channel.stream.previewImageURL
     result.offline_image_url = ""
     result.title = channelData.data.channel.description
-    result.game = channelData.data.channel.stream.game.name
-    result.viewer_count = channelData.data.channel.stream.viewersCount
     result.followers = channelData.data.channel.followers.totalCount
     result.login = channelData.data.channel.login
     result.id = channelData.data.channel.id
     if channelData.data.channel.stream <> invalid
         result.is_live = true
+        result.thumbnail_url = channelData.data.channel.stream.previewImageURL
+        result.game = channelData.data.channel.stream.game.name
+        result.viewer_count = channelData.data.channel.stream.viewersCount
     else
         result.is_live = false
+        result.thumbnail_url = ""
+        result.game = ""
+        result.viewer_count = ""
     end if
     search_results_url = "https://api.twitch.tv/helix/users?login=" + m.top.loginRequested
     url = createUrl()

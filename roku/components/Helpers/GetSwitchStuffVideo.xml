@@ -9,10 +9,6 @@
         <field id="thumbnailInfo" type="assocarray" />
     </interface>
 
-    <script
-        type="text/brightscript" uri="GetSwitchStuffVideo.brs" />
-    <script type="text/brightscript"
-        uri="pkg:/components/Helpers/UrlFunctions.brs" />
-    <script type="text/brightscript"
-        uri="pkg:/source/utils/config.brs" />
+    <script type="text/brightscript" uri="GetSwitchStuffVideo.brs" />
+    <script type="text/brightscript" uri="pkg:/components/Helpers/UrlFunctions.brs" />
 </component>

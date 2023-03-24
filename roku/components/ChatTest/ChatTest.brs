@@ -9,10 +9,8 @@ function getChannelBadges() as object
     response_string = url.GetToString()
     user_data = ParseJson(response_string)
     user_id = ""
-    if user_data.data <> invalid
-        if user_data.data[0].id <> invalid
-            user_id = user_data.data[0].id
-        end if
+    if user_data.data[0].id <> invalid
+        user_id = user_data.data[0].id
     end if
 
     return user_id
@@ -46,7 +44,7 @@ function main()
         tcpListen.notifyReadable(true)
         ? "connect " tcpListen.Connect()
         tcpListen.SendStr("CAP REQ :twitch.tv/tags twitch.tv/commands" + Chr(13) + Chr(10))
-        user_auth_token = get_user_setting("access_token")
+        user_auth_token = m.global.userToken
         if m.top.loggedInUsername <> "" and user_auth_token <> invalid and user_auth_token <> ""
             ? "PASS " tcpListen.SendStr("PASS oauth:" + user_auth_token + Chr(13) + Chr(10))
             ? "USER " tcpListen.SendStr("USER " + m.top.loggedInUsername + " 8 * :" + m.top.loggedInUsername + Chr(13) + Chr(10))
@@ -91,7 +89,6 @@ function main()
 
         temp = getjsondata("https://api.betterttv.net/3/cached/frankerfacez/users/twitch/" + channel_id)
         assocEmotes = {}
-
         for each emote in temp
             assocEmotes[emote.code] = emote.images["1x"]
         end for
@@ -143,7 +140,7 @@ function main()
                 'tcpListen.notifyReadable(true)
                 ? "connect " tcpListen.Connect()
                 tcpListen.SendStr("CAP REQ :twitch.tv/tags twitch.tv/commands" + Chr(13) + Chr(10))
-                user_auth_token = get_user_setting("access_token")
+                user_auth_token = m.global.userToken
                 if m.top.loggedInUsername <> "" and user_auth_token <> invalid and user_auth_token <> ""
                     ? "PASS " tcpListen.SendStr("PASS oauth:" + user_auth_token + Chr(13) + Chr(10))
                     ? "USER " tcpListen.SendStr("USER " + m.top.loggedInUsername + " 8 * :" + m.top.loggedInUsername + Chr(13) + Chr(10))

@@ -7,11 +7,7 @@
         <field id="streamUrl" type="uri" />
     </interface>
 
-    <script type="text/brightscript"
-        uri="GetStuff.brs" />
-    <script type="text/brightscript"
-        uri="pkg:/components/Helpers/UrlFunctions.brs" />
-    <script type="text/brightscript"
-        uri="pkg:/source/utils/config.brs" />
+    <script type="text/brightscript" uri="GetStuff.brs" />
+    <script type="text/brightscript" uri="pkg:/components/Helpers/UrlFunctions.brs" />
 
 </component>

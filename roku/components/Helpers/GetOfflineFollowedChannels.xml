@@ -8,11 +8,7 @@
         <field id="offlineFollowedUsers" type="array" />
     </interface>
 
-    <script
-        type="text/brightscript" uri="GetOfflineFollowedChannels.brs" />
-    <script
-        type="text/brightscript" uri="pkg:/components/Helpers/UrlFunctions.brs" />
-    <script
-        type="text/brightscript" uri="pkg:/source/utils/config.brs" />
+    <script type="text/brightscript" uri="GetOfflineFollowedChannels.brs" />
+    <script type="text/brightscript" uri="pkg:/components/Helpers/UrlFunctions.brs" />
 
 </component>

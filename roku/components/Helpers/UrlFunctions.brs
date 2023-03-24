@@ -4,16 +4,18 @@ function createUrl()
     url.RetainBodyOnError(true)
     url.SetCertificatesFile("common:/certs/ca-bundle.crt")
     url.InitClientCertificates()
-    ' userToken = get_user_setting("access_token")
-    ' '? "(userToken) " userToken
-    ' if userToken <> invalid and userToken <> ""
-    '     ? "we usin " userToken
-    '     url.AddHeader("Authorization", "Bearer " + get_user_setting("access_token"))
-    ' else
-    ? "we using global"
-    url.AddHeader("Client-ID", "cf9fbjz6j9i6k6guz3dwh6qff5dluz") 'Used for API
-    url.AddHeader("Authorization", m.global.appBearerToken)
-    ' end if
+    url.AddHeader("Client-ID", "ue6666qo983tsx6so1t0vnawi233wa") 'Used for API
+    while m.global.appBearerToken = invalid
+    end while
+    userToken = m.global.userToken
+    '? "(userToken) " userToken
+    if userToken <> invalid and userToken <> ""
+        ? "we usin " userToken
+        url.AddHeader("Authorization", "Bearer " + m.global.userToken)
+    else
+        ? "we using global"
+        url.AddHeader("Authorization", m.global.appBearerToken)
+    end if
     return url
 end function
 
@@ -25,12 +27,12 @@ function createUrlNorm()
     url.InitClientCertificates()
     while m.global.appBearerToken = invalid
     end while
-    userToken = get_user_setting("access_token")
+    userToken = m.global.userToken
     ? "(userToken) " userToken
     if userToken <> invalid and userToken <> ""
         ? "we usin " userToken
         url.AddHeader("Client-ID", "ue6666qo983tsx6so1t0vnawi233wa") 'Used for API
-        url.AddHeader("Authorization", "Bearer " + get_user_setting("access_token"))
+        url.AddHeader("Authorization", "Bearer " + m.global.userToken)
     else
         ? "we using global"
         url.AddHeader("Client-ID", "cf9fbjz6j9i6k6guz3dwh6qff5dluz") 'Used for API
@@ -69,6 +71,89 @@ function POST(request_url as string, request_payload as string) as string
 end function
 
 
+function getTokenFromRegistry()
+    sec = createObject("roRegistrySection", "SavedUserData")
+    if sec.Exists("RefreshToken")
+        refresh_token = sec.Read("RefreshToken")
+    end if
+    if sec.Exists("UserToken")
+        userToken = sec.Read("UserToken")
+    end if
+    if sec.Exists("LoggedInUser")
+        userLogin = sec.Read("LoggedInUser")
+    end if
+    if sec.Exists("DeviceId")
+        device_id = sec.Read("DeviceId")
+    else
+        device_id = ""
+    end if
+    if refresh_token = invalid or refresh_token = ""
+        refresh_token = ""
+    end if
+    if userToken = invalid or userToken = ""
+        userToken = ""
+    end if
+    if userLogin = invalid or userLogin = ""
+        userLogin = ""
+    end if
+    if device_id = invalid or device_id = ""
+        device_id = ""
+    end if
+    return {
+        access_token: userToken
+        refresh_token: refresh_token
+        login: userLogin
+        device_id: device_id
+    }
+end function
+
+
+function refreshToken()
+    userdata = getTokenFromRegistry()
+    userLogin = userdata.login
+    refresh_token = userdata.refresh_token
+    userToken = userdata.access_token
+    deviceCode = userdata.device_id
+
+    ? "Client Asked to Refresh Token"
+    validateUserToken()
+    ' queryString = "client_id=ue6666qo983tsx6so1t0vnawi233wa&device_code=" + response.device_code + "&grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Adevice_code"
+    ' oauth_token = ParseJson(msg.GetString())
+
+    ' if refresh_token <> invalid and refresh_token <> ""
+    '     req = HttpRequest({
+    '         url: "https://id.twitch.tv/oauth2/token?grant_type=refresh_token&refresh_token=" + refresh_token + "&client_id=ue6666qo983tsx6so1t0vnawi233wa" + "&device_code=" + deviceCode
+    '         headers: {
+    '             "content-type": "application/x-www-form-urlencoded"
+    '             "origin": "https://switch.tv.twitch.tv"
+    '             "referer": "https://switch.tv.twitch.tv/"
+    '             "accept": "application/json"
+    '         }
+    '         method: "POST"
+    '     })
+    '     oauth_token = ParseJSON(req.send())
+    '     ? "REFRESHED OAUTH TOKEN IS: "; oauth_token
+    '     saveLogin(oauth_token.access_token, oauth_oken.refresh_token, userLogin)
+    ' end if
+end function
+
+
+function saveLogin(access_token, refresh_token, login) as void
+    sec = createObject("roRegistrySection", "SavedUserData")
+    if access_token <> invalid and access_token <> ""
+        sec.Write("UserToken", access_token)
+        m.global.setField("UserToken", access_token)
+    end if
+    if access_token <> invalid and access_token <> ""
+        sec.Write("RefreshToken", refresh_token)
+        m.global.setField("RefreshToken", refresh_token)
+    end if
+    if access_token <> invalid and access_token <> ""
+        sec.Write("LoggedInUser", login)
+        m.global.setField("LoggedInUser", login)
+    end if
+    sec.Flush()
+end function
 
 function UrlEncode(str as string) as string
     o = CreateObject("roUrlTransfer")
@@ -76,7 +161,48 @@ function UrlEncode(str as string) as string
 end function
 
 function validateUserToken(oauth_token = invalid)
-    get_user_setting("login")
+    ' refreshToken()
+    if oauth_token = invalid
+        token = getTokenFromRegistry()
+        userToken = token.access_token
+        refresh_token = token.refresh_token
+        userLogin = token.login
+    else
+        userToken = oauth_token.access_token
+    end if
+    req = HttpRequest({
+        url: "https://id.twitch.tv/oauth2/validate"
+        headers: {
+            "Client-ID": "ue6666qo983tsx6so1t0vnawi233wa"
+            "Authorization": "OAuth " + userToken
+        }
+        method: "GET"
+    })
+    response = ParseJSON(req.send())
+    ? "VALIDATION Response: "; response
+    data = getTokenFromRegistry()
+    req = HttpRequest({
+        url: "https://id.twitch.tv/oauth2/validate"
+        headers: {
+            "Client-ID": "ue6666qo983tsx6so1t0vnawi233wa"
+            "Authorization": "OAuth " + userToken
+            "Device-Id": data.device_id
+        }
+        method: "GET"
+    })
+    response = ParseJSON(req.send())
+    ? "VALIDATION Response: "; response
+    if response <> invalid
+        if response.status = 401 and refresh_token <> invalid and refresh_token <> ""
+            ? "USED FIRST ONE!!!"
+            ' refreshToken()
+            return ""
+        end if
+        if response.login <> invalid and response.login <> ""
+            ? "USED THIS ONE!!!"
+            return response.login
+        end if
+    end if
 end function
 
 function HttpRequest(params = invalid as dynamic) as object

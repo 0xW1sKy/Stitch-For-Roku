@@ -46,7 +46,7 @@ function onSearchItemSelect()
     if m.liveLine.visible = true
         'm.getStuff.streamerRequested = m.searchResultList.content.getChild(m.searchResultList.itemSelected).title
         'm.getStuff.control = "RUN"
-        m.top.streamerSelectedName = m.searchResultList.content.getChild(m.searchResultList.itemSelected).ShortDescriptionLine1
+        m.top.streamerSelectedName = m.searchResultList.content.getChild(m.searchResultList.itemSelected).title
         m.wasLastScene = true
     else if m.categoryLine.visible = true
         m.top.categorySelected = m.resultCategoryList.content.getChild(m.resultCategoryList.itemSelected).categories

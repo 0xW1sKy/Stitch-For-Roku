@@ -67,7 +67,6 @@ function getSearchResults() as object
     first = true
     result = []
     if search <> invalid and search.data <> invalid
-        ? "Stop"
         for each stream in search.data
             item = {}
             item.id = stream.user_id
@@ -83,18 +82,16 @@ function getSearchResults() as object
             item.title = stream.title
             item.viewers = stream.viewer_count
             item.thumbnail = Left(stream.thumbnail_url, Len(stream.thumbnail_url) - 20) + "320x180.jpg"
-            item.game = stream.game_name
-            item.name = stream.user_login
             result.push(item)
             first = false
         end for
         getGameNameFromId(game_ids_url)
         getLoginFromId(user_ids_url)
-        ' for each stream in result
-        '     stream.game = m.gameNames[stream.game_id]
-        '     '? "login > "; m.loginNames[stream.id]
-        '     stream.name = m.loginNames[stream.id]
-        ' end for
+        for each stream in result
+            stream.game = m.gameNames[stream.game_id]
+            '? "login > "; m.loginNames[stream.id]
+            stream.name = m.loginNames[stream.id]
+        end for
     end if
 
     if search.pagination.cursor <> invalid

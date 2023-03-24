@@ -74,7 +74,7 @@ function getDeviceId()
 end function
 
 function getStreamLink() as object
-    userToken = get_user_setting("access_token")
+    userToken = m.global.userToken
     playbackAccessToken = getPlaybackAccessToken()
     baseurl = "https://usher.ttvnw.net/"
     isVod = false
