@@ -2,7 +2,7 @@
 
 $version = gitversion | ConvertFrom-Json
 
-$manifest = Get-Content ./manifest
+$manifest = Get-Content ./roku/manifest
 $output = ""
 $manifest | ForEach-Object {
     if ($_ -like "major_version=*") {
