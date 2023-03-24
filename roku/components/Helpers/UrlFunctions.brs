@@ -70,44 +70,6 @@ function POST(request_url as string, request_payload as string) as string
     return response.GetString()
 end function
 
-
-function getTokenFromRegistry()
-    sec = createObject("roRegistrySection", "SavedUserData")
-    if sec.Exists("RefreshToken")
-        refresh_token = sec.Read("RefreshToken")
-    end if
-    if sec.Exists("UserToken")
-        userToken = sec.Read("UserToken")
-    end if
-    if sec.Exists("LoggedInUser")
-        userLogin = sec.Read("LoggedInUser")
-    end if
-    if sec.Exists("DeviceId")
-        device_id = sec.Read("DeviceId")
-    else
-        device_id = ""
-    end if
-    if refresh_token = invalid or refresh_token = ""
-        refresh_token = ""
-    end if
-    if userToken = invalid or userToken = ""
-        userToken = ""
-    end if
-    if userLogin = invalid or userLogin = ""
-        userLogin = ""
-    end if
-    if device_id = invalid or device_id = ""
-        device_id = ""
-    end if
-    return {
-        access_token: userToken
-        refresh_token: refresh_token
-        login: userLogin
-        device_id: device_id
-    }
-end function
-
-
 function refreshToken()
     userdata = getTokenFromRegistry()
     userLogin = userdata.login

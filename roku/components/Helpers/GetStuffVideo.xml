@@ -10,4 +10,5 @@
 
     <script type="text/brightscript" uri="GetStuffVideo.brs" />
     <script type="text/brightscript" uri="pkg:/components/Helpers/UrlFunctions.brs" />
+    <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
 </component>

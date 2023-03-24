@@ -4,6 +4,7 @@
 function init()
     m.top.backgroundUri = ""
     m.top.backgroundColor = "0x020202FF"
+    validateDeviceCode()
     m.videoPlayer = m.top.findNode("videoPlayer")
     m.keyboardGroup = m.top.findNode("keyboardGroup")
     m.homeScene = m.top.findNode("homeScene")
@@ -54,15 +55,6 @@ function init()
     m.testtimer.control = "start"
     m.testtimer.ObserveField("fire", "refreshFollows")
 
-    if checkReset() = "false"
-        sec = createObject("roRegistrySection", "SavedUserData")
-        sec.Write("UserToken", "")
-        sec.Write("RefreshToken", "")
-        sec.Write("LoggedInUser", "")
-        sec.Write("DeviceId", "")
-        ? "RESETTED"
-        setReset("true")
-    end if
 
     loggedInUser = checkIfLoggedIn()
     if loggedInUser <> invalid
@@ -137,6 +129,23 @@ function init()
     m.videoPlayer.notificationInterval = 1
     m.plyrTask = invalid
 end function
+
+sub handleDevicecode()
+    ? m.Task.response
+    ? "STOP"
+end sub
+
+sub validateDeviceCode()
+    device_code = get_user_setting("device_code", invalid)
+    if device_code = invalid
+        m.Task = CreateObject("roSGNode", "TwitchApi") ' create task for feed retrieving
+        ' observe content so we can know when feed content will be parsed
+        m.Task.observeField("response", "handleDeviceCode")
+        m.Task.request = {
+            type: "getHomePageQuery"
+        }
+    end if
+end sub
 
 sub onChatDoneFocus()
     ? "Main Scene > onChatDoneFocus"
@@ -249,33 +258,6 @@ function checkUserToken()
         return sec.Read("UserToken")
     end if
     return ""
-end function
-
-function getTokenFromRegistry()
-    sec = createObject("roRegistrySection", "SavedUserData")
-    if sec.Exists("RefreshToken")
-        refresh_token = sec.Read("RefreshToken")
-    end if
-    if sec.Exists("UserToken")
-        userToken = sec.Read("UserToken")
-    end if
-    if sec.Exists("LoggedInUser")
-        userLogin = sec.Read("LoggedInUser")
-    end if
-    if refresh_token = invalid or refresh_token = ""
-        refresh_token = ""
-    end if
-    if userToken = invalid or userToken = ""
-        userToken = ""
-    end if
-    if userLogin = invalid or userLogin = ""
-        userLogin = ""
-    end if
-    return {
-        access_token: userToken
-        refresh_token: refresh_token
-        login: userLogin
-    }
 end function
 
 function checkVideoBookmarks()

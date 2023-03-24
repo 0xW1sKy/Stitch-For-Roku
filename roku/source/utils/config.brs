@@ -90,3 +90,13 @@ function findConfigTreeKey(key as string, tree)
     return invalid
 end function
 
+' Added for backwards compatibility
+
+function getTokenFromRegistry()
+    return {
+        access_token: get_user_setting("refresh_token", "")
+        refresh_token: get_user_setting("access_token", "")
+        login: get_user_setting("login", "")
+        device_id: get_user_setting("device_code", "")
+    }
+end function
