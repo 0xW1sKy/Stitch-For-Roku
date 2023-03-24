@@ -27,12 +27,16 @@ end sub
 ' Initializes the scene and shows the main homepage.
 ' Handles closing of the channel.
 sub RunUserInterface()
-    screen = CreateObject("roSGScreen")
+    ' The main function that runs when the application is launched.
+    m.screen = CreateObject("roSGScreen")
     m.port = CreateObject("roMessagePort")
-    screen.setMessagePort(m.port)
-    scene = screen.CreateScene("MainScene")
-    screen.show()
-
+    ' Set global constants
+    setConstants()
+    m.screen.setMessagePort(m.port)
+    m.scene = m.screen.CreateScene("MainScene")
+    m.screen.show()
+    m.global = m.screen.getGlobalNode()
+    ' vscode_rdb_on_device_component_entry
     while(true)
         msg = wait(0, m.port)
         msgType = type(msg)
