@@ -93,7 +93,7 @@ function init()
     else
         m.global.addFields({ userToken: "" })
     end if
-    ? "User Token is "; m.global.userToken
+    ? "User Token is "; get_user_setting("access_token")
 
     if userdata.refresh_token <> invalid and userdata.refresh_token <> ""
         m.global.addFields({ refreshToken: userdata.refresh_token })

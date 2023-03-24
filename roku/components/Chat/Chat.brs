@@ -15,15 +15,15 @@ end sub
 
 sub onSetKeyboardFocus()
     if m.top.setKeyboardFocus
-        m.keyboard.visible = true
-        m.chatButton.visible = true
+        ' m.keyboard.visible = true
+        ' m.chatButton.visible = true
         m.top.setKeyboardFocus = false
-        m.keyboard.setFocus(true)
+        ' m.keyboard.setFocus(true)
     end if
 end sub
 
 sub setLoggedInUsername()
-    m.chat.loggedInUsername = m.top.loggedInUsername
+    m.chat.loggedInUsername = get_user_setting("login")
 end sub
 
 sub onInvisible()
@@ -459,18 +459,20 @@ function onKeyEvent(key, press) as boolean
             m.chatButton.color = "0x18181BFF"
             handled = true
         else if key = "OK" and m.chatButton.hasFocus()
-            m.chat.sendMessage = m.keyboard.text
-            m.keyboard.text = ""
-            m.chatButton.visible = false
-            m.keyboard.visible = false
-            m.chatButton.color = "0x18181BFF"
-            m.chatButton.setFocus(false)
-            m.top.doneFocus = true
-            handled = true
+            return false
+            ' m.chat.sendMessage = m.keyboard.text
+            ' m.keyboard.text = ""
+            ' m.chatButton.visible = false
+            ' m.keyboard.visible = false
+            ' m.chatButton.color = "0x18181BFF"
+            ' m.chatButton.setFocus(false)
+            ' m.top.doneFocus = true
+            ' handled = true
         else if key = "OK" and not m.keyboard.visible
-            m.keyboard.visible = true
-            m.chatButton.visible = true
-            m.keyboard.setFocus(true)
+            return false
+            ' m.keyboard.visible = true
+            ' m.chatButton.visible = true
+            ' m.keyboard.setFocus(true)
         else if key = "back"
             m.keyboard.text = ""
             m.chatButton.visible = false

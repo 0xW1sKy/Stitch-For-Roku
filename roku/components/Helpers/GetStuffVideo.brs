@@ -67,7 +67,7 @@ function getStreamLink() as object
     url.RetainBodyOnError(true)
     url.SetCertificatesFile("common:/certs/ca-bundle.crt")
     url.InitClientCertificates() 'Used for API
-    userToken = m.global.userToken
+    userToken = get_user_setting("access_token")
     ? "(userToken) " userToken
     if userToken <> invalid and userToken <> ""
         ? "we usin " userToken

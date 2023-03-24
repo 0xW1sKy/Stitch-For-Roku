@@ -6,7 +6,7 @@ function createUrl()
     url.InitClientCertificates()
     while m.global.appBearerToken = invalid
     end while
-    userToken = m.global.userToken
+    userToken = get_user_setting("access_token")
     '? "(userToken) " userToken
     if get_user_setting("access_token", invalid) <> invalid
         ? "UrlFunctions > createUrl() > UserToken"
@@ -28,12 +28,11 @@ function createUrlNorm()
     url.InitClientCertificates()
     while m.global.appBearerToken = invalid
     end while
-    userToken = m.global.userToken
-    ? "(userToken) " userToken
-    if userToken <> invalid and userToken <> ""
-        ? "we usin " userToken
+    if get_user_setting("access_token", invalid) <> invalid
+        ? "UrlFunctions > createUrl() > UserToken"
         url.AddHeader("Client-ID", "ue6666qo983tsx6so1t0vnawi233wa") 'Used for API
-        url.AddHeader("Authorization", "Bearer " + m.global.userToken)
+        url.AddHeader("Authorization", "Bearer " + get_user_setting("access_token"))
+        ? "CreateURLNorm -> You might need to add Device ID Headers..."
     else
         ? "we using global"
         url.AddHeader("Client-ID", "cf9fbjz6j9i6k6guz3dwh6qff5dluz") 'Used for API
@@ -72,50 +71,20 @@ function POST(request_url as string, request_payload as string) as string
 end function
 
 function refreshToken()
-    userdata = getTokenFromRegistry()
-    userLogin = userdata.login
-    refresh_token = userdata.refresh_token
-    userToken = userdata.access_token
-    deviceCode = userdata.device_id
-
-    ? "Client Asked to Refresh Token"
-    validateUserToken()
-    ' queryString = "client_id=ue6666qo983tsx6so1t0vnawi233wa&device_code=" + response.device_code + "&grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Adevice_code"
-    ' oauth_token = ParseJson(msg.GetString())
-
-    ' if refresh_token <> invalid and refresh_token <> ""
-    '     req = HttpRequest({
-    '         url: "https://id.twitch.tv/oauth2/token?grant_type=refresh_token&refresh_token=" + refresh_token + "&client_id=ue6666qo983tsx6so1t0vnawi233wa" + "&device_code=" + deviceCode
-    '         headers: {
-    '             "content-type": "application/x-www-form-urlencoded"
-    '             "origin": "https://switch.tv.twitch.tv"
-    '             "referer": "https://switch.tv.twitch.tv/"
-    '             "accept": "application/json"
-    '         }
-    '         method: "POST"
-    '     })
-    '     oauth_token = ParseJSON(req.send())
-    '     ? "REFRESHED OAUTH TOKEN IS: "; oauth_token
-    '     saveLogin(oauth_token.access_token, oauth_oken.refresh_token, userLogin)
-    ' end if
+    ? "deprecated"
 end function
 
 
 function saveLogin(access_token, refresh_token, login) as void
-    sec = createObject("roRegistrySection", "SavedUserData")
     if access_token <> invalid and access_token <> ""
-        sec.Write("UserToken", access_token)
-        m.global.setField("UserToken", access_token)
+        set_user_setting("access_token", access_token)
     end if
-    if access_token <> invalid and access_token <> ""
-        sec.Write("RefreshToken", refresh_token)
-        m.global.setField("RefreshToken", refresh_token)
+    if refresh_token <> invalid and refresh_token <> ""
+        set_user_setting("refresh_token", refresh_token)
     end if
-    if access_token <> invalid and access_token <> ""
-        sec.Write("LoggedInUser", login)
-        m.global.setField("LoggedInUser", login)
+    if login <> invalid and login <> ""
+        set_user_setting("login", login)
     end if
-    sec.Flush()
 end function
 
 function UrlEncode(str as string) as string
@@ -124,48 +93,7 @@ function UrlEncode(str as string) as string
 end function
 
 function validateUserToken(oauth_token = invalid)
-    ' refreshToken()
-    if oauth_token = invalid
-        token = getTokenFromRegistry()
-        userToken = token.access_token
-        refresh_token = token.refresh_token
-        userLogin = token.login
-    else
-        userToken = oauth_token.access_token
-    end if
-    req = HttpRequest({
-        url: "https://id.twitch.tv/oauth2/validate"
-        headers: {
-            "Client-ID": "ue6666qo983tsx6so1t0vnawi233wa"
-            "Authorization": "OAuth " + userToken
-        }
-        method: "GET"
-    })
-    response = ParseJSON(req.send())
-    ? "VALIDATION Response: "; response
-    data = getTokenFromRegistry()
-    req = HttpRequest({
-        url: "https://id.twitch.tv/oauth2/validate"
-        headers: {
-            "Client-ID": "ue6666qo983tsx6so1t0vnawi233wa"
-            "Authorization": "OAuth " + userToken
-            "Device-Id": data.device_id
-        }
-        method: "GET"
-    })
-    response = ParseJSON(req.send())
-    ? "VALIDATION Response: "; response
-    if response <> invalid
-        if response.status = 401 and refresh_token <> invalid and refresh_token <> ""
-            ? "USED FIRST ONE!!!"
-            ' refreshToken()
-            return ""
-        end if
-        if response.login <> invalid and response.login <> ""
-            ? "USED THIS ONE!!!"
-            return response.login
-        end if
-    end if
+    return get_user_setting("login", "")
 end function
 
 function HttpRequest(params = invalid as dynamic) as object

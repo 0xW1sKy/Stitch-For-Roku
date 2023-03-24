@@ -61,13 +61,22 @@ end sub
 
 function getVodLink() as object
     userdata = getTokenFromRegistry()
+    access_token = ""
+    device_code = ""
+    ' doubled up here in stead of defaulting to "" because access_token is dependent on device_code
+    if get_user_setting("device_code") <> invalid
+        device_code = get_user_setting("device_code")
+        if get_user_setting("access_token") <> invalid
+            access_token = "OAuth " + get_user_setting("access_token")
+        end if
+    end if
     req = HttpRequest({
         url: "https://gql.twitch.tv/gql"
         headers: {
             "Accept": "*/*"
-            "Authorization": "OAuth " + userdata.access_token
+            "Authorization": access_token
             "Client-Id": "ue6666qo983tsx6so1t0vnawi233wa"
-            "Device-ID": userdata.device_id
+            "Device-ID": device_code
             "Origin": "https://switch.tv.twitch.tv"
             "Referer": "https://switch.tv.twitch.tv/"
         }

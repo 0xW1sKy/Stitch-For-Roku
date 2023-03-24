@@ -14,7 +14,7 @@
     </interface>
 
     <script type="text/brightscript" uri="Chat.brs" />
-
+    <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
     <children>
 
         <Rectangle
@@ -34,7 +34,7 @@
             translation="[1030,0]" />
         <SimpleLabel
             translation="[1050,700]"
-            text="Press OK to chat..."
+            text=""
             color="0xEFEFF1FF"
             fontSize="12"
             fontUri="pkg:/fonts/Inter-Regular.ttf" />

@@ -21,16 +21,16 @@ function getSearchResults() as object
     url.AddHeader("Origin", "https://player.twitch.tv")
     url.AddHeader("Referer", "https://player.twitch.tv")
     url.AddHeader("Client-Id", "ue6666qo983tsx6so1t0vnawi233wa")
-    userToken = m.global.userToken
+    userToken = get_user_setting("access_token")
     '? "(userToken) " userToken
     if userToken <> invalid and userToken <> ""
         ? "we usin " userToken
-        url.AddHeader("Authorization", "Bearer " + m.global.userToken)
+        url.AddHeader("Authorization", "Bearer " + get_user_setting("access_token"))
     else
         ? "we using global"
         url.AddHeader("Authorization", m.global.appBearerToken)
     end if
-    ' ? m.global.userToken
+    ' ? get_user_setting("access_token")
     url.AddHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36")
     url.AddHeader("Accept", "application/vnd.twitchtv.v5+json")
     url.InitClientCertificates()

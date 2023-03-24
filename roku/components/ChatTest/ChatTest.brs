@@ -44,19 +44,20 @@ function main()
         tcpListen.notifyReadable(true)
         ? "connect " tcpListen.Connect()
         tcpListen.SendStr("CAP REQ :twitch.tv/tags twitch.tv/commands" + Chr(13) + Chr(10))
-        user_auth_token = m.global.userToken
-        if m.top.loggedInUsername <> "" and user_auth_token <> invalid and user_auth_token <> ""
+        user_auth_token = get_user_setting("access_token")
+        m.loggedinUserName = get_user_setting("login")
+        if m.loggedInUsername <> "" and user_auth_token <> invalid and user_auth_token <> ""
             ? "PASS " tcpListen.SendStr("PASS oauth:" + user_auth_token + Chr(13) + Chr(10))
-            ? "USER " tcpListen.SendStr("USER " + m.top.loggedInUsername + " 8 * :" + m.top.loggedInUsername + Chr(13) + Chr(10))
-            ? "NICK " tcpListen.SendStr("NICK " + m.top.loggedInUsername + Chr(13) + Chr(10))
+            ? "USER " tcpListen.SendStr("USER " + m.loggedinUsername + " 8 * :" + m.loggedinUsername + Chr(13) + Chr(10))
+            ? "NICK " tcpListen.SendStr("NICK " + m.loggedinUsername + Chr(13) + Chr(10))
             ? "first eOK " tcpListen.eOK()
             ? "first IsReadable " tcpListen.IsReadable()
             ? "first IsWritable " tcpListen.IsWritable()
             ? "first IsException " tcpListen.IsException()
             ? "first eSuccess " tcpListen.eSuccess()
             '? "PASS oauth:" + user_auth_token
-            '? "USER " + m.top.loggedInUsername + " 8 * :" + m.top.loggedInUsername
-            '? "NICK " + m.top.loggedInUsername
+            '? "USER " + m.loggedinUsername + " 8 * :" + m.loggedinUsername
+            '? "NICK " + m.loggedinUsername
         else
             tcpListen.SendStr("PASS SCHMOOPIIE" + Chr(13) + Chr(10))
             tcpListen.SendStr("NICK justinfan32006" + Chr(13) + Chr(10))
@@ -140,14 +141,14 @@ function main()
                 'tcpListen.notifyReadable(true)
                 ? "connect " tcpListen.Connect()
                 tcpListen.SendStr("CAP REQ :twitch.tv/tags twitch.tv/commands" + Chr(13) + Chr(10))
-                user_auth_token = m.global.userToken
-                if m.top.loggedInUsername <> "" and user_auth_token <> invalid and user_auth_token <> ""
+                user_auth_token = get_user_setting("access_token")
+                if m.loggedinUsername <> "" and user_auth_token <> invalid and user_auth_token <> ""
                     ? "PASS " tcpListen.SendStr("PASS oauth:" + user_auth_token + Chr(13) + Chr(10))
-                    ? "USER " tcpListen.SendStr("USER " + m.top.loggedInUsername + " 8 * :" + m.top.loggedInUsername + Chr(13) + Chr(10))
-                    ? "NICK " tcpListen.SendStr("NICK " + m.top.loggedInUsername + Chr(13) + Chr(10))
+                    ? "USER " tcpListen.SendStr("USER " + m.loggedinUsername + " 8 * :" + m.loggedinUsername + Chr(13) + Chr(10))
+                    ? "NICK " tcpListen.SendStr("NICK " + m.loggedinUsername + Chr(13) + Chr(10))
                     '? "PASS oauth:" + user_auth_token
-                    '? "USER " + m.top.loggedInUsername + " 8 * :" + m.top.loggedInUsername
-                    '? "NICK " + m.top.loggedInUsername
+                    '? "USER " + m.loggedinUsername + " 8 * :" + m.loggedinUsername
+                    '? "NICK " + m.loggedinUsername
                 else
                     tcpListen.SendStr("PASS SCHMOOPIIE" + Chr(13) + Chr(10))
                     tcpListen.SendStr("NICK justinfan32006" + Chr(13) + Chr(10))

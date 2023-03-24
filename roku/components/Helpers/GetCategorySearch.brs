@@ -20,11 +20,11 @@ function getSearchResults() as object
     url.AddHeader("Origin", "https://player.twitch.tv")
     url.AddHeader("Referer", "https://player.twitch.tv")
     url.AddHeader("Client-Id", "ue6666qo983tsx6so1t0vnawi233wa")
-    userToken = m.global.userToken
+    userToken = get_user_setting("access_token")
     '? "(userToken) " userToken
     if userToken <> invalid and userToken <> ""
         ? "we usin " userToken
-        url.AddHeader("Authorization", "Bearer " + m.global.userToken)
+        url.AddHeader("Authorization", "Bearer " + get_user_setting("access_token"))
     else
         ? "we using global"
         url.AddHeader("Authorization", m.global.appBearerToken)
