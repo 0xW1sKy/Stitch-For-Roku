@@ -14,6 +14,8 @@ sub extractThumbnailUrl(streamUrl)
     while index > 0
         if Mid(streamUrl, index, 1) = "/"
             if secondSlash
+                ' https: //dqrpb9wgowsf5.cloudfront.net / f339ec10e143fbac0b75_hasanabi_41619886427_1671303742 / storyboards / 1681696949 - info.json
+                ' https: //static - cdn.jtvnw.net / cf_vods / d1m7jfoe9zdc1j / 29ddacf442e5977ef368_crownemoji_48200242173_1679807731 / /thumb/thumb0 - 320x180.jpg 'TODO: determine if this is a better method to grab thumbnail
                 info_url = Mid(streamUrl, 1, index - 1) + "/storyboards/"
                 url = CreateObject("roUrlTransfer")
                 url.EnableEncodings(true)
@@ -22,6 +24,7 @@ sub extractThumbnailUrl(streamUrl)
                 url.InitClientCertificates()
                 url.SetUrl(info_url + m.top.videoId + "-info.json")
                 ? "video info url > "; info_url + m.top.videoId + "-info.json"
+                ? "sprite url > "; info_url + m.top.videoId + "-strip-0.json" ' TODO: Turn this into video previews
                 response_string = url.GetToString()
                 thumbnailInfo = ParseJson(response_string)
                 ' ? "thumbnail info > "; thumbnailInfo
@@ -32,13 +35,8 @@ sub extractThumbnailUrl(streamUrl)
                     url2.SetCertificatesFile("common:/certs/ca-bundle.crt")
                     url2.InitClientCertificates()
                     url2.SetUrl(info_url + thumbnailInfo[1].images[0])
-                    ' https: //dqrpb9wgowsf5.cloudfront.net / f339ec10e143fbac0b75_hasanabi_41619886427_1671303742 / storyboards / 1681696949 - info.json
-                    ' https: //static - cdn.jtvnw.net / cf_vods / d2nvs31859zcd8 / f339ec10e143fbac0b75_hasanabi_41619886427_1671303742 / /thumb/thumb0 - 320x180.jpg
-                    'url2.SetUrl(info_url + thumbnailInfo[0].images[0])
-                    'url2.SetUrl("https://i.redd.it/u105ro5rg8o31.jpg")
+
                     ? "image url: "; info_url + thumbnailInfo[1].images[0]
-                    '? "response code: "; url2.GetToFile("tmp:/thumbnails.jpg")
-                    '? "response: "; url2.GetToString()
                     m.top.thumbnailInfo = { count: thumbnailInfo[1].count,
                         width: thumbnailInfo[1].width,
                         rows: thumbnailInfo[1].rows,
