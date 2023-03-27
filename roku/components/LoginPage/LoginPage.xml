@@ -8,6 +8,13 @@
 
     <script type="text/brightscript" uri="LoginPage.brs" />
     <children>
+        <Rectangle
+            id="background"
+            visible="true"
+            color="0x000000FF"
+            width="1280"
+            height="720"
+            translation="[0,0]" />
         <SimpleLabel
             translation="[100,72]"
             text="Go to https://www.twitch.tv/activate and type the following code:"

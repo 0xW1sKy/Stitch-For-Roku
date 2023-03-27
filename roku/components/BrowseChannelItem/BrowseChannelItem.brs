@@ -10,7 +10,7 @@ sub init()
 end sub
 
 sub onItemHasFocus()
-    ? "Browse Channel Item > onItemHasFocus"
+
     if m.top.itemHasFocus
         m.itemTitle.repeatCount = -1
     else

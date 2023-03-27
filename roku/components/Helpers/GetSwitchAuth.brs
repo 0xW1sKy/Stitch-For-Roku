@@ -64,11 +64,8 @@ function getOauthToken() as object
     ' url.AddHeader("Client-ID", "ue6666qo983tsx6so1t0vnawi233wa")
     ' response_string = ParseJson(url.GetToString())
     m.top.access_token = oauth_token.access_token
-    m.global.switchUserToken = oauth_token.access_token
     m.top.refresh_token = oauth_token.refresh_token
-    m.global.switchRefreshToken = oauth_token.refresh_token
     m.top.device_id = response.device_code
-    m.global.switchDeviceId = response.device_code
     login = getUserLogin()
     saveSwitchLogin(oauth_token.access_token, oauth_token.refresh_token, login, response.device_code)
     saveLogin(oauth_token.access_token, oauth_token.refresh_token, login)
@@ -106,7 +103,7 @@ function getUserLogin()
     ? "RESPONSE: "; data
     response = ParseJSON(data)
     m.top.login = response.data.currentUser.login
-    m.global.loggedInUser = response.data.currentUser.login
+    set_user_setting("login", response.data.currentUser.login)
     return response.data.currentUser.login
 end function
 
@@ -114,22 +111,8 @@ end function
 
 
 function saveSwitchLogin(access_token, refresh_token, login, device_id) as void
-    sec = createObject("roRegistrySection", "SavedUserData")
-    if access_token <> invalid and access_token <> ""
-        sec.Write("UserToken", access_token)
-        m.global.setField("UserToken", access_token)
-    end if
-    if access_token <> invalid and access_token <> ""
-        sec.Write("RefreshToken", refresh_token)
-        m.global.setField("RefreshToken", refresh_token)
-    end if
-    if access_token <> invalid and access_token <> ""
-        sec.Write("LoggedInUser", login)
-        m.global.setField("LoggedInUser", login)
-    end if
-    if access_token <> invalid and access_token <> ""
-        sec.Write("DeviceId", device_id)
-        ' m.global.setField("DeviceId", device_id)
-    end if
-    sec.Flush()
+    set_user_setting("access_token", access_token)
+    set_user_setting("refresh_token", refresh_token)
+    set_user_setting("login", login)
+    set_user_setting("device_code", device_id)
 end function

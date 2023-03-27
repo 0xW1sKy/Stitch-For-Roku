@@ -13,9 +13,7 @@ function init()
     m.homeScene = m.top.findNode("homeScene")
     m.categoryScene = m.top.findNode("categoryScene")
     m.loginPage = m.top.findNode("loginPage")
-    m.global.addFields({ switchUserToken: "" })
-    m.global.addFields({ switchDeviceId: "" })
-    m.global.addFields({ switchRefreshToken: "" })
+    m.options = m.top.findNode("Options")
     m.keyboardGroup.observeField("streamUrl", "onStreamChange")
     m.keyboardGroup.observeField("streamerSelectedName", "onStreamerSelected")
     m.categoryScene.observeField("streamerSelectedThumbnail", "onStreamerSelected")
@@ -66,48 +64,6 @@ function init()
         m.login = loggedInUser
     end if
 
-    videoQuality = checkSavedVideoQuality()
-    if videoQuality <> invalid
-        m.global.addFields({ videoQuality: Int(Val(videoQuality)) })
-    else
-        m.global.addFields({ videoQuality: 2 })
-    end if
-
-    videoFramerate = checkSavedVideoFramerate()
-    if videoQuality <> invalid
-        m.global.addFields({ videoFramerate: Int(Val(videoFramerate)) })
-    else
-        m.global.addFields({ videoFramerate: 60 })
-    end if
-
-    chatOption = checkSavedChatOption()
-    if chatOption <> invalid and chatOption = "true"
-        m.global.addFields({ chatOption: true })
-    else
-        m.global.addFields({ chatOption: false })
-    end if
-
-    userData = getTokenFromRegistry()
-    if userdata.access_token <> invalid and userdata.access_token <> ""
-        m.global.addFields({ userToken: userdata.access_token })
-    else
-        m.global.addFields({ userToken: "" })
-    end if
-    ? "User Token is "; get_user_setting("access_token")
-
-    if userdata.refresh_token <> invalid and userdata.refresh_token <> ""
-        m.global.addFields({ refreshToken: userdata.refresh_token })
-    else
-        m.global.addFields({ refreshToken: "" })
-    end if
-    ? "Refresh Token is "; m.global.refreshToken
-    if userdata.login <> invalid and userdata.login <> ""
-        m.global.addFields({ loggedInUser: userdata.login })
-    else
-        m.global.addFields({ loggedInUser: "" })
-    end if
-    ? "LoggedInUser is "; userData
-
     videoBookmarks = checkVideoBookmarks()
     ? "MainScene >> videoBookmarks > " videoBookmarks
     if videoBookmarks <> ""
@@ -123,14 +79,15 @@ function init()
     m.chat = m.top.findNode("chat")
     m.chat.observeField("doneFocus", "onChatDoneFocus")
 
-    m.options = createObject("roSGNode", "Options")
-    m.options.visible = false
-
-    m.top.appendChild(m.options)
 
     m.homeScene.setFocus(true)
     m.videoPlayer.notificationInterval = 1
     m.plyrTask = invalid
+    m.buttonHoldTimer = createObject("roSGNode", "Timer")
+    m.buttonHoldTimer.observeField("fire", "onButtonHold")
+    m.buttonHoldTimer.repeat = true
+    m.buttonHoldTimer.duration = "15"
+    m.buttonHoldTimer.control = "stop"
 end function
 
 sub handleDevicecode()
@@ -189,7 +146,7 @@ end sub
 
 sub onBearerTokenReceived()
     ? "Main Scene > onBearerTokenReceived"
-    m.global.addFields({ appBearerToken: m.getToken.appBearerToken })
+    set_setting("AppBearerToken", m.getToken.appBearerToken)
 end sub
 
 sub onStreamChangeFromChannelPage()
@@ -246,80 +203,42 @@ end sub
 
 function checkReset()
     ? "Main Scene > checkReset"
-    sec = createObject("roRegistrySection", "SavedUserData")
-    if sec.Exists("Reset")
-        return sec.Read("Reset")
-    end if
     return "false"
 end function
 
 function checkUserToken()
     ? "Main Scene > checkUserToken"
-    sec = createObject("roRegistrySection", "SavedUserData")
-    if sec.Exists("UserToken")
-        return sec.Read("UserToken")
-    end if
-    return ""
+    return get_user_setting("access_token", "")
 end function
 
 function checkVideoBookmarks()
     ? "Main Scene > checkVideoBookmarks"
-    sec = createObject("roRegistrySection", "VideoSettings")
-    if sec.Exists("VideoBookmarks")
-        return sec.Read("VideoBookmarks")
-    end if
-    return ""
+    return get_user_setting("VideoBookmarks", "")
 end function
 
 function checkSavedChatOption()
     ? "Main Scene > checkSavedChatOption"
-    sec = createObject("roRegistrySection", "VideoSettings")
-    if sec.Exists("ChatOption")
-        return sec.Read("ChatOption")
-    end if
-    return invalid
+    return get_user_setting("ChatOption", "true")
 end function
 
 function checkSavedVideoFramerate()
     ? "Main Scene > checkSavedVideoFramerate"
-    sec = createObject("roRegistrySection", "VideoSettings")
-    if sec.Exists("VideoFramerate")
-        return sec.Read("VideoFramerate")
-    end if
-    return invalid
+    return get_user_setting("VideoFramerate", "60").ToInt()
 end function
 
 function checkSavedVideoQuality()
     ? "Main Scene > checkSavedVideoQuality"
-    sec = createObject("roRegistrySection", "VideoSettings")
-    if sec.Exists("VideoQuality")
-        return sec.Read("VideoQuality")
-    end if
-    return invalid
+    return get_user_setting("VideoQuality", "0").ToInt()
 end function
 
 function checkIfLoggedIn() as dynamic
     ? "Main Scene > checkIfLoggedIn"
-    sec = createObject("roRegistrySection", "SavedUserData")
-    if sec.Exists("LoggedInUser")
-        return sec.Read("LoggedInUser")
-    end if
-    return invalid
+    return get_user_setting("login", invalid)
 end function
 
 function setReset(word as string) as void
     ? "Main Scene > setReset"
-    sec = createObject("roRegistrySection", "SavedUserData")
-    sec.Write("Reset", word)
-    sec.Flush()
 end function
-
-' function saveLogin() as void
-'     ? "Main Scene > saveLogin"
-'     sec = createObject("roRegistrySection", "SavedUserData")
-'     sec.Write("LoggedInUser", m.homeScene.loggedInUserName)
-'     sec.Flush()
-' end function
 
 function onHeaderButtonPress()
     ? "Main Scene > onHeaderButtonPress"
@@ -330,11 +249,11 @@ function onHeaderButtonPress()
     else if m.homeScene.buttonPressed = "login"
         'm.top.dialog = createObject("RoSGNode", "LoginPrompt")
         'm.top.dialog.observeField("buttonSelected", "onLogin")
-        m.homeScene.visible = false
+        ' m.homeScene.visible = false
         m.loginPage.visible = true
         m.loginPage.setFocus(true)
     else if m.homeScene.buttonPressed = "options"
-        m.homeScene.visible = false
+        ' m.homeScene.visible = false
         m.options.visible = true
         m.options.setFocus(true)
     end if
@@ -412,7 +331,11 @@ function onStreamChange()
         '     m.chat.channel = m.channelPage.streamerSelectedName
         '     m.stream["url"] = m.channelPage.streamUrl
     end if
-    m.chat.visible = m.global.chatOption
+    if get_user_setting("ChatOption", "true") = "true"
+        m.chat.visible = true
+    else
+        m.chat.visible = false
+    end if
     m.videoPlayer.chatIsVisible = m.chat.visible
     playVideo(m.stream)
 end function
@@ -532,11 +455,30 @@ sub onToggleStreamLayout()
     end if
 end sub
 
+sub onButtonHold()
+    if m.buttonHeld = "replay"
+        NukeRegsitry()
+    end if
+    if m.buttonHeld = "options"
+        ? "Stop"
+        m.top.exitApp = true
+    end if
+
+end sub
 ' This needs rework
 function onKeyEvent(key, press) as boolean
-    ' ? "Main Scene > onKeyEvent"
+    ? "Main Scene > onKeyEvent" + key; press
     handled = false
     if press
+        if key = "replay"
+            m.buttonHeld = "replay"
+            m.buttonHoldTimer.control = "start"
+            ' ? "KONAMI"
+        end if
+        if key = "options"
+            m.buttonHeld = "options"
+            m.buttonHoldTimer.control = "start"
+        end if
         if m.videoPlayer.visible = true and key = "back"
             m.videoPlayer.back = true
             handled = true
@@ -548,8 +490,9 @@ function onKeyEvent(key, press) as boolean
             m.keyboardGroup.visible = true
             m.keyboardGroup.setFocus(true)
             handled = true
-        else if m.options.visible and key = "back"
+        else if (m.options.visible or m.loginPage.visible) and key = "back"
             m.options.visible = false
+            m.loginPage.visible = false
             m.homeScene.visible = false
             m.homeScene.visible = true
             m.homeScene.setFocus(true)
@@ -601,25 +544,14 @@ function onKeyEvent(key, press) as boolean
             m.chat.setKeyboardFocus = true
             handled = true
         end if
+    else if not press
+        if key = "replay" or key = "options"
+            ?"key: " key " press: " press
+            m.buttonHoldTimer.control = "stop"
+        end if
     end if
 
     '? "MAINSCENE > handled " handled " > (" key ", " press ")"
     return handled
 end function
 
-function saveLogin(access_token, refresh_token, login) as void
-    sec = createObject("roRegistrySection", "SavedUserData")
-    if access_token <> invalid and access_token <> ""
-        sec.Write("UserToken", access_token)
-        m.global.setField("UserToken", access_token)
-    end if
-    if access_token <> invalid and access_token <> ""
-        sec.Write("RefreshToken", refresh_token)
-        m.global.setField("RefreshToken", refresh_token)
-    end if
-    if access_token <> invalid and access_token <> ""
-        sec.Write("LoggedInUser", login)
-        m.global.setField("LoggedInUser", login)
-    end if
-    sec.Flush()
-end function

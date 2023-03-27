@@ -8,7 +8,7 @@
     </interface>
 
     <script type="text/brightscript" uri="BrowseChannelItem.brs" />
-
+    <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
     <children>
 
         <Poster

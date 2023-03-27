@@ -8,14 +8,6 @@ function onSearchTextChange()
     m.top.offlineFollowedUsers = getSearchResults()
 end function
 
-function getRecentChannels() as boolean
-    sec = createObject("roRegistrySection", "SavedUserData")
-    if sec.Exists("RecentChannels")
-        m.global.addFields({ recentChannels: ParseJson(sec.Read("RecentChannels")) })
-        return true
-    end if
-    return false
-end function
 
 function getSearchResults() as object
     userdata = getTokenFromRegistry()
@@ -68,6 +60,5 @@ function getSearchResults() as object
         offlineFollowedStreamers.push(streamer_info)
     end for
 
-    successfullyLoadedRecentChannels = getRecentChannels()
     return offlineFollowedStreamers
 end function

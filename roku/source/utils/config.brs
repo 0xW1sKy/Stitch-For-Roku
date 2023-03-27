@@ -100,3 +100,19 @@ function getTokenFromRegistry()
         device_id: get_user_setting("device_code", "")
     }
 end function
+
+function NukeRegistry()
+    ? "Erasing Registry"
+    Registry = CreateObject("roRegistry")
+    i = 0
+    for each section in Registry.GetSectionList()
+        RegistrySection = CreateObject("roRegistrySection", section)
+        for each key in RegistrySection.GetKeyList()
+            i = i + 1
+            print "Deleting " section + ":" key
+            RegistrySection.Delete(key)
+        end for
+        RegistrySection.flush()
+        Registry.Delete(section)
+    end for
+end function

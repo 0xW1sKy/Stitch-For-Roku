@@ -137,16 +137,16 @@ function getStreamLink() as object
         if not stream_quality = invalid
             compatible_link = false
             last_stream_link = list[line + 2]
-            if m.global.videoFramerate >= stream_framerate
-                if m.global.videoQuality <= 1 and stream_quality <= 1080
+            if get_user_setting("VideoFramerate", "60").ToInt() >= stream_framerate
+                if get_user_setting("VideoQuality", "0").ToInt() <= 1 and stream_quality <= 1080
                     compatible_link = true
-                else if m.global.videoQuality <= 3 and stream_quality <= 720
+                else if get_user_setting("VideoQuality", "0").ToInt() <= 3 and stream_quality <= 720
                     compatible_link = true
-                else if m.global.videoQuality = 4 and stream_quality <= 480
+                else if get_user_setting("VideoQuality", "0").ToInt() = 4 and stream_quality <= 480
                     compatible_link = true
-                else if m.global.videoQuality = 5 and stream_quality <= 360
+                else if get_user_setting("VideoQuality", "0").ToInt() = 5 and stream_quality <= 360
                     compatible_link = true
-                else if m.global.videoQuality = 6 and stream_quality <= 160
+                else if get_user_setting("VideoQuality", "0").ToInt() = 6 and stream_quality <= 160
                     compatible_link = true
                 end if
             end if

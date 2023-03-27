@@ -231,7 +231,6 @@ end sub
 
 sub onKeyEvent(key, press) as boolean
     handled = false
-
     if m.top.visible = true and press
         if m.browseList.hasFocus() = true and key = "up"
             m.clipButton.color = "0xA970FFFF"
