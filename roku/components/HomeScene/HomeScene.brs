@@ -129,7 +129,7 @@ end sub
 sub onNewUser()
     ? "Home Scene > onNewUser"
     ? "Home Scene > onNewUser > loggedInUserProfileImage > " m.top.loggedInUserProfileImage
-    m.loggedUserName.text = m.top.loggedInUserName
+    m.loggedUserName.text = get_user_setting("display_name", "Login")
     m.loggedUserName.color = m.inactiveSelectionColor
     m.loggedUserName.translation = [60, 20]
     m.profileImage.uri = m.top.loggedInUserProfileImage
@@ -610,6 +610,11 @@ sub onKeyEvent(key, press) as boolean
             m.followBar.setFocus(true)
             m.followBar.focused = true
             handled = true
+        else if (m.browseList.hasFocus() or m.browseCategoryList.hasFocus() or m.browseFollowingList.hasFocus()) and key = "back"
+            if m.top.focusedChild.focusedChild.rowItemFocused[0] <> 0 or m.top.focusedChild.focusedChild.rowItemFocused[1] <> 0
+                m.top.focusedChild.focusedChild.jumpToRowItem = "[0,0]"
+                handled = true
+            end if
         else if m.followBar.hasFocus() = true and key = "right"
             'm.browseButtons.translation = "[0, 0]"
             'm.browseList.translation = "[100,165]"

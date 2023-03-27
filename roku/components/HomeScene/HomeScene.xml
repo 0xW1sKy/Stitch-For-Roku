@@ -12,6 +12,7 @@
         <field id="followedStreams" type="array" alias="followBar.followedStreams" />
         <field id="followBarFocused" type="bool" alias="followBar.focused" />
         <field id="loggedInUserName" type="string" />
+        <field id="loggedInUserDisplayName" type="string" />
         <field id="loggedInUserProfileImage" type="uri" onChange="onNewUser" />
         <field id="buttonPressed" type="string" alwaysNotify="true" value="" />
         <field id="currentlyLiveStreamerIds" type="assocarray" />
@@ -28,6 +29,7 @@
     </interface>
 
     <script type="text/brightscript" uri="HomeScene.brs" />
+    <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
     <script type="text/brightscript" uri="pkg:/components/Helpers/StringUtils.brs" />
 
     <children>

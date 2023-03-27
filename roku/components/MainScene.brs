@@ -458,12 +458,11 @@ end sub
 sub onButtonHold()
     if m.buttonHeld = "replay"
         NukeRegsitry()
-    end if
-    if m.buttonHeld = "options"
-        ? "Stop"
         m.top.exitApp = true
     end if
-
+    if m.buttonHeld = "options"
+        ? "Only used for dev purposes"
+    end if
 end sub
 ' This needs rework
 function onKeyEvent(key, press) as boolean

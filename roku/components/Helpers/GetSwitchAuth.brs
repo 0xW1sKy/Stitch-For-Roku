@@ -66,9 +66,19 @@ function getOauthToken() as object
     m.top.access_token = oauth_token.access_token
     m.top.refresh_token = oauth_token.refresh_token
     m.top.device_id = response.device_code
-    login = getUserLogin()
-    saveSwitchLogin(oauth_token.access_token, oauth_token.refresh_token, login, response.device_code)
-    saveLogin(oauth_token.access_token, oauth_token.refresh_token, login)
+    resp_data = getUserLogin()
+    login = resp_data.currentUser.login
+    previous_user = get_setting("active_user", "default")
+    set_setting("active_user", login)
+    set_user_setting("access_token", oauth_token.access_token)
+    set_user_setting("refresh_token", oauth_token.refresh_token)
+    set_user_setting("login", login)
+    set_user_setting("device_code", m.top.device_id)
+    set_user_setting("display_name", resp_data.currentUser.displayName)
+    if previous_user <> login
+        NukeRegistry(section = previous_user)
+    end if
+    m.top.login = login
 end function
 
 
@@ -96,15 +106,15 @@ function getUserLogin()
         }
         method: "POST"
         data: {
-            query: "query Homepage_Query {" + chr(10) + "  currentUser {" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "    login" + chr(10) + "    roles {" + chr(10) + "      isStaff" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "  }" + chr(10) + ""
+            query: "query Homepage_Query {" + chr(10) + "  currentUser {" + chr(10) + "    id" + chr(10) + "    displayName" + chr(10) + "    __typename" + chr(10) + "    login" + chr(10) + "    roles {" + chr(10) + "      isStaff" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "  }" + chr(10) + ""
         }
     })
     data = req.send()
     ? "RESPONSE: "; data
     response = ParseJSON(data)
-    m.top.login = response.data.currentUser.login
+    ? "stop2"
     set_user_setting("login", response.data.currentUser.login)
-    return response.data.currentUser.login
+    return response.data
 end function
 
 
