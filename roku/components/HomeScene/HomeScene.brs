@@ -175,10 +175,12 @@ sub onBrowseItemSelect()
         'm.getStuff.control = "RUN"
         m.top.streamerSelectedThumbnail = ""
         m.top.streamerSelectedName = m.followBar.streamerSelected
+        ? "HomeScene > followbar.hasFocus() > streamerSelectedName: "; m.top.streamerSelectedName
     else if m.browseList.visible = true
         'm.getStuff.streamerRequested = m.browseList.content.getChild(m.browseList.rowItemSelected[0]).getChild(m.browseList.rowItemSelected[1]).ShortDescriptionLine1
         'm.getStuff.control = "RUN"
         m.top.streamerSelectedName = m.browseList.content.getChild(m.browseList.rowItemSelected[0]).getChild(m.browseList.rowItemSelected[1]).ShortDescriptionLine1
+        ? "HomeScene > BrowseList.hasFocus() > streamerSelectedName: "; m.top.streamerSelectedName
         m.top.streamerSelectedThumbnail = m.browseList.content.getChild(m.browseList.rowItemSelected[0]).getChild(m.browseList.rowItemSelected[1]).HDPosterUrl
         'm.top.streamerSelectedThumbnail =  m.browseList.content.getChild(m.browseList.rowItemSelected[0]).getChild(m.browseList.rowItemSelected[1]).HDPosterUrl
         m.wasLastScene = true
@@ -186,13 +188,15 @@ sub onBrowseItemSelect()
         m.top.categorySelected = m.browseCategoryList.content.getChild(m.browseCategoryList.rowItemSelected[0]).getChild(m.browseCategoryList.rowItemSelected[1]).ShortDescriptionLine1
     else if m.browseFollowingList.hasFocus()
         m.top.streamerSelectedName = m.browseFollowingList.content.getChild(m.browseFollowingList.rowItemSelected[0]).getChild(m.browseFollowingList.rowItemSelected[1]).ShortDescriptionLine1
+        ? "HomeScene > browsFollingList.hasFocus() > streamerSelectedName: "; m.top.streamerSelectedName
         m.top.streamerSelectedThumbnail = m.browseFollowingList.content.getChild(m.browseFollowingList.rowItemSelected[0]).getChild(m.browseFollowingList.rowItemSelected[1]).HDPosterUrl
     else if m.browseOfflineFollowingList.hasFocus()
         m.top.streamerSelectedName = m.browseOfflineFollowingList.content.getChild(m.browseOfflineFollowingList.rowItemSelected[0]).getChild(m.browseOfflineFollowingList.rowItemSelected[1]).ShortDescriptionLine1
+        ? "HomeScene > OfflineFollowingList.hasFocus() > streamerSelectedName: "; m.top.streamerSelectedName
         m.top.streamerSelectedThumbnail = m.browseOfflineFollowingList.content.getChild(m.browseOfflineFollowingList.rowItemSelected[0]).getChild(m.browseOfflineFollowingList.rowItemSelected[1]).HDPosterUrl
     else if m.offlineChannelList.hasFocus()
-
         m.top.streamerSelectedName = m.offlineChannelList.channelSelected
+        ? "HomeScene > OfflineChannelList.hasFocus() > streamerSelectedName: "; m.top.streamerSelectedName
         m.top.streamerSelectedThumbnail = ""
     end if
 end sub

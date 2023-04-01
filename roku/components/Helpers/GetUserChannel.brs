@@ -79,7 +79,7 @@ function getSearchResults() as object
     ? "DATA"
     ? channelData
     testvar = m.top.loginRequested
-    ? testvar
+    ? "GetUserChannel > "; testvar
 
     result = {}
     result.display_name = channelData.data.channel.login

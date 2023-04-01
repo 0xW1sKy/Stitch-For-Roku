@@ -30,7 +30,7 @@ function main()
         end for
         m.global.addFields({ globalTTVEmotes: assocEmotes })
     end if
-
+    ? "Channel is "; m.top.channel
     if m.top.channel <> ""
         tcpListen = createObject("roStreamSocket")
 
@@ -173,7 +173,7 @@ function main()
                 end if
             end if
 
-            if m.top.readyForNextComment and queue.count() > 0
+            if queue.count() > 0
                 m.top.nextComment = queue.shift()
                 'queue[first] = invalid
                 if first + 1 < 100

@@ -94,7 +94,6 @@ function getSearchResults() as object
             stream.name = m.loginNames[stream.id]
         end for
     end if
-    ? "stop"
     if search.pagination.cursor <> invalid
         m.top.pagination = "&after=" + search.pagination.cursor
     end if

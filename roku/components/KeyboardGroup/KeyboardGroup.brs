@@ -47,6 +47,7 @@ function onSearchItemSelect()
         'm.getStuff.streamerRequested = m.searchResultList.content.getChild(m.searchResultList.itemSelected).title
         'm.getStuff.control = "RUN"
         m.top.streamerSelectedName = m.searchResultList.content.getChild(m.searchResultList.itemSelected).title
+        ? "onSearchItemSelect > streamerSelectedName: "; m.top.streamerSelectedName
         m.wasLastScene = true
     else if m.categoryLine.visible = true
         m.top.categorySelected = m.resultCategoryList.content.getChild(m.resultCategoryList.itemSelected).categories

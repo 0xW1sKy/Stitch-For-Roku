@@ -41,10 +41,11 @@ sub onFollowedStreamsChange()
     m.min = 0
     m.max = 9
     for each stream in m.top.followedStreams
+        ? "Stop"
         ' ? "stream: " stream
         group = createObject("roSGNode", "Group")
         group.translation = "[5," + translation.ToStr() + "]"
-
+        group.id = stream.login
         mask_group = createObject("roSGNode", "MaskGroup")
         mask_group.maskuri = "pkg:/images/profile-mask.png"
         mask_group.masksize = m.maskSize
@@ -262,7 +263,7 @@ sub onKeyEvent(key, press) as boolean
         else if key = "OK"
             if m.children[m.currentIndex] <> invalid
                 ' ? "selected > ";m.children[m.currentIndex].getChild(5)
-                m.top.streamerSelected = m.children[m.currentIndex].getChild(2).text
+                m.top.streamerSelected = m.children[m.currentIndex].id
                 handled = true
             end if
         end if

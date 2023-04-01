@@ -48,10 +48,8 @@ function getStreamUrl()
         }
     })
     data = req.send()
-    ? "RESPONSE: "; data
     response = ParseJSON(data)
     usherUrl = "https://usher.ttvnw.net/api/channel/hls/" + response.data.user.login + ".m3u8?playlist_include_framerate=true&allow_source=true&player_type=pulsar&player_backend=mediaplayer&lr=true&token=" + UrlEncode(response.data.user.stream.playbackaccesstoken.value) + "&sig=" + response.data.user.stream.playbackaccesstoken.signature
-    ? "USERURL: "; usherUrl
     ' return usherUrl
     req = HttpRequest({
         url: usherUrl
@@ -63,7 +61,6 @@ function getStreamUrl()
         method: "GET"
     })
     rsp = req.send().getString()
-    ? "RESPONSE: "; rsp
     list = rsp.Split(chr(10))
     first_stream_link = ""
     last_stream_link = ""

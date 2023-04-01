@@ -22,7 +22,6 @@ function getOauthToken() as object
     })
     data = req.send()
     response = ParseJSON(data)
-    ? "getAuth enter code: "; response
     m.top.code = response.user_code
 
 
@@ -110,9 +109,7 @@ function getUserLogin()
         }
     })
     data = req.send()
-    ? "RESPONSE: "; data
     response = ParseJSON(data)
-    ? "stop2"
     set_user_setting("login", response.data.currentUser.login)
     return response.data
 end function
