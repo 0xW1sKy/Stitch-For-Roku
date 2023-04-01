@@ -40,21 +40,23 @@ sub onFollowedStreamsChange()
     m.currentIndex = 0
     m.min = 0
     m.max = 9
-    for each stream in m.top.followedStreams
-        group = createObject("roSGNode", "SidebarItem")
-        group.twitch_id = stream.login
-        group.streamerProfileImage = stream.profile_image_url
-        group.display_name = stream.user_name
-        group.game = stream.game_id
-        group.maskSize = m.maskSize
-        group.translation = "[5," + translation.ToStr() + "]"
-        m.top.appendChild(group)
-        translation += 60
-    end for
-    m.children = []
-    for child = 2 to m.top.getChildCount() - 1
-        m.children.push(m.top.getChild(child))
-    end for
+    if m.top.followedStreams <> invalid and m.top.followedStreams.Count() > 0
+        for each stream in m.top.followedStreams
+            group = createObject("roSGNode", "SidebarItem")
+            group.twitch_id = stream.login
+            group.streamerProfileImage = stream.profile_image_url
+            group.display_name = stream.user_name
+            group.game = stream.game_id
+            group.maskSize = m.maskSize
+            group.translation = "[5," + translation.ToStr() + "]"
+            m.top.appendChild(group)
+            translation += 60
+        end for
+        m.children = []
+        for child = 2 to m.top.getChildCount() - 1
+            m.children.push(m.top.getChild(child))
+        end for
+    end if
 end sub
 
 sub onGetFocus()
