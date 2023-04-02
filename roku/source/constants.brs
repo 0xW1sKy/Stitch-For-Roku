@@ -8,6 +8,7 @@ sub setConstants()
         constants: {
             colors: {
                 muted: {
+                    black: "0x020202FF"
                     ice: "0xd6e4ffFF"
                     cupcake: "0xffa3eeFF"
                     min: "0x5cffbeFF"

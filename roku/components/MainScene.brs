@@ -3,7 +3,7 @@
 
 function init()
     m.top.backgroundUri = ""
-    m.top.backgroundColor = "0x020202FF"
+    m.top.backgroundColor = m.global.constants.colors.muted.black
     if get_setting("active_user", invalid) = invalid
         set_setting("active_user", "default")
     end if
@@ -23,31 +23,20 @@ function init()
     m.homeScene.observeField("categorySelected", "onCategoryItemSelect")
     m.homeScene.observeField("buttonPressed", "onHeaderButtonPress")
     m.homeScene.observeField("videoUrl", "onStreamChangeFromChannelPage")
-
     m.keyboardGroup.observeField("categorySelected", "onCategoryItemSelectFromSearch")
-
     m.categoryScene.observeField("streamUrl", "onStreamChange")
-
     m.categoryScene.observeField("clipUrl", "onClipChange")
-
-
     m.loginPage.observeField("finished", "onLoginFinish")
-
     m.videoPlayer.observeField("back", "onVideoPlayerBack")
     m.videoPlayer.observeField("toggleChat", "onToggleChat")
-
-
     m.currentScene = "home"
     m.lastScene = ""
     m.lastLastScene = ""
-
     m.stream = createObject("RoSGNode", "ContentNode")
     m.stream.streamFormat = "hls"
-
     m.getToken = createObject("roSGNode", "GetToken")
     m.getToken.observeField("appBearerToken", "onBearerTokenReceived")
     m.getToken.control = "RUN"
-
     m.login = ""
     m.getUser = createObject("roSGNode", "GetUser")
     m.getUser.observeField("searchResults", "onUserLogin")
@@ -57,17 +46,15 @@ function init()
     m.testtimer.ObserveField("fire", "refreshFollows")
     m.videoPlayer.observeField("streamLayoutMode", "onToggleStreamLayout")
 
-    loggedInUser = checkIfLoggedIn()
+    loggedInUser = get_user_setting("login", invalid)
     if loggedInUser <> invalid
         m.getUser.loginRequested = loggedInUser
         m.getUser.control = "RUN"
         m.login = loggedInUser
     end if
 
-    videoBookmarks = checkVideoBookmarks()
-    ? "MainScene >> videoBookmarks > " videoBookmarks
+    videoBookmarks = get_user_setting("VideoBookmarks", "")
     if videoBookmarks <> ""
-        'm.videoPlayer.videoBookmarks = {}
         m.videoPlayer.videoBookmarks = ParseJSON(videoBookmarks)
         ? "MainScene >> ParseJSON > " m.videoPlayer.videoBookmarks
     else
@@ -78,8 +65,6 @@ function init()
 
     m.chat = m.top.findNode("chat")
     m.chat.observeField("doneFocus", "onChatDoneFocus")
-
-
     m.homeScene.setFocus(true)
     m.videoPlayer.notificationInterval = 1
     m.plyrTask = invalid
@@ -119,18 +104,11 @@ sub onBackgroundChange()
     m.top.backgroundUri = m.homeScene.backgroundImageUri
 
 end sub
-' function on_open(event as object) as void
-'     m.ws.send = ["Hello World"]
-' end function
-
-' function on_message(event as object) as void
-'     print event.getData().message
-' end function
 
 sub onLoginFinish()
     ? "Main Scene > onLoginFinish"
     if m.loginPage.finished = true
-        loggedInUser = checkIfLoggedIn()
+        loggedInUser = get_user_setting("login", invalid)
         if loggedInUser <> invalid
             m.getUser.loginRequested = loggedInUser
             m.getUser.control = "RUN"
@@ -155,7 +133,6 @@ sub onStreamChangeFromChannelPage()
     m.stream["url"] = m.homeScene.videoUrl
     m.chat.visible = false
     m.videoPlayer.chatIsVisible = m.chat.visible
-
     m.videoPlayer.videoTitle = m.homeScene.videoTitle
     m.videoPlayer.channelUsername = m.homeScene.channelUsername
     m.videoPlayer.channelAvatar = m.homeScene.channelAvatar
@@ -174,8 +151,6 @@ sub onStreamerSelected()
     ? "Main Scene > onStreamerSelected"
     if m.homeScene.visible
         ? "MainScene > Streamer"
-        'm.channelPage.streamerSelectedName = m.homeScene.streamerSelectedName
-        'm.channelPage.streamerSelectedThumbnail = m.homeScene.streamerSelectedThumbnail
         m.lastScene = "home"
     else if m.categoryScene.visible
         m.homeScene.lastScene = "category"
@@ -184,8 +159,6 @@ sub onStreamerSelected()
         m.lastLastScene = "home" 'm.lastScene
         m.lastScene = "category"
     else if m.keyboardGroup.visible
-        'm.channelPage.streamerSelectedName = m.keyboardGroup.streamerSelectedName
-        'm.channelPage.streamerSelectedThumbnail = ""
         m.homeScene.streamerSelectedName = m.keyboardGroup.streamerSelectedName
         m.homeScene.streamerSelectedThumbnail = ""
         m.lastLastScene = "home"
@@ -194,51 +167,9 @@ sub onStreamerSelected()
     m.homeScene.visible = false
     m.keyboardGroup.visible = false
     m.categoryScene.visible = false
-
-    'm.channelPage.visible = true
     m.homeScene.visible = true
-
     m.currentScene = "channel"
 end sub
-
-function checkReset()
-    ? "Main Scene > checkReset"
-    return "false"
-end function
-
-function checkUserToken()
-    ? "Main Scene > checkUserToken"
-    return get_user_setting("access_token", "")
-end function
-
-function checkVideoBookmarks()
-    ? "Main Scene > checkVideoBookmarks"
-    return get_user_setting("VideoBookmarks", "")
-end function
-
-function checkSavedChatOption()
-    ? "Main Scene > checkSavedChatOption"
-    return get_user_setting("ChatOption", "true")
-end function
-
-function checkSavedVideoFramerate()
-    ? "Main Scene > checkSavedVideoFramerate"
-    return get_user_setting("VideoFramerate", "60").ToInt()
-end function
-
-function checkSavedVideoQuality()
-    ? "Main Scene > checkSavedVideoQuality"
-    return get_user_setting("VideoQuality", "0").ToInt()
-end function
-
-function checkIfLoggedIn() as dynamic
-    ? "Main Scene > checkIfLoggedIn"
-    return get_user_setting("login", invalid)
-end function
-
-function setReset(word as string) as void
-    ? "Main Scene > setReset"
-end function
 
 function onHeaderButtonPress()
     ? "Main Scene > onHeaderButtonPress"
@@ -247,13 +178,9 @@ function onHeaderButtonPress()
         m.keyboardGroup.visible = true
         m.keyboardGroup.setFocus(true)
     else if m.homeScene.buttonPressed = "login"
-        'm.top.dialog = createObject("RoSGNode", "LoginPrompt")
-        'm.top.dialog.observeField("buttonSelected", "onLogin")
-        ' m.homeScene.visible = false
         m.loginPage.visible = true
         m.loginPage.setFocus(true)
     else if m.homeScene.buttonPressed = "options"
-        ' m.homeScene.visible = false
         m.options.visible = true
         m.options.setFocus(true)
     end if
@@ -325,11 +252,6 @@ function onStreamChange()
         m.currentScene = "category"
         m.chat.channel = m.categoryScene.streamerRequested
         m.stream["url"] = m.categoryScene.streamUrl
-        ' else if m.channelPage.visible
-        '     m.currentScene = "channel"
-        '     m.channelPage.visible = false
-        '     m.chat.channel = m.channelPage.streamerSelectedName
-        '     m.stream["url"] = m.channelPage.streamUrl
     end if
     if get_user_setting("ChatOption", "true") = "true"
         m.chat.visible = true
@@ -352,29 +274,6 @@ function playVideo(stream as object)
     end if
     m.videoPlayer.content = stream
     m.videoPlayer.control = "play"
-    ' if invalid = m.plyrTask
-    '     m.plyrTask = createObject("roSGNode", "playerTask")
-    '     m.plyrTask.observeField("state", "onTaskStateUpdated")
-    ' end if
-    ' streamConfig = {
-    '     title: ""
-    '     streamformat: stream["streamFormat"]
-    '     live: false
-    '     url: stream["url"]
-    '     "type": "vod"
-    '     streamtype: "vod"
-    '     player: { sgnode: m.videoPlayer }
-    '     blockAds: false
-    ' }
-    ' if stream["streamFormat"] = "hls"
-    '     streamConfig.live = true
-    '     streamConfig.type = "live"
-    '     streamConfig.streamtype = "live"
-    ' end if
-    ' m.plyrTask.blockAds = false
-    ' m.plyrTask.streamConfig = streamConfig
-    ' m.plyrTask.video = m.videoPlayer
-    ' m.plyrTask.control = "run"
 end function
 
 function refreshFollows()
