@@ -42,7 +42,7 @@ function getSearchResults() as object
                 "itemsPerRow": 25
                 "limit": 8
                 "platform": "web_tv"
-                "requestID": "xl8ONVvbK8sBp2H9"
+                "requestID": GetRandomRequestUUID()
             }
         }
     })

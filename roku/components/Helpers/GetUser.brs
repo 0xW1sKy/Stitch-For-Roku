@@ -132,7 +132,7 @@ function getSearchResults() as object
                 "itemsPerRow": 25
                 "limit": 8
                 "platform": "web_tv"
-                "requestID": "xl8ONVvbK8sBp2H9"
+                "requestID": GetRandomRequestUUID()
             }
         }
     })
@@ -164,7 +164,9 @@ function getSearchResults() as object
         item = {}
         item.viewer_count = streamer.node.stream.viewersCount
         item.user_name = streamer.node.displayName
-        item.game_id = streamer.node.stream.game.displayName
+        if streamer.node.stream.game <> invalid
+            item.game_id = streamer.node.stream.game.displayName
+        end if
         item.title = streamer.node.stream.broadcaster.broadcastSettings.title
         item.shortDescriptionLine1 = streamer.node.stream.broadcaster.login
         item.login = streamer.node.stream.broadcaster.login

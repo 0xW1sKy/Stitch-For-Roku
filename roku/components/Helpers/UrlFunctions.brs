@@ -1,3 +1,8 @@
+function GetRandomRequestUUID()
+    di = CreateObject("roDeviceInfo")
+    return di.GetRandomUUID()
+end function
+
 function createUrl()
     url = CreateObject("roUrlTransfer")
     url.EnableEncodings(true)
