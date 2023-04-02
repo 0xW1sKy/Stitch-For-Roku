@@ -157,24 +157,27 @@ function getSearchResults() as object
     ' current_user_id = test_data.data.user.id
     ? "TEST DATA: "
     ? "live"
-    ? test_data.data.user.followedLiveUsers.edges[0].node
+    result.followed_users = []
     live_streamer_ids = {}
-    for each streamer in test_data.data.user.followedLiveUsers.edges
-        live_streamer_ids[(streamer.node.id.ToStr())] = true
-        item = {}
-        item.viewer_count = streamer.node.stream.viewersCount
-        item.user_name = streamer.node.displayName
-        if streamer.node.stream.game <> invalid
-            item.game_id = streamer.node.stream.game.displayName
-        end if
-        item.title = streamer.node.stream.broadcaster.broadcastSettings.title
-        item.shortDescriptionLine1 = streamer.node.stream.broadcaster.login
-        item.login = streamer.node.stream.broadcaster.login
-        item.thumbnail = Left(streamer.node.stream.previewImageUrl, Len(streamer.node.stream.previewImageUrl) - 20) + "320x180.jpg"
-        item.profile_image_url = streamer.node.stream.broadcaster.profileImageUrl
-        result.followed_users.push(item)
-        ' item.live_duration = convertToTimeFormat(streamer.started_at)ToStr()
-    end for
+    if test_data.data.user.followedLiveUsers <> invalid and test_data.data.user.followedLiveUsers.edges <> invalid and test_data.data.user.followedLiveUsers.edges[0] <> invalid and test_data.data.user.followedLiveUsers.edges[0].node <> invalid
+        ' test_data.data.user.followedLiveUsers.edges[0].node
+        for each streamer in test_data.data.user.followedLiveUsers.edges
+            live_streamer_ids[(streamer.node.id.ToStr())] = true
+            item = {}
+            item.viewer_count = streamer.node.stream.viewersCount
+            item.user_name = streamer.node.displayName
+            if streamer.node.stream.game <> invalid
+                item.game_id = streamer.node.stream.game.displayName
+            end if
+            item.title = streamer.node.stream.broadcaster.broadcastSettings.title
+            item.shortDescriptionLine1 = streamer.node.stream.broadcaster.login
+            item.login = streamer.node.stream.broadcaster.login
+            item.thumbnail = Left(streamer.node.stream.previewImageUrl, Len(streamer.node.stream.previewImageUrl) - 20) + "320x180.jpg"
+            item.profile_image_url = streamer.node.stream.broadcaster.profileImageUrl
+            result.followed_users.push(item)
+            ' item.live_duration = convertToTimeFormat(streamer.started_at)ToStr()
+        end for
+    end if
     ' followed_streamers = test_data.data.user.follows.edges
 
     ' refreshToken()
@@ -295,6 +298,8 @@ function getSearchResults() as object
 
     m.top.currentlyLiveStreamerIds = live_streamer_ids
     '? "currentlyLiveStreamerIds getuser " m.top.currentlyLiveStreamerIds
-    result.followed_users.SortBy("viewer_count", "r")
+    if result.followed_users.count() > 0
+        result.followed_users.SortBy("viewer_count", "r")
+    end if
     return result
 end function
