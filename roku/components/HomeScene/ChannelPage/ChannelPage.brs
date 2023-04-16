@@ -47,7 +47,8 @@ sub onGetVideoUrl()
         m.top.videoUrl = m.getStuffVideo.streamUrl
         ? "ChannelPage > thumbnailInfo > "; m.top.thumbnailInfo
     else m.streamItem.hasFocus()
-        m.top.streamUrl = m.getStuff.streamUrl
+        m.top.streamMetadata = m.getStuff.streamMetadata
+        m.top.streamUrl = m.getstuff.streamMetadata["streamUrls"][0]
     end if
 end sub
 

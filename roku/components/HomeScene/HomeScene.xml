@@ -4,6 +4,7 @@
 
     <interface>
         <field id="streamUrl" type="uri" />
+        <field id="streamMetadata" type="assocarray" />
         <field id="videoUrl" type="string" alwaysNotify="true" alias="channelPage.videoUrl" />
         <field id="thumbnailInfo" type="assocarray" alias="channelPage.thumbnailInfo" />
 

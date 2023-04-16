@@ -6,6 +6,7 @@
         <field id="currentCategory" type="string" alwaysNotify="true" onChange="onCategoryChange" />
         <field id="browseList" type="node" alias="browseList" />
         <field id="streamUrl" type="uri" />
+        <field id="streamMetadata" type="assocarray" />
         <field id="streamerRequested" type="string" />
         <field id="clipUrl" type="uri" alwaysNotify="true" />
         <field id="fromClip" type="bool" value="false" />

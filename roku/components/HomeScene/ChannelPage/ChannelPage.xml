@@ -4,6 +4,7 @@
 
     <interface>
         <field id="streamUrl" type="string" />
+        <field id="streamMetadata" type="assocarray" />
         <field id="videoUrl" type="string" alwaysNotify="true" />
         <field id="thumbnailInfo" type="assocarray" />
 

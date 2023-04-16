@@ -103,7 +103,8 @@ end function
 
 function onStreamUrlChange()
     m.top.streamerRequested = m.getStuff.streamerRequested
-    m.top.streamUrl = m.getStuff.streamUrl
+    m.top.streamMetadata = m.getStuff.streamMetadata
+    m.top.streamUrl = m.getstuff.streamMetadata["streamUrls"][0]
 end function
 
 function onKeyEvent(key, press) as boolean
