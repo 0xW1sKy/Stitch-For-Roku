@@ -13,7 +13,10 @@
         <field id="channelAvatar" type="string" alwaysNotify="true" />
         <field id="channelUsername" type="string" />
         <field id="videoTitle" type="string" />
+        <field id="QualityChangeRequestFlag" type="bool" value="false" />
+        <field id="QualityChangeRequest" type="string" />
         <field id="streamDurationSeconds" type="Integer" value="0" />
+        <field id="currentProgressBarState" type="Integer" value="1" />
     </interface>
 
     <script type="text/brightscript" uri="CustomVideo.brs" />
@@ -231,7 +234,7 @@
                 width="14"
                 height="13"
                 visible="true"
-                translation="[40,83]" />
+                translation="[40,78]" />
             <Poster
                 id="controlButton"
                 uri="pkg:/images/pause.png"
@@ -244,6 +247,12 @@
             width="50"
                 height="50"
                 translation="[60,45]" />-->
+            <Poster
+                id="qualitySelectButton"
+                uri="pkg:/images/TimeTravel.png"
+                width="25"
+                height="21"
+                translation="[60,51]" />
             <Poster
                 id="timeTravelButton"
                 uri="pkg:/images/TimeTravel.png"
@@ -289,7 +298,11 @@
                     id="thumbnailImage" />
             </Group>
         </Group>
-
+        <StandardMessageDialog
+            id="QualityDialog"
+            initialFocus="buttonArea"
+            visible="false"
+        />
     </children>
 
 </component>

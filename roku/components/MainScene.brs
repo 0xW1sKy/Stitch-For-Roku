@@ -233,12 +233,18 @@ function onClipChange()
     playVideo(m.stream)
 end function
 
+sub onQualityChangeRequest()
+
+end sub
+
+
 function onStreamChange()
     ? "Main Scene > onStreamChange"
     m.stream["streamFormat"] = "hls"
     if m.keyboardGroup.visible
         m.currentScene = "search"
         m.chat.channel = m.keyboardGroup.streamerRequested
+        AddAndSetFields(m.stream, m.keyboardGroup.streamMetadata)
         m.stream["url"] = m.keyboardGroup.streamUrl
     else if m.homeScene.visible
         m.currentScene = "home"
@@ -247,10 +253,13 @@ function onStreamChange()
         m.videoPlayer.channelUsername = m.homeScene.channelUsername
         m.videoPlayer.channelAvatar = m.homeScene.channelAvatar
         m.videoPlayer.streamDurationSeconds = m.homeScene.streamDurationSeconds
+        AddAndSetFields(m.videoPlayer, m.homeScene.streamMetadata)
+        ? "STOP"
         m.stream["url"] = m.homeScene.streamUrl
     else if m.categoryScene.visible
         m.currentScene = "category"
         m.chat.channel = m.categoryScene.streamerRequested
+        AddAndSetFields(m.stream, m.categoryScene.streamMetadata)
         m.stream["url"] = m.categoryScene.streamUrl
     end if
     if get_user_setting("ChatOption", "true") = "true"
@@ -319,6 +328,11 @@ sub onVideoPlayerBack()
         m.chat.visible = false
         m.videoPlayer.chatIsVisible = m.chat.visible
         m.videoPlayer.back = false
+    end if
+    if m.videoplayer.qualityChangeRequestflag = true
+        m.stream["url"] = m.videoplayer.qualityChangeRequest
+        playVideo(m.stream)
+        m.videoplayer.qualityChangeRequestFlag = false
     end if
 end sub
 

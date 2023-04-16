@@ -88,7 +88,12 @@ function getStreamUrl()
     stream_sticky = []
     for each stream_item in stream_objects
         stream_bitrates.push(Int(Val(stream_item["BANDWIDTH"])) / 1000)
-        stream_content_ids.push(stream_item["VIDEO"])
+        if stream_item["VIDEO"] = "chunked"
+            value = stream_item["RESOLUTION"].split("x")[1] + "p" + stream_item["FRAME-RATE"].split(".")[0]
+        else
+            value = stream_item["VIDEO"]
+        end if
+        stream_content_ids.push(value)
         stream_urls.push(stream_item["URL"])
         if Int(Val(stream_item["RESOLUTION"].split("x")[1])) >= 720
             stream_qualities.push("HD")
@@ -96,6 +101,7 @@ function getStreamUrl()
             stream_qualities.push("SD")
         end if
         stream_sticky.push("false")
+
     end for
     ' The stream needs a couple of seconds to load on AWS's server side before we display back to user.
     ' The idea is that this will provide a better user experience by removing stuttering.
@@ -103,6 +109,7 @@ function getStreamUrl()
         streamUrls: stream_urls
         streamQualities: stream_qualities
         streamContentIDs: stream_content_ids
+        streamBitrates: stream_bitrates
         streamStickyHttpRedirects: stream_sticky
     }
 end function

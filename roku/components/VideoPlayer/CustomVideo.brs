@@ -11,6 +11,8 @@ function init()
     m.controlButton = m.top.findNode("controlButton")
     m.timeTravelButton = m.top.findNode("timeTravelButton")
     m.messagesButton = m.top.findNode("messagesButton")
+    m.qualitySelectButton = m.top.findNode("qualitySelectButton")
+    m.QualityDialog = m.top.findNode("QualityDialog")
     m.glow = m.top.findNode("bg-glow")
     'm.backButton = m.top.findNode("backButton")
     m.timeTravelRect = m.top.findNode("timeTravelRect")
@@ -75,6 +77,39 @@ function init()
 
 end function
 
+function resetProgressBar()
+    m.controlButton.blendColor = "0xFFFFFFFF"
+    m.messagesButton.blendColor = "0xFFFFFFFF"
+    m.timeTravelButton.blendColor = "0xFFFFFFFF"
+    m.qualitySelectButton.blendColor = "0xFFFFFFFF"
+    m.currentProgressBarState = 0
+    m.thumbnailImage.visible = false
+    m.progressBar.visible = false
+end function
+
+sub onQualityButtonSelect()
+    m.QualityDialog.visible = false
+    resetProgressBar()
+    ? "Pressed: "; m.QualityDialog.buttonSelected
+    m.progressBar.getParent().setFocus(true)
+    m.top.control = "pause"
+    m.top.qualityChangeRequestFlag = true
+    m.top.qualityChangeRequest = m.top.STREAMURLS[m.QualityDialog.buttonSelected]
+    m.top.back = true
+end sub
+
+sub onQualitySelectButtonPressed()
+
+    ' set up the dialog
+
+    m.QualityDialog.title = "Please Choose Your Video Quality"
+    m.QualityDialog.buttons = m.top.STREAMCONTENTIDS
+    m.QualityDialog.observeFieldScoped("buttonSelected", "onQualityButtonSelect")
+    m.QualityDialog.visible = true
+    m.lastFocusedchild = m.top.focusedChild
+    m.QualityDialog.setFocus(true)
+    ' display the dialog
+end sub
 
 sub onChatVisibilityChange()
     if m.top.chatIsVisible
@@ -348,6 +383,13 @@ function onKeyEvent(key, press) as boolean
                 h = m.controlButton.height
                 m.glow.translation = [m.controlButton.translation[0] - 30 + w / 2, m.controlButton.translation[1] - 30 + h / 2]
                 m.controlButton.blendColor = "0xBD00FFFF"
+            else if m.currentProgressBarState = 8
+                m.currentProgressBarState = 3
+                m.qualitySelectButton.blendColor = "0xFFFFFFFF"
+                w = m.timeTravelButton.width
+                h = m.timeTravelButton.height
+                m.glow.translation = [m.timeTravelButton.translation[0] - 30 + w / 2, m.timeTravelButton.translation[1] - 30 + h / 2]
+                m.timeTravelButton.blendColor = "0xBD00FFFF"
             else if m.currentProgressBarState = 6
                 if m.focusedTimeSlot <> -1 and m.focusedTimeSlot + 1 <= 5
                     m.timeTravelTimeSlot[m.focusedTimeSlot].uri = "pkg:/images/unfocusedTimeSlot.png"
@@ -413,6 +455,13 @@ function onKeyEvent(key, press) as boolean
                 h = m.timeTravelButton.height
                 m.glow.translation = [m.timeTravelButton.translation[0] - 30 + w / 2, m.timeTravelButton.translation[1] - 30 + h / 2]
                 m.timeTravelButton.blendColor = "0xBD00FFFF"
+            else if m.currentProgressBarState = 3
+                m.currentProgressBarState = 8
+                m.timeTravelButton.blendColor = "0xFFFFFFFF"
+                w = m.qualitySelectButton.width
+                h = m.qualitySelectButton.height
+                m.glow.translation = [m.qualitySelectButton.translation[0] - 30 + w / 2, m.qualitySelectButton.translation[1] - 30 + h / 2]
+                m.qualitySelectButton.blendColor = "0xBD00FFFF"
             else if m.currentProgressBarState = 6
                 if m.focusedTimeSlot <> -1 and m.focusedTimeSlot - 1 >= 0
                     m.timeTravelTimeSlot[m.focusedTimeSlot].uri = "pkg:/images/unfocusedTimeSlot.png"
@@ -446,6 +495,7 @@ function onKeyEvent(key, press) as boolean
                 m.controlButton.blendColor = "0xFFFFFFFF"
                 m.messagesButton.blendColor = "0xFFFFFFFF"
                 m.timeTravelButton.blendColor = "0xFFFFFFFF"
+                m.qualitySelectButton.blendColor = "0xFFFFFFFF"
                 m.currentProgressBarState = 0
                 m.thumbnailImage.visible = false
                 m.progressBar.visible = false
@@ -530,6 +580,8 @@ function onKeyEvent(key, press) as boolean
                     m.timeTravelRect.visible = false
                 end if
                 return true
+            else if m.currentProgressBarState = 8
+                onQualitySelectButtonPressed()
             end if
             'return true
         else if key = "fastforward"

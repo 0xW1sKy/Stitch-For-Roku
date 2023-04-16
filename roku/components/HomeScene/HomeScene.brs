@@ -123,7 +123,8 @@ end sub
 
 sub onLiveStreamSelectedFromChannel()
     ? "Home Scene > onLiveStreamSelectedFromChannel"
-    m.top.streamUrl = m.channelPage.streamUrl
+    m.top.streamMetadata = m.channelPage.streamMetadata
+    m.top.streamUrl = m.channelPage.streamMetadata["streamUrls"][0]
 end sub
 
 sub onNewUser()
