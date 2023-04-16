@@ -9,7 +9,7 @@ $manifest | ForEach-Object {
         $output += $("major_version=$($version.major)`r`n")
     }
     elseif ($_ -like "minor_version=*") {
-        $output += $("minor_version=$($version.minor)`r`n")
+        $output += $("minor_version=$($version.minor + 1)`r`n")
     }
     elseif ($_ -like "build_version=*") {
         $output += $("build_version=$("$($version.patch)".padleft(2,"0"))$($version.CommitsSinceVersionSource)`r`n")
