@@ -3,7 +3,9 @@ function init()
 end function
 
 function onStreamerChange()
-    m.top.streamUrl = getStreamUrl()
+    m.top.streamMetadata = getStreamUrl()
+
+    m.top.streamUrl = m.top.streamMetadata["streamUrls"][0]
 end function
 
 function getStreamUrl()
@@ -66,58 +68,42 @@ function getStreamUrl()
     last_stream_link = ""
     link = ""
     cnt = 0
+    ' streamitems_all = []
+    stream_objects = []
     for line = 2 to list.Count() - 1
         stream_info = list[line + 1].Split(",")
-        stream_quality = invalid
-        stream_framerate = invalid
+        streamobject = {}
         for info = 0 to stream_info.Count() - 1
             info_parsed = stream_info[info].Split("=")
-            if info_parsed[0] = "RESOLUTION"
-                stream_quality = Int(Val(info_parsed[1].Split("x")[1]))
-            else if info_parsed[0] = "VIDEO"
-                if info_parsed[1] = (chr(34) + "chunked" + chr(34))
-                    stream_framerate = 30
-                else
-                    stream_framerate = Int(Val(info_parsed[1].Split("p")[1]))
-                end if
-            end if
+            streamobject[info_parsed[0].replace("#EXT-X-STREAM-INF:", "")] = toString(info_parsed[1], true).replace(chr(34), "")
         end for
-
-        if stream_framerate = invalid
-            stream_framerate = 30
-        end if
-
-        if not stream_quality = invalid
-            compatible_link = false
-            last_stream_link = list[line + 2]
-            if get_user_setting("VideoFramerate", "60").ToInt() >= stream_framerate
-                if get_user_setting("VideoQuality", "0").toInt() <= 1 and stream_quality <= 1080
-                    compatible_link = true
-                else if get_user_setting("VideoQuality", "0").toInt() <= 3 and stream_quality <= 720
-                    compatible_link = true
-                else if get_user_setting("VideoQuality", "0").toInt() = 4 and stream_quality <= 480
-                    compatible_link = true
-                else if get_user_setting("VideoQuality", "0").toInt() = 5 and stream_quality <= 360
-                    compatible_link = true
-                else if get_user_setting("VideoQuality", "0").toInt() = 6 and stream_quality <= 160
-                    compatible_link = true
-                end if
-            end if
-
-            if compatible_link
-                link = list[line + 2]
-                exit for
-            end if
-        end if
-
+        streamobject["URL"] = list[line + 2]
+        stream_objects.push(streamobject)
         line += 2
     end for
-
-    if link = ""
-        return last_stream_link
-    end if
+    stream_bitrates = []
+    stream_urls = []
+    stream_qualities = []
+    stream_content_ids = []
+    stream_sticky = []
+    for each stream_item in stream_objects
+        stream_bitrates.push(Int(Val(stream_item["BANDWIDTH"])) / 1000)
+        stream_content_ids.push(stream_item["VIDEO"])
+        stream_urls.push(stream_item["URL"])
+        if Int(Val(stream_item["RESOLUTION"].split("x")[1])) >= 720
+            stream_qualities.push("HD")
+        else
+            stream_qualities.push("SD")
+        end if
+        stream_sticky.push("false")
+    end for
     ' The stream needs a couple of seconds to load on AWS's server side before we display back to user.
     ' The idea is that this will provide a better user experience by removing stuttering.
-    return link
+    return {
+        streamUrls: stream_urls
+        streamQualities: stream_qualities
+        streamContentIDs: stream_content_ids
+        streamStickyHttpRedirects: stream_sticky
+    }
 end function
 
