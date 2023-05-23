@@ -7,8 +7,7 @@ sub init()
     m.chat.observeField("clientComment", "onNewComment")
     m.top.observeField("visible", "onInvisible")
     m.top.observeField("loggedInUsername", "setLoggedInUsername")
-    m.chat.readyForNextComment = true
-    m.chat.control = "run"
+    ' m.chat.control = "run"
     m.userstate_change = false
     m.translation = 0
 end sub
@@ -127,7 +126,6 @@ sub onNewComment()
     group = createObject("roSGNode", "Group")
     group.visible = true
     group.translation = [5, m.translation]
-
     badge_translation = 0
     for each badge in badges
         if badge <> ""

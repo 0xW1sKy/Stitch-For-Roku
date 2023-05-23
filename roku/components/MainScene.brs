@@ -63,8 +63,8 @@ function init()
 
     ? "MainScene >> registry space > " createObject("roRegistry").GetSpaceAvailable()
 
-    m.chat = m.top.findNode("chat")
-    m.chat.observeField("doneFocus", "onChatDoneFocus")
+    ' m.chat = m.top.findNode("chat")
+    ' m.chat.observeField("doneFocus", "onChatDoneFocus")
     m.homeScene.setFocus(true)
     m.videoPlayer.notificationInterval = 1
     m.plyrTask = invalid
@@ -93,10 +93,10 @@ end sub
 
 sub onChatDoneFocus()
     ? "Main Scene > onChatDoneFocus"
-    if m.chat.doneFocus
-        m.videoPlayer.setFocus(true)
-        m.chat.doneFocus = false
-    end if
+    ' if m.chat.doneFocus
+    '     m.videoPlayer.setFocus(true)
+    '     m.chat.doneFocus = false
+    ' end if
 end sub
 
 sub onBackgroundChange()
@@ -131,8 +131,8 @@ sub onStreamChangeFromChannelPage()
     ? "Main Scene > onStreamChangeFromChannelPage"
     m.stream["streamFormat"] = "hls"
     m.stream["url"] = m.homeScene.videoUrl
-    m.chat.visible = false
-    m.videoPlayer.chatIsVisible = m.chat.visible
+    ' m.chat.visible = false
+    ' m.videoPlayer.chatIsVisible = m.chat.visible
     m.videoPlayer.videoTitle = m.homeScene.videoTitle
     m.videoPlayer.channelUsername = m.homeScene.channelUsername
     m.videoPlayer.channelAvatar = m.homeScene.channelAvatar
@@ -193,7 +193,7 @@ function onUserLogin()
     m.homeScene.loggedInUserName = userdata.login
     if m.getUser.searchResults.profile_image_url <> invalid
         m.homeScene.loggedInUserProfileImage = m.getUser.searchResults.profile_image_url
-        m.chat.loggedInUsername = userdata.login
+        ' m.chat.loggedInUsername = userdata.login
     else
         m.homeScene.loggedInUserProfileImage = ""
         m.homeScene.loggedInUserName = "Login"
@@ -243,12 +243,12 @@ function onStreamChange()
     m.stream["streamFormat"] = "hls"
     if m.keyboardGroup.visible
         m.currentScene = "search"
-        m.chat.channel = m.keyboardGroup.streamerRequested
+        ' m.chat.channel = m.keyboardGroup.streamerRequested
         AddAndSetFields(m.stream, m.keyboardGroup.streamMetadata)
         m.stream["url"] = m.keyboardGroup.streamUrl
     else if m.homeScene.visible
         m.currentScene = "home"
-        m.chat.channel = m.homeScene.streamerSelectedName 'm.homeScene.streamerRequested
+        ' m.chat.channel = m.homeScene.streamerSelectedName 'm.homeScene.streamerRequested
         m.videoPlayer.videoTitle = m.homeScene.videoTitle
         m.videoPlayer.channelUsername = m.homeScene.channelUsername
         m.videoPlayer.channelAvatar = m.homeScene.channelAvatar
@@ -258,16 +258,16 @@ function onStreamChange()
         m.stream["url"] = m.homeScene.streamUrl
     else if m.categoryScene.visible
         m.currentScene = "category"
-        m.chat.channel = m.categoryScene.streamerRequested
+        ' m.chat.channel = m.categoryScene.streamerRequested
         AddAndSetFields(m.stream, m.categoryScene.streamMetadata)
         m.stream["url"] = m.categoryScene.streamUrl
     end if
-    if get_user_setting("ChatOption", "true") = "true"
-        m.chat.visible = true
-    else
-        m.chat.visible = false
-    end if
-    m.videoPlayer.chatIsVisible = m.chat.visible
+    ' if get_user_setting("ChatOption", "true") = "true"
+    '     ' m.chat.visible = true
+    ' else
+    '     ' m.chat.visible = false
+    ' end if
+    ' m.videoPlayer.chatIsVisible = m.chat.visible
     playVideo(m.stream)
 end function
 
@@ -325,8 +325,8 @@ sub onVideoPlayerBack()
             'm.channelPage.visible = true
             'm.channelPage.setFocus(true)
         end if
-        m.chat.visible = false
-        m.videoPlayer.chatIsVisible = m.chat.visible
+        ' m.chat.visible = false
+        ' m.videoPlayer.chatIsVisible = m.chat.visible
         m.videoPlayer.back = false
     end if
     if m.videoplayer.qualityChangeRequestflag = true
@@ -339,8 +339,8 @@ end sub
 sub onToggleChat()
     ? "Main Scene > onToggleChat"
     if m.videoPlayer.toggleChat = true
-        m.chat.visible = not m.chat.visible
-        m.videoPlayer.chatIsVisible = m.chat.visible
+        ' m.chat.visible = not m.chat.visible
+        ' m.videoPlayer.chatIsVisible = m.chat.visible
         m.videoPlayer.toggleChat = false
     end if
 end sub
@@ -351,20 +351,20 @@ sub onToggleStreamLayout()
     if m.videoPlayer.streamLayoutMode = 0 'stream is shrinked
         m.videoPlayer.width = 1030
         m.videoPlayer.height = 720
-        m.chat.getchild(0).opacity = "1"
-        m.chat.visible = true
-        m.videoPlayer.chatIsVisible = m.chat.visible
+        ' m.chat.getchild(0).opacity = "1"
+        ' m.chat.visible = true
+        ' m.videoPlayer.chatIsVisible = m.chat.visible
     else if m.videoPlayer.streamLayoutMode = 1 'layout with chat on top of stream
         m.videoPlayer.width = 0
         m.videoPlayer.height = 0
-        m.chat.getchild(0).opacity = "0.85"
-        m.chat.visible = true
-        m.videoPlayer.chatIsVisible = m.chat.visible
+        ' m.chat.getchild(0).opacity = "0.85"
+        ' m.chat.visible = true
+        ' m.videoPlayer.chatIsVisible = m.chat.visible
     else if m.videoPlayer.streamLayoutMode = 2 'no chat layout fullscreen
         m.videoPlayer.width = 0
         m.videoPlayer.height = 0
-        m.chat.visible = false
-        m.videoPlayer.chatIsVisible = m.chat.visible
+        ' m.chat.visible = false
+        ' m.videoPlayer.chatIsVisible = m.chat.visible
     end if
 end sub
 
@@ -453,7 +453,7 @@ function onKeyEvent(key, press) as boolean
             m.homeScene.setFocus(true)
             return true
         else if key = "OK" and m.videoPlayer.visible
-            m.chat.setKeyboardFocus = true
+            ' m.chat.setKeyboardFocus = true
             handled = true
         end if
     else if not press
