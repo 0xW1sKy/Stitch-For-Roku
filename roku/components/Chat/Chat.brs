@@ -7,7 +7,7 @@ sub init()
     m.chat.observeField("clientComment", "onNewComment")
     m.top.observeField("visible", "onInvisible")
     m.top.observeField("loggedInUsername", "setLoggedInUsername")
-    ' m.chat.control = "run"
+    m.chat.control = "run"
     m.userstate_change = false
     m.translation = 0
 end sub
@@ -130,26 +130,30 @@ sub onNewComment()
     for each badge in badges
         if badge <> ""
             badge_parts = badge.Split("/")
-            if m.global.channelBadges.badge_sets[badge_parts[0]] <> invalid
-                if m.global.channelBadges.badge_sets[badge_parts[0]].versions[badge_parts[1]] <> invalid
-                    poster = createObject("roSGNode", "Poster")
-                    poster.uri = m.global.channelBadges.badge_sets[badge_parts[0]].versions[badge_parts[1]].image_url_1x
-                    poster.width = 18
-                    poster.height = 18
-                    poster.visible = true
-                    poster.translation = [badge_translation, 0]
-                    group.appendChild(poster)
-                    badge_translation += 20
+            if m.global.channelBadges <> invalid
+                if m.global.channelBadges.badge_sets <> invalid
+                    if m.global.channelBadges.badge_sets[badge_parts[0]] <> invalid
+                        if m.global.channelBadges.badge_sets[badge_parts[0]].versions[badge_parts[1]] <> invalid
+                            poster = createObject("roSGNode", "Poster")
+                            poster.uri = m.global.channelBadges.badge_sets[badge_parts[0]].versions[badge_parts[1]].image_url_1x
+                            poster.width = 18
+                            poster.height = 18
+                            poster.visible = true
+                            poster.translation = [badge_translation, 0]
+                            group.appendChild(poster)
+                            badge_translation += 20
+                        end if
+                    else if m.global.globalBadges.badge_sets[badge_parts[0]].versions[badge_parts[1]] <> invalid
+                        poster = createObject("roSGNode", "Poster")
+                        poster.uri = m.global.globalBadges.badge_sets[badge_parts[0]].versions[badge_parts[1]].image_url_1x
+                        poster.width = 18
+                        poster.height = 18
+                        poster.visible = true
+                        poster.translation = [badge_translation, 0]
+                        group.appendChild(poster)
+                        badge_translation += 20
+                    end if
                 end if
-            else if m.global.globalBadges.badge_sets[badge_parts[0]].versions[badge_parts[1]] <> invalid
-                poster = createObject("roSGNode", "Poster")
-                poster.uri = m.global.globalBadges.badge_sets[badge_parts[0]].versions[badge_parts[1]].image_url_1x
-                poster.width = 18
-                poster.height = 18
-                poster.visible = true
-                poster.translation = [badge_translation, 0]
-                group.appendChild(poster)
-                badge_translation += 20
             end if
         end if
     end for

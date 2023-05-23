@@ -52,9 +52,9 @@
             translation="[75,80]"
             visible="false"
         />
-        <!-- <Chat
+        <Chat
             id="chat"
-            visible="false" /> -->
+            visible="false" />
 
         <Timer
             id="testTimer"
