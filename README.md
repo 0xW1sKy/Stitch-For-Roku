@@ -18,7 +18,7 @@ Best way to support Stitch is interaction with this project. Contributions are w
 
 ### With Access Code
 
-Stitch *uncertified* : LL5GKQ (<https://my.roku.com/account/add?channel=LL5GKQ>)
+LL5GKQ (<https://my.roku.com/account/add?channel=LL5GKQ>)
 
 ## URLs used by app (may need to be allowed in pihole, etc)
 
