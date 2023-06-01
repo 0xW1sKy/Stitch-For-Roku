@@ -210,7 +210,7 @@ function main()
                     '     ? "Message " comment " was sent " waitingCommentAge " secs ago"
                     '     ? "Queue size: " queue.count()
                     ' end if
-                    if commentAge > 27 ' measured in seconds
+                    if commentAge > 30 ' measured in seconds
                         m.top.nextComment = queue.pop()
                         'queue[first] = invalid
                         if first + 1 < 100
