@@ -300,7 +300,6 @@
         </Group>
         <StandardMessageDialog
             id="QualityDialog"
-            initialFocus="buttonArea"
             visible="false"
         />
     </children>
