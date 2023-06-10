@@ -32,7 +32,7 @@
             <source>Login</source>
             <translation>Login</translation>
         </message>
-                <message>
+        <message>
             <source>Live Stream</source>
             <translation>Live Stream</translation>
         </message>

@@ -2,7 +2,7 @@ title=stitch
 
 major_version=1
 minor_version=37
-build_version=0114
+build_version=0115
 mm_icon_focus_hd=pkg:/images/channel-icon_HD.png
 mm_icon_focus_sd=pkg:/images/channel-poster_sd.png
 
@@ -12,6 +12,7 @@ splash_screen_sd=pkg:/images/splash-screen_sd.png
 supports_input_launch=1
 
 ui_resolutions=hd
+
 
 
 
