@@ -75,7 +75,7 @@ function getOauthToken() as object
     set_user_setting("device_code", m.top.device_id)
     set_user_setting("display_name", resp_data.currentUser.displayName)
     if previous_user <> login
-        NukeRegistry(section = previous_user)
+        NukeRegistry(previous_user)
     end if
     m.top.login = login
 end function

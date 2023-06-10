@@ -370,7 +370,7 @@ end sub
 
 sub onButtonHold()
     if m.buttonHeld = "replay"
-        NukeRegsitry()
+        NukeRegistry()
         m.top.exitApp = true
     end if
     if m.buttonHeld = "options"
