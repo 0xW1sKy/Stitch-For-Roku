@@ -58,7 +58,7 @@
         </Group>
         <SimpleLabel
             id="liveStreamLabel"
-            text="Token0008"
+            text="Live Stream"
             color="0xB9B9B9FF"
             fontSize="24"
             fontUri="pkg:/fonts/Inter-SemiBold.ttf"
@@ -80,7 +80,7 @@
             visible="true" />
         <SimpleLabel
             id="recentVideosLabel"
-            text="Token0009"
+            text="Recent Videos"
             color="0xB9B9B9FF"
             fontSize="24"
             fontUri="pkg:/fonts/Inter-SemiBold.ttf"

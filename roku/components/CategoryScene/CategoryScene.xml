@@ -23,7 +23,7 @@
             <SimpleLabel
                 id="liveButton"
                 translation="[400,60]"
-                text="Token0001"
+                text="Live Channels"
                 color="0xA970FFFF"
                 fontSize="32"
                 fontUri="pkg:/fonts/Roobert-SemiBold.ttf">
@@ -38,7 +38,7 @@
             <SimpleLabel
                 id="clipButton"
                 translation="[700,60]"
-                text="Token0002"
+                text="Clips"
                 color="0xEFEFF1FF"
                 fontSize="32"
                 fontUri="pkg:/fonts/Roobert-SemiBold.ttf">
@@ -54,7 +54,7 @@
         <SimpleLabel
             id="searchHeader"
             translation="[100,50]"
-            text="Token0003"
+            text="Browse"
             fontSize="48"
             fontUri="pkg:/fonts/Roobert-Bold.ttf" />
         <RowList

@@ -58,7 +58,7 @@
                 <SimpleLabel
                     id="categoryButton"
                     translation="[88,24]"
-                    text="Token0004"
+                    text="Categories"
                     color="0xEFEFF1FF"
                     fontSize="24"
                     fontUri="pkg:/fonts/Inter-SemiBold.ttf">
@@ -73,7 +73,7 @@
                 <SimpleLabel
                     id="liveButton"
                     translation="[238,24]"
-                    text="Token0001"
+                    text="Live Channels"
                     color="0x9146FFCC"
                     fontSize="24"
                     fontUri="pkg:/fonts/Inter-SemiBold.ttf">
@@ -88,7 +88,7 @@
                 <SimpleLabel
                     id="followingButton"
                     translation="[423,24]"
-                    text="Token0005"
+                    text="Following"
                     color="0xEFEFF1FF"
                     fontSize="24"
                     fontUri="pkg:/fonts/Inter-SemiBold.ttf">
@@ -149,7 +149,7 @@
             <SimpleLabel
                 id="offlineChannelsLabel"
                 translation="[120,700]"
-                text="Token0006"
+                text="Offline Channels"
                 color="0xEFEFF1FF"
                 fontSize="18"
                 visible="false"
@@ -172,7 +172,7 @@
                     <Poster id="profileImage" width="50" height="50" />
                 </MaskGroup>
                 <SimpleLabel id="loggedUserName" translation="[0,20]" fontSize="16"
-                    fontUri="pkg:/fonts/Roobert-SemiBold.ttf" text="Token0007" />
+                    fontUri="pkg:/fonts/Roobert-SemiBold.ttf" text="Login" />
             </Group>
         </Group>
 

@@ -47,7 +47,7 @@
             id="loginPage"
             translation="[75,80]"
             visible="false" />
-        <Options
+        <Settings
             id="Options"
             translation="[75,80]"
             visible="false"

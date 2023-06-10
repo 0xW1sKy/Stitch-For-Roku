@@ -36,7 +36,7 @@
             <SimpleLabel
                 id="categoryButton"
                 translation="[700,50]"
-                text="Token0004"
+                text="Categories"
                 color="0xEFEFF1FF"
                 fontSize="32"
                 fontUri="pkg:/fonts/Roobert-SemiBold.ttf">
@@ -52,7 +52,7 @@
         <SimpleLabel
             id="searchHeader"
             translation="[50,50]"
-            text="Token0010"
+            text="Search"
             fontSize="48"
             fontUri="pkg:/fonts/Roobert-Bold.ttf" />
         <MiniKeyboard

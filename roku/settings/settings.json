@@ -1,54 +1,54 @@
 [
     {
-        "title": "Playback",
-        "description": "Settings relating to playback and supported codec and media types.",
-        "children": [
+        "title": "Chat On-By-Default",
+        "description": "Determines default state of chat window when opening a stream",
+        "settingName": "ChatOption",
+        "type": "bool",
+        "default": "true"
+    },
+    {
+        "title": "Video Quality",
+        "description": "",
+        "settingName": "VideoQuality",
+        "type": "radio",
+        "default": "1",
+        "options": [
             {
-                "title": "Bitrate Limit",
-                "description": "Configure the maximum playback bitrate.",
-                "children": [
-                    {
-                        "title": "Enable Limit",
-                        "description": "Enable or disable  the 'Maximum Bitrate' setting.",
-                        "settingName": "playback.bitrate.maxlimited",
-                        "type": "bool",
-                        "default": "true"
-                    },
-                    {
-                        "title": "Maximum Bitrate",
-                        "description": "Set the maximum bitrate in Mbps. Set to 0 to use Roku's specifications. This setting must be enabled to take effect.",
-                        "settingName": "playback.bitrate.limit",
-                        "type": "integer",
-                        "default": "0"
-                    }
-                ]
+                "title": "1080p",
+                "id": "1"
             },
             {
-                "title": "Codec Support",
-                "description": "Enable or disable Direct Play support for certain codecs.",
-                "children": [
-                    {
-                        "title": "AV1",
-                        "description": "** EXPERIMENTAL** Support Direct Play of AV1 content if this Roku device supports it.",
-                        "settingName": "playback.av1",
-                        "type": "bool",
-                        "default": "false"
-                    },
-                    {
-                        "title": "MPEG-2",
-                        "description": "Support Direct Play of MPEG-2 content (e.g., Live TV). This will prevent transcoding of MPEG-2 content, but uses significantly more bandwidth.",
-                        "settingName": "playback.mpeg2",
-                        "type": "bool",
-                        "default": "false"
-                    },
-                    {
-                        "title": "MPEG-4",
-                        "description": "Support Direct Play of MPEG-4 content. This may need to be disabled for playback of DIVX encoded video files.",
-                        "settingName": "playback.mpeg4",
-                        "type": "bool",
-                        "default": "true"
-                    }
-                ]
+                "title": "720p",
+                "id": "3"
+            },
+            {
+                "title": "480p",
+                "id": "4"
+            },
+            {
+                "title": "360p",
+                "id": "5"
+            },
+            {
+                "title": "160p",
+                "id": "6"
+            }
+        ]
+    },
+    {
+        "title": "Video Framerate",
+        "description": "",
+        "settingName": "VideoFramerate",
+        "type": "radio",
+        "default": "1",
+        "options": [
+            {
+                "title": "60 fps",
+                "id": "60"
+            },
+            {
+                "title": "30 fps",
+                "id": "30"
             }
         ]
     }
