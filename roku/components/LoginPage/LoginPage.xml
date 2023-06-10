@@ -17,7 +17,7 @@
             translation="[0,0]" />
         <SimpleLabel
             translation="[100,72]"
-            text="Go to https://www.twitch.tv/activate and type the following code:"
+            text="Token0011"
             color="0xEFEFF1FF"
             fontSize="18"
             fontUri="pkg:/fonts/Roobert-SemiBold.ttf" />
@@ -30,7 +30,7 @@
             fontUri="pkg:/fonts/JetBrainsMono-Bold.ttf" />
         <SimpleLabel
             translation="[100,302]"
-            text="Stitch should log you in soon after you authorize your account for use."
+            text="Token0012"
             color="0xEFEFF1FF"
             fontSize="18"
             fontUri="pkg:/fonts/Roobert-SemiBold.ttf" />

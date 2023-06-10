@@ -55,20 +55,10 @@
                     uri="pkg:/images/logo.png"
                     width="48px"
                     height="56" />
-                <!--<SimpleLabel
-                    id="searchHeader"
-                    translation="[100,50]"
-                text="Browse"
-                    fontSize="48"
-                fontUri="pkg:/fonts/Roobert-Bold.ttf" /> -->
-                <!-- <Overhang
-                    logoUri="pkg:/images/logo.png"
-                    showClock="true"
-                title="Stitch for Roku" /> -->
                 <SimpleLabel
                     id="categoryButton"
                     translation="[88,24]"
-                    text="Categories"
+                    text="Token0004"
                     color="0xEFEFF1FF"
                     fontSize="24"
                     fontUri="pkg:/fonts/Inter-SemiBold.ttf">
@@ -83,7 +73,7 @@
                 <SimpleLabel
                     id="liveButton"
                     translation="[238,24]"
-                    text="Live Channels"
+                    text="Token0001"
                     color="0x9146FFCC"
                     fontSize="24"
                     fontUri="pkg:/fonts/Inter-SemiBold.ttf">
@@ -98,7 +88,7 @@
                 <SimpleLabel
                     id="followingButton"
                     translation="[423,24]"
-                    text="Following"
+                    text="Token0005"
                     color="0xEFEFF1FF"
                     fontSize="24"
                     fontUri="pkg:/fonts/Inter-SemiBold.ttf">
@@ -110,13 +100,6 @@
                         height="3"
                         translation="[0,51]" />
                 </SimpleLabel>
-                <!--<SimpleLabel
-                    id="searchLabel"
-                    translation="[735,29]"
-                text="Search *"
-                    color="0xEFEFF1FF"
-                    fontSize="18"
-                fontUri="pkg:/fonts/Roobert-SemiBold.ttf" /> -->
                 <Poster
                     id="searchLabel"
                     height="32"
@@ -124,22 +107,6 @@
                     translation="[1080,24]"
                     uri="pkg:/images/search.png"
                     blendColor="0xEFEFF1FF" />
-                <!--<SimpleLabel
-                    id="loginButton"
-                    translation="[845,29]"
-                text="Login"
-                    color="0xEFEFF1FF"
-                    fontSize="18"
-                fontUri="pkg:/fonts/Roobert-SemiBold.ttf" >
-                </SimpleLabel> -->
-                <!--<SimpleLabel
-                    id="optionsButton"
-                    translation="[940,29]"
-                text="Options"
-                    color="0xEFEFF1FF"
-                    fontSize="18"
-                fontUri="pkg:/fonts/Roobert-SemiBold.ttf" >
-                </SimpleLabel> -->
                 <Poster
                     id="optionsButton"
                     height="32"
@@ -182,7 +149,7 @@
             <SimpleLabel
                 id="offlineChannelsLabel"
                 translation="[120,700]"
-                text="Offline Channels"
+                text="Token0006"
                 color="0xEFEFF1FF"
                 fontSize="18"
                 visible="false"
@@ -205,7 +172,7 @@
                     <Poster id="profileImage" width="50" height="50" />
                 </MaskGroup>
                 <SimpleLabel id="loggedUserName" translation="[0,20]" fontSize="16"
-                    fontUri="pkg:/fonts/Roobert-SemiBold.ttf" text="Login" />
+                    fontUri="pkg:/fonts/Roobert-SemiBold.ttf" text="Token0007" />
             </Group>
         </Group>
 

@@ -19,7 +19,7 @@
             translation="[0,0]" />
         <SimpleLabel
             translation="[100,50]"
-            text="Options"
+            text="Token0013"
             fontSize="48"
             fontUri="pkg:/fonts/Roobert-Bold.ttf" />
 
@@ -33,7 +33,7 @@
 
         <Group id="videoQualityOption" translation="[100,200]">
             <SimpleLabel
-                text="Video/Stream Quality"
+                text="Token0014"
                 visible="true" />
             <SimpleLabel
                 id="currentVideoQuality"
@@ -82,7 +82,7 @@
 
         <Group id="chatOption" translation="[100,300]">
             <SimpleLabel
-                text="Chat On-By-Default"
+                text="Token0015"
                 visible="true" />
             <SimpleLabel
                 id="chatInfo"

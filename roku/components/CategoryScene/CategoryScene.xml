@@ -19,12 +19,11 @@
     <script type="text/brightscript" uri="pkg:/components/Helpers/StringUtils.brs" />
 
     <children>
-
         <Group id="browseButtons">
             <SimpleLabel
                 id="liveButton"
                 translation="[400,60]"
-                text="Live Channels"
+                text="Token0001"
                 color="0xA970FFFF"
                 fontSize="32"
                 fontUri="pkg:/fonts/Roobert-SemiBold.ttf">
@@ -39,7 +38,7 @@
             <SimpleLabel
                 id="clipButton"
                 translation="[700,60]"
-                text="Clips"
+                text="Token0002"
                 color="0xEFEFF1FF"
                 fontSize="32"
                 fontUri="pkg:/fonts/Roobert-SemiBold.ttf">
@@ -55,7 +54,7 @@
         <SimpleLabel
             id="searchHeader"
             translation="[100,50]"
-            text="Browse"
+            text="Token0003"
             fontSize="48"
             fontUri="pkg:/fonts/Roobert-Bold.ttf" />
         <RowList
