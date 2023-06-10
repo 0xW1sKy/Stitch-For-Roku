@@ -64,5 +64,13 @@
             <source>Determines default state of chat window when opening a stream</source>
             <translation>Determines default state of chat window when opening a stream</translation>
         </message>
+        <message>
+            <source>Video Quality</source>
+            <translation>Video Quality</translation>
+        </message>
+        <message>
+            <source>Video Framerate</source>
+            <translation>Video Framerate</translation>
+        </message>
     </context>
 </TS>
