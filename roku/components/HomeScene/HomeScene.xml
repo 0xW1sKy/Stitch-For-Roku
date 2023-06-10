@@ -87,7 +87,7 @@
                 </SimpleLabel>
                 <SimpleLabel
                     id="followingButton"
-                    translation="[423,24]"
+                    translation="[443,24]"
                     text="Following"
                     color="0xEFEFF1FF"
                     fontSize="24"

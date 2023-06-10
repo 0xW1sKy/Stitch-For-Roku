@@ -277,14 +277,16 @@
                 masksize="[50,50]" translation="[15,-603]">
                 <Poster id="avatar" width="50" height="50" />
             </MaskGroup>
-
-            <SimpleLabel
+            <EmojiLabel
                 id="videoTitle"
-                translation="[82,-594]"
-                text="Stream Title"
-                color="0xFFFFFFFF"
-                fontSize="18"
-                fontUri="pkg:/fonts/Inter-SemiBold.ttf" />
+                height="30"
+                maxWidth="1920"
+                horizAlign="left"
+                repeatCount="-1"
+                color="0xC4C4C4FF"
+                translation="[82, -594]">
+                <Font role="font" uri="pkg:/fonts/Inter-Regular.ttf" size="18" />
+            </EmojiLabel>
             <SimpleLabel
                 id="channelUsername"
                 translation="[82,-572]"

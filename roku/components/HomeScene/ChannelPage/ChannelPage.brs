@@ -148,7 +148,7 @@ sub onGetUserInfo()
     m.streamItem.content.getChild(0).getChild(0).ShortDescriptionLine2 = m.getUserChannel.searchResults.title
     m.streamItem.content.getChild(0).getChild(0).Categories = m.getUserChannel.searchResults.game
     m.streamItem.content.getChild(0).getChild(0).Title = m.getUserChannel.searchResults.viewer_count
-    m.followers.text = m.getUserChannel.searchResults.followers
+    m.followers.text = m.getUserChannel.searchResults.viewer_count
     getVideos()
 end sub
 

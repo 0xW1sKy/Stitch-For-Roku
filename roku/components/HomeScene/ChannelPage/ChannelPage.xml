@@ -44,7 +44,7 @@
                     fontSize="16"
                     fontUri="pkg:/fonts/Inter-Regular.ttf"
                     translation="[80,45]" />
-                <ScrollingLabel
+                <EmojiLabel
                     id="description"
                     height="30"
                     maxWidth="600"
@@ -53,7 +53,7 @@
                     color="0xC4C4C4FF"
                     translation="[600, 45]">
                     <Font role="font" uri="pkg:/fonts/Inter-Regular.ttf" size="11" />
-                </ScrollingLabel>
+                </EmojiLabel>
             </Group>
         </Group>
         <SimpleLabel
