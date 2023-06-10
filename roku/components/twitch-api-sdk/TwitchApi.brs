@@ -218,6 +218,43 @@ function TwitchHelixApiRequest()
     writeResponse(rsp)
 end function
 
+
+function followChannel() as object
+    TwitchGraphQLRequest({
+        operationName: "FollowButton_FollowUser",
+        variables: {
+            input: {
+                disableNotifications: false,
+                targetID: m.top.request.params.id
+            }
+        },
+        extensions: {
+            persistedQuery: {
+                version: 1,
+                sha256Hash: "800e7346bdf7e5278a3c1d3f21b2b56e2639928f86815677a7126b093b2fdd08"
+            }
+        }
+    })
+end function
+
+function unfollowChannel() as object
+    TwitchGraphQLRequest({
+        operationName: "FollowButton_UnfollowUser",
+        variables: {
+            input: {
+                targetID: m.top.request.params.id
+            }
+        },
+        extensions: {
+            persistedQuery: {
+                version: 1,
+                sha256Hash: "f7dae976ebf41c755ae2d758546bfd176b4eeb856656098bb40e0a672ca0d880"
+            }
+        }
+    })
+end function
+
+
 sub main()
     ' Holds requests by id
     m.jobsById = {}
@@ -258,6 +295,12 @@ sub main()
                 end if
                 if rtype = "HelixApiRequest"
                     TwitchHelixApiRequest()
+                end if
+                if rtype = "followChannel"
+                    followChannel()
+                end if
+                if rtype = "unfollowChannel"
+                    unfollowChannel()
                 end if
             end if
         end if
