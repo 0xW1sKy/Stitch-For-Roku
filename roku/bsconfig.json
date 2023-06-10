@@ -1,6 +1,6 @@
 { //This file controls the vscode BrighterScript extension including Debug Capabilities
     "rootDir": "${workspaceFolder}/roku",
-    "host": "192.168.2.30",
+    "host": "192.168.2.44",
     "username": "rokudev",
     "password": "1111",
     "sourceMap": true,
