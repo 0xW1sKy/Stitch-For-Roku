@@ -5,26 +5,24 @@
         <Label id="path" translation="[64,117]" font="font:SmallestBoldSystemFont" />
 
         <LabelList
-            translation="[80,167]"
+            translation="[80,67]"
             id="settingsMenu"
-            itemSize="[293,32]"
+            itemSize="[290,45]"
             vertFocusAnimationStyle="floatingFocus"
-            focusBitmapBlendColor="#006fab"
-            focusedColor="#ffffff"
             itemSpacing="[0,5]"
         />
 
         <Poster
-            translation="[473,167]"
+            translation="[473,67]"
             id="testRectangle"
-            width="880"
-            height="700"
+            width="586"
+            height="400"
             uri="pkg:/images/white.9.png"
             blendColor="#3f3f3f"
         />
 
         <LayoutGroup
-            translation="[767,183]"
+            translation="[767,83]"
             id="settingDetail"
             vertAlignment="top"
             horizAlignment="center"
@@ -42,7 +40,7 @@
                 </ContentNode>
             </RadioButtonList>
         </LayoutGroup>
-        <RadioButtonList id="radioSetting" translation="[600, 300]"
+        <RadioButtonList id="radioSetting" translation="[600, 200]"
             inheritParentTransform="false" vertFocusAnimationStyle="floatingFocus" />
 
     </children>

@@ -6,6 +6,12 @@ sub init()
     m.userLocation = []
 
     m.settingsMenu = m.top.findNode("settingsMenu")
+    ' m.settingsMenu.focusBitmapUri = m.settingsMenu.focusFootprintBitmapUri
+    m.settingsMenu.focusBitmapBlendColor = m.global.constants.colors.twitch.purple9
+    ' m.settingsMenu.focusFootprintBlendColor = m.global.constants.colors.twitch.purple10
+    m.settingsMenu.focusedColor = m.global.constants.colors.white
+
+
     m.settingDetail = m.top.findNode("settingDetail")
     m.settingDesc = m.top.findNode("settingDesc")
     m.settingTitle = m.top.findNode("settingTitle")
