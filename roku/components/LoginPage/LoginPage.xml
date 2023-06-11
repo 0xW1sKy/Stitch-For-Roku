@@ -20,20 +20,20 @@
             text="Go to https://www.twitch.tv/activate and type the following code:"
             color="0xEFEFF1FF"
             fontSize="18"
-            fontUri="pkg:/fonts/Roobert-SemiBold.ttf" />
+            fontUri="pkg:/fonts/KlokanTechNotoSansCJK-Bold.otf" />
         <SimpleLabel
             translation="[300,202]"
             id="code"
             text=""
             color="0xEFEFF1FF"
             fontSize="36"
-            fontUri="pkg:/fonts/JetBrainsMono-Bold.ttf" />
+            fontUri="pkg:/fonts/KlokanTechNotoSansCJK-Bold.otf" />
         <SimpleLabel
             translation="[100,302]"
             text="Stitch should log you in soon after you authorize your account for use."
             color="0xEFEFF1FF"
             fontSize="18"
-            fontUri="pkg:/fonts/Roobert-SemiBold.ttf" />
+            fontUri="pkg:/fonts/KlokanTechNotoSansCJK-Bold.otf" />
     </children>
 
 </component>

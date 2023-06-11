@@ -24,7 +24,7 @@
                 text="Streamers"
                 color="0xA970FFFF"
                 fontSize="32"
-                fontUri="pkg:/fonts/Roobert-SemiBold.ttf">
+                fontUri="pkg:/fonts/KlokanTechNotoSansCJK-Bold.otf">
                 <Rectangle
                     id="liveLine"
                     visible="true"
@@ -39,7 +39,7 @@
                 text="Categories"
                 color="0xEFEFF1FF"
                 fontSize="32"
-                fontUri="pkg:/fonts/Roobert-SemiBold.ttf">
+                fontUri="pkg:/fonts/KlokanTechNotoSansCJK-Bold.otf">
                 <Rectangle
                     id="categoryLine"
                     visible="false"
@@ -54,7 +54,7 @@
             translation="[50,50]"
             text="Search"
             fontSize="48"
-            fontUri="pkg:/fonts/Roobert-Bold.ttf" />
+            fontUri="pkg:/fonts/KlokanTechNotoSansCJK-Bold.otf" />
         <MiniKeyboard
             id="keyboard"
             translation="[50,130]" />

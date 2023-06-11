@@ -36,7 +36,7 @@
             text=""
             color="0xEFEFF1FF"
             fontSize="12"
-            fontUri="pkg:/fonts/Inter-Regular.ttf" />
+            fontUri="pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf" />
 
         <Rectangle
             visible="false"
@@ -63,7 +63,7 @@
                 text="Chat"
                 color="0xEFEFF1FF"
                 fontSize="24"
-                fontUri="pkg:/fonts/Inter-SemiBold.ttf" />
+                fontUri="pkg:/fonts/KlokanTechNotoSansCJK-Bold.otf" />
         </Rectangle>
 
     </children>

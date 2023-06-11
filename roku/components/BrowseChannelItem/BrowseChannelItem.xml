@@ -24,7 +24,7 @@
             maxWidth="320"
             color="0xFFFFFFFF"
             translation="[0, 200]">
-            <Font role="font" uri="pkg:/fonts/Inter-SemiBold.ttf" size="16" />
+            <Font role="font" uri="pkg:/fonts/KlokanTechNotoSansCJK-Bold.otf" size="16" />
         </EmojiLabel>
         <Label
             id="itemStreamer"
@@ -33,7 +33,7 @@
             horizAlign="left"
             color="0xFFFFFFFF"
             translation="[0, 210]">
-            <Font role="font" uri="pkg:/fonts/Inter-Regular.ttf" size="16" />
+            <Font role="font" uri="pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf" size="16" />
         </Label>
         <Label
             id="itemCategory"
@@ -42,7 +42,7 @@
             horizAlign="left"
             color="0xFFFFFFFF"
             translation="[0, 230]">
-            <Font role="font" uri="pkg:/fonts/Inter-Regular.ttf" size="16" />
+            <Font role="font" uri="pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf" size="16" />
         </Label>
         <Poster
             id="viewsRect"
@@ -56,7 +56,7 @@
                 color = "0xFFFFFFFF"
                 translation = "[16, 1]"
             >
-                <Font role = "font" uri = "pkg:/fonts/Inter-Regular.ttf" size = "8"
+                <Font role = "font" uri = "pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf" size = "8"
             />
             </Label>-->
             <Poster
@@ -78,7 +78,7 @@
             horizAlign="left"
             color="0xFFFFFFFF"
             translation="[15,157]">
-            <Font role="font" uri="pkg:/fonts/Inter-Regular.ttf" size="14" />
+            <Font role="font" uri="pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf" size="14" />
         </Label>
 
 

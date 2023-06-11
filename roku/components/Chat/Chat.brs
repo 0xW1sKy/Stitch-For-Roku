@@ -167,7 +167,7 @@ sub onNewComment()
     username.translation = [badge_translation, 0]
     username.visible = true
     username.fontSize = "14"
-    username.fontUri = "pkg:/fonts/Inter-SemiBold.ttf"
+    username.fontUri = "pkg:/fonts/KlokanTechNotoSansCJK-Bold.otf"
 
     message_chars = message.Split(" ")
 
@@ -178,13 +178,13 @@ sub onNewComment()
 
     message_text = createObject("roSGNode", "SimpleLabel")
     message_text.fontSize = "14"
-    message_text.fontUri = "pkg:/fonts/Inter-Regular.ttf"
+    message_text.fontUri = "pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf"
     message_text.visible = true
     message_text.text = ""
 
     colon = createObject("roSGNode", "SimpleLabel")
     colon.fontSize = "14"
-    colon.fontUri = "pkg:/fonts/Inter-Regular.ttf"
+    colon.fontUri = "pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf"
     colon.color = "0xFFFFFFFF"
     colon.translation = [x_translation, y_translation]
     colon.visible = true
@@ -192,7 +192,7 @@ sub onNewComment()
 
     currentWord = createObject("roSGNode", "SimpleLabel")
     currentWord.fontSize = "14"
-    currentWord.fontUri = "pkg:/fonts/Inter-Regular.ttf"
+    currentWord.fontUri = "pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf"
     currentWord.color = "0xFFFFFFFF"
     currentWord.translation = [x_translation, y_translation]
     currentWord.visible = true
@@ -221,7 +221,7 @@ sub onNewComment()
 
                     message_text = createObject("roSGNode", "SimpleLabel")
                     message_text.fontSize = "14"
-                    message_text.fontUri = "pkg:/fonts/Inter-Regular.ttf"
+                    message_text.fontUri = "pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf"
                     message_text.visible = true
                     message_text.text = ""
 
@@ -254,7 +254,7 @@ sub onNewComment()
 
             message_text = createObject("roSGNode", "SimpleLabel")
             message_text.fontSize = "14"
-            message_text.fontUri = "pkg:/fonts/Inter-Regular.ttf"
+            message_text.fontUri = "pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf"
             message_text.visible = true
             message_text.text = ""
 
@@ -288,7 +288,7 @@ sub onNewComment()
 
                 message_text = createObject("roSGNode", "SimpleLabel")
                 message_text.fontSize = "14"
-                message_text.fontUri = "pkg:/fonts/Inter-Regular.ttf"
+                message_text.fontUri = "pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf"
                 message_text.visible = true
                 message_text.text = ""
 
@@ -323,7 +323,7 @@ sub onNewComment()
 
                 message_text = createObject("roSGNode", "SimpleLabel")
                 message_text.fontSize = "14"
-                message_text.fontUri = "pkg:/fonts/Inter-Regular.ttf"
+                message_text.fontUri = "pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf"
                 message_text.visible = true
                 message_text.text = ""
 
@@ -370,7 +370,7 @@ sub onNewComment()
 
                             message_text = createObject("roSGNode", "SimpleLabel")
                             message_text.fontSize = "14"
-                            message_text.fontUri = "pkg:/fonts/Inter-Regular.ttf"
+                            message_text.fontUri = "pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf"
                             message_text.visible = true
                             message_text.text = ""
 
@@ -385,7 +385,7 @@ sub onNewComment()
 
                     message_text = createObject("roSGNode", "SimpleLabel")
                     message_text.fontSize = "14"
-                    message_text.fontUri = "pkg:/fonts/Inter-Regular.ttf"
+                    message_text.fontUri = "pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf"
                     message_text.visible = true
                     message_text.text = word
 
@@ -401,7 +401,7 @@ sub onNewComment()
 
                 ' message_text = createObject("roSGNode", "SimpleLabel")
                 ' message_text.fontSize = "14"
-                ' message_text.fontUri = "pkg:/fonts/Inter-Regular.ttf"
+                ' message_text.fontUri = "pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf"
                 ' message_text.visible = true
                 ' message_text.text = word + " "
 

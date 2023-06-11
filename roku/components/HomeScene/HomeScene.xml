@@ -61,7 +61,7 @@
                     text="Categories"
                     color="0xEFEFF1FF"
                     fontSize="24"
-                    fontUri="pkg:/fonts/Inter-SemiBold.ttf">
+                    fontUri="pkg:/fonts/KlokanTechNotoSansCJK-Bold.otf">
                     <Rectangle
                         id="categoryLine"
                         visible="false"
@@ -76,7 +76,7 @@
                     text="Live Channels"
                     color="0x9146FFCC"
                     fontSize="24"
-                    fontUri="pkg:/fonts/Inter-SemiBold.ttf">
+                    fontUri="pkg:/fonts/KlokanTechNotoSansCJK-Bold.otf">
                     <Rectangle
                         id="liveLine"
                         visible="true"
@@ -91,7 +91,7 @@
                     text="Following"
                     color="0xEFEFF1FF"
                     fontSize="24"
-                    fontUri="pkg:/fonts/Inter-SemiBold.ttf">
+                    fontUri="pkg:/fonts/KlokanTechNotoSansCJK-Bold.otf">
                     <Rectangle
                         id="followingLine"
                         visible="false"
@@ -153,7 +153,7 @@
                 color="0xEFEFF1FF"
                 fontSize="18"
                 visible="false"
-                fontUri="pkg:/fonts/Roobert-SemiBold.ttf" />
+                fontUri="pkg:/fonts/KlokanTechNotoSansCJK-Bold.otf" />
             <RowList
                 id="browseOfflineFollowingList"
                 itemComponentName="BrowseOfflineChannelItem"
@@ -172,7 +172,7 @@
                     <Poster id="profileImage" width="50" height="50" />
                 </MaskGroup>
                 <SimpleLabel id="loggedUserName" translation="[0,20]" fontSize="16"
-                    fontUri="pkg:/fonts/Roobert-SemiBold.ttf" text="Login" />
+                    fontUri="pkg:/fonts/KlokanTechNotoSansCJK-Bold.otf" text="Login" />
             </Group>
         </Group>
 

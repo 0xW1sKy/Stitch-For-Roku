@@ -26,7 +26,7 @@
                 text="Live Channels"
                 color="0xA970FFFF"
                 fontSize="32"
-                fontUri="pkg:/fonts/Roobert-SemiBold.ttf">
+                fontUri="pkg:/fonts/KlokanTechNotoSansCJK-Bold.otf">
                 <Rectangle
                     id="liveLine"
                     visible="true"
@@ -41,7 +41,7 @@
                 text="Clips"
                 color="0xEFEFF1FF"
                 fontSize="32"
-                fontUri="pkg:/fonts/Roobert-SemiBold.ttf">
+                fontUri="pkg:/fonts/KlokanTechNotoSansCJK-Bold.otf">
                 <Rectangle
                     id="clipLine"
                     visible="false"
@@ -56,7 +56,7 @@
             translation="[100,50]"
             text="Browse"
             fontSize="48"
-            fontUri="pkg:/fonts/Roobert-Bold.ttf" />
+            fontUri="pkg:/fonts/KlokanTechNotoSansCJK-Bold.otf" />
         <RowList
             id="browseList"
             itemComponentName="BrowseChannelItem"

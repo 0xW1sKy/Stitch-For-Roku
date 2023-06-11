@@ -29,7 +29,7 @@
                 horizAlign="left"
                 color="0xFFFFFFFF"
                 translation="[15,3]">
-                <Font role="font" uri="pkg:/fonts/Inter-Regular.ttf" size="12" />
+                <Font role="font" uri="pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf" size="12" />
             </Label>
             <Poster
                 uri="pkg:/images/live.png"

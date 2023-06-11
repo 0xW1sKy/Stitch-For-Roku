@@ -43,7 +43,7 @@ sub onOfflineChannelsChange()
         stream_user.translation = "[5,5]"
         stream_user.visible = false
         stream_user.fontSize = "18"
-        stream_user.fontUri = "pkg:/fonts/Inter-SemiBold.ttf"
+        stream_user.fontUri = "pkg:/fonts/KlokanTechNotoSansCJK-Bold.otf"
 
         ' indicator = createObject("roSGNode", "Poster")
         ' indicator.uri = "pkg:/images/verticalFocusIndicator.9.png"
@@ -100,7 +100,7 @@ sub onOfflineChannelsChange()
     stream_user.translation = "[5,7]"
     stream_user.visible = true
     stream_user.fontSize = "18"
-    stream_user.fontUri = "pkg:/fonts/Inter-SemiBold.ttf"
+    stream_user.fontUri = "pkg:/fonts/KlokanTechNotoSansCJK-Bold.otf"
 
     nameBox.appendChild(stream_user)
     m.indicator.appendChild(circle)

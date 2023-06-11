@@ -37,12 +37,12 @@
                 <SimpleLabel
                     id="username"
                     fontSize="24"
-                    fontUri="pkg:/fonts/Inter-SemiBold.ttf"
+                    fontUri="pkg:/fonts/KlokanTechNotoSansCJK-Bold.otf"
                     translation="[80,15]" />
                 <SimpleLabel
                     id="followers"
                     fontSize="16"
-                    fontUri="pkg:/fonts/Inter-Regular.ttf"
+                    fontUri="pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf"
                     translation="[80,45]" />
                 <EmojiLabel
                     id="description"
@@ -52,7 +52,7 @@
                     repeatCount="-1"
                     color="0xC4C4C4FF"
                     translation="[600, 45]">
-                    <Font role="font" uri="pkg:/fonts/Inter-Regular.ttf" size="11" />
+                    <Font role="font" uri="pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf" size="11" />
                 </EmojiLabel>
             </Group>
         </Group>
@@ -61,12 +61,12 @@
             text="Live Stream"
             color="0xB9B9B9FF"
             fontSize="24"
-            fontUri="pkg:/fonts/Inter-SemiBold.ttf"
+            fontUri="pkg:/fonts/KlokanTechNotoSansCJK-Bold.otf"
             translation="[37,87]" />
         <SimpleLabel
             id="liveDuration"
             fontSize="12"
-            fontUri="pkg:/fonts/Inter-Regular.ttf"
+            fontUri="pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf"
             translation="[37,119]" />
         <RowList
             id="streamItem"
@@ -83,7 +83,7 @@
             text="Recent Videos"
             color="0xB9B9B9FF"
             fontSize="24"
-            fontUri="pkg:/fonts/Inter-SemiBold.ttf"
+            fontUri="pkg:/fonts/KlokanTechNotoSansCJK-Bold.otf"
             translation="[37,373]" />
         <RowList
             id="pastBroadcastsList"
