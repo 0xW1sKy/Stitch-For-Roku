@@ -75,7 +75,7 @@ sub onKeyEvent(key, press) as boolean
     handled = false
     if press
         if key = "up"
-            if m.currentIndex = m.min
+            if m.currentIndex = 0
                 return false
                 'tofix: add behaviour to move to top bar'
             end if
