@@ -14,7 +14,7 @@ multi-line text. You can only use EmojiLabel for single lines at a time. -->
     <script type="text/brightscript" uri="EmojiLabel.brs" />
     <script type="text/brightscript" uri="EmojiLabelRegex.brs" />
     <script type="text/brightscript" uri="EmojiLabelUtil.brs" />
-    <script type="text/brightscript" uri="unidecode.brs" />
+    <!-- <script type="text/brightscript" uri="unidecode.brs" /> -->
 
     <interface>
         <!-- Set to the text to display. The text will be searched for emoji characters, and those

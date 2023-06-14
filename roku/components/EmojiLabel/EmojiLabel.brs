@@ -199,15 +199,15 @@ function checkBoundingWidth()
     end for
 end function
 
-function normalizeText(text as string)
-    unicodeRegex = createObject("roRegex", unidecodeRegex(), "m")
-    matches = unicodeRegex.matchAll(text)
-    for each match in matches
-        matchText = match[0]
-        text = text.replace(matchText, textPointName(matchText))
-    end for
-    return text
-end function
+' function normalizeText(text as string)
+'     unicodeRegex = createObject("roRegex", unidecodeRegex(), "m")
+'     matches = unicodeRegex.matchAll(text)
+'     for each match in matches
+'         matchText = match[0]
+'         text = text.replace(matchText, textPointName(matchText))
+'     end for
+'     return text
+' end function
 
 ' Updates the entire label components with new text.
 function setText()
@@ -225,7 +225,7 @@ function setText()
             ' if there is any
             loc = labelText.instr(matchText)
             if loc > 0
-                leftText = normalizeText(labelText.left(loc))
+                leftText = labelText.left(loc)
                 m.components.appendChild(createLabel(leftText))
             end if
 
@@ -234,7 +234,7 @@ function setText()
             m.components.appendChild(createPoster(pointURI))
 
             ' Update the remaining text. Set to be text after this emoji.
-            labelText = normalizeText(labelText.mid(loc + matchText.len()))
+            labelText = labelText.mid(loc + matchText.len())
         end for
 
         ' If we have text at the end after the last emoji match, create
