@@ -16,6 +16,38 @@ function getChannelBadges() as object
     return user_id
 end function
 
+sub getChannel7tvEmotes(channel_id)
+    temp = getjsondata("https://7tv.io/v3/users/twitch/" + channel_id)
+    assocEmotes = {}
+    if temp.emote_set <> invalid
+        if temp.emote_set.emotes <> invalid
+            for each emote in temp.emote_set.emotes
+                uri = "https://cdn.7tv.app/emote/" + emote.id + "/1x.webp"
+                assocEmotes[emote.name] = uri
+            end for
+        end if
+    end if
+    if m.global.channel7TVEmotes = invalid
+        m.global.addFields({ channel7TVEmotes: assocEmotes })
+    else
+        m.global.setField("channel7TVEmotes", assocEmotes)
+    end if
+end sub
+
+sub getGlobal7tvEmotes()
+    temp = getjsondata("https://7tv.io/v3/emote-sets/global")
+    assocEmotes = {}
+    for each emote in temp.emotes
+        uri = "https://cdn.7tv.app/emote/" + emote.id + "/1x.webp"
+        assocEmotes[emote.name] = uri
+    end for
+    if m.global.global7TVEmotes = invalid
+        m.global.addFields({ global7TVEmotes: assocEmotes })
+    else
+        m.global.setField("global7TVEmotes", assocEmotes)
+    end if
+end sub
+
 function main()
     'messagePort = CreateObject("roMessagePort")
     if m.global.globalBadges = invalid
@@ -30,6 +62,8 @@ function main()
         end for
         m.global.addFields({ globalTTVEmotes: assocEmotes })
     end if
+
+    getGlobal7tvEmotes()
 
     if m.top.channel <> ""
         tcpListen = createObject("roStreamSocket")
@@ -98,6 +132,8 @@ function main()
         else
             m.global.setField("channelTTVFrankerEmotes", assocEmotes)
         end if
+
+        getChannel7tvEmotes(channel_id)
 
         queue = createObject("roArray", 300, true)
         first = 0

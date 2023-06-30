@@ -349,6 +349,75 @@ sub onNewComment()
             'end for
         end if
 
+        if m.global.global7TVEmotes <> invalid and not is_emote
+            if m.global.global7TVEmotes.DoesExist(word)
+                message_text.translation = [x_translation, y_translation]
+
+                group.appendChild(message_text)
+
+                message_text = createObject("roSGNode", "SimpleLabel")
+                message_text.fontSize = "14"
+                message_text.fontUri = "pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf"
+                message_text.visible = true
+                message_text.text = ""
+
+                x_translation += width
+
+                poster = createObject("roSGNode", "Poster")
+                poster.uri = m.global.global7TVEmotes[word]
+                poster.visible = true
+                poster.translation = [x_translation, y_translation - 5]
+
+                group.appendChild(poster)
+
+                x_translation += 35
+
+                if x_translation >= 230 or word_number = message_chars.Count()
+                    x_translation = 0
+                    y_translation += 23
+                end if
+
+                is_emote = true
+                appended_last_line = true
+            end if
+            'end for
+        end if
+
+
+        if m.global.channel7TVEmotes <> invalid and not is_emote
+            if m.global.channel7TVEmotes.DoesExist(word)
+                message_text.translation = [x_translation, y_translation]
+
+                group.appendChild(message_text)
+
+                message_text = createObject("roSGNode", "SimpleLabel")
+                message_text.fontSize = "14"
+                message_text.fontUri = "pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf"
+                message_text.visible = true
+                message_text.text = ""
+
+                x_translation += width
+
+                poster = createObject("roSGNode", "Poster")
+                poster.uri = m.global.channel7TVEmotes[word]
+                poster.visible = true
+                poster.translation = [x_translation, y_translation - 5]
+
+                group.appendChild(poster)
+
+                x_translation += 35
+
+                if x_translation >= 230 or word_number = message_chars.Count()
+                    x_translation = 0
+                    y_translation += 23
+                end if
+
+                is_emote = true
+                appended_last_line = true
+            end if
+            'end for
+        end if
+
         if not is_emote
             if (x_translation + currentWordWidth + width) < 230
                 temp = message_text.text
