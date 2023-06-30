@@ -123,13 +123,13 @@ end sub
 
 sub onChatVisibilityChange()
     if m.top.chatIsVisible
-        m.progressBarBase.width = 816
+        m.progressBarBase.width = 950
         'm.progressBarProgress.width = 810
         m.glow.translation = [534, 32]
         m.timeTravelButton.translation = [390, 51]
         m.controlButton.translation = [476, 53]
         m.messagesButton.translation = [552, 52]
-        m.timeDuration.translation = [814, 61]
+        m.timeDuration.translation = [950, 61]
     else
         m.progressBarBase.width = 1200
         'm.progressBarProgress.width = 1200
