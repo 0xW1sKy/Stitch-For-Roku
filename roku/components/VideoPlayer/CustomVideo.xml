@@ -20,7 +20,8 @@
     </interface>
 
     <script type="text/brightscript" uri="CustomVideo.brs" />
-
+    <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
+    <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
     <children>
         <Poster
             id="timeTravelRect"

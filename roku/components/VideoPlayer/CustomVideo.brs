@@ -46,6 +46,7 @@ function init()
 
     m.progressBarFocused = false
 
+    m.top.observeField("position", "watcher")
     m.top.observeField("state", "onvideoStateChange")
     m.top.observeField("channelAvatar", "onChannelAvatarChange")
     m.top.observeField("chatIsVisible", "onChatVisibilityChange")
@@ -75,6 +76,15 @@ function init()
     m.top.streamLayoutMode = 0
     ' m.progressBar.state = 2
 
+end function
+
+
+function watcher()
+    m.timeProgress.text = convertToReadableTimeFormat(m.currentPositionSeconds)
+    m.timeDuration.text = convertToReadableTimeFormat(m.top.duration)
+    m.currentPositionSeconds = m.top.position
+    m.progressBarProgress.width = m.progressBarBase.width * (m.currentPositionSeconds / m.top.duration)
+    m.progressDot.translation = [m.progressBarBase.width * (m.currentPositionSeconds / m.top.duration) + 33, 77]
 end function
 
 function resetProgressBar()
@@ -304,8 +314,7 @@ function saveVideoBookmark() as void
         ? "CustomVideo >> videoBookmarks > " videoBookmarks
 
         'sec = createObject("roRegistrySection", "VideoSettings")
-        m.sec.Write("VideoBookmarks", videoBookmarks)
-        m.sec.Flush()
+        set_user_setting("VideoBookmarks", videoBookmarks)
     end if
 end function
 
@@ -685,6 +694,7 @@ function onKeyEvent(key, press) as boolean
                     m.controlButton.uri = "pkg:/images/play.png"
                 end if
             end if
+            return true
         end if
     else if not press
         if key = "rewind" or key = "fastforward"
