@@ -24,7 +24,9 @@
     <children>
         <Group id="header" translation="[-8, 5]">
             <Group id="profile" translation="[0,0]">
+                <Group id="banner" translation="[-8, 5]"></Group>
                 <Rectangle
+                    id="bannerOverlay"
                     visible="true"
                     color="0x010101F0"
                     width="1358"

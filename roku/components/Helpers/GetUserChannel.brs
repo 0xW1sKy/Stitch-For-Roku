@@ -76,6 +76,32 @@ function getSearchResults() as object
             }
     } })
     channelData = ParseJSON(req.send())
+    shellreq = HttpRequest({
+        url: "https://gql.twitch.tv/gql"
+        headers: headers
+        method: "POST"
+        data: {
+            operationName: "ChannelShell"
+            variables: {
+                login: m.top.loginRequested
+            }
+            extensions: {
+                persistedQuery: {
+                    version: 1,
+                    sha256Hash: "580ab410bcd0c1ad194224957ae2241e5d252b2c5173d8e0cce9d32d5bb14efe"
+                }
+            }
+    } })
+    channelShell = ParseJSON(shellreq.send())
+    if channelShell <> invalid
+        if channelShell.data.userOrError <> invalid
+            if channelShell.data.userOrError.bannerImageURL <> invalid
+                bannerImage = channelShell.data.userOrError.bannerImageURL
+            else
+                bannerImage = invalid
+            end if
+        end if
+    end if
     ? "DATA"
     ? channelData
     testvar = m.top.loginRequested
@@ -91,6 +117,7 @@ function getSearchResults() as object
     result.followers = channelData.data.channel.followers.totalCount
     result.login = channelData.data.channel.login
     result.id = channelData.data.channel.id
+    result.bannerImage = bannerImage
     if channelData.data.channel.stream <> invalid
         result.is_live = true
         result.thumbnail_url = channelData.data.channel.stream.previewImageURL

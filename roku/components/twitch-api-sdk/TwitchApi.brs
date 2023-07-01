@@ -187,6 +187,21 @@ function getGameDirectoryQuery()
 
 end function
 
+function getChannelShell()
+    if m.top.request.params.id = invalid return invalid
+    TwitchGraphQLRequest({
+        operationName: "ChannelShell"
+        variables: {
+            login: m.top.request.params.id
+        }
+        extensions: {
+            persistedQuery: {
+                version: 1,
+                sha256Hash: "580ab410bcd0c1ad194224957ae2241e5d252b2c5173d8e0cce9d32d5bb14efe"
+            }
+        }
+    })
+end function
 
 function TwitchHelixApiRequest()
     access_token = ""
@@ -301,6 +316,9 @@ sub main()
                 end if
                 if rtype = "unfollowChannel"
                     unfollowChannel()
+                end if
+                if rtype = "getChannelShell"
+                    getChannelShell()
                 end if
             end if
         end if
