@@ -117,23 +117,29 @@ sub getVideos()
     m.getVideos.control = "RUN"
 end sub
 
+function setBannerImage()
+    bannerGroup = m.top.findNode("banner")
+    poster = createObject("roSGNode", "Poster")
+    if m.getUserChannel.searchResults.bannerImage <> invalid
+        poster.uri = m.getUserChannel.searchResults.bannerImage
+    else
+        poster.uri = "pkg:/images/default_banner.png"
+    end if
+    poster.width = 1280
+    poster.height = 320
+    poster.visible = true
+    poster.translation = [0, -5]
+    bannerGroup.appendChild(poster)
+    bannerOverlay = m.top.findNode("bannerOverlay")
+    bannerOverlay.color = "0x01010199"
+end function
+
 sub onGetUserInfo()
     ? "Home Scene > Channel Page > onGetUserInfo"
     m.username.text = m.getUserChannel.searchResults.display_name
     m.avatar.uri = m.getUserChannel.searchResults.profile_image_url
     tempDescription = createObject("roSGNode", "SimpleLabel")
-    if m.getUserChannel.searchResults.bannerImage <> invalid
-        bannerGroup = m.top.findNode("banner")
-        poster = createObject("roSGNode", "Poster")
-        poster.uri = m.getUserChannel.searchResults.bannerImage
-        poster.width = 1200
-        poster.height = 300
-        poster.visible = true
-        poster.translation = [0, -5]
-        bannerGroup.appendChild(poster)
-        bannerOverlay = m.top.findNode("bannerOverlay")
-        bannerOverlay.color = "0x01010199"
-    end if
+    setBannerImage()
     if m.getUserChannel.searchResults.description <> ""
         m.description.text = chr(34) + m.getUserChannel.searchResults.description + chr(34)
         tempDescription.text = chr(34) + m.getUserChannel.searchResults.description + chr(34)
