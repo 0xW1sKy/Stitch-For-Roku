@@ -137,12 +137,17 @@ sub onStreamChangeFromChannelPage()
     m.videoPlayer.channelUsername = m.homeScene.channelUsername
     m.videoPlayer.channelAvatar = m.homeScene.channelAvatar
     m.videoPlayer.thumbnailInfo = m.homeScene.thumbnailInfo
+    if m.stream.URL.Instr("/vod/") > -1
+        m.videoPlayer.video_id = m.stream.URL.split("/vod/")[1].split(".m3u8?")[0]
+    else
+        m.videoPlayer.video_id = invalid
+    end if
     m.homeScene.thumbnailInfo = invalid
     playVideo(m.stream)
-    if m.videoPlayer.thumbnailInfo <> invalid
-        if m.videoPlayer.videoBookmarks.DoesExist(m.videoPlayer.thumbnailInfo.video_id.ToStr())
-            ? "MainScene >> position > " m.videoPlayer.videoBookmarks[m.videoPlayer.thumbnailInfo.video_id.ToStr()]
-            m.videoPlayer.seek = Val(m.videoPlayer.videoBookmarks[m.videoPlayer.thumbnailInfo.video_id.ToStr()])
+    if m.videoPlayer.video_id <> invalid
+        if m.videoPlayer.videoBookmarks.DoesExist(m.videoPlayer.video_id)
+            ? "MainScene >> position > " m.videoPlayer.videoBookmarks[m.videoPlayer.video_id]
+            m.videoPlayer.seek = Val(m.videoPlayer.videoBookmarks[m.videoPlayer.video_id])
         end if
     end if
 end sub

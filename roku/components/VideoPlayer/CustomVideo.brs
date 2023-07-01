@@ -83,8 +83,15 @@ function watcher()
     m.timeProgress.text = convertToReadableTimeFormat(m.currentPositionSeconds)
     m.timeDuration.text = convertToReadableTimeFormat(m.top.duration)
     m.currentPositionSeconds = m.top.position
-    m.progressBarProgress.width = m.progressBarBase.width * (m.currentPositionSeconds / m.top.duration)
-    m.progressDot.translation = [m.progressBarBase.width * (m.currentPositionSeconds / m.top.duration) + 33, 77]
+    if m.top.duration <> 0
+        m.progressBarProgress.width = m.progressBarBase.width * (m.currentPositionSeconds / m.top.duration)
+        m.progressDot.translation = [m.progressBarBase.width * (m.currentPositionSeconds / m.top.duration) + 33, 77]
+    end if
+
+    checker = m.top.position mod 60
+    if checker = 0
+        saveVideoBookmark()
+    end if
 end function
 
 function resetProgressBar()
@@ -272,9 +279,9 @@ function saveVideoBookmark() as void
         videoBookmarks = "{"
 
         tempBookmarks = m.top.videoBookmarks
-        if m.top.thumbnailInfo <> invalid and m.top.thumbnailInfo.video_id <> invalid
-            bookmarkAlreadyExists = tempBookmarks.DoesExist(m.top.thumbnailInfo.video_id)
-            tempBookmarks[m.top.thumbnailInfo.video_id] = Int(m.top.position).ToStr()
+        if m.top.video_id <> invalid
+            bookmarkAlreadyExists = tempBookmarks.DoesExist(m.top.video_id)
+            tempBookmarks[m.top.video_id] = Int(m.top.position).ToStr()
         else
             bookmarkAlreadyExists = false
         end if
@@ -304,7 +311,7 @@ function saveVideoBookmark() as void
         end if
 
         if m.top.thumbnailInfo <> invalid and bookmarkAlreadyExists = false
-            videoBookmarks += "," + chr(34) + m.top.thumbnailInfo.video_id.ToStr() + chr(34) + " : " + chr(34) + Int(m.top.position).ToStr() + chr(34) + "}"
+            videoBookmarks += "," + chr(34) + m.top.video_id.ToStr() + chr(34) + " : " + chr(34) + Int(m.top.position).ToStr() + chr(34) + "}"
         else
             videoBookmarks += "}"
         end if

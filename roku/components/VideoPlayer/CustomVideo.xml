@@ -17,6 +17,7 @@
         <field id="QualityChangeRequest" type="string" />
         <field id="streamDurationSeconds" type="Integer" value="0" />
         <field id="currentProgressBarState" type="Integer" value="1" />
+        <field id="video_id" type="string" />
     </interface>
 
     <script type="text/brightscript" uri="CustomVideo.brs" />
