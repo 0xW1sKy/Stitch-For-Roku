@@ -162,6 +162,46 @@ function getOauthToken()
     writeResponse(rsp)
 end function
 
+function getSearchQuery()
+    if m.top.request.params.query = invalid return invalid
+    TwitchGraphQLRequest({
+        query: "query Search_Query(" + chr(10) + "  $userQuery: String!" + chr(10) + "  $platform: String!" + chr(10) + "  $noQuery: Boolean!" + chr(10) + ") {" + chr(10) + "  currentUser {" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "    login" + chr(10) + "    roles {" + chr(10) + "      isStaff" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "  searchFor(userQuery: $userQuery, platform: $platform) @skip(if: $noQuery) {" + chr(10) + "    ...SearchResults_results" + chr(10) + "  }" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment FocusableCategoryCard_category on Game {" + chr(10) + "  name" + chr(10) + "  id" + chr(10) + "  __typename" + chr(10) + "  displayName" + chr(10) + "  viewersCount" + chr(10) + "  boxArtURL" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment FocusableOfflineChannelCard_channel on User {" + chr(10) + "  displayName" + chr(10) + "  followers {" + chr(10) + "    totalCount" + chr(10) + "  }" + chr(10) + "  lastBroadcast {" + chr(10) + "    startedAt" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "  login" + chr(10) + "  profileImageURL(width: 300)" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment FocusableStreamCard_stream on Stream {" + chr(10) + "  broadcaster {" + chr(10) + "    displayName" + chr(10) + "    login" + chr(10) + "    hosting {" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "    }" + chr(10) + "    broadcastSettings {" + chr(10) + "      title" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "    }" + chr(10) + "    profileImageURL(width: 50)" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "  game {" + chr(10) + "    displayName" + chr(10) + "    name" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "  id" + chr(10) + "  __typename" + chr(10) + "  previewImageURL" + chr(10) + "  type" + chr(10) + "  viewersCount" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment FocusableVodCard_video on Video {" + chr(10) + "  createdAt" + chr(10) + "  lengthSeconds" + chr(10) + "  game {" + chr(10) + "    boxArtURL" + chr(10) + "    displayName" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "  id" + chr(10) + "  __typename" + chr(10) + "  previewThumbnailURL" + chr(10) + "  self {" + chr(10) + "    viewingHistory {" + chr(10) + "      position" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "  title" + chr(10) + "  viewCount" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment SearchResults_results on SearchFor {" + chr(10) + "  channels {" + chr(10) + "    items {" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "      bannerImageURL" + chr(10) + "      ...FocusableOfflineChannelCard_channel" + chr(10) + "      stream {" + chr(10) + "        id" + chr(10) + "        __typename" + chr(10) + "        previewImageURL" + chr(10) + "        ...FocusableStreamCard_stream" + chr(10) + "        game {" + chr(10) + "          id" + chr(10) + "          __typename" + chr(10) + "        }" + chr(10) + "      }" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "  relatedLiveChannels {" + chr(10) + "    items {" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "      bannerImageURL" + chr(10) + "      ...FocusableOfflineChannelCard_channel" + chr(10) + "      stream {" + chr(10) + "        id" + chr(10) + "        __typename" + chr(10) + "        previewImageURL" + chr(10) + "        ...FocusableStreamCard_stream" + chr(10) + "        game {" + chr(10) + "          id" + chr(10) + "          __typename" + chr(10) + "        }" + chr(10) + "      }" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "  games {" + chr(10) + "    items {" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "      ...FocusableCategoryCard_category" + chr(10) + "      streams(first: 1) {" + chr(10) + "        edges {" + chr(10) + "          node {" + chr(10) + "            previewImageURL" + chr(10) + "            id" + chr(10) + "            __typename" + chr(10) + "          }" + chr(10) + "        }" + chr(10) + "      }" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "  videos {" + chr(10) + "    items {" + chr(10) + "      ...FocusableVodCard_video" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "      game {" + chr(10) + "        id" + chr(10) + "        __typename" + chr(10) + "      }" + chr(10) + "      previewThumbnailURL" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "}" + chr(10) + ""
+        variables: {
+            userQuery: m.top.request.params.query
+            platform: "switch_web_tv"
+            noQuery: false
+        }
+    })
+
+end function
+
+function getGameDirectoryQuery()
+    if m.top.request.params.gameAlias = invalid return invalid
+    TwitchGraphQLRequest({
+        query: "query GameDirectory_Query(" + chr(10) + "  $gameAlias: String!" + chr(10) + "  $channelsCount: Int!" + chr(10) + ") {" + chr(10) + "  currentUser {" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "    login" + chr(10) + "    roles {" + chr(10) + "      isStaff" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "  game(name: $gameAlias) {" + chr(10) + "    boxArtURL" + chr(10) + "    displayName" + chr(10) + "    name" + chr(10) + "    streams(first: $channelsCount) {" + chr(10) + "      edges {" + chr(10) + "        node {" + chr(10) + "          id" + chr(10) + "          __typename" + chr(10) + "          previewImageURL" + chr(10) + "          ...FocusableStreamCard_stream" + chr(10) + "        }" + chr(10) + "      }" + chr(10) + "    }" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment FocusableStreamCard_stream on Stream {" + chr(10) + "  broadcaster {" + chr(10) + "    displayName" + chr(10) + "    login" + chr(10) + "    hosting {" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "    }" + chr(10) + "    broadcastSettings {" + chr(10) + "      title" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "    }" + chr(10) + "    profileImageURL(width: 50)" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "  game {" + chr(10) + "    displayName" + chr(10) + "    name" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "  id" + chr(10) + "  __typename" + chr(10) + "  previewImageURL" + chr(10) + "  type" + chr(10) + "  viewersCount" + chr(10) + "}" + chr(10) + ""
+        variables: {
+            gameAlias: m.top.request.params.gameAlias
+            channelsCount: 40
+        }
+    })
+
+end function
+
+function getChannelShell()
+    if m.top.request.params.id = invalid return invalid
+    TwitchGraphQLRequest({
+        operationName: "ChannelShell"
+        variables: {
+            login: m.top.request.params.id
+        }
+        extensions: {
+            persistedQuery: {
+                version: 1,
+                sha256Hash: "580ab410bcd0c1ad194224957ae2241e5d252b2c5173d8e0cce9d32d5bb14efe"
+            }
+        }
+    })
+end function
 
 function TwitchHelixApiRequest()
     access_token = ""
@@ -192,6 +232,43 @@ function TwitchHelixApiRequest()
     rsp = ParseJSON(req.send())
     writeResponse(rsp)
 end function
+
+
+function followChannel() as object
+    TwitchGraphQLRequest({
+        operationName: "FollowButton_FollowUser",
+        variables: {
+            input: {
+                disableNotifications: false,
+                targetID: m.top.request.params.id
+            }
+        },
+        extensions: {
+            persistedQuery: {
+                version: 1,
+                sha256Hash: "800e7346bdf7e5278a3c1d3f21b2b56e2639928f86815677a7126b093b2fdd08"
+            }
+        }
+    })
+end function
+
+function unfollowChannel() as object
+    TwitchGraphQLRequest({
+        operationName: "FollowButton_UnfollowUser",
+        variables: {
+            input: {
+                targetID: m.top.request.params.id
+            }
+        },
+        extensions: {
+            persistedQuery: {
+                version: 1,
+                sha256Hash: "f7dae976ebf41c755ae2d758546bfd176b4eeb856656098bb40e0a672ca0d880"
+            }
+        }
+    })
+end function
+
 
 sub main()
     ' Holds requests by id
@@ -233,6 +310,15 @@ sub main()
                 end if
                 if rtype = "HelixApiRequest"
                     TwitchHelixApiRequest()
+                end if
+                if rtype = "followChannel"
+                    followChannel()
+                end if
+                if rtype = "unfollowChannel"
+                    unfollowChannel()
+                end if
+                if rtype = "getChannelShell"
+                    getChannelShell()
                 end if
             end if
         end if
