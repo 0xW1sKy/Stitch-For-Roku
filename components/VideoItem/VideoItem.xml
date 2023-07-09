@@ -7,7 +7,7 @@
         <field id="rowFocusPercent" type="float" onChange="showrowfocus" />
     </interface>
 
-    <script type="text/brightscript" uri="BrowseChannelItem.brs" />
+    <script type="text/brightscript" uri="VideoItem.brs" />
     <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
     <children>
 
@@ -26,7 +26,7 @@
                 translation="[5,5]" />
             <Rectangle
                 id="itemMask"
-                color="0x000000FF"
+                color="0x0e0e10ff"
                 opacity="0.75"
                 width="512"
                 height="288"

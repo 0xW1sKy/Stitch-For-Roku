@@ -8,6 +8,7 @@ sub init()
     m.itemCategory = m.top.findNode("itemCategory")
     m.itemViewers = m.top.findNode("itemViewers")
     m.viewsRect = m.top.findNode("viewsRect")
+
 end sub
 
 sub showcontent()
