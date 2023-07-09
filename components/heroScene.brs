@@ -8,6 +8,7 @@ sub init()
     if get_setting("active_user") = invalid
         set_setting("active_user", "default")
     end if
+    onMenuSelection()
 end sub
 
 function gsCallback()
