@@ -1,6 +1,6 @@
 sub init()
     m.top.backgroundUri = ""
-    m.top.backgroundColor = "0x020202FF"
+    m.top.backgroundColor = m.global.constants.colors.hinted.grey1
     m.activeNode = invalid
     m.menu = m.top.findNode("MenuBar")
     m.menu.observeField("buttonSelected", "onMenuSelection")
@@ -28,7 +28,6 @@ function buildNode(id, name)
 end function
 
 function onMenuSelection()
-    pageMap = ["Home", 1, 2, 3, 4, "Settings", "LoginPage"]
     if m.activeNode <> invalid
         if m.activeNode.id.toStr() <> m.menu.buttonSelected.toStr()
             m.top.removeChild(m.activeNode)
@@ -37,7 +36,7 @@ function onMenuSelection()
     end if
     ? "Menu Button Selected"; m.menu.buttonSelected
     if m.activeNode = invalid
-        m.activeNode = buildNode(m.menu.buttonSelected, pageMap[m.menu.buttonSelected])
+        m.activeNode = buildNode(m.menu.buttonSelected, m.global.constants.menuOptions[m.menu.buttonSelected])
     end if
     m.activeNode.setfocus(true)
 end function

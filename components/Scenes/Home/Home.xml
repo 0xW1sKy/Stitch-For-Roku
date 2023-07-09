@@ -7,14 +7,14 @@
         <RowList
             id="exampleRowList"
             translation="[ 130, 160 ]"
-            itemComponentName="BrowseChannelItem"
+            itemComponentName="VideoItem"
             numRows="4"
             rowItemSize="[[320,180]]"
             rowItemSpacing="[[30,0]]"
             itemSize="[1080,275]"
             itemSpacing="[ 0, 40 ]"
             showRowLabel="[ true ]"
-            drawFocusFeedback="false"
+            focusBitmapUri="pkg:/images/focusIndicator.9.png"
             vertFocusAnimationStyle="fixedFocus"
             rowFocusAnimationStyle="fixedFocusWrap" />
 

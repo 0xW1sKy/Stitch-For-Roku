@@ -9,11 +9,12 @@
         <ContentNode title="Renderable Nodes">
             <ContentNode
                 HDPosterUrl="http://www.sdktestinglab.com/Tutorial/images/rectanglepg.jpg"
-                title="Rectangle Node"
-                secondaryTitle="SecondaryTitle"
-                shortDescriptionLine1="DescriptionLine1"
-                shortDescriptionLine2="DescriptionLine2"
-                Live="true" />
+                title="STREAM TITLE CLICK HERE!!!!"
+                secondaryTitle="HasanAbi"
+                shortDescriptionLine1="20K Viewers"
+                shortDescriptionLine2="Just Chatting"
+                Live="true"
+            />
             <ContentNode
                 HDPosterUrl="http://www.sdktestinglab.com/Tutorial/images/rectanglerotpg.jpg"
                 title="Rectangle Node (Rotated)"
@@ -44,28 +45,32 @@
                 secondaryTitle=""
                 shortDescriptionLine1=""
                 shortDescriptionLine2=""
-                Live="false" />
+                Live="false"
+            />
             <ContentNode
                 HDPosterUrl="http://www.sdktestinglab.com/Tutorial/images/zorenderablespg.jpg"
                 title="Z-Order Renderable Nodes"
                 secondaryTitle=""
                 shortDescriptionLine1=""
                 shortDescriptionLine2=""
-                Live="false" />
+                Live="false"
+            />
             <ContentNode
                 HDPosterUrl="http://www.sdktestinglab.com/Tutorial/images/pcrenderablespg.jpg"
                 title="Parent-Child Grouping"
                 secondaryTitle=""
                 shortDescriptionLine1=""
                 shortDescriptionLine2=""
-                Live="false" />
+                Live="false"
+            />
             <ContentNode
                 HDPosterUrl="http://www.sdktestinglab.com/Tutorial/images/pcrectanglespg.jpg"
                 title="Parent-Child Inheritance"
                 secondaryTitle=""
                 shortDescriptionLine1=""
                 shortDescriptionLine2=""
-                Live="false" />
+                Live="false"
+            />
         </ContentNode>
 
         <ContentNode title="Animation Nodes">
@@ -75,35 +80,40 @@
                 secondaryTitle=""
                 shortDescriptionLine1=""
                 shortDescriptionLine2=""
-                Live="false" />
+                Live="false"
+            />
             <ContentNode
                 HDPosterUrl="http://www.sdktestinglab.com/Tutorial/images/animfloatpg.jpg"
                 title="FloatFieldInterpolator"
                 secondaryTitle=""
                 shortDescriptionLine1=""
                 shortDescriptionLine2=""
-                Live="false" />
+                Live="false"
+            />
             <ContentNode
                 HDPosterUrl="http://www.sdktestinglab.com/Tutorial/images/animcolorpg.jpg"
                 title="ColorFieldInterpolator"
                 secondaryTitle=""
                 shortDescriptionLine1=""
                 shortDescriptionLine2=""
-                Live="false" />
+                Live="false"
+            />
             <ContentNode
                 HDPosterUrl="http://www.sdktestinglab.com/Tutorial/images/animsequencepg.jpg"
                 title="Sequential Animation"
                 secondaryTitle=""
                 shortDescriptionLine1=""
                 shortDescriptionLine2=""
-                Live="false" />
+                Live="false"
+            />
             <ContentNode
                 HDPosterUrl="http://www.sdktestinglab.com/Tutorial/images/animparallelpg.jpg"
                 title="Parallel Animation"
                 secondaryTitle=""
                 shortDescriptionLine1=""
                 shortDescriptionLine2=""
-                Live="false" />
+                Live="false"
+            />
         </ContentNode>
 
         <ContentNode title="Events and Observers">
@@ -113,14 +123,16 @@
                 secondaryTitle=""
                 shortDescriptionLine1=""
                 shortDescriptionLine2=""
-                Live="false" />
+                Live="false"
+            />
             <ContentNode
                 HDPosterUrl="http://www.sdktestinglab.com/Tutorial/images/keyeventspg.jpg"
                 title="Key Events"
                 secondaryTitle=""
                 shortDescriptionLine1=""
                 shortDescriptionLine2=""
-                Live="false" />
+                Live="false"
+            />
         </ContentNode>
 
     </children>

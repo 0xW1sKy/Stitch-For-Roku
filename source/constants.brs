@@ -5,6 +5,15 @@ sub setConstants()
     ' Set Global Constants
     globals.addFields({
         constants: {
+            menuOptions: [
+                "Home",
+                "Categories",
+                "Following",
+                "Vods",
+                "Search",
+                "Settings",
+                "LoginPage"
+            ]
             colors: {
                 muted: {
                     black: "0x020202FF"
