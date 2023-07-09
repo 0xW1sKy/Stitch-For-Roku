@@ -4,6 +4,7 @@ end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
     if not press then return false
+    ? "ButtonGroup Key Event: "; key
     if key = "right"
         i = m.top.buttonFocused
         target = i + 1
@@ -18,7 +19,10 @@ function onKeyEvent(key as string, press as boolean) as boolean
         return true
     else if key = "up" or key = "down"
         m.top.escape = key
-        return true
+    end if
+    if key = "down"
+        m.top.buttonSelected = m.top.buttonFocused
+        return True
     end if
 
     return false
