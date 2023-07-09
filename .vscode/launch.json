@@ -9,21 +9,51 @@
             "request": "launch",
             "name": "BrightScript Debug: Launch",
             "stopOnEntry": false,
-            "host": "192.168.2.44",
+            "host": "192.168.2.33",
             "password": "1111",
-            "rootDir": "${workspaceFolder}",
+            "rootDir": "${workspaceFolder}/",
             "injectRdbOnDeviceComponent": true,
             "enableDebuggerAutoRecovery": true,
             "stopDebuggerOnAppExit": true,
             "files": [
+                "source/**/*",
                 "components/**/*",
-                "modules/**/*",
-                "fonts/**/*",
                 "images/**/*",
+                "fonts/**/*",
+                "vendor/**/*",
+                "lib/**/*",
+                "modules/**/*",
                 "locale/**/*",
                 "settings/**/*",
                 "source/**/*",
-                "manifest"
+                "manifest",
+                "env"
+            ]
+        },
+            {
+            "type": "brightscript",
+            "request": "launch",
+            "name": "BrightScript Package: Run",
+            "stopOnEntry": false,
+            "host": "192.168.2.33",
+            "password": "1111",
+            "rootDir": "${workspaceFolder}/",
+            "injectRdbOnDeviceComponent": false,
+            "enableDebuggerAutoRecovery": false,
+            "stopDebuggerOnAppExit": false,
+            "files": [
+                "source/**/*",
+                "components/**/*",
+                "images/**/*",
+                "fonts/**/*",
+                "vendor/**/*",
+                "lib/**/*",
+                "modules/**/*",
+                "locale/**/*",
+                "settings/**/*",
+                "source/**/*",
+                "manifest",
+                "env"
             ]
         }
     ]

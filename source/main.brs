@@ -1,5 +1,4 @@
 sub Main(input as dynamic)
-
     ' Add deep linking support here. Input is an associative array containing
     ' parameters that the client defines. Examples include "options, contentID, etc."
     ' See guide here: https://sdkdocs.roku.com/display/sdkdoc/External+Control+Guide
@@ -36,13 +35,22 @@ sub RunUserInterface()
     m.screen.setMessagePort(m.port)
     m.scene = m.screen.CreateScene("HeroScene")
     m.screen.show()
+    m.scene.observeField("exitApp", m.port)
+    m.scene.setFocus(true)
     m.global = m.screen.getGlobalNode()
     ' vscode_rdb_on_device_component_entry
     while(true)
         msg = wait(0, m.port)
         msgType = type(msg)
-        if msgType = "roSGScreenEvent"
+        ? "msgType: "; msgType
+        ? "field: "; msg.getField()
+        if msgType = "roSGScreenEvent" then
             if msg.isScreenClosed() then
+                return
+            end if
+        else if msgType = "roSGNodeEvent" then
+            field = msg.getField()
+            if field = "exitApp" then
                 return
             end if
         end if

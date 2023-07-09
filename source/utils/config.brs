@@ -90,3 +90,40 @@ function findConfigTreeKey(key as string, tree)
     return invalid
 end function
 
+' Added for backwards compatibility
+
+function getTokenFromRegistry()
+    return {
+        access_token: get_user_setting("refresh_token", "")
+        refresh_token: get_user_setting("access_token", "")
+        login: get_user_setting("login", "")
+        device_id: get_user_setting("device_code", "")
+    }
+end function
+
+function NukeRegistry(section = invalid)
+    ? "Erasing Registry"
+    Registry = CreateObject("roRegistry")
+    i = 0
+    if section = invalid
+        for each section in Registry.GetSectionList()
+            RegistrySection = CreateObject("roRegistrySection", section)
+            for each key in RegistrySection.GetKeyList()
+                i = i + 1
+                print "Deleting " section + ":" key
+                RegistrySection.Delete(key)
+            end for
+            RegistrySection.flush()
+            Registry.Delete(section)
+        end for
+    else
+        RegistrySection = CreateObject("roRegistrySection", section)
+        for each key in RegistrySection.GetKeyList()
+            i = i + 1
+            print "Deleting " section + ":" key
+            RegistrySection.Delete(key)
+        end for
+        RegistrySection.flush()
+    end if
+
+end function

@@ -19,9 +19,7 @@ function buildNode(id, name)
     if name <> invalid and id <> invalid
         newNode = createObject("roSGNode", name)
         newNode.id = id
-        if id = 6
-            newNode.translation = "[360, 80]"
-        end if
+        newNode.translation = "[0, 0]"
         newNode.observeField("backPressed", "onBackPressed")
         m.top.appendChild(newNode)
         return newNode
@@ -29,7 +27,7 @@ function buildNode(id, name)
 end function
 
 function onMenuSelection()
-    pageMap = [0, 1, 2, 3, 4, "Settings", "LoginPage"]
+    pageMap = ["Home", 1, 2, 3, 4, "Settings", "LoginPage"]
     if m.activeNode <> invalid
         if m.activeNode.id.toStr() <> m.menu.buttonSelected.toStr()
             m.top.removeChild(m.activeNode)
@@ -39,10 +37,8 @@ function onMenuSelection()
     ? "Menu Button Selected"; m.menu.buttonSelected
     if m.activeNode = invalid
         m.activeNode = buildNode(m.menu.buttonSelected, pageMap[m.menu.buttonSelected])
-    else
-        ' TODO: Replace this with something more dynamic. hardcoding the .getchild(1) screams bad news to me
-        m.activeNode.getchild(1).setFocus(true)
     end if
+    m.activeNode.setfocus(true)
 end function
 
 sub onBackPressed()
@@ -53,6 +49,7 @@ end sub
 
 function onKeyEvent(key, press) as boolean
     if press
+        ? "Hero Scene Key Event: "; key
         if key = "options"
             ? "STOP"
             return true

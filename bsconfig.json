@@ -1,6 +1,6 @@
 { //This file controls the vscode BrighterScript extension including Debug Capabilities
     "rootDir": "${workspaceFolder}/",
-    "host": "192.168.2.44",
+    "host": "192.168.2.33",
     "username": "rokudev",
     "password": "1111",
     "sourceMap": true,
@@ -8,14 +8,18 @@
     "deploy": true,
     "createPackage": true,
     "files": [
+        "source/**/*",
         "components/**/*",
-        "modules/**/*",
-        "fonts/**/*",
         "images/**/*",
+        "fonts/**/*",
+        "vendor/**/*",
+        "lib/**/*",
+        "modules/**/*",
         "locale/**/*",
         "settings/**/*",
         "source/**/*",
-        "manifest"
+        "manifest",
+        "env"
     ],
     "diagnosticFilters": [{
         "src": "vendor/**/*",

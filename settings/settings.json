@@ -1,99 +1,54 @@
 [
     {
-        "title": "Playback",
-        "description": "Settings related to playback and supported codec and media types",
-        "children": [
+        "title": "Chat On-By-Default",
+        "description": "Determines default state of chat window when opening a stream",
+        "settingName": "ChatOption",
+        "type": "bool",
+        "default": "true"
+    },
+    {
+        "title": "Video Quality",
+        "description": "",
+        "settingName": "VideoQuality",
+        "type": "radio",
+        "default": "1",
+        "options": [
             {
-                "title": "Cinema mode",
-                "description": "Cinema mode brings the theater experience straight to your living room with the ability to play custom intros before the main feature.",
-                "settingName": "playback.cinemamode",
-                "type": "bool",
-                "default": "false"
+                "title": "1080p",
+                "id": "1"
+            },
+            {
+                "title": "720p",
+                "id": "3"
+            },
+            {
+                "title": "480p",
+                "id": "4"
+            },
+            {
+                "title": "360p",
+                "id": "5"
+            },
+            {
+                "title": "160p",
+                "id": "6"
             }
         ]
     },
     {
-        "title": "User Interface",
-        "description": "Settings relating to how the how the application looks",
-        "children": [
+        "title": "Video Framerate",
+        "description": "",
+        "settingName": "VideoFramerate",
+        "type": "radio",
+        "default": "1",
+        "options": [
             {
-                "title": "Detail Page",
-                "description": "Options for details pages.",
-                "children": [
-                    {
-                        "title": "Hide Taglines",
-                        "description": "Hides tagline text on details pages.",
-                        "settingName": "ui.details.hidetagline",
-                        "type": "bool",
-                        "default": "false"
-                    }
-                ]
+                "title": "60 fps",
+                "id": "60"
             },
             {
-                "title": "TV Shows",
-                "description": "Options for TV Shows.",
-                "children": [
-                    {
-                        "title": "Blur Unwatched Episodes",
-                        "description": "If enabled, images for unwatched episodes will be blurred.",
-                        "settingName": "ui.tvshows.blurunwatched",
-                        "type": "bool",
-                        "default": "false"
-                    }
-                ]
-            },
-            {
-                "title": "Screensaver",
-                "description": "Options for Jellyfin's screensaver.",
-                "children": [
-                    {
-                        "title": "Use Splashscreen as Screensaver Background",
-                        "description": "Use generated splashscreen image as Jellyfin's screensaver background.",
-                        "settingName": "ui.screensaver.splashBackground",
-                        "type": "bool",
-                        "default": "false"
-                    }
-                ]
-            },
-            {
-                "title": "Design Elements",
-                "description": "Options that alter the design of Jellyfin.",
-                "children": [
-                    {
-                        "title": "Use Splashscreen as Home Background",
-                        "description": "Use generated splashscreen image as Jellyfin home background. Jellyfin will need to be closed and reopened for change to take effect.",
-                        "settingName": "ui.home.splashBackground",
-                        "type": "bool",
-                        "default": "false"
-                    }
-                ]
-            },
-            {
-                "title": "Media Grid",
-                "description": "Media Grid Options",
-                "children": [
-                    {
-                        "title": "Item Count",
-                        "description": "Show item count in the library, and index of selected item.",
-                        "settingName": "itemgrid.showItemCount",
-                        "type": "bool",
-                        "default": "false"
-                    },
-                    {
-                        "title": "Item Titles",
-                        "description": "Always show the titles below the poster images. (If disabled, title will be shown under hilighted item only)",
-                        "settingName": "itemgrid.alwaysShowTitles",
-                        "type": "bool",
-                        "default": "false"
-                    },
-                    {
-                        "title": "Return to Top",
-                        "description": "Use the replay button to slowly animate to the first item in the folder. (If disabled, The folder will reset to the first item immediately)",
-                        "settingName": "itemgrid.reset",
-                        "type": "bool",
-                        "default": "true"
-                    }
-                ]
+                "title": "30 fps",
+                "id": "30"
             }
         ]
     }
