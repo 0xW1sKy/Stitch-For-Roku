@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<component name="VideoItem" extends="Group">
+
+    <interface>
+        <field id="itemContent" type="node" onChange="showcontent" />
+        <field id="rowFocusPercent" type="float" onChange="showrowfocus" />
+    </interface>
+
+    <script type="text/brightscript" uri="BrowseChannelItem.brs" />
+    <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
+    <children>
+
+        <Poster
+            id="itemPoster"
+            height="180"
+            width="320"
+            loadWidth="320"
+            loadHeight="180"
+            loadDisplayMode="scaleToFit">
+            <Poster
+                id="liveIcon"
+                uri="pkg:/images/live-icon.png"
+                height="25"
+                width="50"
+                translation="[5,5]" />
+            <Rectangle
+                id="itemMask"
+                color="0x000000FF"
+                opacity="0.75"
+                width="512"
+                height="288"
+                scaleRotateCenter="[ 256.0, 144.0 ]" />
+        </Poster>
+        <EmojiLabel
+            id="itemLabel"
+            height="30"
+            maxWidth="320"
+            color="0xFFFFFFFF"
+            translation="[0, 200]">
+            <Font role="font" uri="pkg:/fonts/KlokanTechNotoSansCJK-Bold.otf" size="20" />
+        </EmojiLabel>
+        <Label
+            id="itemStreamer"
+            height="30"
+            width="320"
+            horizAlign="left"
+            color="0xFFFFFFFF"
+            translation="[0, 210]">
+            <Font role="font" uri="pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf" size="16" />
+        </Label>
+        <Label
+            id="itemCategory"
+            height="30"
+            width="320"
+            horizAlign="left"
+            color="0xFFFFFFFF"
+            translation="[0, 230]">
+            <Font role="font" uri="pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf" size="16" />
+        </Label>
+        <Poster
+            id="viewsRect"
+            uri="pkg:/images/live_rectangle.9.png"
+            translation="[5,157]">
+        </Poster>
+        <Label
+            id="itemViewers"
+            horizAlign="left"
+            color="0xFFFFFFFF"
+            translation="[7,157]">
+            <Font role="font" uri="pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf" size="14" />
+        </Label>
+
+
+    </children>
+
+</component>
