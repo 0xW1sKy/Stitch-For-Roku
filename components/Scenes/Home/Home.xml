@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component name="Home" extends="SceneManagerGroup" initialFocus="exampleRowList">
+    <script type="text/brightscript" uri="Home.brs" />
+
+    <children>
+
+        <RowList
+            id="exampleRowList"
+            translation="[ 130, 160 ]"
+            itemComponentName="BrowseChannelItem"
+            numRows="4"
+            rowItemSize="[[320,180]]"
+            rowItemSpacing="[[30,0]]"
+            itemSize="[1080,275]"
+            itemSpacing="[ 0, 40 ]"
+            showRowLabel="[ true ]"
+            drawFocusFeedback="false"
+            vertFocusAnimationStyle="fixedFocus"
+            rowFocusAnimationStyle="fixedFocusWrap" />
+
+
+    </children>
+
+</component>
