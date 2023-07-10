@@ -51,7 +51,7 @@ function onKeyEvent(key, press) as boolean
     if press
         ? "Hero Scene Key Event: "; key
         if key = "options"
-            ? "STOP"
+            NukeRegistry()
             return true
         end if
         if key = "replay"

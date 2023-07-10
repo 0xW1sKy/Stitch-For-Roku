@@ -21,6 +21,10 @@ function GetRandomUUID()
     return di.GetRandomUUID()
 end function
 
+function getDeviceLocale()
+    di = CreateObject("roDeviceInfo")
+    return di.GetCurrentLocale().Replace("_", "-")
+end function
 
 function TwitchGraphQLRequest(data)
     access_token = ""
@@ -41,7 +45,7 @@ function TwitchGraphQLRequest(data)
             "Device-ID": device_code
             "Origin": "https://switch.tv.twitch.tv"
             "Referer": "https://switch.tv.twitch.tv/"
-            "Accept-Language": "en-US"
+            "Accept-Language": getDeviceLocale()
         }
         method: "POST"
         data: data
