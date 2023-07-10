@@ -41,6 +41,7 @@ function TwitchGraphQLRequest(data)
             "Device-ID": device_code
             "Origin": "https://switch.tv.twitch.tv"
             "Referer": "https://switch.tv.twitch.tv/"
+            "Accept-Language": "en-US"
         }
         method: "POST"
         data: data
@@ -252,6 +253,33 @@ function followChannel() as object
     })
 end function
 
+function getRecommendedSections() as object
+    TwitchGraphQLRequest({
+        operationName: "Shelves",
+        variables: {
+            "imageWidth": 50,
+            "itemsPerRow": 3,
+            "platform": "web",
+            "limit": 8,
+            "requestID": getRandomUUID(),
+            "context": {
+                "clientApp": "twilight",
+                "location": "home",
+                "referrerDomain": "twitch.tv",
+                "viewportHeight": 1080,
+                "viewportWidth": 1920
+            },
+            "verbose": false
+        },
+        extensions: {
+            persistedQuery: {
+                version: 1,
+                sha256Hash: "b6f0c72c747457b73107f6aa00bd6a5bb294539d2de5398646e949c863662543"
+            }
+        }
+    })
+end function
+
 function unfollowChannel() as object
     TwitchGraphQLRequest({
         operationName: "FollowButton_UnfollowUser",
@@ -319,6 +347,9 @@ sub main()
                 end if
                 if rtype = "getChannelShell"
                     getChannelShell()
+                end if
+                if rtype = "getRecommendedSections"
+                    getRecommendedSections()
                 end if
             end if
         end if
