@@ -6,6 +6,8 @@
 
         <RowList
             id="exampleRowList"
+            rowLabelOffset="[[0,5]]"
+            rowLabelFont="font:LargeBoldSystemFont"
             translation="[ 130, 160 ]"
             itemComponentName="VideoItem"
             numRows="4"
@@ -16,7 +18,8 @@
             showRowLabel="[ true ]"
             focusBitmapUri="pkg:/images/focusIndicator.9.png"
             vertFocusAnimationStyle="fixedFocus"
-            rowFocusAnimationStyle="fixedFocusWrap" />
+            rowFocusAnimationStyle="fixedFocusWrap"
+        />
 
 
     </children>
