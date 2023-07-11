@@ -53,6 +53,18 @@ function onMenuSelection()
     m.activeNode.setfocus(true)
 end function
 
+function channelPage(content)
+    if m.activeNode <> invalid
+        m.top.removeChild(m.activeNode)
+        m.activeNode = invalid
+    end if
+    if m.activeNode = invalid
+        m.activeNode = buildNode("8", m.global.constants.menuOptions[8])
+    end if
+    m.activeNode.contentRequested = content
+    m.activeNode.setfocus(true)
+end function
+
 function gamePage(content)
     if m.activeNode <> invalid
         m.top.removeChild(m.activeNode)
@@ -69,6 +81,8 @@ sub onContentSelected()
     ? m.activeNode.contentSelected
     if m.activeNode.contentSelected.contentType = "GAME"
         gamePage(m.activeNode.contentSelected)
+    else
+        channelPage(m.activeNode.contentSelected)
     end if
 end sub
 

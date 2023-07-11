@@ -3,12 +3,87 @@ sub init()
     ' m.top.observeField("itemFocused", "onGetFocus")
     m.rowlist = m.top.findNode("exampleRowList")
     m.rowlist.ObserveField("itemSelected", "handleItemSelected")
+    m.username = m.top.findNode("username")
+    m.followers = m.top.findNode("followers")
+    m.description = m.top.findNode("description")
+    m.livestreamlabel = m.top.findNode("livestreamlabel")
+    m.liveDuration = m.top.findNode("liveDuration")
+    m.recentVideosLabel = m.top.findNode("recentVideosLabel")
+    m.avatar = m.top.findNode("avatar")
+end sub
+
+sub updatePage()
+    m.username.text = m.top.contentRequested.streamerDisplayName
     m.GetContentTask = CreateObject("roSGNode", "TwitchApi") ' create task for feed retrieving
-    ' observe content so we can know when feed content will be parsed
-    m.GetContentTask.observeField("response", "handleRecommendedSections")
+    ' ' observe content so we can know when feed content will be parsed
+    ' ? "REQUESTED CONTENT: "; m.top.contentRequested
+    ' ? "Pause"
+    m.GetContentTask.observeField("response", "updateChannelInfo")
     m.GetContentTask.request = {
-        type: "getHomePageQuery"
+        type: "getChannelHomeQuery"
+        params: {
+            id: m.top.contentRequested.streamerLogin
+        }
     }
+    m.GetShellTask = CreateObject("roSGNode", "TwitchApi") ' create task for feed retrieving
+    ' ' observe content so we can know when feed content will be parsed
+    ' ? "REQUESTED CONTENT: "; m.top.contentRequested
+    ' ? "Pause"
+    m.GetShellTask.observeField("response", "updateChannelShell")
+    m.GetShellTask.request = {
+        type: "getChannelShell"
+        params: {
+            id: m.top.contentRequested.streamerLogin
+        }
+    }
+end sub
+
+sub updateChannelShell()
+    setBannerImage()
+end sub
+
+function setBannerImage()
+    bannerGroup = m.top.findNode("banner")
+    poster = createObject("roSGNode", "Poster")
+    if m.GetShellTask.response.data.userOrError.bannerImageUrl <> invalid
+        poster.uri = m.GetShellTask.response.data.userOrError.bannerImageUrl
+    else
+        poster.uri = "pkg:/images/default_banner.png"
+    end if
+    poster.width = 1280
+    poster.height = 320
+    poster.visible = true
+    poster.translation = [-122, -25]
+    overlay = createObject("roSGNode", "Rectangle")
+    overlay.color = "0x010101F0"
+    overlay.width = 1280
+    overlay.height = 320
+    poster.appendChild(overlay)
+    bannerGroup.appendChild(poster)
+end function
+
+sub updateChannelInfo()
+    ' m.GetcontentTask.response.data.channel
+    ' id                : 71092938
+    ' __typename        : User
+    ' login             : xqc
+    ' stream            :
+    ' videoShelves      : @{edges=System.Object[]}
+    ' self              : @{follower=; subscriptionBenefit=}
+    ' displayName       : xQc
+    ' hosting           :
+    ' videos            : @{edges=System.Object[]}
+    ' roles             : @{isPartner=True}
+    ' broadcastSettings : @{isMature=False; id=71092938; __typename=BroadcastSettings}
+    ' description       : THE BEST AT ABSOLUTELY EVERYTHING. THE JUICER. LEADER OF THE JUICERS.
+    ' followers         : @{totalCount=11870230}
+    ' profileImageURL   : https://static-cdn.jtvnw.net/jtv_user_pictures/xqc-profile_image-9298dca608632101-70x70.jpeg
+    ' profileViewCount  :
+    m.description.infoText = m.GetcontentTask.response.data.channel.description
+    m.followers.text = numberToText(m.GetcontentTask.response.data.channel.followers.totalCount) + " " + tr("followers")
+    m.avatar.uri = m.GetcontentTask.response.data.channel.profileImageUrl
+    ? "Resp: "; m.GetcontentTask.response
+    ? "Resp: "; m.GetcontentTask.response.data
 end sub
 
 function buildContentNodeFromShelves(shelves)
