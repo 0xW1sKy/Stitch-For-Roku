@@ -12,15 +12,6 @@ sub init()
     m.translation = 0
 end sub
 
-sub onSetKeyboardFocus()
-    if m.top.setKeyboardFocus
-        ' m.keyboard.visible = true
-        ' m.chatButton.visible = true
-        m.top.setKeyboardFocus = false
-        ' m.keyboard.setFocus(true)
-    end if
-end sub
-
 sub setLoggedInUsername()
     m.chat.loggedInUsername = get_user_setting("login")
 end sub
@@ -62,7 +53,6 @@ end sub
 sub onNewComment()
     m.chat.readyForNextComment = false
     comment = m.chat.nextComment.Split(";")
-    '? "comment: " comment
     display_name = ""
     message = ""
     color = ""
@@ -104,7 +94,6 @@ sub onNewComment()
             clientInfo.display_name = display_name
             clientInfo.color = color
             clientInfo.badges = badges
-            'm.top.clientInfo.emotes = emotes
             clientInfo.emote_set = emote_set
             m.top.clientInfo = clientInfo
             m.userstate_change = false
@@ -114,7 +103,6 @@ sub onNewComment()
             display_name = m.top.clientInfo.display_name
             color = m.top.clientInfo.color
             badges = m.top.clientInfo.badges
-            'emotes = m.top.clientInfo.emotes
             emote_set = m.top.clientInfo.emote_set
             m.chat.clientComment = ""
         else
@@ -181,234 +169,166 @@ sub onNewComment()
     currentWord.translation = [x_translation, y_translation]
     currentWord.visible = true
     currentWord.text = ""
-
     x_translation += 7
-
     word_number = 1
     char = 0
     for each word in message_chars
         appended_last_line = false
         is_emote = false
-
         currentWord.text = word
-
         width = message_text.localBoundingRect().width
         currentWordWidth = currentWord.localBoundingRect().width
-
         '? "Current word width ("; word; "): "; currentWordWidth; ", Total message width: "; width
-
         for each emote in emote_set.Items()
             for each start in emote.value.starts
                 if start = char
                     message_text.translation = [x_translation, y_translation]
                     group.appendChild(message_text)
-
                     message_text = createObject("roSGNode", "SimpleLabel")
                     message_text.fontSize = "14"
                     message_text.fontUri = "pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf"
                     message_text.visible = true
                     message_text.text = ""
-
                     x_translation += width
-
                     poster = createObject("roSGNode", "Poster")
                     poster.uri = "https://static-cdn.jtvnw.net/emoticons/v1/" + emote.key + "/1.0"
                     poster.visible = true
                     poster.translation = [x_translation, y_translation - 5]
-
                     group.appendChild(poster)
-
                     x_translation += 35
-
                     if x_translation >= 230 or word_number = message_chars.Count()
                         x_translation = 0
                         y_translation += 23
                     end if
-
                     is_emote = true
                     appended_last_line = true
                 end if
             end for
         end for
-
-        'for each emote in m.global.globalTTVEmotes
         if m.global.globalTTVEmotes.DoesExist(word) and not is_emote
             message_text.translation = [x_translation, y_translation]
             group.appendChild(message_text)
-
             message_text = createObject("roSGNode", "SimpleLabel")
             message_text.fontSize = "14"
             message_text.fontUri = "pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf"
             message_text.visible = true
             message_text.text = ""
-
             x_translation += width
-
             poster = createObject("roSGNode", "Poster")
             poster.uri = "https://cdn.betterttv.net/emote/" + m.global.globalTTVEmotes[word] + "/1x"
             poster.visible = true
             poster.translation = [x_translation, y_translation - 5]
-
             group.appendChild(poster)
-
             x_translation += 35
-
             if x_translation >= 230 or word_number = message_chars.Count()
                 x_translation = 0
                 y_translation += 23
             end if
-
             is_emote = true
             appended_last_line = true
         end if
-        'end for
-
         if m.global.channelTTVEmotes <> invalid and not is_emote
-            'for each emote in m.global.channelTTVEmotes.sharedEmotes
             if m.global.channelTTVEmotes.DoesExist(word)
                 message_text.translation = [x_translation, y_translation]
-
                 group.appendChild(message_text)
-
                 message_text = createObject("roSGNode", "SimpleLabel")
                 message_text.fontSize = "14"
                 message_text.fontUri = "pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf"
                 message_text.visible = true
                 message_text.text = ""
-
                 x_translation += width
-
                 poster = createObject("roSGNode", "Poster")
                 poster.uri = "https://cdn.betterttv.net/emote/" + m.global.channelTTVEmotes[word] + "/1x"
                 poster.visible = true
                 poster.translation = [x_translation, y_translation - 5]
-
                 group.appendChild(poster)
-
                 x_translation += 35
-
                 if x_translation >= 230 or word_number = message_chars.Count()
                     x_translation = 0
                     y_translation += 23
                 end if
-
                 is_emote = true
                 appended_last_line = true
             end if
-            'end for
         end if
-
         if m.global.channelTTVFrankerEmotes <> invalid and not is_emote
-            'for each emote in m.global.channelTTVFrankerEmotes
             if m.global.channelTTVFrankerEmotes.DoesExist(word)
                 message_text.translation = [x_translation, y_translation]
-
                 group.appendChild(message_text)
-
                 message_text = createObject("roSGNode", "SimpleLabel")
                 message_text.fontSize = "14"
                 message_text.fontUri = "pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf"
                 message_text.visible = true
                 message_text.text = ""
-
                 x_translation += width
-
                 poster = createObject("roSGNode", "Poster")
                 poster.uri = m.global.channelTTVFrankerEmotes[word]
                 poster.visible = true
                 poster.translation = [x_translation, y_translation - 5]
-
                 group.appendChild(poster)
-
                 x_translation += 35
-
                 if x_translation >= 230 or word_number = message_chars.Count()
                     x_translation = 0
                     y_translation += 23
                 end if
-
                 is_emote = true
                 appended_last_line = true
             end if
-            'end for
         end if
-
         if m.global.global7TVEmotes <> invalid and not is_emote
             if m.global.global7TVEmotes.DoesExist(word)
                 message_text.translation = [x_translation, y_translation]
-
                 group.appendChild(message_text)
-
                 message_text = createObject("roSGNode", "SimpleLabel")
                 message_text.fontSize = "14"
                 message_text.fontUri = "pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf"
                 message_text.visible = true
                 message_text.text = ""
-
                 x_translation += width
-
                 poster = createObject("roSGNode", "Poster")
                 poster.uri = m.global.global7TVEmotes[word]
                 poster.visible = true
                 poster.translation = [x_translation, y_translation - 5]
-
                 group.appendChild(poster)
-
                 x_translation += 35
-
                 if x_translation >= 230 or word_number = message_chars.Count()
                     x_translation = 0
                     y_translation += 23
                 end if
-
                 is_emote = true
                 appended_last_line = true
             end if
-            'end for
         end if
-
-
         if m.global.channel7TVEmotes <> invalid and not is_emote
             if m.global.channel7TVEmotes.DoesExist(word)
                 message_text.translation = [x_translation, y_translation]
-
                 group.appendChild(message_text)
-
                 message_text = createObject("roSGNode", "SimpleLabel")
                 message_text.fontSize = "14"
                 message_text.fontUri = "pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf"
                 message_text.visible = true
                 message_text.text = ""
-
                 x_translation += width
-
                 poster = createObject("roSGNode", "Poster")
                 poster.uri = m.global.channel7TVEmotes[word]
                 poster.visible = true
                 poster.translation = [x_translation, y_translation - 5]
-
                 group.appendChild(poster)
-
                 x_translation += 35
-
                 if x_translation >= 230 or word_number = message_chars.Count()
                     x_translation = 0
                     y_translation += 23
                 end if
-
                 is_emote = true
                 appended_last_line = true
             end if
-            'end for
         end if
-
         if not is_emote
             if (x_translation + currentWordWidth + width) < 230
                 temp = message_text.text
                 temp2 = word + " "
                 temp.AppendString(temp2, Len(temp2))
                 message_text.text = temp
-                'appended_last_line = false
             else if (x_translation + currentWordWidth + width) >= 230
                 if currentWordWidth >= 230
                     currentWordChars = word.Split("")
@@ -418,15 +338,12 @@ sub onNewComment()
                         if width >= 230
                             message_text.translation = [x_translation, y_translation]
                             group.appendChild(message_text)
-
                             appended_last_line = true
-
                             message_text = createObject("roSGNode", "SimpleLabel")
                             message_text.fontSize = "14"
                             message_text.fontUri = "pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf"
                             message_text.visible = true
                             message_text.text = ""
-
                             x_translation = 0
                             y_translation += 23
                         end if
@@ -435,33 +352,16 @@ sub onNewComment()
                 else
                     message_text.translation = [x_translation, y_translation]
                     group.appendChild(message_text)
-
                     message_text = createObject("roSGNode", "SimpleLabel")
                     message_text.fontSize = "14"
                     message_text.fontUri = "pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf"
                     message_text.visible = true
                     message_text.text = word
-
                     appended_last_line = false
-
                     x_translation = 0
                     y_translation += 23
                 end if
                 message_text.text += " "
-            else
-                ' message_text.translation = [ x_translation, y_translation ]
-                ' group.appendChild(message_text)
-
-                ' message_text = createObject("roSGNode", "SimpleLabel")
-                ' message_text.fontSize = "14"
-                ' message_text.fontUri = "pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf"
-                ' message_text.visible = true
-                ' message_text.text = word + " "
-
-                ' x_translation = 0
-                ' y_translation += 28
-
-                ' appended_last_line = true
             end if
         end if
         char += Len(word) + 1
@@ -470,15 +370,11 @@ sub onNewComment()
 
     if not appended_last_line
         message_text.translation = [x_translation, y_translation]
-
         group.appendChild(message_text)
-
         y_translation += 32
     end if
 
     group.appendChild(username)
-    ' group.appendChild(colon)
-
     m.chatPanel.appendChild(group)
 
     if m.translation + y_translation > 700
@@ -492,50 +388,5 @@ sub onNewComment()
     else
         m.translation += y_translation
     end if
-
-    '? "";display_name;": ";message
-    'm.chat.clientComment = ""
     m.chat.readyForNextComment = true
 end sub
-
-function onKeyEvent(key, press) as boolean
-    handled = false
-    if press
-        if key = "down" and m.keyboard.hasFocus()
-            m.chatButton.color = "0xBD00FFFF"
-            m.chatButton.setFocus(true)
-            handled = true
-        else if key = "down"
-            m.chatButton.color = "0xBD00FFFF"
-            m.chatButton.setFocus(true)
-            handled = true
-        else if key = "up" and m.chatButton.hasFocus()
-            m.keyboard.setFocus(true)
-            m.chatButton.color = "0x18181BFF"
-            handled = true
-        else if key = "OK" and m.chatButton.hasFocus()
-            return false
-            ' m.chat.sendMessage = m.keyboard.text
-            ' m.keyboard.text = ""
-            ' m.chatButton.visible = false
-            ' m.keyboard.visible = false
-            ' m.chatButton.color = "0x18181BFF"
-            ' m.chatButton.setFocus(false)
-            ' m.top.doneFocus = true
-            ' handled = true
-        else if key = "OK" and not m.keyboard.visible
-            return false
-            ' m.keyboard.visible = true
-            ' m.chatButton.visible = true
-            ' m.keyboard.setFocus(true)
-        else if key = "back"
-            m.keyboard.text = ""
-            m.chatButton.visible = false
-            m.keyboard.visible = false
-            m.chatButton.color = "0x18181BFF"
-            handled = true
-            m.top.doneFocus = true
-        end if
-    end if
-    return handled
-end function

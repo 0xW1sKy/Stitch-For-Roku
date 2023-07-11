@@ -458,7 +458,6 @@ function onKeyEvent(key, press) as boolean
             m.homeScene.setFocus(true)
             return true
         else if key = "OK" and m.videoPlayer.visible
-            m.chat.setKeyboardFocus = true
             handled = true
         end if
     else if not press

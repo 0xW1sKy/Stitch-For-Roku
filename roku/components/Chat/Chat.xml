@@ -7,7 +7,6 @@
         <field id="focusable" type="Boolean" value="true" />
         <field id="loggedInUsername" type="string" value="" />
         <field id="control" type="bool" onChange="onVideoChange" value="false" alwaysNotify="true" />
-        <field id="setKeyboardFocus" type="bool" onChange="onSetKeyboardFocus" value="false" />
         <field id="doneFocus" type="Boolean" value="false" />
         <field id="clientInfo" type="assocarray" />
         <field id="clientMessage" type="string" value="" />
