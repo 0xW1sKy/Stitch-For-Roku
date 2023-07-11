@@ -39,20 +39,18 @@ function getTwitchBadges()
     rsp = ParseJSON(req.send())
     badgelist = {}
     for each badge in rsp.data.badges
-        ' badge.setID = 1979-revolution_1
-        ' badge.title = 1979 Revolution
-        ' badge.id = MTk3OS1yZXZvbHV0aW9uXzE7MTs=
         identifier = badge.setID + "/" + badge.version
         badgelist[identifier] = badge.image2x
     end for
     for each badge in rsp.data.user.broadcastBadges
-        ' badge.setID = 1979-revolution_1
-        ' badge.title = 1979 Revolution
-        ' badge.id = MTk3OS1yZXZvbHV0aW9uXzE7MTs=
         identifier = badge.setID + "/" + badge.version
         badgelist[identifier] = badge.image2x
     end for
-    return badgelist
+    if m.global.twitchBadges = invalid
+        m.global.addFields({ twitchBadges: badgelist })
+    else
+        m.global.setField("twitchBadges", badgelist)
+    end if
 end function
 
 function getChannelUserId() as object
@@ -101,14 +99,7 @@ sub getGlobal7tvEmotes()
     end if
 end sub
 
-function main()
-    'messagePort = CreateObject("roMessagePort")
-    if m.global.twitchBadges = invalid
-        m.global.addFields({ twitchBadges: getTwitchBadges() })
-    else
-        m.global.setField("twitchBadges", getTwitchBadges())
-    end if
-
+function getGlobalTTVEmotes()
     if m.global.globalTTVEmotes = invalid
         temp = getjsondata("https://api.betterttv.net/3/cached/emotes/global")
         assocEmotes = {}
@@ -117,19 +108,59 @@ function main()
         end for
         m.global.addFields({ globalTTVEmotes: assocEmotes })
     end if
+end function
 
-    getGlobal7tvEmotes()
+function getChannelTTVFrankerEmotes(channel_id)
+    temp = getjsondata("https://api.betterttv.net/3/cached/frankerfacez/users/twitch/" + channel_id)
+    assocEmotes = {}
+    for each emote in temp
+        assocEmotes[emote.code] = emote.images["1x"]
+    end for
+    if m.global.channelTTVFrankerEmotes = invalid
+        m.global.addFields({ channelTTVFrankerEmotes: assocEmotes })
+    else
+        m.global.setField("channelTTVFrankerEmotes", assocEmotes)
+    end if
+end function
 
+function getChannelTTVEmotes(channel_id)
+    temp = getjsondata("https://api.betterttv.net/3/cached/users/twitch/" + channel_id)
+    assocEmotes = {}
+    if temp.sharedEmotes <> invalid
+        for each emote in temp.sharedEmotes
+            assocEmotes[emote.code] = emote.id
+        end for
+    end if
+    if m.global.channelTTVEmotes = invalid
+        m.global.addFields({ channelTTVEmotes: assocEmotes })
+    else
+        m.global.setField("channelTTVEmotes", assocEmotes)
+    end if
+end function
+
+function getAllEmotes()
+    try
+        getTwitchBadges()
+        getGlobalTTVEmotes()
+        getGlobal7tvEmotes()
+        channel_id = getChannelUserId()
+        getChannelTTVEmotes(channel_id)
+        getChannelTTVFrankerEmotes(channel_id)
+        getChannel7tvEmotes(channel_id)
+    catch e
+        ? "Error Occured While Fetching Emotes & Badges"
+        ? "Error: "; e
+    end try
+end function
+
+function main()
+    'messagePort = CreateObject("roMessagePort")
+    getAllEmotes()
     if m.top.channel <> ""
         tcpListen = createObject("roStreamSocket")
-
         addr = createObject("roSocketAddress")
         addr.SetAddress("irc.chat.twitch.tv:6667")
-
-        'messagePort = createObject("roMessagePort")
-
         tcpListen.SetSendToAddress(addr)
-        'tcpListen.SetMessagePort(messagePort)
         tcpListen.notifyReadable(true)
         ? "connect " tcpListen.Connect()
         tcpListen.SendStr("CAP REQ :twitch.tv/tags twitch.tv/commands" + Chr(13) + Chr(10))
@@ -153,38 +184,6 @@ function main()
         end if
         ? "ChatTest >> JOIN > " m.top.channel
         tcpListen.SendStr("JOIN #" + m.top.channel + Chr(13) + Chr(10))
-
-        'm.top.observeField("sendMessage", "sendMessage")
-
-        channel_id = getChannelUserId()
-
-
-        temp = getjsondata("https://api.betterttv.net/3/cached/users/twitch/" + channel_id)
-        assocEmotes = {}
-        if temp.sharedEmotes <> invalid
-            for each emote in temp.sharedEmotes
-                assocEmotes[emote.code] = emote.id
-            end for
-        end if
-        if m.global.channelTTVEmotes = invalid
-            m.global.addFields({ channelTTVEmotes: assocEmotes })
-        else
-            m.global.setField("channelTTVEmotes", assocEmotes)
-        end if
-
-        temp = getjsondata("https://api.betterttv.net/3/cached/frankerfacez/users/twitch/" + channel_id)
-        assocEmotes = {}
-        for each emote in temp
-            assocEmotes[emote.code] = emote.images["1x"]
-        end for
-        if m.global.channelTTVFrankerEmotes = invalid
-            m.global.addFields({ channelTTVFrankerEmotes: assocEmotes })
-        else
-            m.global.setField("channelTTVFrankerEmotes", assocEmotes)
-        end if
-
-        getChannel7tvEmotes(channel_id)
-
         queue = createObject("roArray", 300, true)
         first = 0
         last = 0
@@ -204,15 +203,12 @@ function main()
                 ' ? "second eSuccess " tcpListen.eSuccess()
                 sent = tcpListen.SendStr("PRIVMSG #" + m.top.channel + " :" + m.top.sendMessage + Chr(13) + Chr(10))
                 ' ? "Send Status " tcpListen.Status()
-                ' ? "sent ;) " sent
                 if sent > 0
                     m.top.nextComment = ""
                     m.top.clientComment = m.top.sendMessage
                 end if
                 m.top.sendMessage = ""
-                'm.top.clientComment = m.top.sendMessage
             end if
-
             if tcpListen.GetCountRcvBuf() > 0
                 while not get = Chr(10)
                     get = tcpListen.ReceiveStr(1)
@@ -220,7 +216,6 @@ function main()
                     received += get
                 end while
             end if
-
             if tcpListen.GetCountRcvBuf() = 0 and tcpListen.IsReadable()
                 ? "chat connection failed?"
                 'tcpListen.Close()
@@ -235,16 +230,12 @@ function main()
                     ? "PASS " tcpListen.SendStr("PASS oauth:" + user_auth_token + Chr(13) + Chr(10))
                     ? "USER " tcpListen.SendStr("USER " + m.loggedinUsername + " 8 * :" + m.loggedinUsername + Chr(13) + Chr(10))
                     ? "NICK " tcpListen.SendStr("NICK " + m.loggedinUsername + Chr(13) + Chr(10))
-                    '? "PASS oauth:" + user_auth_token
-                    '? "USER " + m.loggedinUsername + " 8 * :" + m.loggedinUsername
-                    '? "NICK " + m.loggedinUsername
                 else
                     tcpListen.SendStr("PASS SCHMOOPIIE" + Chr(13) + Chr(10))
                     tcpListen.SendStr("NICK justinfan32006" + Chr(13) + Chr(10))
                 end if
                 tcpListen.SendStr("JOIN #" + m.top.channel + Chr(13) + Chr(10))
             end if
-
             if not received = ""
                 if Left(received, 4) = "PING"
                     ? "PONG"
@@ -261,7 +252,6 @@ function main()
                     end if
                 end if
             end if
-
             if sendWaitingMessage and m.top.readyForNextComment
                 sendWaitingMessage = false
                 m.top.nextComment = "display-name=System;user-type= :test!test@test.tmi.twitch.tv PRIVMSG #test :Delaying Chat to sync to stream. Please hold...  " ' whitespace at end is removed by comment parser
@@ -306,11 +296,7 @@ function main()
                         end if
                     end if
                 end if
-
             end if
-
         end while
     end if
-
-
 end function
