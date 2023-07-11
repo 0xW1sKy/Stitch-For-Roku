@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component name="Categories" extends="SceneManagerGroup" initialFocus="exampleRowList">
     <script type="text/brightscript" uri="Categories.brs" />
-
+    <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
     <children>
-
         <RowList
             id="exampleRowList"
-            translation="[ 130, 160 ]"
+            rowLabelOffset="[[0,5]]"
+            rowLabelFont="font:LargeBoldSystemFont"
+            translation="[ 130, 120 ]"
             itemComponentName="VideoItem"
             numRows="4"
             rowItemSize="[[320,180]]"
             rowItemSpacing="[[30,0]]"
-            itemSize="[1080,275]"
+            itemSize="[1080,295]"
             itemSpacing="[ 0, 40 ]"
             showRowLabel="[ true ]"
             focusBitmapUri="pkg:/images/focusIndicator.9.png"
             vertFocusAnimationStyle="fixedFocus"
-            rowFocusAnimationStyle="fixedFocusWrap" />
-
-
+            rowFocusAnimationStyle="floatingFocus"
+        />
     </children>
 
 </component>

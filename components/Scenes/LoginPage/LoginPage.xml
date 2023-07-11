@@ -1,30 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<component name="LoginPage" extends="Group">
+<component name="LoginPage" extends="SceneManagerGroup">
 
     <interface>
         <field id="finished" type="bool" />
         <field id="login" type="string" />
-        <field id="backPressed" type="bool" />
     </interface>
 
     <script type="text/brightscript" uri="LoginPage.brs" />
     <children>
         <SimpleLabel
-            translation="[100,72]"
+            translation="[100,172]"
             text="LoginPageTopText"
             color="0xEFEFF1FF"
             fontSize="18"
             fontUri="pkg:/fonts/Roobert-SemiBold.ttf" />
         <SimpleLabel
-            translation="[300,202]"
+            translation="[300,302]"
             id="code"
             text=""
             color="0xEFEFF1FF"
             fontSize="36"
             fontUri="pkg:/fonts/JetBrainsMono-Bold.ttf" />
         <SimpleLabel
-            translation="[100,302]"
+            translation="[100,402]"
             text="LoginPageBottomText"
             color="0xEFEFF1FF"
             fontSize="18"

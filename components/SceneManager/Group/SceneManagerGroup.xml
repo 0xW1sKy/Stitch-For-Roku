@@ -2,6 +2,7 @@
 <component name="SceneManagerGroup" extends="Group">
     <interface>
         <field id="backPressed" type="boolean" alwaysNotify="true" />
+        <field id="contentSelected" type="node" alwaysNotify="true" />
         <field id="lastFocus" type="node" />
         <field id="overhangTitle" type="string" />
         <field id="optionsAvailable" value="true" type="boolean" />

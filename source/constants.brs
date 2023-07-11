@@ -12,7 +12,10 @@ sub setConstants()
                 "Vods",
                 "Search",
                 "Settings",
-                "LoginPage"
+                "LoginPage",
+                "GamePage",
+                "ChannelPage",
+
             ]
             colors: {
                 muted: {

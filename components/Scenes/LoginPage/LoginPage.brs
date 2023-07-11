@@ -29,6 +29,7 @@ sub handleUserLogin()
         ' Parent = heroScene, child 1 = MenuBar, child 3 = ButtonGroup, child 6 = loginIconButton
         m.top.getParent().getChild(1).updateUserIcon = true
     end if
+    m.top.backPressed = true
 end sub
 
 function getUserLogin()

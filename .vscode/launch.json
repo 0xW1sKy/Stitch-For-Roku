@@ -13,19 +13,16 @@
             "password": "1111",
             "rootDir": "${workspaceFolder}/",
             "injectRdbOnDeviceComponent": true,
-            "enableDebuggerAutoRecovery": true,
+            "enableDebuggerAutoRecovery": false,
             "stopDebuggerOnAppExit": true,
             "files": [
                 "source/**/*",
                 "components/**/*",
                 "images/**/*",
                 "fonts/**/*",
-                "vendor/**/*",
-                "lib/**/*",
                 "modules/**/*",
                 "locale/**/*",
                 "settings/**/*",
-                "source/**/*",
                 "manifest",
                 "env"
             ]
@@ -38,20 +35,17 @@
             "host": "192.168.2.33",
             "password": "1111",
             "rootDir": "${workspaceFolder}/",
-            "injectRdbOnDeviceComponent": false,
+            "injectRdbOnDeviceComponent": true,
             "enableDebuggerAutoRecovery": false,
-            "stopDebuggerOnAppExit": false,
+            "stopDebuggerOnAppExit": true,
             "files": [
                 "source/**/*",
                 "components/**/*",
                 "images/**/*",
                 "fonts/**/*",
-                "vendor/**/*",
-                "lib/**/*",
                 "modules/**/*",
                 "locale/**/*",
                 "settings/**/*",
-                "source/**/*",
                 "manifest",
                 "env"
             ]

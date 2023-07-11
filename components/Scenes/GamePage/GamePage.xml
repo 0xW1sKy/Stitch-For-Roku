@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component name="Home" extends="SceneManagerGroup" initialFocus="exampleRowList">
-    <script type="text/brightscript" uri="Home.brs" />
+<component name="GamePage" extends="SceneManagerGroup" initialFocus="exampleRowList">
+    <interface>
+        <field id="contentRequested" type="node" onChange="updatePage" />
+    </interface>
+    <script type="text/brightscript" uri="GamePage.brs" />
     <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
     <children>
         <RowList
             id="exampleRowList"
+            visible="true"
             rowLabelOffset="[[0,5]]"
             rowLabelFont="font:LargeBoldSystemFont"
             translation="[ 130, 120 ]"
@@ -14,10 +18,11 @@
             rowItemSpacing="[[30,0]]"
             itemSize="[1080,295]"
             itemSpacing="[ 0, 40 ]"
-            showRowLabel="[ true ]"
+            showRowLabel="[ false ]"
+            rowHeights="[235]"
             focusBitmapUri="pkg:/images/focusIndicator.9.png"
             vertFocusAnimationStyle="fixedFocus"
-            rowFocusAnimationStyle="fixedFocus"
+            rowFocusAnimationStyle="floatingFocus"
         />
     </children>
 

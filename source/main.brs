@@ -35,10 +35,10 @@ sub RunUserInterface()
     m.screen.setMessagePort(m.port)
     m.scene = m.screen.CreateScene("HeroScene")
     m.screen.show()
+    ' vscode_rdb_on_device_component_entry
     m.scene.observeField("exitApp", m.port)
     m.scene.setFocus(true)
-    m.global = m.screen.getGlobalNode()
-    ' vscode_rdb_on_device_component_entry
+    ' m.global = m.screen.getGlobalNode()
     while(true)
         msg = wait(0, m.port)
         msgType = type(msg)

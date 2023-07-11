@@ -8,12 +8,23 @@ sub init()
     if get_setting("active_user") = invalid
         set_setting("active_user", "default")
     end if
-    onMenuSelection()
+    if get_user_setting("device_code") = invalid
+        m.getDeviceCodeTask = CreateObject("roSGNode", "TwitchApi")
+        m.getDeviceCodeTask.observeField("response", "handleDeviceCode")
+        m.getDeviceCodeTask.request = {
+            type: "getRendezvouzToken"
+        }
+    else
+        onMenuSelection()
+    end if
 end sub
 
-function gsCallback()
-    twitchAsyncResponse = m.TwitchAsync.response
-    ? "STOP"
+function handleDeviceCode()
+    if m.getDeviceCodeTask <> invalid
+        response = m.getDeviceCodeTask.response
+        set_user_setting("device_code", response.device_code)
+    end if
+    onMenuSelection()
 end function
 
 function buildNode(id, name)
@@ -22,6 +33,7 @@ function buildNode(id, name)
         newNode.id = id
         newNode.translation = "[0, 0]"
         newNode.observeField("backPressed", "onBackPressed")
+        newNode.observeField("contentSelected", "onContentSelected")
         m.top.appendChild(newNode)
         return newNode
     end if
@@ -40,6 +52,25 @@ function onMenuSelection()
     end if
     m.activeNode.setfocus(true)
 end function
+
+function gamePage(content)
+    if m.activeNode <> invalid
+        m.top.removeChild(m.activeNode)
+        m.activeNode = invalid
+    end if
+    if m.activeNode = invalid
+        m.activeNode = buildNode("7", m.global.constants.menuOptions[7])
+    end if
+    m.activeNode.contentRequested = content
+    m.activeNode.setfocus(true)
+end function
+
+sub onContentSelected()
+    ? m.activeNode.contentSelected
+    if m.activeNode.contentSelected.contentType = "GAME"
+        gamePage(m.activeNode.contentSelected)
+    end if
+end sub
 
 sub onBackPressed()
     if m.activeNode.backPressed <> invalid and m.activeNode.backPressed

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component name="TwitchContentNode" extends="ContentNode">
+    <script type="text/brightscript" uri="TwitchContentNode.brs" />
+    <interface>
+        <field id="contentId" type="string" />
+        <field id="contentType" type="string" />
+        <!-- GAME, VOD, LIVE -->
+        <field id="previewImageUrl" type="uri" />
+        <field id="contentTitle" type="string" />
+        <field id="viewersCount" type="string" onChange="updateViewersDisplay" />
+        <!-- raw number, translated to viewersDisplay below -->
+        <field id="viewersDisplay" type="string" />
+        <field id="streamerDisplayName" type="string" />
+        <field id="streamerLogin" type="string" />
+        <field id="streamerId" type="string" />
+        <field id="streamerProfileImageUrl" type="uri" />
+        <field id="gameDisplayName" type="string" />
+        <field id="gameBoxArtUrl" type="uri" />
+        <field id="gameId" type="string" />
+        <field id="gameName" type="string" />
+        <field id="url" type="string" />
+    </interface>
+</component>
