@@ -2,7 +2,60 @@ function init()
     m.top.functionName = "main"
 end function
 
-function getChannelBadges() as object
+function getTwitchBadges()
+    access_token = ""
+    device_code = ""
+    ' doubled up here in stead of defaulting to "" because access_token is dependent on device_code
+    if get_user_setting("device_code") <> invalid
+        device_code = get_user_setting("device_code")
+        if get_user_setting("access_token") <> invalid
+            access_token = "OAuth " + get_user_setting("access_token")
+        end if
+    end if
+    req = HttpRequest({
+        url: "https://gql.twitch.tv/gql"
+        headers: {
+            "Accept": "*/*"
+            "Authorization": access_token
+            "Client-Id": "ue6666qo983tsx6so1t0vnawi233wa"
+            "Device-ID": device_code
+            "Origin": "https://switch.tv.twitch.tv"
+            "Referer": "https://switch.tv.twitch.tv/"
+        }
+        method: "POST"
+        data: {
+            "operationName": "ChatList_Badges",
+            "variables": {
+                "channelLogin": m.top.channel
+            },
+            "extensions": {
+                "persistedQuery": {
+                    "version": 1,
+                    "sha256Hash": "86f43113c04606e6476e39dcd432dee47c994d77a83e54b732e11d4935f0cd08"
+                }
+            }
+        }
+    })
+    rsp = ParseJSON(req.send())
+    badgelist = {}
+    for each badge in rsp.data.badges
+        ' badge.setID = 1979-revolution_1
+        ' badge.title = 1979 Revolution
+        ' badge.id = MTk3OS1yZXZvbHV0aW9uXzE7MTs=
+        identifier = badge.setID + "/" + badge.version
+        badgelist[identifier] = badge.image2x
+    end for
+    for each badge in rsp.data.user.broadcastBadges
+        ' badge.setID = 1979-revolution_1
+        ' badge.title = 1979 Revolution
+        ' badge.id = MTk3OS1yZXZvbHV0aW9uXzE7MTs=
+        identifier = badge.setID + "/" + badge.version
+        badgelist[identifier] = badge.image2x
+    end for
+    return badgelist
+end function
+
+function getChannelUserId() as object
     url = createUrl()
     search_results_url = "https://api.twitch.tv/helix/users?login=" + m.top.channel
     url.SetUrl(search_results_url.EncodeUri())
@@ -50,8 +103,10 @@ end sub
 
 function main()
     'messagePort = CreateObject("roMessagePort")
-    if m.global.globalBadges = invalid
-        m.global.addFields({ globalBadges: getjsondata("https://badges.twitch.tv/v1/badges/global/display") })
+    if m.global.twitchBadges = invalid
+        m.global.addFields({ twitchBadges: getTwitchBadges() })
+    else
+        m.global.setField("twitchBadges", getTwitchBadges())
     end if
 
     if m.global.globalTTVEmotes = invalid
@@ -101,13 +156,8 @@ function main()
 
         'm.top.observeField("sendMessage", "sendMessage")
 
-        channel_id = getChannelBadges()
+        channel_id = getChannelUserId()
 
-        if m.global.channelBadges = invalid
-            m.global.addFields({ channelBadges: getjsondata("https://badges.twitch.tv/v1/badges/channels/" + channel_id + "/display") })
-        else
-            m.global.setField("channelBadges", getjsondata("https://badges.twitch.tv/v1/badges/channels/" + channel_id + "/display"))
-        end if
 
         temp = getjsondata("https://api.betterttv.net/3/cached/users/twitch/" + channel_id)
         assocEmotes = {}
