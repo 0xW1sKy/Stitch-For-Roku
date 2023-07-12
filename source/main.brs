@@ -28,13 +28,13 @@ end sub
 ' Handles closing of the channel.
 sub RunUserInterface()
     ' The main function that runs when the application is launched.
-    m.screen = CreateObject("roSGScreen")
+    screen = CreateObject("roSGScreen")
     m.port = CreateObject("roMessagePort")
     ' Set global constants
     setConstants()
-    m.screen.setMessagePort(m.port)
+    screen.setMessagePort(m.port)
     m.scene = m.screen.CreateScene("HeroScene")
-    m.screen.show()
+    screen.show()
     ' vscode_rdb_on_device_component_entry
     m.scene.observeField("exitApp", m.port)
     m.scene.setFocus(true)

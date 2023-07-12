@@ -54,14 +54,14 @@
                 rowFocusAnimationStyle="fixedFocus"
             />
         </Group>
-        <VideoPlayer
+        <Video
             id="videoPlayer"
             enableUI="true"
             enableTrickPlay="false"
-            visible="false"
+            visible="true"
             translation="[0,0]"
-            width="1280"
-            height="720" />
+            width="180"
+            height="72" />
     </children>
 
 </component>
