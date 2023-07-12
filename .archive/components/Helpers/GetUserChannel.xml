@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<component name="GetUserChannel" extends="Task">
+
+    <interface>
+        <field id="loginRequested" type="string" />
+        <field id="streamDurationSeconds" type="Integer" />
+        <field id="searchResults" type="assocarray" />
+        <field id="isLive" type="bool" />
+    </interface>
+
+    <script type="text/brightscript" uri="GetUserChannel.brs" />
+    <script type="text/brightscript" uri="pkg:/components/Helpers/UrlFunctions.brs" />
+    <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
+    <script type="text/brightscript" uri="pkg:/components/Helpers/StringUtils.brs" />
+
+</component>

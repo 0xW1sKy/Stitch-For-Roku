@@ -1,0 +1,49 @@
+<component name="Settings" extends="SceneManagerGroup" initialFocus="settingsMenu">
+    <children>
+        <Rectangle width="1280" height="720" color="0x0e0e10FF"
+        />
+        <Label id="path" translation="[64,117]" font="font:SmallestBoldSystemFont" />
+
+        <LabelList
+            translation="[80,67]"
+            id="settingsMenu"
+            itemSize="[290,45]"
+            vertFocusAnimationStyle="floatingFocus"
+            itemSpacing="[0,5]"
+        />
+
+        <Poster
+            translation="[473,67]"
+            id="testRectangle"
+            width="586"
+            height="400"
+            uri="pkg:/images/white.9.png"
+            blendColor="#3f3f3f"
+        />
+
+        <LayoutGroup
+            translation="[767,83]"
+            id="settingDetail"
+            vertAlignment="top"
+            horizAlignment="center"
+            itemSpacings="[50]"
+        >
+
+            <ScrollingLabel font="font:LargeSystemFont" id="settingTitle" maxWidth="473" />
+
+            <Label id="settingDesc" width="473" wrap="true" />
+
+            <RadioButtonList id="boolSetting" vertFocusAnimationStyle="floatingFocus">
+                <ContentNode role="content">
+                    <ContentNode title="Disabled" />
+                    <ContentNode title="Enabled" />
+                </ContentNode>
+            </RadioButtonList>
+        </LayoutGroup>
+        <RadioButtonList id="radioSetting" translation="[600, 200]"
+            inheritParentTransform="false" vertFocusAnimationStyle="floatingFocus" />
+
+    </children>
+    <script type="text/brightscript" uri="settings.brs" />
+    <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
+</component>

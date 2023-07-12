@@ -1,0 +1,55 @@
+[
+    {
+        "title": "Chat On-By-Default",
+        "description": "Determines default state of chat window when opening a stream",
+        "settingName": "ChatOption",
+        "type": "bool",
+        "default": "true"
+    },
+    {
+        "title": "Video Quality",
+        "description": "",
+        "settingName": "VideoQuality",
+        "type": "radio",
+        "default": "1",
+        "options": [
+            {
+                "title": "1080p",
+                "id": "1"
+            },
+            {
+                "title": "720p",
+                "id": "3"
+            },
+            {
+                "title": "480p",
+                "id": "4"
+            },
+            {
+                "title": "360p",
+                "id": "5"
+            },
+            {
+                "title": "160p",
+                "id": "6"
+            }
+        ]
+    },
+    {
+        "title": "Video Framerate",
+        "description": "",
+        "settingName": "VideoFramerate",
+        "type": "radio",
+        "default": "1",
+        "options": [
+            {
+                "title": "60 fps",
+                "id": "60"
+            },
+            {
+                "title": "30 fps",
+                "id": "30"
+            }
+        ]
+    }
+]
