@@ -2,21 +2,30 @@
 <component name="GamePage" extends="SceneManagerGroup" initialFocus="exampleRowList">
     <interface>
         <field id="contentRequested" type="node" onChange="updatePage" />
+        <field id="backgroundColor" type="string" alias="background.color" />
+        <field id="pageTitle" type="string" alias="Header.text" />
     </interface>
     <script type="text/brightscript" uri="GamePage.brs" />
     <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
     <children>
+        <rectangle id="background" width="1920" height="1080" />
+        <SimpleLabel
+            id="Header"
+            translation="[75,20]"
+            text="Browse"
+            fontSize="48"
+            fontUri="pkg:/fonts/KlokanTechNotoSansCJK-Bold.otf" />
         <RowList
             id="exampleRowList"
             visible="true"
             rowLabelOffset="[[0,5]]"
             rowLabelFont="font:LargeBoldSystemFont"
-            translation="[ 130, 120 ]"
+            translation="[ 100, 120 ]"
             itemComponentName="VideoItem"
             numRows="4"
             rowItemSize="[[320,180]]"
             rowItemSpacing="[[30,0]]"
-            itemSize="[1080,295]"
+            itemSize="[1280,295]"
             itemSpacing="[ 0, 40 ]"
             showRowLabel="[ false ]"
             rowHeights="[235]"

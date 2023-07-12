@@ -1,4 +1,5 @@
 sub init()
+    m.top.backgroundColor = m.global.constants.colors.hinted.grey1
     m.top.observeField("focusedChild", "onGetfocus")
     ' m.top.observeField("itemFocused", "onGetFocus")
     m.rowlist = m.top.findNode("exampleRowList")
@@ -8,7 +9,6 @@ sub init()
     m.description = m.top.findNode("description")
     m.livestreamlabel = m.top.findNode("livestreamlabel")
     m.liveDuration = m.top.findNode("liveDuration")
-    m.recentVideosLabel = m.top.findNode("recentVideosLabel")
     m.avatar = m.top.findNode("avatar")
 end sub
 
@@ -16,8 +16,6 @@ sub updatePage()
     m.username.text = m.top.contentRequested.streamerDisplayName
     m.GetContentTask = CreateObject("roSGNode", "TwitchApi") ' create task for feed retrieving
     ' ' observe content so we can know when feed content will be parsed
-    ' ? "REQUESTED CONTENT: "; m.top.contentRequested
-    ' ? "Pause"
     m.GetContentTask.observeField("response", "updateChannelInfo")
     m.GetContentTask.request = {
         type: "getChannelHomeQuery"
@@ -27,8 +25,6 @@ sub updatePage()
     }
     m.GetShellTask = CreateObject("roSGNode", "TwitchApi") ' create task for feed retrieving
     ' ' observe content so we can know when feed content will be parsed
-    ' ? "REQUESTED CONTENT: "; m.top.contentRequested
-    ' ? "Pause"
     m.GetShellTask.observeField("response", "updateChannelShell")
     m.GetShellTask.request = {
         type: "getChannelShell"
@@ -53,7 +49,7 @@ function setBannerImage()
     poster.width = 1280
     poster.height = 320
     poster.visible = true
-    poster.translation = [-122, -25]
+    poster.translation = [0, 0]
     overlay = createObject("roSGNode", "Rectangle")
     overlay.color = "0x010101F0"
     overlay.width = 1280
@@ -82,6 +78,8 @@ sub updateChannelInfo()
     m.description.infoText = m.GetcontentTask.response.data.channel.description
     m.followers.text = numberToText(m.GetcontentTask.response.data.channel.followers.totalCount) + " " + tr("followers")
     m.avatar.uri = m.GetcontentTask.response.data.channel.profileImageUrl
+    channelContent = buildContentNodeFromShelves(m.GetcontentTask.response.data.channel.videoShelves.edges)
+    updateRowList(channelContent)
     ? "Resp: "; m.GetcontentTask.response
     ? "Resp: "; m.GetcontentTask.response.data
 end sub
@@ -90,69 +88,28 @@ function buildContentNodeFromShelves(shelves)
     contentCollection = createObject("RoSGNode", "ContentNode")
     for each shelf in shelves
         row = createObject("RoSGNode", "ContentNode")
-        temp_title = ""
-        try
-            for each wordblock in shelf.node.title.localizedTitleTokens
-                if wordblock.node.__typename = "TextToken"
-                    temp_title = Substitute("{0}{1}", temp_title, wordblock.node.text)
-                end if
-                if wordblock.node.__typename = "Game"
-                    temp_title = Substitute("{0}{1}", temp_title, wordblock.node.displayName)
-                end if
-                if wordblock.node.__typename = "BrowsableCollection"
-                    temp_title = shelf.node.title.fallbackLocalizedTitle
-                end if
-            end for
-        catch e
-            ? "TITLE ERROR: "; e
-            temp_title = shelf.node.title.fallbackLocalizedTitle
-        end try
-        row.title = temp_title
-        for each stream in shelf.node.content.edges
-            streamnode = stream.node
-            ' type_name = stream.node.__typename
-            try
-                if stream.node.type <> invalid and stream.node.type = "live"
-                    rowItem = createObject("RoSGNode", "TwitchContentNode")
-                    rowItem.contentId = stream.node.Id
-                    rowItem.contentType = "LIVE"
-                    rowItem.previewImageURL = Substitute("https://static-cdn.jtvnw.net/previews-ttv/live_user_{0}-{1}x{2}.jpg", stream.node.broadcaster.login, "320", "180")
-                    rowItem.contentTitle = stream.node.broadcaster.broadcastSettings.title
-                    rowItem.viewersCount = stream.node.viewersCount
-                    rowItem.streamerDisplayName = stream.node.broadcaster.displayName
-                    rowItem.streamerLogin = stream.node.broadcaster.login
-                    rowItem.streamerId = stream.node.broadcaster.id
-                    rowItem.streamerProfileImageUrl = stream.node.broadcaster.profileImageURL
-                    rowItem.gameDisplayName = stream.node.game.displayName
-                    rowItem.gameBoxArtUrl = Left(stream.node.game.boxArtUrl, Len(stream.node.game.boxArtUrl) - 20) + "188x250.jpg"
-                    rowItem.gameId = stream.node.game.Id
-                    rowItem.gameName = stream.node.game.name
-
-                    rowItem.Title = streamnode.broadcaster.broadcastSettings.title
-                    rowItem.secondaryTitle = streamnode.broadcaster.displayName
-                    rowItem.HDPosterUrl = Substitute("https://static-cdn.jtvnw.net/previews-ttv/live_user_{0}-{1}x{2}.jpg", streamnode.broadcaster.login, "320", "180")
-                    rowItem.ShortDescriptionLine1 = streamnode.viewersCount
-                    rowItem.ShortDescriptionLine2 = streamnode.game.displayName
-                    row.appendChild(rowItem)
-                else
-                    rowItem = createObject("RoSGNode", "TwitchContentNode")
-                    rowItem.contentId = stream.node.Id
-                    rowItem.contentType = "GAME"
-                    rowItem.viewersCount = stream.node.viewersCount
-                    rowItem.gameDisplayName = stream.node.displayName
-                    rowItem.gameBoxArtUrl = Left(stream.node.boxArtUrl, Len(stream.node.boxArtUrl) - 20) + "188x250.jpg"
-                    rowItem.gameId = stream.node.Id
-                    rowItem.gameName = stream.node.name
-
-                    rowItem.Title = streamnode.displayName
-                    rowItem.secondaryTitle = streamnode.viewersCount
-                    rowItem.HDPosterUrl = Left(stream.node.boxArtUrl, Len(stream.node.boxArtUrl) - 20) + "188x250.jpg"
-                    rowItem.ShortDescriptionLine1 = streamnode.viewersCount
-                    row.appendChild(rowItem)
-                end if
-            catch e
-                ? "Error: "; e
-            end try
+        row.title = shelf.node.title
+        for each stream in shelf.node.items
+            rowItem = createObject("RoSGNode", "TwitchContentNode")
+            rowItem.contentId = stream.id
+            rowItem.contentType = "VOD"
+            if stream.previewThumbnailURL <> invalid
+                rowItem.previewImageURL = Left(stream.previewThumbnailURL, len(stream.previewThumbnailURL) - 20) + "320x180." + Right(stream.previewThumbnailURL, 3)
+            else if stream.thumbnailURL <> invalid
+                rowItem.previewImageURL = stream.thumbnailURL
+            end if
+            rowItem.contentTitle = stream.title
+            rowItem.viewersCount = stream.viewCount
+            rowItem.streamerDisplayName = m.top.contentRequested.streamerDisplayName
+            rowItem.streamerLogin = m.top.contentRequested.streamerLogin
+            rowItem.streamerId = m.top.contentRequested.streamerId
+            rowItem.streamerProfileImageUrl = m.top.contentRequested.streamerProfileImageUrl
+            if stream.game <> invalid
+                rowItem.gameDisplayName = stream.game.displayName
+                rowItem.gameBoxArtUrl = Left(stream.game.boxArtUrl, Len(stream.game.boxArtUrl) - 20) + "188x250.jpg"
+                rowItem.gameId = stream.game.Id
+            end if
+            row.appendChild(rowItem)
         end for
         contentCollection.appendChild(row)
     end for
@@ -171,22 +128,44 @@ sub handleRecommendedSections()
     updateRowList(contentCollection)
 end sub
 
-' function createRowList()
-'     newRowList = createObject("RoSGNode", "RowList")
-'     newRowList.rowLabelOffset = "[[0,5]]"
-'     newRowList.rowLabelFont = "font:LargeBoldSystemFont"
-'     newRowList.itemComponentName = "VideoItem"
-'     newRowList.numRows = 1
-'     newRowList.rowItemSize = "[[320,180]]"
-'     newRowList.rowItemSpacing = "[[30,0]]"
-'     newRowList.itemSize = "[1080,275]"
-'     newRowList.itemSpacing = "[ 0, 40 ]"
-'     newRowList.showRowLabel = "[true]"
-'     newRowList.focusBitmapUri = "pkg:/images/focusIndicator.9.png"
-'     newRowList.vertFocusAnimationStyle = "fixedFocus"
-'     newRowList.rowFocusAnimationStyle = "fixedFocusWrap"
-'     return newRowList
-' end function
+function getVodLink(videoId) as object
+    access_token = ""
+    device_code = ""
+    ' doubled up here in stead of defaulting to "" because access_token is dependent on device_code
+    if get_user_setting("device_code") <> invalid
+        device_code = get_user_setting("device_code")
+        if get_user_setting("access_token") <> invalid
+            access_token = "OAuth " + get_user_setting("access_token")
+        end if
+    end if
+    req = HttpRequest({
+        url: "https://gql.twitch.tv/gql"
+        headers: {
+            "Accept": "*/*"
+            "Authorization": access_token
+            "Client-Id": "ue6666qo983tsx6so1t0vnawi233wa"
+            "Device-ID": device_code
+            "Origin": "https://switch.tv.twitch.tv"
+            "Referer": "https://switch.tv.twitch.tv/"
+        }
+        method: "POST"
+        data: {
+            query: "query VodPlayerWrapper_Query(" + chr(10) + "  $videoId: ID!" + chr(10) + "  $platform: String!" + chr(10) + "  $playerType: String!" + chr(10) + "  $skipPlayToken: Boolean!" + chr(10) + ") {" + chr(10) + "  ...VodPlayerWrapper_token" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment VodPlayerWrapper_token on Query {" + chr(10) + "  video(id: $videoId) @skip(if: $skipPlayToken) {" + chr(10) + "    playbackAccessToken(params: {platform: $platform, playerType: $playerType}) {" + chr(10) + "      signature" + chr(10) + "      value" + chr(10) + "    }" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "}" + chr(10) + ""
+            variables: {
+                "videoId": videoId
+                "platform": "switch_web_tv"
+                "playerType": "pulsar"
+                "skipPlayToken": false
+            }
+        }
+    })
+    data = req.send()
+    response = ParseJSON(data)
+    ' seekpreviewurl = response.data.video.seekpreviewurl
+    '"https://static-cdn.jtvnw.net/cf_vods/vod/7b652c53825567c2bb4c_kaicenat_41850780219_1676414633/storyboards/1738339385-info.json"
+    vod_link = "https://usher.ttvnw.net/vod/" + videoId + ".m3u8?playlist_include_framerate=true&allow_source=true&player_type=pulsar&player_backend=mediaplayer&nauth=" + UrlEncode(response.data.video.playbackAccessToken.value) + "&nauthsig=" + response.data.video.playbackAccessToken.signature
+    return vod_link
+end function
 
 function updateRowList(contentCollection)
     rowItemSize = []
@@ -241,7 +220,7 @@ end sub
 function onKeyEvent(key as string, press as boolean) as boolean
     if press
         ? "Home Scene Key Event: "; key
-        if key = "up" or key = "back"
+        if key = "back"
             m.top.backPressed = true
             return true
         end if

@@ -23,6 +23,7 @@ function buildContentNodeFromShelves(games)
         rowItem.contentId = game.node.Id
         rowItem.contentType = "GAME"
         rowItem.viewersCount = game.node.viewersCount
+        rowItem.contentTitle = game.node.displayName
         rowItem.gameDisplayName = game.node.displayName
         rowItem.gameBoxArtUrl = Left(game.node.boxArtUrl, Len(game.node.boxArtUrl) - 20) + "188x250.jpg"
         rowItem.gameId = game.node.Id

@@ -52,12 +52,9 @@ function buildContentNodeFromShelves(shelves)
                     rowItem.gameBoxArtUrl = Left(stream.node.game.boxArtUrl, Len(stream.node.game.boxArtUrl) - 20) + "188x250.jpg"
                     rowItem.gameId = stream.node.game.Id
                     rowItem.gameName = stream.node.game.name
-
-                    rowItem.Title = streamnode.broadcaster.broadcastSettings.title
-                    rowItem.secondaryTitle = streamnode.broadcaster.displayName
-                    rowItem.HDPosterUrl = Substitute("https://static-cdn.jtvnw.net/previews-ttv/live_user_{0}-{1}x{2}.jpg", streamnode.broadcaster.login, "320", "180")
-                    rowItem.ShortDescriptionLine1 = streamnode.viewersCount
-                    rowItem.ShortDescriptionLine2 = streamnode.game.displayName
+                    ' rowItem.secondaryTitle = streamnode.broadcaster.displayName
+                    ' rowItem.ShortDescriptionLine1 = streamnode.viewersCount
+                    ' rowItem.ShortDescriptionLine2 = streamnode.game.displayName
                     row.appendChild(rowItem)
                 else
                     rowItem = createObject("RoSGNode", "TwitchContentNode")
@@ -68,11 +65,10 @@ function buildContentNodeFromShelves(shelves)
                     rowItem.gameBoxArtUrl = Left(stream.node.boxArtUrl, Len(stream.node.boxArtUrl) - 20) + "188x250.jpg"
                     rowItem.gameId = stream.node.Id
                     rowItem.gameName = stream.node.name
-
-                    rowItem.Title = streamnode.displayName
-                    rowItem.secondaryTitle = streamnode.viewersCount
-                    rowItem.HDPosterUrl = Left(stream.node.boxArtUrl, Len(stream.node.boxArtUrl) - 20) + "188x250.jpg"
-                    rowItem.ShortDescriptionLine1 = streamnode.viewersCount
+                    rowItem.contentTitle = streamnode.displayName
+                    ' rowItem.secondaryTitle = streamnode.viewersCount
+                    ' rowItem.HDPosterUrl = Left(stream.node.boxArtUrl, Len(stream.node.boxArtUrl) - 20) + "188x250.jpg"
+                    ' rowItem.ShortDescriptionLine1 = streamnode.viewersCount
                     row.appendChild(rowItem)
                 end if
             catch e

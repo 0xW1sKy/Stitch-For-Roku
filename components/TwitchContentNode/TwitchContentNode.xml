@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component name="TwitchContentNode" extends="ContentNode">
     <script type="text/brightscript" uri="TwitchContentNode.brs" />
+    <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
     <interface>
         <field id="contentId" type="string" />
         <field id="contentType" type="string" />
         <!-- GAME, VOD, LIVE -->
         <field id="previewImageUrl" type="uri" />
         <field id="contentTitle" type="string" />
-        <field id="viewersCount" type="string" onChange="updateViewersDisplay" />
+        <field id="viewersCount" type="int" onChange="updateViewersDisplay" />
         <!-- raw number, translated to viewersDisplay below -->
         <field id="viewersDisplay" type="string" />
         <field id="streamerDisplayName" type="string" />
@@ -19,5 +20,7 @@
         <field id="gameId" type="string" />
         <field id="gameName" type="string" />
         <field id="url" type="string" />
+        <field id="datePublished" type="string" onChange="updateRelativePublishDate" />
+        <field id="relativePublishDate" type="string" />
     </interface>
 </component>

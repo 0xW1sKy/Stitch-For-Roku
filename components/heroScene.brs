@@ -17,6 +17,7 @@ sub init()
     else
         onMenuSelection()
     end if
+    m.footprints = []
 end sub
 
 function handleDeviceCode()
@@ -53,21 +54,28 @@ function onMenuSelection()
     m.activeNode.setfocus(true)
 end function
 
-function channelPage(content)
+sub onContentSelected()
+    if m.activeNode.contentSelected.contentType = "GAME"
+        id = 7
+    end if
+    if m.activeNode.contentSelected.contentType = "LIVE" or m.activeNode.contentSelected.contentType = "VOD"
+        id = 8
+    end if
+    content = m.activeNode.contentSelected
     if m.activeNode <> invalid
-        m.top.removeChild(m.activeNode)
+        m.footprints.push(m.activeNode)
         m.activeNode = invalid
     end if
     if m.activeNode = invalid
-        m.activeNode = buildNode("8", m.global.constants.menuOptions[8])
+        m.activeNode = buildNode(id, m.global.constants.menuOptions[id])
     end if
     m.activeNode.contentRequested = content
     m.activeNode.setfocus(true)
-end function
+end sub
 
 function gamePage(content)
     if m.activeNode <> invalid
-        m.top.removeChild(m.activeNode)
+        m.footprints.push(m.activeNode)
         m.activeNode = invalid
     end if
     if m.activeNode = invalid
@@ -77,18 +85,16 @@ function gamePage(content)
     m.activeNode.setfocus(true)
 end function
 
-sub onContentSelected()
-    ? m.activeNode.contentSelected
-    if m.activeNode.contentSelected.contentType = "GAME"
-        gamePage(m.activeNode.contentSelected)
-    else
-        channelPage(m.activeNode.contentSelected)
-    end if
-end sub
 
 sub onBackPressed()
     if m.activeNode.backPressed <> invalid and m.activeNode.backPressed
-        m.menu.setFocus(true)
+        if m.footprints.Count() > 0
+            m.top.removeChild(m.activeNode)
+            m.activeNode = m.footprints.pop()
+            m.activeNode.setFocus(false)
+        else
+            m.menu.setFocus(true)
+        end if
     end if
 end sub
 
@@ -96,7 +102,7 @@ function onKeyEvent(key, press) as boolean
     if press
         ? "Hero Scene Key Event: "; key
         if key = "options"
-            NukeRegistry()
+            ? "BREAK"
             return true
         end if
         if key = "replay"
@@ -105,7 +111,7 @@ function onKeyEvent(key, press) as boolean
             return true
         end if
         if key = "down"
-            onMenuSelection()
+            m.activeNode.setFocus(true)
         end if
     end if
     ' if key = "up"

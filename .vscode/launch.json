@@ -15,6 +15,7 @@
             "injectRdbOnDeviceComponent": true,
             "enableDebuggerAutoRecovery": false,
             "stopDebuggerOnAppExit": true,
+            "enableDebugProtocol": true,
             "files": [
                 "source/**/*",
                 "components/**/*",

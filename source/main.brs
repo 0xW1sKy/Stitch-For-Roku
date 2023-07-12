@@ -42,8 +42,6 @@ sub RunUserInterface()
     while(true)
         msg = wait(0, m.port)
         msgType = type(msg)
-        ? "msgType: "; msgType
-        ? "field: "; msg.getField()
         if msgType = "roSGScreenEvent" then
             if msg.isScreenClosed() then
                 return

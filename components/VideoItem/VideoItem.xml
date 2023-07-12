@@ -41,7 +41,7 @@
             <Font role="font" uri="pkg:/fonts/KlokanTechNotoSansCJK-Bold.otf" size="20" />
         </EmojiLabel>
         <Label
-            id="itemStreamer"
+            id="itemSubtitle"
             height="30"
             width="320"
             horizAlign="left"
@@ -50,7 +50,7 @@
             <Font role="font" uri="pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf" size="16" />
         </Label>
         <Label
-            id="itemCategory"
+            id="itemThirdTitle"
             height="30"
             width="320"
             horizAlign="left"

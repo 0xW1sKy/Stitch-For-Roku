@@ -388,3 +388,55 @@ sub numberToText(number as object) as object
     end if
     return result
 end sub
+
+
+function getRelativeTimePublished(timePublished as string) as string
+    secondsSincePublished = createObject("roDateTime")
+    secondsSincePublished.FromISO8601String(timePublished)
+    currentTime = createObject("roDateTime").AsSeconds()
+    elapsedTime = currentTime - secondsSincePublished.AsSeconds()
+
+    elapsedTime = Int(elapsedTime / 60)
+    if elapsedTime < 60
+        if elapsedTime = 1
+            return "1 minute ago"
+        else
+            return elapsedTime.ToStr() + " minutes ago"
+        end if
+    end if
+
+    elapsedTime = Int(elapsedTime / 60)
+    if elapsedTime < 24
+        if elapsedTime = 1
+            return "1 hour ago"
+        else
+            return elapsedTime.ToStr() + " hours ago"
+        end if
+    end if
+
+    elapsedTime = Int(elapsedTime / 24)
+    if elapsedTime < 30
+        if elapsedTime = 1
+            return "1 day ago"
+        else
+            return elapsedTime.ToStr() + " days ago"
+        end if
+    end if
+
+    elapsedTime = Int(elapsedTime / 30)
+    if elapsedTime < 12
+        if elapsedTime = 1
+            return "Last month"
+        else
+            return elapsedTime.ToStr() + " months ago"
+        end if
+    end if
+
+    elapsedTime = Int(elapsedTime / 12)
+    if elapsedTime = 1
+        return "1 year ago"
+    else
+        return elapsedTime.ToStr() + " years ago"
+    end if
+
+end function

@@ -2,13 +2,16 @@
 <component name="ChannelPage" extends="SceneManagerGroup">
     <interface>
         <field id="contentRequested" type="node" onChange="updatePage" />
+        <field id="backgroundColor" type="string" alias="background.color" />
     </interface>
     <script type="text/brightscript" uri="ChannelPage.brs" />
+    <script type="text/brightscript" uri="pkg:/components/twitch-api-sdk/http.brs" />
     <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
     <children>
-        <Group id="container" translation="[ 130, 100 ]">
+        <rectangle id="background" width="1920" height="1080" />
+        <Group id="banner" translation="[0, 0]"></Group>
+        <Group id="container" translation="[ 20, 10 ]">
             <Group id="profile" translation="[0,0]">
-                <Group id="banner" translation="[-8, 5]"></Group>
                 <MaskGroup id="profileImageMask" maskuri="pkg:/images/profile-mask-150.png"
                     maskSize="[226,226]" maskOffset="[0,0]">
                     <Poster id="avatar" width="150" height="150" />
@@ -35,32 +38,20 @@
             </Group>
             <RowList
                 id="exampleRowList"
+                rowLabelOffset="[[0,5]]"
+                rowLabelFont="font:LargeBoldSystemFont"
+                translation="[ 30,350 ]"
                 itemComponentName="VideoItem"
-                translation="[30,161]"
-                numRows="1"
+                numRows="4"
                 rowItemSize="[[320,180]]"
                 rowItemSpacing="[[30,0]]"
-                itemSize="[320,250]"
+                itemSize="[1980, 295]"
+                itemSpacing="[ 0, 40 ]"
+                showRowLabel="[ true ]"
                 focusBitmapUri="pkg:/images/focusIndicator.9.png"
-                visible="true" />
-            <SimpleLabel
-                id="recentVideosLabel"
-                text="Recent Videos"
-                color="0xB9B9B9FF"
-                fontSize="24"
-                fontUri="pkg:/fonts/KlokanTechNotoSansCJK-Bold.otf"
-                translation="[37,373]" />
-            <RowList
-                id="pastBroadcastsList"
-                itemComponentName="VideoItem"
-                translation="[30,412]"
-                numRows="1"
-                rowItemSize="[[320,180]]"
-                rowItemSpacing="[[30,0]]"
-                itemSize="[1200, 275]"
-                focusBitmapUri="pkg:/images/focusIndicator.9.png"
-                rowFocusAnimationStyle="floatingFocus"
-                visible="true" />
+                vertFocusAnimationStyle="fixedFocus"
+                rowFocusAnimationStyle="fixedFocus"
+            />
         </Group>
     </children>
 

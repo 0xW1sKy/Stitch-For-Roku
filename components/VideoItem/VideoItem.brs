@@ -4,8 +4,8 @@ sub init()
     m.itemmask = m.top.findNode("itemMask")
     m.itemlabel = m.top.findNode("itemLabel")
     m.liveicon = m.top.findNode("liveIcon")
-    m.itemstreamer = m.top.findNode("itemStreamer")
-    m.itemCategory = m.top.findNode("itemCategory")
+    m.itemSubtitle = m.top.findNode("itemSubtitle")
+    m.itemThirdTitle = m.top.findNode("itemThirdTitle")
     m.itemViewers = m.top.findNode("itemViewers")
     m.viewsRect = m.top.findNode("viewsRect")
 
@@ -20,25 +20,30 @@ sub showcontent()
         m.itemposter.loadheight = 250
         m.itemlabel.maxwidth = 188
         m.itemlabel.translation = "[0,270]"
-        m.itemStreamer.translation = "[0, 280]"
-        m.itemCategory.translation = "[0, 290]"
+        m.itemSubtitle.translation = "[0, 280]"
+        m.itemThirdTitle.translation = "[0, 290]"
         m.liveicon.visible = false
         m.itemViewers.visible = false
         m.viewsRect.visible = false
-        m.itemstreamer.text = itemcontent.viewersDisplay
+        m.itemSubtitle.text = itemcontent.viewersDisplay
+        m.itemposter.uri = itemcontent.gameBoxArtUrl
     end if
     if itemcontent.contentType = "LIVE" or itemcontent.contentType = "VOD"
-        m.liveicon.visible = true
         m.itemViewers.text = itemcontent.viewersDisplay
-        m.itemstreamer.text = itemcontent.secondaryTitle
         m.viewsRect.height = m.itemViewers.boundingRect().height
         m.viewsRect.width = m.itemViewers.boundingRect().width + 6
+        m.itemposter.uri = itemcontent.previewImageURL
+        m.itemSubtitle.text = itemcontent.streamerDisplayName
+        m.itemThirdTitle.text = itemcontent.gameDisplayName
     end if
-    m.itemposter.uri = itemcontent.HDPosterUrl
-    m.itemlabel.text = itemcontent.title
-    m.itemstreamer.color = m.global.constants.colors.hinted.grey9
-    m.itemCategory.text = itemcontent.shortDescriptionLine2
-    m.itemCategory.color = m.global.constants.colors.hinted.grey9
+    if itemcontent.contentType = "VOD"
+        m.liveicon.visible = false
+        m.itemThirdTitle.text = itemcontent.gameDisplayName
+    end if
+    m.itemlabel.text = itemcontent.contentTitle
+    m.itemSubtitle.color = m.global.constants.colors.hinted.grey9
+
+    m.itemThirdTitle.color = m.global.constants.colors.hinted.grey9
 end sub
 
 sub showfocus()

@@ -1,4 +1,5 @@
 sub init()
+    m.top.backgroundColor = m.global.constants.colors.hinted.grey1
     m.top.observeField("focusedChild", "onGetfocus")
     ' m.top.observeField("itemFocused", "onGetFocus")
     m.rowlist = m.top.findNode("exampleRowList")
@@ -6,6 +7,7 @@ sub init()
 end sub
 
 sub updatePage()
+    m.top.pageTitle = m.top.contentRequested.gameName
     m.GetContentTask = CreateObject("roSGNode", "TwitchApi") ' create task for feed retrieving
     ' observe content so we can know when feed content will be parsed
     ? "REQUESTED CONTENT: "; m.top.contentRequested
@@ -41,13 +43,12 @@ function buildContentNodeFromShelves(streams)
         rowItem.streamerLogin = stream.node.broadcaster.login
         rowItem.streamerId = stream.node.broadcaster.id
         rowItem.streamerProfileImageUrl = stream.node.broadcaster.profileImageURL
-        rowItem.gameDisplayName = stream.node.game.displayName
-
-        rowItem.Title = stream.node.broadcaster.broadcastsettings.title
-        rowItem.secondaryTitle = stream.node.broadcaster.displayName
-        rowItem.HDPosterUrl = Substitute("https://static-cdn.jtvnw.net/previews-ttv/live_user_{0}-{1}x{2}.jpg", stream.node.broadcaster.login, "320", "180")
-        rowItem.ShortDescriptionLine1 = stream.node.viewersCount
-        rowItem.ShortDescriptionLine2 = stream.node.game.displayName
+        ' rowItem.gameDisplayName = stream.node.game.displayName
+        ' rowItem.Title = stream.node.broadcaster.broadcastsettings.title
+        ' rowItem.secondaryTitle = stream.node.broadcaster.displayName
+        ' rowItem.HDPosterUrl = Substitute("https://static-cdn.jtvnw.net/previews-ttv/live_user_{0}-{1}x{2}.jpg", stream.node.broadcaster.login, "320", "180")
+        ' rowItem.ShortDescriptionLine1 = stream.node.viewersCount
+        ' rowItem.ShortDescriptionLine2 = stream.node.game.displayName
         row.appendChild(rowItem)
         if row.getChildCount() = itemsPerRow
             ? "Added to collection!"
@@ -58,12 +59,46 @@ function buildContentNodeFromShelves(streams)
 end function
 
 
-sub handleRecommendedSections()
-    ? "GOT THIS FAR: "; m.GetContentTask.response
-    contentCollection = buildContentNodeFromShelves(m.GetContentTask.response.data.game.streams.edges)
+function updateRowList(contentCollection)
+    rowItemSize = []
+    showRowLabel = []
+    rowHeights = []
+    for each row in contentCollection.getChildren(contentCollection.getChildCount(), 0)
+        if row.title <> ""
+            hasRowLabel = true
+        else
+            hasRowLabel = false
+        end if
+        showRowLabel.push(hasRowLabel)
+        defaultRowHeight = 275
+        if row.getchild(0).contentType = "LIVE" or row.getchild(0).contentType = "VOD"
+            rowItemSize.push([320, 180])
+            if hasRowLabel
+                rowHeights.push(275)
+            else
+                rowHeights.push(235)
+            end if
+        end if
+        if row.getchild(0).contentType = "GAME"
+            rowItemSize.push([188, 250])
+            if hasRowLabel
+                rowHeights.push(325)
+            else
+                rowHeights.push(305)
+            end if
+        end if
+    end for
+    m.rowList.rowHeights = rowHeights
+    m.rowlist.showRowLabel = showRowLabel
+    m.rowlist.rowItemSize = rowItemSize
     m.rowlist.content = contentCollection
     m.rowlist.numRows = contentCollection.getChildCount()
-    ? "finished that: "; contentCollection.getChildCount()
+end function
+
+
+sub handleRecommendedSections()
+    contentCollection = buildContentNodeFromShelves(m.GetContentTask.response.data.game.streams.edges)
+    updateRowList(contentCollection)
 end sub
 
 sub handleItemSelected()
