@@ -61,6 +61,9 @@ sub onContentSelected()
     if m.activeNode.contentSelected.contentType = "LIVE" or m.activeNode.contentSelected.contentType = "VOD"
         id = 8
     end if
+    if m.activeNode.playContent = true
+        id = 9
+    end if
     content = m.activeNode.contentSelected
     if m.activeNode <> invalid
         m.footprints.push(m.activeNode)
@@ -72,19 +75,6 @@ sub onContentSelected()
     m.activeNode.contentRequested = content
     m.activeNode.setfocus(true)
 end sub
-
-function gamePage(content)
-    if m.activeNode <> invalid
-        m.footprints.push(m.activeNode)
-        m.activeNode = invalid
-    end if
-    if m.activeNode = invalid
-        m.activeNode = buildNode("7", m.global.constants.menuOptions[7])
-    end if
-    m.activeNode.contentRequested = content
-    m.activeNode.setfocus(true)
-end function
-
 
 sub onBackPressed()
     if m.activeNode.backPressed <> invalid and m.activeNode.backPressed

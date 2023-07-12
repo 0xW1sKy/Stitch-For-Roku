@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component name="VideoPlayer" extends="SceneManagerGroup" initialFocus="videoWindow">
+    <interface>
+        <field id="contentRequested" type="Node" onChange="handleContent" />
+    </interface>
+    <script type="text/brightscript" uri="VideoPlayer.brs" />
+    <script type="text/brightscript" uri="pkg:/components/twitch-api-sdk/http.brs" />
+    <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
+    <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
+    <children>
+        <Video
+            id="videoWindow"
+            enableUI="true"
+            enableTrickPlay="true"
+            visible="true"
+            translation="[0,0]"
+            width="1280"
+            height="720" />
+    </children>
+
+</component>

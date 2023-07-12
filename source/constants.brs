@@ -15,7 +15,7 @@ sub setConstants()
                 "LoginPage",
                 "GamePage",
                 "ChannelPage",
-
+                "VideoPlayer"
             ]
             colors: {
                 muted: {

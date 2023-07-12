@@ -31,6 +31,7 @@
             </Group>
             <Group id="about" translation="[450,25]">
                 <InfoPane
+                    visible="false"
                     id="description"
                     width="600"
                     fontSize="24"
@@ -54,14 +55,6 @@
                 rowFocusAnimationStyle="fixedFocus"
             />
         </Group>
-        <Video
-            id="videoPlayer"
-            enableUI="true"
-            enableTrickPlay="false"
-            visible="true"
-            translation="[0,0]"
-            width="180"
-            height="72" />
     </children>
 
 </component>

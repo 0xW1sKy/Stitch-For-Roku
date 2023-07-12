@@ -10,8 +10,6 @@ sub updatePage()
     m.top.pageTitle = m.top.contentRequested.gameName
     m.GetContentTask = CreateObject("roSGNode", "TwitchApi") ' create task for feed retrieving
     ' observe content so we can know when feed content will be parsed
-    ? "REQUESTED CONTENT: "; m.top.contentRequested
-    ? "Pause"
     m.GetContentTask.observeField("response", "handleRecommendedSections")
     m.GetContentTask.request = {
         type: "getGameDirectoryQuery"
@@ -24,13 +22,10 @@ end sub
 function buildContentNodeFromShelves(streams)
     itemsPerRow = 3
     contentCollection = createObject("RoSGNode", "ContentNode")
-    ? "Streams Count: "; streams.count()
     for i = 0 to (streams.count() - 1) step 1
         if i mod itemsPerRow = 0
-            ? "Created Row!"
             row = createObject("RoSGNode", "ContentNode")
         end if
-        ? "Checking Stream "; i
         stream = streams[i]
         row.title = ""
         rowItem = createObject("RoSGNode", "TwitchContentNode")
@@ -51,7 +46,6 @@ function buildContentNodeFromShelves(streams)
         ' rowItem.ShortDescriptionLine2 = stream.node.game.displayName
         row.appendChild(rowItem)
         if row.getChildCount() = itemsPerRow
-            ? "Added to collection!"
             contentCollection.appendChild(row)
         end if
     end for
