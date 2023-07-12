@@ -1,45 +1,58 @@
 sub init()
-    m.top.functionName = "playContent"
-    m.top.id = "PlayerTask"
+    m.top.functionName = "runTask"
 end sub
 
-sub playContent()
+function runTask()
+    ? "Hit"
+    '  2. Request preplay
+    '
+    loadStream()
+    '
+    '  3. Play content
+    '
+    runLoop()
+end function
 
-    video = m.top.video
-    ' `view` is the node under which RAF should display its UI (passed as 3rd argument of showAds())
-    view = video.getParent()
-    content = video.content
+function loadStream()
+    ? "Hit2"
+    '
+    '  2.3  Setup video node.  Select here variant
+    '
+    vidContent = m.top.content
+    vidContent.title = m.top.content.contentTitle
+    m.top.video.content = vidContent
+    m.top.video.setFocus(true)
+    m.top.video.visible = true
+    m.top.video.enableCookies()
+end function
 
-    keepPlaying = true 'gets set to `false` when showAds() was exited via Back button
-
+function runLoop() as void
+    ? "Hit3"
     port = CreateObject("roMessagePort")
-    if keepPlaying then
-        video.observeField("position", port)
-        video.observeField("state", port)
-        video.visible = true
-        video.control = "play"
-        video.setFocus(true) 'so we can handle a Back key interruption
-    end if
-
-    curPos = 0
-    while keepPlaying
-        msg = wait(0, port)
-        if type(msg) = "roSGNodeEvent"
-            if msg.GetField() = "position" then
-                ' keep track of where we reached in content
-                curPos = msg.GetData()
-            else if msg.GetField() = "state" then
-                curState = msg.GetData()
-                print "PlayerTask: state = "; curState
-                if curState = "stopped" then
-                    exit while
-                else if curState = "finished" then
-                    print "PlayerTask: main content finished"
-                    exit while
-                    video.control = "stop"
-                end if
+    '   3.3  Observe video node
+    '
+    m.top.video.observeFieldScoped("position", port) ' Required
+    m.top.video.observeFieldScoped("control", port)
+    m.top.video.observeFieldScoped("state", port)
+    '
+    '   3.4  Start playback and fire uo:contentImpression
+    '
+    m.top.video.control = "play"
+    while true
+        msg = wait(1000, port)
+        '
+        '  3.5  Have adapter handle events
+        '
+        if "roSGNodeEvent" = type(msg)
+            if "state" = msg.getField() and "finished" = msg.getData() and msg.getNode() = m.top.video.id then
+                exit while ' stream ended. quit loop
+            end if
+            if "state" = msg.getField() and "stopped" = msg.getData() and msg.getNode() = m.top.video.id then
+                exit while ' video node stopped. quit loop
             end if
         end if
     end while
-    print "PlayerTask: exiting playContentWithAds()"
-end sub
+    m.top.video.unobserveFieldScoped("position")
+    m.top.video.unobserveFieldScoped("control")
+    m.top.video.unobserveFieldScoped("state")
+end function

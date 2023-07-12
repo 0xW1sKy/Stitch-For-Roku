@@ -10,6 +10,8 @@ sub init()
     m.livestreamlabel = m.top.findNode("livestreamlabel")
     m.liveDuration = m.top.findNode("liveDuration")
     m.avatar = m.top.findNode("avatar")
+    m.videoPlayer = m.top.findNode("videoPlayer")
+    m.plyrTask = invalid
 end sub
 
 sub updatePage()
@@ -128,44 +130,7 @@ sub handleRecommendedSections()
     updateRowList(contentCollection)
 end sub
 
-function getVodLink(videoId) as object
-    access_token = ""
-    device_code = ""
-    ' doubled up here in stead of defaulting to "" because access_token is dependent on device_code
-    if get_user_setting("device_code") <> invalid
-        device_code = get_user_setting("device_code")
-        if get_user_setting("access_token") <> invalid
-            access_token = "OAuth " + get_user_setting("access_token")
-        end if
-    end if
-    req = HttpRequest({
-        url: "https://gql.twitch.tv/gql"
-        headers: {
-            "Accept": "*/*"
-            "Authorization": access_token
-            "Client-Id": "ue6666qo983tsx6so1t0vnawi233wa"
-            "Device-ID": device_code
-            "Origin": "https://switch.tv.twitch.tv"
-            "Referer": "https://switch.tv.twitch.tv/"
-        }
-        method: "POST"
-        data: {
-            query: "query VodPlayerWrapper_Query(" + chr(10) + "  $videoId: ID!" + chr(10) + "  $platform: String!" + chr(10) + "  $playerType: String!" + chr(10) + "  $skipPlayToken: Boolean!" + chr(10) + ") {" + chr(10) + "  ...VodPlayerWrapper_token" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment VodPlayerWrapper_token on Query {" + chr(10) + "  video(id: $videoId) @skip(if: $skipPlayToken) {" + chr(10) + "    playbackAccessToken(params: {platform: $platform, playerType: $playerType}) {" + chr(10) + "      signature" + chr(10) + "      value" + chr(10) + "    }" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "}" + chr(10) + ""
-            variables: {
-                "videoId": videoId
-                "platform": "switch_web_tv"
-                "playerType": "pulsar"
-                "skipPlayToken": false
-            }
-        }
-    })
-    data = req.send()
-    response = ParseJSON(data)
-    ' seekpreviewurl = response.data.video.seekpreviewurl
-    '"https://static-cdn.jtvnw.net/cf_vods/vod/7b652c53825567c2bb4c_kaicenat_41850780219_1676414633/storyboards/1738339385-info.json"
-    vod_link = "https://usher.ttvnw.net/vod/" + videoId + ".m3u8?playlist_include_framerate=true&allow_source=true&player_type=pulsar&player_backend=mediaplayer&nauth=" + UrlEncode(response.data.video.playbackAccessToken.value) + "&nauthsig=" + response.data.video.playbackAccessToken.signature
-    return vod_link
-end function
+
 
 function updateRowList(contentCollection)
     rowItemSize = []
@@ -203,11 +168,29 @@ function updateRowList(contentCollection)
     m.rowlist.numRows = contentCollection.getChildCount()
 end function
 
-sub handleItemSelected()
+function handleItemSelected()
+    ? "Item Selected"
     selectedRow = m.rowlist.content.getchild(m.rowlist.rowItemSelected[0])
     selectedItem = selectedRow.getChild(m.rowlist.rowItemSelected[1])
-    m.top.contentSelected = selectedItem
-end sub
+
+    if invalid = m.plyrTask
+        m.plyrTask = createObject("roSGNode", "playerTask")
+        m.plyrTask.observeField("state", "onTaskStateUpdated")
+    end if
+    m.plyrTask.content = selectedItem
+    m.plyrTask.video = m.videoPlayer
+    ' ~~~ Let plyr task running
+    m.plyrTask.control = "run"
+    ? "break"
+end function
+
+
+function onTaskStateUpdated(msg as object)
+    if msg.getData() = "stop"
+        m.videoPlayer.visible = false
+        m.rowlist.setFocus(true)
+    end if
+end function
 
 sub onGetFocus()
     if m.rowlist.focusedChild = invalid
@@ -221,8 +204,12 @@ function onKeyEvent(key as string, press as boolean) as boolean
     if press
         ? "Home Scene Key Event: "; key
         if key = "back"
+            ? "Pause"
             m.top.backPressed = true
             return true
+        end if
+        if key = "OK"
+            ? "selected"
         end if
     end if
 end function
