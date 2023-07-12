@@ -3,10 +3,11 @@
     <interface>
         <field id="contentRequested" type="node" onChange="updatePage" />
         <field id="backgroundColor" type="string" alias="background.color" />
+        <field id="selectedItem" type="node" />
     </interface>
     <script type="text/brightscript" uri="ChannelPage.brs" />
-    <script type="text/brightscript" uri="pkg:/components/twitch-api-sdk/http.brs" />
     <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
+    <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
     <children>
         <rectangle id="background" width="1920" height="1080" />
         <Group id="banner" translation="[0, 0]"></Group>
@@ -53,6 +54,14 @@
                 rowFocusAnimationStyle="fixedFocus"
             />
         </Group>
+        <Video
+            id="videoPlayer"
+            enableUI="true"
+            enableTrickPlay="false"
+            visible="true"
+            translation="[0,0]"
+            width="180"
+            height="72" />
     </children>
 
 </component>

@@ -1,12 +1,10 @@
-<?rokuml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Roku, Inc.  All Rights Reserved. -->
 
-<!-- a Task handling the playback loop of both content abd ad -->
-<component name="PlayerTask" extends="Task">
-
-    <script type="text/brightscript" uri="PlayerTask.brs" />
-
+<component name="playerTask" extends="Task">
     <interface>
-        <field id="video" type="node" />
+        <field id="content" type="Node" />
+        <field id="video" type="Node" />
+        <field id="errors" type="stringarray" />
     </interface>
-
 </component>
