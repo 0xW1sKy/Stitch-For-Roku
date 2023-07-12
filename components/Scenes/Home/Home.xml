@@ -5,14 +5,14 @@
     <children>
         <RowList
             id="exampleRowList"
-            rowLabelOffset="[[0,5]]"
+            rowLabelOffset="[[0,10]]"
             rowLabelFont="font:LargeBoldSystemFont"
             translation="[ 130, 120 ]"
             itemComponentName="VideoItem"
             numRows="4"
             rowItemSize="[[320,180]]"
             rowItemSpacing="[[30,0]]"
-            itemSize="[1080,295]"
+            itemSize="[1280,295]"
             itemSpacing="[ 0, 40 ]"
             showRowLabel="[ true ]"
             focusBitmapUri="pkg:/images/focusIndicator.9.png"

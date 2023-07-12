@@ -143,6 +143,7 @@ function updateRowList(contentCollection)
     m.rowlist.rowItemSize = rowItemSize
     m.rowlist.content = contentCollection
     m.rowlist.numRows = contentCollection.getChildCount()
+    m.rowlist.rowlabelcolor = m.global.constants.colors.twitch.purple10
 end function
 
 sub handleItemSelected()
