@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2016 Roku Corp.  All Rights Reserved. -->
+
+<component name="httpRequest" extends="Task">
+    <interface>
+        <!-- Field to issue a request to the handler -->
+        <field id="request" type="assocarray" />
+        <field id="response" type="assocarray" />
+    </interface>
+    <script type="text/brightscript" uri="httpRequest.brs" />
+    <script type="text/brightscript" uri="pkg:/source/utils/http.brs" />
+    <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
+    <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
+</component>
