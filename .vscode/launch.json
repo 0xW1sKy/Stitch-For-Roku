@@ -14,8 +14,8 @@
             "rootDir": "${workspaceFolder}/",
             "injectRdbOnDeviceComponent": true,
             "enableDebuggerAutoRecovery": false,
-            "stopDebuggerOnAppExit": true,
-            "enableDebugProtocol": true,
+            "stopDebuggerOnAppExit": false,
+            "enableDebugProtocol": false,
             "rendezvousTracking": true,
             "files": [
                 "source/**/*",

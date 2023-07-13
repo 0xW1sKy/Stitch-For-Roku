@@ -4,12 +4,12 @@
 
 <component name="HeroScene" extends="SceneManagerScene">
   <interface>
+    <field id="ready" type="boolean" value="false" />
     <field id="exitApp" type="boolean" value="false" />
     <field id="forcePress" type="boolean" value="false" />
   </interface>
   <children>
     <!-- RowList on HeroScene -->
-
     <MenuBar
       id="MenuBar"
       menuOptionsText="[&quot;MenuOptionA&quot;, &quot;MenuOptionB&quot;, &quot;MenuOptionC&quot;, &quot;MenuOptionD&quot;]"

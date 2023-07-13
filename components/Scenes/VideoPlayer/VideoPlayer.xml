@@ -4,11 +4,10 @@
         <field id="contentRequested" type="Node" onChange="handleContent" />
     </interface>
     <script type="text/brightscript" uri="VideoPlayer.brs" />
-    <script type="text/brightscript" uri="pkg:/components/twitch-api-sdk/http.brs" />
     <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
     <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
     <children>
-        <Video
+        <CustomVideo
             id="videoWindow"
             enableUI="true"
             enableTrickPlay="true"
@@ -16,6 +15,9 @@
             translation="[0,0]"
             width="1280"
             height="720" />
+        <Chat
+            id="chat"
+            visible="true" />
     </children>
 
 </component>

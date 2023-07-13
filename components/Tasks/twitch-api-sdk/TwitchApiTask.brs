@@ -2,12 +2,7 @@ sub init()
 end sub
 
 function writeResponse(data)
-    if data <> invalid
-        m.top.response = data
-    else
-        m.top.response = { "response": invalid }
-    end if
-    m.top.control = "STOP"
+
 end function
 
 function GetRandomUUID()
@@ -54,13 +49,18 @@ function getHomePageQuery() as object
     rsp = TwitchGraphQLRequest({
         query: "query Homepage_Query(" + chr(10) + "  $itemsPerRow: Int!" + chr(10) + "  $limit: Int!" + chr(10) + "  $platform: String!" + chr(10) + "  $requestID: String!" + chr(10) + ") {" + chr(10) + "  currentUser {" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "    login" + chr(10) + "    roles {" + chr(10) + "      isStaff" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "  shelves(itemsPerRow: $itemsPerRow, first: $limit, platform: $platform, requestID: $requestID) {" + chr(10) + "    edges {" + chr(10) + "      node {" + chr(10) + "        id" + chr(10) + "        __typename" + chr(10) + "        title {" + chr(10) + "          fallbackLocalizedTitle" + chr(10) + "          localizedTitleTokens {" + chr(10) + "            node {" + chr(10) + "              __typename" + chr(10) + "              ... on Game {" + chr(10) + "                __typename" + chr(10) + "                displayName" + chr(10) + "                name" + chr(10) + "              }" + chr(10) + "              ... on TextToken {" + chr(10) + "                __typename" + chr(10) + "                text" + chr(10) + "                location" + chr(10) + "              }" + chr(10) + "            }" + chr(10) + "          }" + chr(10) + "        }" + chr(10) + "        trackingInfo {" + chr(10) + "          reasonTarget" + chr(10) + "          reasonTargetType" + chr(10) + "          reasonType" + chr(10) + "          rowName" + chr(10) + "        }" + chr(10) + "        content {" + chr(10) + "          edges {" + chr(10) + "            trackingID" + chr(10) + "            node {" + chr(10) + "              __typename" + chr(10) + "              __isShelfContent: __typename" + chr(10) + "              ... on Stream {" + chr(10) + "                id" + chr(10) + "                __typename" + chr(10) + "                previewImageURL" + chr(10) + "                broadcaster {" + chr(10) + "                  displayName" + chr(10) + "                  broadcastSettings {" + chr(10) + "                    title" + chr(10) + "                    id" + chr(10) + "                    __typename" + chr(10) + "                  }" + chr(10) + "                  id" + chr(10) + "                  __typename" + chr(10) + "                }" + chr(10) + "                game {" + chr(10) + "                  displayName" + chr(10) + "                  boxArtURL" + chr(10) + "                  id" + chr(10) + "                  __typename" + chr(10) + "                }" + chr(10) + "                ...FocusableStreamCard_stream" + chr(10) + "              }" + chr(10) + "              ... on Game {" + chr(10) + "                ...FocusableCategoryCard_category" + chr(10) + "                id" + chr(10) + "                __typename" + chr(10) + "                streams(first: 1) {" + chr(10) + "                  edges {" + chr(10) + "                    node {" + chr(10) + "                      id" + chr(10) + "                      __typename" + chr(10) + "                      previewImageURL" + chr(10) + "                      broadcaster {" + chr(10) + "                        displayName" + chr(10) + "                        broadcastSettings {" + chr(10) + "                          title" + chr(10) + "                          id" + chr(10) + "                          __typename" + chr(10) + "                        }" + chr(10) + "                        id" + chr(10) + "                        __typename" + chr(10) + "                      }" + chr(10) + "                      game {" + chr(10) + "                        displayName" + chr(10) + "                        boxArtURL" + chr(10) + "                        id" + chr(10) + "                        __typename" + chr(10) + "                      }" + chr(10) + "                    }" + chr(10) + "                  }" + chr(10) + "                }" + chr(10) + "              }" + chr(10) + "            }" + chr(10) + "          }" + chr(10) + "        }" + chr(10) + "      }" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment FocusableCategoryCard_category on Game {" + chr(10) + "  name" + chr(10) + "  id" + chr(10) + "  __typename" + chr(10) + "  displayName" + chr(10) + "  viewersCount" + chr(10) + "  boxArtURL" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment FocusableStreamCard_stream on Stream {" + chr(10) + "  broadcaster {" + chr(10) + "    displayName" + chr(10) + "    login" + chr(10) + "    hosting {" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "    }" + chr(10) + "    broadcastSettings {" + chr(10) + "      title" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "    }" + chr(10) + "    profileImageURL(width: 50)" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "  game {" + chr(10) + "    displayName" + chr(10) + "    name" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "  id" + chr(10) + "  __typename" + chr(10) + "  previewImageURL" + chr(10) + "  type" + chr(10) + "  viewersCount" + chr(10) + "}" + chr(10) + ""
         variables: {
-            "itemsPerRow": 50,
+            "itemsPerRow": 16,
             "limit": 50,
             "platform": "switch_web_tv",
             "requestID": getRandomUUID()
         }
     })
-    writeResponse(rsp)
+    if rsp <> invalid
+        m.top.response = rsp
+    else
+        m.top.response = { "response": invalid }
+    end if
+    m.top.control = "STOP"
 end function
 
 function getCategoryQuery() as object
@@ -71,7 +71,12 @@ function getCategoryQuery() as object
             "gameAlias": m.top.request.params.id
         }
     })
-    writeResponse(rsp)
+    if rsp <> invalid
+        m.top.response = rsp
+    else
+        m.top.response = { "response": invalid }
+    end if
+    m.top.control = "STOP"
 end function
 
 function getStreamPlayerQuery()
@@ -84,7 +89,12 @@ function getStreamPlayerQuery()
             "skipPlayToken": false
         }
     })
-    writeResponse(rsp)
+    if rsp <> invalid
+        m.top.response = rsp
+    else
+        m.top.response = { "response": invalid }
+    end if
+    m.top.control = "STOP"
 end function
 
 function getVodPlayerWrapperQuery() as object
@@ -97,7 +107,12 @@ function getVodPlayerWrapperQuery() as object
             "skipPlayToken": false
         }
     })
-    writeResponse(rsp)
+    if rsp <> invalid
+        m.top.response = rsp
+    else
+        m.top.response = { "response": invalid }
+    end if
+    m.top.control = "STOP"
 end function
 
 
@@ -111,7 +126,12 @@ function getChannelInterstitialQuery() as object
             "skipPlayToken": true
         }
     })
-    writeResponse(rsp)
+    if rsp <> invalid
+        m.top.response = rsp
+    else
+        m.top.response = { "response": invalid }
+    end if
+    m.top.control = "STOP"
 end function
 
 function getChannelHomeQuery() as object
@@ -124,7 +144,12 @@ function getChannelHomeQuery() as object
             "skipPlayToken": false
         }
     })
-    writeResponse(rsp)
+    if rsp <> invalid
+        m.top.response = rsp
+    else
+        m.top.response = { "response": invalid }
+    end if
+    m.top.control = "STOP"
 end function
 
 function getFollowingPageQuery() as object
@@ -142,7 +167,12 @@ function getFollowingPageQuery() as object
             "requestID": getRandomUUID()
         }
     })
-    writeResponse(rsp)
+    if rsp <> invalid
+        m.top.response = rsp
+    else
+        m.top.response = { "response": invalid }
+    end if
+    m.top.control = "STOP"
 end function
 
 function getRendezvouzToken()
@@ -156,7 +186,12 @@ function getRendezvouzToken()
         method: "POST"
     })
     rsp = ParseJSON(req.send())
-    writeResponse(rsp)
+    if rsp <> invalid
+        m.top.response = rsp
+    else
+        m.top.response = { "response": invalid }
+    end if
+    m.top.control = "STOP"
 end function
 
 
@@ -179,7 +214,12 @@ function getOauthToken()
         end if
         sleep(5000)
     end while
-    writeResponse(rsp)
+    if rsp <> invalid
+        m.top.response = rsp
+    else
+        m.top.response = { "response": invalid }
+    end if
+    m.top.control = "STOP"
 end function
 
 function getSearchQuery()
@@ -192,7 +232,12 @@ function getSearchQuery()
             noQuery: false
         }
     })
-    writeResponse(rsp)
+    if rsp <> invalid
+        m.top.response = rsp
+    else
+        m.top.response = { "response": invalid }
+    end if
+    m.top.control = "STOP"
 end function
 
 function getGameDirectoryQuery()
@@ -205,7 +250,12 @@ function getGameDirectoryQuery()
             "channelsCount": 40
         }
     })
-    writeResponse(rsp)
+    if rsp <> invalid
+        m.top.response = rsp
+    else
+        m.top.response = { "response": invalid }
+    end if
+    m.top.control = "STOP"
 end function
 
 function getCategoriesQuery()
@@ -215,7 +265,12 @@ function getCategoriesQuery()
             "first": 80
         }
     })
-    writeResponse(rsp)
+    if rsp <> invalid
+        m.top.response = rsp
+    else
+        m.top.response = { "response": invalid }
+    end if
+    m.top.control = "STOP"
 end function
 
 function getChannelShell()
@@ -232,10 +287,16 @@ function getChannelShell()
             }
         }
     })
-    writeResponse(rsp)
+    if rsp <> invalid
+        m.top.response = rsp
+    else
+        m.top.response = { "response": invalid }
+    end if
+    m.top.control = "STOP"
 end function
 
 function TwitchHelixApiRequest()
+    ? "HelixAPIRequest"
     access_token = ""
     device_code = ""
     ' doubled up here in stead of defaulting to "" because access_token is dependent on device_code
@@ -262,7 +323,12 @@ function TwitchHelixApiRequest()
     end if
     req = HttpRequest(requestParams)
     rsp = ParseJSON(req.send())
-    writeResponse(rsp)
+    if rsp <> invalid
+        m.top.response = rsp
+    else
+        m.top.response = { "response": invalid }
+    end if
+    m.top.control = "STOP"
 end function
 
 
@@ -282,7 +348,12 @@ function followChannel() as object
             }
         }
     })
-    writeResponse(rsp)
+    if rsp <> invalid
+        m.top.response = rsp
+    else
+        m.top.response = { "response": invalid }
+    end if
+    m.top.control = "STOP"
 end function
 
 function getRecommendedSections() as object
@@ -310,7 +381,12 @@ function getRecommendedSections() as object
             }
         }
     })
-    writeResponse(rsp)
+    if rsp <> invalid
+        m.top.response = rsp
+    else
+        m.top.response = { "response": invalid }
+    end if
+    m.top.control = "STOP"
 end function
 
 function unfollowChannel() as object
@@ -328,7 +404,12 @@ function unfollowChannel() as object
             }
         }
     })
-    writeResponse(rsp)
+    if rsp <> invalid
+        m.top.response = rsp
+    else
+        m.top.response = { "response": invalid }
+    end if
+    m.top.control = "STOP"
 end function
 
 function extractUrls(input, contentType)

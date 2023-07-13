@@ -1,5 +1,21 @@
 sub init()
     m.videoPlayer = m.top.findNode("videoWindow")
+    ' m.videoPlayer.observeField("back", "onVideoPlayerBack")
+    videoBookmarks = get_user_setting("VideoBookmarks", "")
+    if videoBookmarks <> ""
+        m.videoPlayer.videoBookmarks = ParseJSON(videoBookmarks)
+        ? "MainScene >> ParseJSON > " m.videoPlayer.videoBookmarks
+    else
+        m.videoPlayer.videoBookmarks = {}
+    end if
+    m.videoPlayer.notificationInterval = 1
+    m.chat = m.top.findNode("chat")
+    if get_user_setting("ChatOption", "true") = "true"
+        m.chat.visible = true
+    else
+        m.chat.visible = false
+    end if
+    ' m.chat.loggedInUsername =
 end sub
 
 function handleContent()
@@ -30,6 +46,8 @@ end function
 
 function handleResponse()
     ? "handleResponse"
+    m.chat.channel = m.top.contentRequested.streamerLogin
+    m.chat.control = "run"
     if m.top.contentRequested.contentType = "VOD"
         usherUrl = "https://usher.ttvnw.net/vod/" + m.gettwitchdatatask.response.data.video.id + ".m3u8?playlist_include_framerate=true&allow_source=true&player_type=pulsar&player_backend=mediaplayer&nauth=" + m.gettwitchdatatask.response.data.video.playbackAccessToken.value.EncodeUri() + "&nauthsig=" + m.gettwitchdatatask.response.data.video.playbackAccessToken.signature
     else if m.top.contentRequested.contentType = "LIVE"

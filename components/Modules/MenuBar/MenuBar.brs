@@ -100,7 +100,7 @@ sub handleUserLogin()
         m.loginIconTask = CreateObject("roSGNode", "TwitchApiTask") ' create task for feed retrieving
         m.loginIconTask.observeField("response", "handleUserLoginResponse")
         m.loginIconTask.request = {
-            type: "HelixApiRequest"
+            type: "TwitchHelixApiRequest"
             params: {
                 endpoint: "users"
                 args: "login=" + get_user_setting("login")

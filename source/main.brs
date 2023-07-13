@@ -23,17 +23,16 @@ sub Main(input as dynamic)
     end if
     RunUserInterface()
 end sub
-
 ' Initializes the scene and shows the main homepage.
 ' Handles closing of the channel.
 sub RunUserInterface()
-    ' The main function that runs when the application is launched.
     m.screen = CreateObject("roSGScreen")
     m.port = CreateObject("roMessagePort")
     ' Set global constants
     setConstants()
     m.screen.setMessagePort(m.port)
     m.scene = m.screen.CreateScene("HeroScene")
+    ' The main function that runs when the application is launched.
     m.screen.show()
     ' vscode_rdb_on_device_component_entry
     m.scene.observeField("exitApp", m.port)

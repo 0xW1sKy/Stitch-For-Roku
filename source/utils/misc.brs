@@ -279,28 +279,12 @@ function toString(input, replaceInvalid = false) as string
     return str(input)
 end function
 
-sub startLoadingSpinner()
-    m.spinner = createObject("roSGNode", "Spinner")
-    m.spinner.translation = "[900, 450]"
-    m.spinner.visible = true
-    m.scene.appendChild(m.spinner)
-end sub
-
 sub startMediaLoadingSpinner()
     dialog = createObject("roSGNode", "ProgressDialog")
     dialog.id = "invisibiledialog"
     dialog.visible = false
     m.scene.dialog = dialog
     startLoadingSpinner()
-end sub
-
-sub stopLoadingSpinner()
-    if isValid(m.spinner)
-        m.spinner.visible = false
-    end if
-    if isValid(m.scene) and isValid(m.scene.dialog)
-        m.scene.dialog.close = true
-    end if
 end sub
 
 function select(arr, start = invalid, finish = invalid, step_ = 1):
