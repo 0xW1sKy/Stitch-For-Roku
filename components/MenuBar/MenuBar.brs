@@ -97,7 +97,7 @@ end sub
 sub handleUserLogin()
     if m.top.updateUserIcon
         ? "[MenuBar] - handleUserLogin()"
-        m.loginIconTask = CreateObject("roSGNode", "TwitchApi") ' create task for feed retrieving
+        m.loginIconTask = CreateObject("roSGNode", "TwitchApiTask") ' create task for feed retrieving
         m.loginIconTask.observeField("response", "handleUserLoginResponse")
         m.loginIconTask.request = {
             type: "HelixApiRequest"
@@ -107,5 +107,7 @@ sub handleUserLogin()
                 method: "GET"
             }
         }
+        m.loginIconTask.functionName = m.loginIconTask.request.type
+        m.loginIconTask.control = "run"
     end if
 end sub

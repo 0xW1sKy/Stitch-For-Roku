@@ -1,5 +1,4 @@
 sub init()
-    m.deviceInfo = createObject("roDeviceInfo")
 end sub
 
 function writeResponse(data)

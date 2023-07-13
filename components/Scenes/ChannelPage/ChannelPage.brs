@@ -16,7 +16,7 @@ end sub
 
 sub updatePage()
     m.username.text = m.top.contentRequested.streamerDisplayName
-    m.GetContentTask = CreateObject("roSGNode", "TwitchApi") ' create task for feed retrieving
+    m.GetContentTask = CreateObject("roSGNode", "TwitchApiTask") ' create task for feed retrieving
     ' ' observe content so we can know when feed content will be parsed
     m.GetContentTask.observeField("response", "updateChannelInfo")
     m.GetContentTask.request = {
@@ -25,7 +25,9 @@ sub updatePage()
             id: m.top.contentRequested.streamerLogin
         }
     }
-    m.GetShellTask = CreateObject("roSGNode", "TwitchApi") ' create task for feed retrieving
+    m.GetContentTask.functionName = m.getcontenttask.request.type
+    m.getcontentTask.control = "run"
+    m.GetShellTask = CreateObject("roSGNode", "TwitchApiTask") ' create task for feed retrieving
     ' ' observe content so we can know when feed content will be parsed
     m.GetShellTask.observeField("response", "updateChannelShell")
     m.GetShellTask.request = {
@@ -34,6 +36,8 @@ sub updatePage()
             id: m.top.contentRequested.streamerLogin
         }
     }
+    m.getshellTask.functionName = m.getshelltask.request.type
+    m.getshellTask.control = "run"
 end sub
 
 sub updateChannelShell()

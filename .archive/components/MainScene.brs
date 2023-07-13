@@ -82,12 +82,14 @@ end sub
 sub validateDeviceCode()
     device_code = get_user_setting("device_code", invalid)
     if device_code = invalid
-        m.Task = CreateObject("roSGNode", "TwitchApi") ' create task for feed retrieving
+        m.Task = CreateObject("roSGNode", "TwitchApiTask") ' create task for feed retrieving
         ' observe content so we can know when feed content will be parsed
         m.Task.observeField("response", "handleDeviceCode")
         m.Task.request = {
             type: "getRendezvouzToken"
         }
+        m.Task.functionName = m.task.request.type
+        m.Task.control = "run"
     end if
 end sub
 

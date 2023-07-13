@@ -34,6 +34,9 @@ function HttpRequest(params = invalid as dynamic) as object
 
         _createHttpRequest: function() as object
             request = createObject("roUrlTransfer")
+            if request = invalid
+                ? "Failed to create roUrlTransfer"
+            end if
             request.setPort(createObject("roMessagePort"))
             request.setUrl(m._url)
             request.retainBodyOnError(true)

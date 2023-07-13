@@ -9,11 +9,13 @@ sub init()
         set_setting("active_user", "default")
     end if
     if get_user_setting("device_code") = invalid
-        m.getDeviceCodeTask = CreateObject("roSGNode", "TwitchApi")
+        m.getDeviceCodeTask = CreateObject("roSGNode", "TwitchApiTask")
         m.getDeviceCodeTask.observeField("response", "handleDeviceCode")
         m.getDeviceCodeTask.request = {
             type: "getRendezvouzToken"
         }
+        m.getDeviceCodeTask.functionName = m.getDeviceCodeTask.request.type
+        m.getDeviceCodeTask.control = "run"
     else
         onMenuSelection()
     end if

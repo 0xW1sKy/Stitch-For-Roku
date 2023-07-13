@@ -3,12 +3,14 @@ sub init()
     ' m.top.observeField("itemFocused", "onGetFocus")
     m.rowlist = m.top.findNode("exampleRowList")
     m.rowlist.ObserveField("itemSelected", "handleItemSelected")
-    m.GetContentTask = CreateObject("roSGNode", "TwitchApi") ' create task for feed retrieving
+    m.GetContentTask = CreateObject("roSGNode", "TwitchApiTask") ' create task for feed retrieving
     ' observe content so we can know when feed content will be parsed
     m.GetContentTask.observeField("response", "handleRecommendedSections")
     m.GetContentTask.request = {
         type: "getCategoriesQuery"
     }
+    m.GetContentTask.functionName = m.GetContentTask.request.type
+    m.GetContentTask.control = "run"
 end sub
 
 function buildContentNodeFromShelves(games)

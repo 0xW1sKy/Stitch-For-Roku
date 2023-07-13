@@ -8,7 +8,7 @@
         <field id="response" type="assocarray" />
     </interface>
     <script type="text/brightscript" uri="TwitchApiTask.brs" />
-    <script type="text/brightscript" uri="http.brs" />
+    <script type="text/brightscript" uri="pkg:/source/utils/http.brs" />
     <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
     <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
 </component>

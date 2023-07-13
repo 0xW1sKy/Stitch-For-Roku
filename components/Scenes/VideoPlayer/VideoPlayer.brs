@@ -29,13 +29,16 @@ function handleContent()
 end function
 
 function handleResponse()
+    ? "handleResponse"
     if m.top.contentRequested.contentType = "VOD"
         usherUrl = "https://usher.ttvnw.net/vod/" + m.gettwitchdatatask.response.data.video.id + ".m3u8?playlist_include_framerate=true&allow_source=true&player_type=pulsar&player_backend=mediaplayer&nauth=" + m.gettwitchdatatask.response.data.video.playbackAccessToken.value.EncodeUri() + "&nauthsig=" + m.gettwitchdatatask.response.data.video.playbackAccessToken.signature
     else if m.top.contentRequested.contentType = "LIVE"
         usherUrl = "https://usher.ttvnw.net/api/channel/hls/" + m.gettwitchdatatask.response.data.user.login + ".m3u8?playlist_include_framerate=true&allow_source=true&player_type=pulsar&player_backend=mediaplayer&lr=true&token=" + m.gettwitchdatatask.response.data.user.stream.playbackaccesstoken.value.EncodeUri() + "&sig=" + m.gettwitchdatatask.response.data.user.stream.playbackaccesstoken.signature
     end if
     ' return usherUrl
-    req = HttpRequest({
+    m.usherRequestTask = createObject("roSGNode", "httpRequest")
+    m.usherRequestTask.observeField("response", "handleUsherResponse")
+    m.usherRequestTask.request = {
         url: usherUrl
         headers: {
             "Accept": "*/*"
@@ -43,14 +46,13 @@ function handleResponse()
             "Referer": "https://switch.tv.twitch.tv/"
         }
         method: "GET"
-    })
-    while true
-        rsp = req.send().getString()
-        if rsp <> invalid
-            exit while
-        end if
-        sleep(10)
-    end while
+    }
+    m.usherRequestTask.control = "RUN"
+    ? "got this far"
+end function
+function handleUsherResponse()
+    ? "handleUsherResponse"
+    rsp = m.usherRequestTask.response.data
     list = rsp.Split(chr(10))
     first_stream_link = ""
     last_stream_link = ""
