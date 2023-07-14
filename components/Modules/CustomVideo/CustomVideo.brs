@@ -61,9 +61,9 @@ function init()
     deviceInfo = CreateObject("roDeviceInfo")
     uiResolutionWidth = deviceInfo.GetUIResolution().width
 
-    if uiResolutionWidth = 1920
-        m.top.findNode("profileImageMask").maskSize = [75, 75]
-    end if
+    ' if uiResolutionWidth = 1920
+    '     m.top.findNode("profileImageMask").maskSize = [75, 75]
+    ' end if
 
     m.sec = createObject("roRegistrySection", "VideoSettings")
 

@@ -274,11 +274,7 @@
                 height="13.32"
                 translation="[50,-605]"
             />-->
-
-            <MaskGroup id="profileImageMask" maskuri="pkg:/images/profile-mask.png"
-                masksize="[50,50]" translation="[15,-603]">
-                <Poster id="avatar" width="50" height="50" />
-            </MaskGroup>
+            <CirclePoster id="avatar" width="50" height="50" translation="[15,-603]" />
             <EmojiLabel
                 id="videoTitle"
                 height="30"
