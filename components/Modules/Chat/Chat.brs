@@ -24,7 +24,7 @@ end sub
 
 sub onEnterChannel()
     ? "Chat >> onEnterChannel > " m.top.channel
-    m.chat = CreateObject("roSGNode", "ChatTest")
+    m.chat = CreateObject("roSGNode", "ChatJob")
     m.chat.observeField("nextComment", "onNewComment")
     m.chat.observeField("clientComment", "onNewComment")
     m.chat.channel = m.top.channel

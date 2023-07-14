@@ -4,8 +4,7 @@ end function
 
 
 function main()
-    ? "[ChatTest] - main"
-    ? "[ChatTest] - "; m.top.channel
+    ? "[ChatJob] - main"
     if m.top.channel <> ""
         tcpListen = createObject("roStreamSocket")
         addr = createObject("roSocketAddress")
@@ -32,7 +31,7 @@ function main()
             tcpListen.SendStr("PASS SCHMOOPIIE" + Chr(13) + Chr(10))
             tcpListen.SendStr("NICK justinfan32006" + Chr(13) + Chr(10))
         end if
-        ? "ChatTest >> JOIN > " m.top.channel
+        ? "[ChatJob] - JOIN - "; m.top.channel
         tcpListen.SendStr("JOIN #" + m.top.channel + Chr(13) + Chr(10))
         queue = createObject("roArray", 300, true)
         first = 0
