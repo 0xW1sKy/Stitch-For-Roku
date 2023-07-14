@@ -28,7 +28,6 @@ sub init()
 end sub
 
 sub onTimerFireChange() as void
-    ? "FIRED"
     m.animation.repeat = false
     m.animation.control = "stop"
     m.components.translation = [0, 0]
@@ -43,6 +42,9 @@ function doScroll()
             m.animation.repeat = true
             m.timer.repeat = true
             ? "STARTED"
+            ' this sleep is so that when you change from one item to another,
+            ' you have enough time to read the first 1-2 words before scrolling.
+            sleep(300)
             m.animation.control = "start"
             m.timer.control = "start"
             m.animation.duration = (m.top.width / m.top.maxWidth) * 2
@@ -77,6 +79,7 @@ function updateComponents()
 
         ' Set component properties
         comps = getAllComponents()
+        totalWidth = 0
         for each comp in comps
             comp.visible = true
             if comp.subtype() = "Label"
@@ -101,10 +104,12 @@ function updateComponents()
                     comp.height = 0
                 end if
             end if
+            totalWidth = totalWidth + comp.width
         end for
+        width = totalWidth
 
         ' Check if we need to use ellipsis for this label
-        checkBoundingWidth()
+        ' checkBoundingWidth()
         boundingWidth = m.components.boundingRect().width
         if width = 0 or boundingWidth > width
             width = boundingWidth

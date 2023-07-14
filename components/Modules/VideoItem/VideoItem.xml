@@ -5,6 +5,7 @@
     <interface>
         <field id="itemContent" type="node" onChange="showcontent" />
         <field id="rowFocusPercent" type="float" onChange="showrowfocus" />
+        <field id="itemHasFocus" type="boolean" onChange="onGetfocus" />
     </interface>
 
     <script type="text/brightscript" uri="VideoItem.brs" />

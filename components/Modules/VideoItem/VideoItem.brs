@@ -46,8 +46,16 @@ sub showcontent()
     m.itemThirdTitle.color = m.global.constants.colors.hinted.grey9
 end sub
 
-sub showfocus()
-
+sub onGetFocus()
+    ? "focused"
+    ? "itemLabel: "; m.itemLabel
+    if m.top.itemHasFocus
+        if m.itemLabel.width > m.itemLabel.maxWidth
+            m.itemLabel.repeatCount = -1
+        end if
+    else
+        m.itemLabel.repeatCount = 0
+    end if
 end sub
 
 sub showrowfocus()
