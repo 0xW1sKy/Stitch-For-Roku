@@ -26,7 +26,7 @@ end sub
 
 sub onChatVisibilityChange()
     if m.chatWindow.visible
-        m.videoPlayer.width = 1030
+        m.videoPlayer.width = 1025
         m.videoPlayer.height = 720
         m.chatWindow.getchild(0).opacity = "1"
     else
@@ -147,6 +147,9 @@ function playVideo(data)
     vidContent.url = data.streamUrls[0]
     vidContent.streamFormat = "hls"
     ? "Pause"
+    m.videoPlayer.channelUsername = m.top.contentRequested.streamerDisplayName
+    m.videoPlayer.channelAvatar = m.top.contentRequested.streamerProfileImageUrl
+    m.videoPlayer.videoTitle = m.top.contentRequested.contentTitle
     m.videoplayer.content = vidContent
     m.videoplayer.visible = true
     m.videoplayer.setFocus(true)

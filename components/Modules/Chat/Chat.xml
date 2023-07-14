@@ -17,11 +17,11 @@
     <children>
         <Rectangle
             visible="true"
-            color="0x18181BFF"
-            width="250"
+            color="0x000000FF"
+            width="255"
             height="720"
             opacity="0.85"
-            translation="[1030,0]" />
+            translation="[1025,0]" />
         <Rectangle
             id="chatPanel"
             visible="true"

@@ -13,10 +13,11 @@
         <Group id="banner" translation="[0, 0]"></Group>
         <Group id="container" translation="[ 20, 10 ]">
             <Group id="profile" translation="[0,0]">
-                <MaskGroup id="profileImageMask" maskuri="pkg:/images/profile-mask-150.png"
+                <CirclePoster id="avatar" width="150" height="150" />
+                <!-- <MaskGroup id="profileImageMask" maskuri="pkg:/images/profile-mask-150.png"
                     maskSize="[226,226]" maskOffset="[0,0]">
                     <Poster id="avatar" width="150" height="150" />
-                </MaskGroup>
+                </MaskGroup> -->
                 <SimpleLabel
                     id="username"
                     fontSize="24"

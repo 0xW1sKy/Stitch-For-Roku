@@ -48,7 +48,9 @@ function init()
 
     m.top.observeField("position", "watcher")
     m.top.observeField("state", "onvideoStateChange")
-    m.top.observeField("channelAvatar", "onChannelAvatarChange")
+    m.top.observeField("channelAvatar", "onChannelInfoChange")
+    m.top.observeField("videoTitle", "onChannelInfoChange")
+    m.top.observeField("channelUsername", "onChannelInfoChange")
     m.top.observeField("chatIsVisible", "onChatVisibilityChange")
     m.uiResolution = createObject("roDeviceInfo").GetUIResolution()
     m.uiResolutionWidth = m.uiResolution.width
@@ -335,7 +337,7 @@ function getTimeTravelTime()
     return hour0 + hour1 + minute0 + minute1 + second0 + second1
 end function
 
-sub onChannelAvatarChange()
+sub onChannelInfoChange()
     m.videoTitle.text = m.top.videoTitle
     m.channelUsername.text = m.top.channelUsername
     m.avatar.uri = m.top.channelAvatar
