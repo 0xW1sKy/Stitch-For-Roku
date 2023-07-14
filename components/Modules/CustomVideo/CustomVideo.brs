@@ -561,7 +561,7 @@ function onKeyEvent(key, press) as boolean
                 m.timeTravelRect.visible = true
                 return true
             else if m.currentProgressBarState = 4
-                ' m.top.toggleChat = true
+                m.top.toggleChat = true
                 m.top.streamLayoutMode = (m.top.streamLayoutMode + 1) mod 3
                 return true
             else if m.currentProgressBarState = 5

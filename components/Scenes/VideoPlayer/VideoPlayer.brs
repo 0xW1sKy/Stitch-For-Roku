@@ -9,7 +9,9 @@ sub init()
         m.videoPlayer.videoBookmarks = {}
     end if
     m.videoPlayer.notificationInterval = 1
+    m.videoPlayer.observeField("toggleChat", "onToggleChat")
     m.chatWindow = m.top.findNode("chat")
+    m.chatWindow.observeField("visible", "onChatVisibilityChange")
     if get_user_setting("ChatOption", "true") = "true"
         m.chatWindow.visible = true
     else
@@ -17,6 +19,27 @@ sub init()
     end if
     ' m.chatWindow.loggedInUsername =
 end sub
+
+sub onToggleChat()
+    ? "Main Scene > onToggleChat"
+    if m.videoPlayer.toggleChat = true
+        m.chatWindow.visible = not m.chatWindow.visible
+        m.videoPlayer.chatIsVisible = m.chatWindow.visible
+        m.videoPlayer.toggleChat = false
+    end if
+end sub
+
+sub onChatVisibilityChange()
+    if m.chatWindow.visible
+        m.videoPlayer.width = 1030
+        m.videoPlayer.height = 720
+        m.chatWindow.getchild(0).opacity = "1"
+    else
+        m.videoPlayer.width = 0
+        m.videoPlayer.height = 0
+    end if
+end sub
+
 
 function handleContent()
     ?"Content Requested!"
@@ -137,7 +160,6 @@ function playVideo(data)
     ' I'm too tired to do this better, but channel_id needs to be set before channel
     m.chatWindow.channel_id = m.top.contentRequested.streamerId
     m.chatWindow.channel = m.top.contentRequested.streamerLogin
-    m.chatWindow.setFocus(true)
 end function
 
 

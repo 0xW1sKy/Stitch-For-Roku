@@ -13,11 +13,11 @@
             enableTrickPlay="false"
             visible="false"
             translation="[0,0]"
-            width="1280"
-            height="720" />
+            width="0"
+            height="0" />
         <Chat
             id="chat"
-            visible="true" />
+            visible="false" />
     </children>
 
 </component>

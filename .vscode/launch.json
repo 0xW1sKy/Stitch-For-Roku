@@ -16,7 +16,7 @@
             "enableDebuggerAutoRecovery": false,
             "stopDebuggerOnAppExit": false,
             "enableDebugProtocol": false,
-            "rendezvousTracking": false,
+            "rendezvousTracking": true,
             "files": [
                 "source/**/*",
                 "components/**/*",
