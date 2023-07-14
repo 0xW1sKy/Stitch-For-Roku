@@ -267,13 +267,6 @@
                 width="24.84"
                 height="20.04"
                 translation="[710,52]" />
-            <!--<Poster
-                id="backButton"
-                uri="pkg:/images/back.png"
-            width="16.32"
-                height="13.32"
-                translation="[50,-605]"
-            />-->
             <CirclePoster id="avatar" width="50" height="50" translation="[15,-603]" />
             <EmojiLabel
                 id="videoTitle"
