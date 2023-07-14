@@ -35,16 +35,12 @@ sub onTimerFireChange() as void
 end sub
 
 function doScroll()
-    ? "EmojiLabel > DO SCROLL"; m.top.repeatcount
     if m.top.repeatCount <> invalid
         if m.top.repeatCount <> 0
-            ? "TEST"
             m.animation.repeat = true
             m.timer.repeat = true
-            ? "STARTED"
             ' this sleep is so that when you change from one item to another,
             ' you have enough time to read the first 1-2 words before scrolling.
-            sleep(300)
             m.animation.control = "start"
             m.timer.control = "start"
             m.animation.duration = (m.top.width / m.top.maxWidth) * 2

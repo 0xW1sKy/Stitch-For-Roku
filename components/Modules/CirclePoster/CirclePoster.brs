@@ -4,3 +4,7 @@ sub updateMask()
     m.maskGroup.maskSize = [(m.poster.width), (m.poster.height)]
     m.maskGroup.maskOffset = [0, 0]
 end sub
+
+sub showContent()
+
+end sub

@@ -6,6 +6,7 @@
 
     <script type="text/brightscript" uri="CirclePoster.brs" />
     <interface>
+        <field id="itemContent" type="node" onChange="showcontent" />
         <field id="maskUri" type="uri" value="pkg:/images/profile-mask-150.png" alias="exampleMaskGroup.maskuri" />
         <field id="width" type="integer" alias="examplePoster.width" />
         <field id="height" type="integer" alias="examplePoster.height" />

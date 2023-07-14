@@ -47,10 +47,8 @@ sub showcontent()
 end sub
 
 sub onGetFocus()
-    ? "focused"
-    ? "itemLabel: "; m.itemLabel
     if m.top.itemHasFocus
-        if m.itemLabel.width > m.itemLabel.maxWidth
+        if m.itemLabel.localBoundingRect().width > m.itemLabel.maxWidth
             m.itemLabel.repeatCount = -1
         end if
     else
