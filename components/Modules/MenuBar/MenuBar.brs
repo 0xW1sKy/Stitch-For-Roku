@@ -16,11 +16,10 @@ end sub
 
 function buildIcon(icon)
     map = {
-        "search": "pkg:/images/iconSearch.png"
-        "settings": "pkg:/images/iconSettings.png"
-        "login": get_user_setting("profile_image_url", "pkg:/images/iconLogin.png")
+        "search": m.global.constants.defaultIcons.search
+        "settings": m.global.constants.defaultIcons.settings
+        "login": get_user_setting("profile_image_url", m.global.constants.defaultIcons.login)
     }
-    ? "User Setting Response: "; get_user_setting("profile_image_url")
     newItem = createObject("roSGNode", "JFButton")
     newItem.textColor = m.top.menuTextColor
     newItem.focusedTextColor = m.top.menuTextColor

@@ -9,13 +9,13 @@ sub init()
         m.videoPlayer.videoBookmarks = {}
     end if
     m.videoPlayer.notificationInterval = 1
-    m.chat = m.top.findNode("chat")
+    m.chatWindow = m.top.findNode("chat")
     if get_user_setting("ChatOption", "true") = "true"
-        m.chat.visible = true
+        m.chatWindow.visible = true
     else
-        m.chat.visible = false
+        m.chatWindow.visible = false
     end if
-    ' m.chat.loggedInUsername =
+    ' m.chatWindow.loggedInUsername =
 end sub
 
 function handleContent()
@@ -46,8 +46,6 @@ end function
 
 function handleResponse()
     ? "handleResponse"
-    m.chat.channel = m.top.contentRequested.streamerLogin
-    m.chat.control = "run"
     if m.top.contentRequested.contentType = "VOD"
         usherUrl = "https://usher.ttvnw.net/vod/" + m.gettwitchdatatask.response.data.video.id + ".m3u8?playlist_include_framerate=true&allow_source=true&player_type=pulsar&player_backend=mediaplayer&nauth=" + m.gettwitchdatatask.response.data.video.playbackAccessToken.value.EncodeUri() + "&nauthsig=" + m.gettwitchdatatask.response.data.video.playbackAccessToken.signature
     else if m.top.contentRequested.contentType = "LIVE"
@@ -116,7 +114,6 @@ function handleUsherResponse()
     end for
     ' The stream needs a couple of seconds to load on AWS's server side before we display back to user.
     ' The idea is that this will provide a better user experience by removing stuttering.
-    ? "STREAMURLS:" stream_urls
     playVideo({
         streamUrls: stream_urls
         streamQualities: stream_qualities
@@ -137,6 +134,10 @@ function playVideo(data)
     m.videoplayer.setFocus(true)
     m.videoplayer.enableCookies()
     m.videoplayer.control = "play"
+    ' I'm too tired to do this better, but channel_id needs to be set before channel
+    m.chatWindow.channel_id = m.top.contentRequested.streamerId
+    m.chatWindow.channel = m.top.contentRequested.streamerLogin
+    m.chatWindow.setFocus(true)
 end function
 
 

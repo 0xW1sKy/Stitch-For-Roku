@@ -4,6 +4,7 @@
 
     <interface>
         <field id="channel" type="string" onChange="onEnterChannel" alwaysNotify="true" />
+        <field id="channel_id" type="string" />
         <field id="focusable" type="Boolean" value="true" />
         <field id="control" type="bool" onChange="onVideoChange" value="false" alwaysNotify="true" />
         <field id="doneFocus" type="Boolean" value="false" />

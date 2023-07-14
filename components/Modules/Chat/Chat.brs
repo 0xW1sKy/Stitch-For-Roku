@@ -2,13 +2,9 @@ sub init()
     m.chatPanel = m.top.findNode("chatPanel")
     m.keyboard = m.top.findNode("keyboard")
     m.chatButton = m.top.findNode("chatButton")
-    m.chat = CreateObject("roSGNode", "ChatTest")
-    m.chat.observeField("nextComment", "onNewComment")
-    m.chat.observeField("clientComment", "onNewComment")
-    m.top.observeField("visible", "onInvisible")
-    m.chat.control = "run"
-    m.userstate_change = false
     m.translation = 0
+    ' m.top.observeField("visible", "onInvisible")
+    ' m.chat.control = "run"
 end sub
 
 sub onInvisible()
@@ -28,12 +24,19 @@ end sub
 
 sub onEnterChannel()
     ? "Chat >> onEnterChannel > " m.top.channel
+    m.chat = CreateObject("roSGNode", "ChatTest")
+    m.chat.observeField("nextComment", "onNewComment")
+    m.chat.observeField("clientComment", "onNewComment")
     m.chat.channel = m.top.channel
     m.chat.control = "stop"
     m.chat.control = "run"
+    m.EmoteJob = CreateObject("roSGNode", "EmoteJob")
+    m.EmoteJob.channel_id = m.top.channel_id
+    m.EmoteJob.control = "run"
 end sub
 
 sub extractMessage(section) as object
+    m.userstate_change = false
     words = section.Split(" ")
     if words[2] = "USERSTATE"
         m.userstate_change = true
@@ -113,14 +116,16 @@ sub onNewComment()
     for each badge in badges
         if badge <> invalid and badge <> ""
             if m.global.twitchBadges <> invalid
-                poster = createObject("roSGNode", "Poster")
-                poster.uri = m.global.twitchBadges[badge]
-                poster.width = 18
-                poster.height = 18
-                poster.visible = true
-                poster.translation = [badge_translation, 0]
-                group.appendChild(poster)
-                badge_translation += 20
+                if m.global.twitchBadges[badge] <> invalid
+                    poster = createObject("roSGNode", "Poster")
+                    poster.uri = m.global.twitchBadges[badge]
+                    poster.width = 18
+                    poster.height = 18
+                    poster.visible = true
+                    poster.translation = [badge_translation, 0]
+                    group.appendChild(poster)
+                    badge_translation += 20
+                end if
             end if
         end if
     end for
@@ -200,27 +205,29 @@ sub onNewComment()
                 end if
             end for
         end for
-        if m.global.globalTTVEmotes.DoesExist(word) and not is_emote
-            message_text.translation = [x_translation, y_translation]
-            group.appendChild(message_text)
-            message_text = createObject("roSGNode", "SimpleLabel")
-            message_text.fontSize = "14"
-            message_text.fontUri = "pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf"
-            message_text.visible = true
-            message_text.text = ""
-            x_translation += width
-            poster = createObject("roSGNode", "Poster")
-            poster.uri = "https://cdn.betterttv.net/emote/" + m.global.globalTTVEmotes[word] + "/1x"
-            poster.visible = true
-            poster.translation = [x_translation, y_translation - 5]
-            group.appendChild(poster)
-            x_translation += 35
-            if x_translation >= 230 or word_number = message_chars.Count()
-                x_translation = 0
-                y_translation += 23
+        if m.global.globalTTVEmotes <> invalid and not is_emote
+            if m.global.globalTTVEmotes.DoesExist(word)
+                message_text.translation = [x_translation, y_translation]
+                group.appendChild(message_text)
+                message_text = createObject("roSGNode", "SimpleLabel")
+                message_text.fontSize = "14"
+                message_text.fontUri = "pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf"
+                message_text.visible = true
+                message_text.text = ""
+                x_translation += width
+                poster = createObject("roSGNode", "Poster")
+                poster.uri = "https://cdn.betterttv.net/emote/" + m.global.globalTTVEmotes[word] + "/1x"
+                poster.visible = true
+                poster.translation = [x_translation, y_translation - 5]
+                group.appendChild(poster)
+                x_translation += 35
+                if x_translation >= 230 or word_number = message_chars.Count()
+                    x_translation = 0
+                    y_translation += 23
+                end if
+                is_emote = true
+                appended_last_line = true
             end if
-            is_emote = true
-            appended_last_line = true
         end if
         if m.global.channelTTVEmotes <> invalid and not is_emote
             if m.global.channelTTVEmotes.DoesExist(word)

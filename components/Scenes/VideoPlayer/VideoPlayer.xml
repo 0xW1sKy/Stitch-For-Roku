@@ -9,9 +9,9 @@
     <children>
         <CustomVideo
             id="videoWindow"
-            enableUI="true"
-            enableTrickPlay="true"
-            visible="true"
+            enableUI="false"
+            enableTrickPlay="false"
+            visible="false"
             translation="[0,0]"
             width="1280"
             height="720" />

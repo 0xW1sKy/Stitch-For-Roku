@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<component name="EmoteJob" extends="Task">
+
+    <interface>
+        <field id="channel" type="string" />
+        <field id="channel_id" type="string" />
+    </interface>
+
+    <script type="text/brightscript" uri="EmoteJob.brs" />
+    <script type="text/brightscript" uri="pkg:/source/utils/http.brs" />
+    <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
+
+</component>

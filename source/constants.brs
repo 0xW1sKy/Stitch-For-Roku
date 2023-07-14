@@ -5,6 +5,11 @@ sub setConstants()
     ' Set Global Constants
     globals.addFields({
         constants: {
+            defaultIcons: {
+                search: "pkg:/images/iconSearch.png"
+                settings: "pkg:/images/iconSettings.png"
+                login: "pkg:/images/iconLogin.png"
+            },
             menuOptions: [
                 "Home",
                 "Categories",
