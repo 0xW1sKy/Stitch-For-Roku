@@ -12,11 +12,6 @@ sub init()
     m.videoPlayer.observeField("toggleChat", "onToggleChat")
     m.chatWindow = m.top.findNode("chat")
     m.chatWindow.observeField("visible", "onChatVisibilityChange")
-    if get_user_setting("ChatOption", "true") = "true"
-        m.chatWindow.visible = true
-    else
-        m.chatWindow.visible = false
-    end if
     ' m.chatWindow.loggedInUsername =
 end sub
 
@@ -160,6 +155,11 @@ function playVideo(data)
     ' I'm too tired to do this better, but channel_id needs to be set before channel
     m.chatWindow.channel_id = m.top.contentRequested.streamerId
     m.chatWindow.channel = m.top.contentRequested.streamerLogin
+    if get_user_setting("ChatOption", "true") = "true"
+        m.chatWindow.visible = true
+    else
+        m.chatWindow.visible = false
+    end if
 end function
 
 
@@ -168,6 +168,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
     if press
         ? "Home Scene Key Event: "; key
         if key = "back"
+            m.chatWindow.control = "stop"
             m.top.backPressed = true
             return true
         end if
