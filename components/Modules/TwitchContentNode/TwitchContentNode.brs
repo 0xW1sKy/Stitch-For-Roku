@@ -6,6 +6,9 @@ function updateViewersDisplay()
     if m.top.contentType = "VOD"
         suffix = tr("Views")
     end if
+    if m.top.contentType = "CLIP"
+        suffix = tr("Views")
+    end if
     if m.top.contentType = "GAME"
         suffix = tr("Viewers")
     end if

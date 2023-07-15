@@ -108,7 +108,12 @@ function buildContentNodeFromShelves(inputData)
         for each stream in shelf.node.items
             rowItem = createObject("RoSGNode", "TwitchContentNode")
             rowItem.contentId = stream.id
-            rowItem.contentType = "VOD"
+            if stream.slug <> invalid
+                rowItem.contentType = "CLIP"
+                rowItem.clipSlug = stream.slug
+            else
+                rowItem.contentType = "VOD"
+            end if
             if stream.previewThumbnailURL <> invalid
                 rowItem.previewImageURL = Left(stream.previewThumbnailURL, len(stream.previewThumbnailURL) - 20) + "320x180." + Right(stream.previewThumbnailURL, 3)
             else if stream.thumbnailURL <> invalid

@@ -15,8 +15,8 @@
             "injectRdbOnDeviceComponent": true,
             "enableDebuggerAutoRecovery": false,
             "stopDebuggerOnAppExit": false,
-            "enableDebugProtocol": true,
-            "rendezvousTracking": true,
+            "enableDebugProtocol": false,
+            "rendezvousTracking": false,
             "files": [
                 "source/**/*",
                 "components/**/*",
