@@ -3,6 +3,7 @@ sub init()
     ' m.top.observeField("itemFocused", "onGetFocus")
     m.rowlist = m.top.findNode("exampleRowList")
     m.rowlist.ObserveField("itemSelected", "handleItemSelected")
+    m.rowlist.observeField("itemHasFocus", "handleItemFocus")
     m.GetContentTask = CreateObject("roSGNode", "TwitchApiTask") ' create task for feed retrieving
     ' observe content so we can know when feed content will be parsed
     m.GetContentTask.observeField("response", "handleRecommendedSections")
@@ -45,15 +46,15 @@ end function
 
 
 sub handleRecommendedSections()
-    ? "Pause"
     if m.GetContentTask.response.data <> invalid and m.GetContentTask.response.data.directoriesWithTags <> invalid
         contentCollection = buildContentNodeFromShelves(m.GetContentTask.response.data.directoriesWithTags.edges)
-        ? "pause"
         if m.GetContentTask.response.data.directoriesWithTags.pageInfo <> invalid
             if m.GetContentTask.response.data.directoriesWithTags.pageInfo.hasNextPage
                 if m.GetContentTask.response.data.directoriesWithTags.edges.peek().cursor <> invalid
                     m.top.cursor = m.GetContentTask.response.data.directoriesWithTags.edges.peek().cursor
                 end if
+            else
+                m.top.maxedOut = true
             end if
         end if
     else
@@ -62,18 +63,21 @@ sub handleRecommendedSections()
         end for
     end if
     updateRowList(contentCollection)
+    m.top.buffer = false
 end sub
 
 sub appendMoreRows()
-    m.GetContentTask = CreateObject("roSGNode", "TwitchApiTask") ' create task for feed retrieving
-    ' observe content so we can know when feed content will be parsed
-    m.GetContentTask.observeField("response", "handleRecommendedSections")
-    m.GetContentTask.request = {
-        type: "getBrowsePageQuery"
-        cursor: m.top.cursor
-    }
-    m.GetContentTask.functionName = m.GetContentTask.request.type
-    m.GetContentTask.control = "run"
+    if m.top.maxedOut = false
+        m.GetContentTask = CreateObject("roSGNode", "TwitchApiTask") ' create task for feed retrieving
+        ' observe content so we can know when feed content will be parsed
+        m.GetContentTask.observeField("response", "handleRecommendedSections")
+        m.GetContentTask.request = {
+            type: "getBrowsePageQuery"
+            cursor: m.top.cursor
+        }
+        m.GetContentTask.functionName = m.GetContentTask.request.type
+        m.GetContentTask.control = "run"
+    end if
 end sub
 
 function buildRowData(contentCollection)
@@ -138,6 +142,16 @@ sub onGetFocus()
         m.rowlist.setFocus(true)
     else if m.rowlist.focusedchild.id = "exampleRowList"
         m.rowlist.focusedChild.setFocus(true)
+        if m.rowlist.rowItemFocused[0] <> invalid
+            if m.rowlist.content.getChildCount() > 0
+                if (m.rowlist.content.getChildCount() - m.rowlist.rowItemFocused[0]) < 5
+                    if m.top.buffer = false
+                        m.top.buffer = true
+                        appendMoreRows()
+                    end if
+                end if
+            end if
+        end if
     end if
 end sub
 
@@ -146,10 +160,6 @@ function onKeyEvent(key as string, press as boolean) as boolean
         ? "Home Scene Key Event: "; key
         if key = "up" or key = "back"
             m.top.backPressed = true
-            return true
-        end if
-        if key = "down"
-            appendMoreRows()
             return true
         end if
     end if

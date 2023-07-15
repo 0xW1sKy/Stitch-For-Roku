@@ -415,7 +415,7 @@ end function
 
 function getBrowsePageQuery()
     variables = {
-        "limit": 30,
+        "limit": 100,
         "options": {
             "recommendationsContext": {
                 "platform": "web"
