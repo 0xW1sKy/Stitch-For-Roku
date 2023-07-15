@@ -28,7 +28,7 @@ sub handleUserLogin()
         set_user_setting("device_code", device_code)
         ' TODO: Yet again with the static reference that should be fixed.
         ' Parent = heroScene, child 1 = MenuBar, child 3 = ButtonGroup, child 6 = loginIconButton
-        m.top.getParent().getChild(1).updateUserIcon = true
+        m.top.finished = true
     end if
     m.top.backPressed = true
 end sub

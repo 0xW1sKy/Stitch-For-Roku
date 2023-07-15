@@ -2,6 +2,8 @@ sub init()
     m.top.backgroundUri = ""
     m.top.backgroundColor = m.global.constants.colors.hinted.grey1
     m.activeNode = invalid
+    m.followedStreamBar = m.top.findNode("followedStreamsBar")
+    m.followedStreamBar.observeField("contentSelected", "onFollowSelected")
     m.menu = m.top.findNode("MenuBar")
     m.menu.menuOptionsText = ["Home", "Categories", "Following"]
     m.menu.observeField("buttonSelected", "onMenuSelection")
@@ -21,7 +23,12 @@ sub init()
         onMenuSelection()
     end if
     m.footprints = []
+    refreshFollowBar()
 end sub
+
+function refreshFollowBar()
+    m.followedStreamBar.refreshFollowBar = true
+end function
 
 function handleDeviceCode()
     if m.getDeviceCodeTask <> invalid
@@ -38,12 +45,24 @@ function buildNode(name)
         newNode.translation = "[0, 0]"
         newNode.observeField("backPressed", "onBackPressed")
         newNode.observeField("contentSelected", "onContentSelected")
-        m.top.appendChild(newNode)
+        if name <> "GamePage" and name <> "ChannelPage" and name <> "VideoPlayer"
+            m.top.insertChild(newNode, 1)
+        else
+            m.top.appendChild(newNode)
+        end if
+        if name = "LoginPage"
+            newNode.observeField("finished", "onLoginFinished")
+        end if
         return newNode
     end if
 end function
 
+sub onLoginFinished()
+    m.menu.updateUserIcon = true
+end sub
+
 function onMenuSelection()
+    refreshFollowBar()
     if m.activeNode <> invalid
         if m.activeNode.id.toStr() <> m.menu.focusedChild.focusedChild.id.toStr()
             m.top.removeChild(m.activeNode)
@@ -55,6 +74,19 @@ function onMenuSelection()
     end if
     m.activeNode.setfocus(true)
 end function
+
+sub onFollowSelected()
+    content = m.followedStreamBar.contentSelected
+    if m.activeNode <> invalid
+        m.footprints.push(m.activeNode)
+        m.activeNode = invalid
+    end if
+    if m.activeNode = invalid
+        m.activeNode = buildNode("ChannelPage")
+    end if
+    m.activeNode.contentRequested = content
+    m.activeNode.setfocus(true)
+end sub
 
 sub onContentSelected()
     if m.activeNode.contentSelected.contentType = "GAME"
@@ -102,8 +134,27 @@ function onKeyEvent(key, press) as boolean
             ? "----------- Last Focused Child ----------" + chr(34); lastFocusedChild(m.top.focusedChild)
             return true
         end if
+        if key = "up"
+            if m.activeNode.id <> "GamePage" and m.activeNode.id <> "ChannelPage" and m.activeNode.id <> "VideoPlayer"
+                m.followedStreamBar.itemHasFocus = false
+                m.menu.setFocus(true)
+            end if
+        end if
         if key = "down"
             m.activeNode.setFocus(true)
+        end if
+        if key = "left"
+            if m.activeNode.id <> "GamePage" and m.activeNode.id <> "ChannelPage" and m.activeNode.id <> "VideoPlayer"
+                m.activeNode.setFocus(false)
+                m.followedStreamBar.setFocus(true)
+                m.followedStreamBar.itemHasFocus = true
+                return true
+            end if
+        end if
+        if key = "right"
+            m.followedStreamBar.itemHasFocus = false
+            m.activeNode.setFocus(true)
+            return true
         end if
     end if
     ' if key = "up"

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<component name="FollowedStreamsBarJob" extends="Task">
+
+    <interface>
+        <field id="result" type="array" />
+    </interface>
+
+    <script type="text/brightscript" uri="FollowedStreamsBarJob.brs" />
+    <script type="text/brightscript" uri="pkg:/source/utils/http.brs" />
+    <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
+
+</component>

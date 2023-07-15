@@ -16,6 +16,9 @@
       visible="true"
       translation="[0,0]"
     />
+    <FollowedStreamsBar
+      id="followedStreamsBar"
+      translation="[0,78]" />
   </children>
   <script type="text/brightscript" uri="heroScene.brs" />
   <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />

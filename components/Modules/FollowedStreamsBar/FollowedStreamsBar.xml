@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<component name="FollowedStreamsBar" extends="Group">
+
+    <interface>
+        <field id="itemHasFocus" type="bool" onChange="onGetFocus" alwaysNotify="true" />
+        <field id="streamerSelected" type="string" alwaysNotify="true" />
+        <field id="contentSelected" type="node" alwaysNotify="true" />
+        <!-- <field id="followedStreams" type="array" onChange="onFollowedStreamsChange" /> -->
+        <field id="refreshFollowBar" type="boolean" onChange="refreshFollowBar" />
+    </interface>
+
+    <script type="text/brightscript" uri="FollowedStreamsBar.brs" />
+
+    <children>
+
+        <Rectangle
+            visible="true"
+            color="0x1f1f23FF"
+            width="70"
+            height="1000"
+            translation="[0,5]" />
+
+        <Poster
+            uri="pkg:/images/icons/heart-o.png"
+            width="24"
+            height="24"
+            translation="[22, 22]">
+        </Poster>
+    </children>
+
+</component>
