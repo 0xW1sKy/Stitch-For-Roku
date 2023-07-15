@@ -35,7 +35,7 @@ sub showcontent()
         m.itemSubtitle.text = itemcontent.streamerDisplayName
         m.itemThirdTitle.text = itemcontent.gameDisplayName
     end if
-    if itemcontent.contentType = "VOD"
+    if itemcontent.contentType = "VOD" or itemcontent.contentType = "CLIP"
         m.liveicon.visible = false
         m.itemThirdTitle.text = itemcontent.gameDisplayName
     end if

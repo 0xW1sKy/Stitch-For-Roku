@@ -38,28 +38,32 @@ end sub
 
 function handleContent()
     ?"Content Requested!"
-    ? "Type: "; m.top.contentRequested.contentType
-    m.getTwitchDataTask = CreateObject("roSGNode", "TwitchApiTask")
-    m.getTwitchDataTask.observeField("response", "handleResponse")
-    if m.top.contentRequested.contentType = "VOD"
-        request = {
-            type: "getVodPlayerWrapperQuery"
-            params: {
-                id: m.top.contentRequested.contentId
+    if m.top.contentRequested.contentType = "CLIP"
+        playClip()
+    else
+        ? "Type: "; m.top.contentRequested.contentType
+        m.getTwitchDataTask = CreateObject("roSGNode", "TwitchApiTask")
+        m.getTwitchDataTask.observeField("response", "handleResponse")
+        if m.top.contentRequested.contentType = "VOD"
+            request = {
+                type: "getVodPlayerWrapperQuery"
+                params: {
+                    id: m.top.contentRequested.contentId
+                }
             }
-        }
-    end if
-    if m.top.contentRequested.contentType = "LIVE"
-        request = {
-            type: "getStreamPlayerQuery"
-            params: {
-                id: m.top.contentRequested.streamerLogin
+        end if
+        if m.top.contentRequested.contentType = "LIVE"
+            request = {
+                type: "getStreamPlayerQuery"
+                params: {
+                    id: m.top.contentRequested.streamerLogin
+                }
             }
-        }
+        end if
+        m.getTwitchDataTask.request = request
+        m.getTwitchDataTask.functionName = request.type
+        m.getTwitchDataTask.control = "run"
     end if
-    m.getTwitchDataTask.request = request
-    m.getTwitchDataTask.functionName = request.type
-    m.getTwitchDataTask.control = "run"
 end function
 
 function handleResponse()
@@ -139,6 +143,22 @@ function handleUsherResponse()
         streamBitrates: stream_bitrates
         streamStickyHttpRedirects: stream_sticky
     })
+end function
+
+function playClip()
+    vidContent = createObject("roSGNode", "ContentNode")
+    vidContent.title = m.top.contentRequested.contentTitle
+    vidContent.url = Left(m.top.contentRequested.previewImageUrl, Len(m.top.contentRequested.previewImageUrl) - 20) + ".mp4"
+    vidContent.streamFormat = "mp4"
+    m.videoPlayer.channelUsername = m.top.contentRequested.streamerDisplayName
+    m.videoPlayer.channelAvatar = m.top.contentRequested.streamerProfileImageUrl
+    m.videoPlayer.videoTitle = m.top.contentRequested.contentTitle
+    m.videoplayer.content = vidContent
+    m.videoplayer.visible = true
+    m.videoplayer.setFocus(true)
+    m.videoplayer.enableCookies()
+    m.chatWindow.visible = false
+    m.videoplayer.control = "play"
 end function
 
 function playVideo(data)
