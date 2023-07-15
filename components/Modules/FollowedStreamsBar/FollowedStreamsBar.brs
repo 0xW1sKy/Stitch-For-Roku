@@ -124,6 +124,7 @@ sub onKeyEvent(key, press) as boolean
             if m.children[m.currentIndex] <> invalid
                 m.top.streamerSelected = m.children[m.currentIndex].twitch_id
                 m.top.contentSelected = m.children[m.currentIndex].content
+                m.children[m.currentIndex].focused = false
                 handled = true
             end if
         end if
