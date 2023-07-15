@@ -12,7 +12,6 @@
     <!-- RowList on HeroScene -->
     <MenuBar
       id="MenuBar"
-      menuOptionsText="[&quot;MenuOptionA&quot;, &quot;MenuOptionB&quot;, &quot;MenuOptionC&quot;, &quot;MenuOptionD&quot;]"
       focusable="true"
       visible="true"
       translation="[0,0]"

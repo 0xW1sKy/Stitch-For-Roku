@@ -3,6 +3,7 @@ sub init()
     m.top.backgroundColor = m.global.constants.colors.hinted.grey1
     m.activeNode = invalid
     m.menu = m.top.findNode("MenuBar")
+    m.menu.menuOptionsText = ["Home", "Categories", "Following"]
     m.menu.observeField("buttonSelected", "onMenuSelection")
     m.menu.setFocus(true)
     if get_setting("active_user") = invalid
@@ -30,10 +31,10 @@ function handleDeviceCode()
     onMenuSelection()
 end function
 
-function buildNode(id, name)
-    if name <> invalid and id <> invalid
+function buildNode(name)
+    if name <> invalid
         newNode = createObject("roSGNode", name)
-        newNode.id = id
+        newNode.id = name
         newNode.translation = "[0, 0]"
         newNode.observeField("backPressed", "onBackPressed")
         newNode.observeField("contentSelected", "onContentSelected")
@@ -44,27 +45,26 @@ end function
 
 function onMenuSelection()
     if m.activeNode <> invalid
-        if m.activeNode.id.toStr() <> m.menu.buttonSelected.toStr()
+        if m.activeNode.id.toStr() <> m.menu.focusedChild.focusedChild.id.toStr()
             m.top.removeChild(m.activeNode)
             m.activeNode = invalid
         end if
     end if
-    ? "Menu Button Selected"; m.menu.buttonSelected
     if m.activeNode = invalid
-        m.activeNode = buildNode(m.menu.buttonSelected, m.global.constants.menuOptions[m.menu.buttonSelected])
+        m.activeNode = buildNode(m.menu.focusedChild.focusedChild.id)
     end if
     m.activeNode.setfocus(true)
 end function
 
 sub onContentSelected()
     if m.activeNode.contentSelected.contentType = "GAME"
-        id = 7
+        id = "GamePage"
     end if
     if m.activeNode.contentSelected.contentType = "LIVE" or m.activeNode.contentSelected.contentType = "VOD"
-        id = 8
+        id = "ChannelPage"
     end if
     if m.activeNode.playContent = true
-        id = 9
+        id = "VideoPlayer"
     end if
     content = m.activeNode.contentSelected
     if m.activeNode <> invalid
@@ -72,7 +72,7 @@ sub onContentSelected()
         m.activeNode = invalid
     end if
     if m.activeNode = invalid
-        m.activeNode = buildNode(id, m.global.constants.menuOptions[id])
+        m.activeNode = buildNode(id)
     end if
     m.activeNode.contentRequested = content
     m.activeNode.setfocus(true)
