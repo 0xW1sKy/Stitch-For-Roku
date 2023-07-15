@@ -54,8 +54,9 @@ function setBannerImage()
     end if
     poster.width = 1280
     poster.height = 320
+    poster.scale = [1.1, 1.1]
     poster.visible = true
-    poster.translation = [0, 0]
+    poster.translation = [0, (0 - poster.height / 3)]
     ' overlay = createObject("roSGNode", "Rectangle")
     ' overlay.color = "0x01010110"
     ' overlay.width = 1280

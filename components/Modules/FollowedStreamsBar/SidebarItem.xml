@@ -33,7 +33,7 @@
                     translation="[64, -5]"
                     height="50"
                />
-               <CirclePoster id="streamerProfile" width="50" height="50" />
+               <CirclePoster id="streamerProfile" width="50" height="50" outlinecolor="0x00000000" backgroundVisible="false" />
                <Label
                     id="streamerName"
                     translation="[90,0]">
