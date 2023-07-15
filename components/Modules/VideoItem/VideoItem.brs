@@ -1,17 +1,16 @@
 
 sub init()
-    m.itemposter = m.top.findNode("itemPoster")
-    m.itemmask = m.top.findNode("itemMask")
     m.itemlabel = m.top.findNode("itemLabel")
+    m.itemmask = m.top.findNode("itemMask")
+end sub
+
+sub showcontent()
+    m.itemposter = m.top.findNode("itemPoster")
     m.liveicon = m.top.findNode("liveIcon")
     m.itemSubtitle = m.top.findNode("itemSubtitle")
     m.itemThirdTitle = m.top.findNode("itemThirdTitle")
     m.itemViewers = m.top.findNode("itemViewers")
     m.viewsRect = m.top.findNode("viewsRect")
-
-end sub
-
-sub showcontent()
     itemcontent = m.top.itemContent
     if itemcontent.contentType = "GAME"
         m.itemposter.width = 188
@@ -28,7 +27,7 @@ sub showcontent()
         m.itemSubtitle.text = itemcontent.viewersDisplay
         m.itemposter.uri = itemcontent.gameBoxArtUrl
     end if
-    if itemcontent.contentType = "LIVE" or itemcontent.contentType = "VOD"
+    if itemcontent.contentType = "LIVE" or itemcontent.contentType = "VOD" or itemContent.contentType = "CLIP"
         m.itemViewers.text = itemcontent.viewersDisplay
         m.viewsRect.height = m.itemViewers.boundingRect().height
         m.viewsRect.width = m.itemViewers.boundingRect().width + 6
@@ -42,7 +41,6 @@ sub showcontent()
     end if
     m.itemlabel.text = itemcontent.contentTitle
     m.itemSubtitle.color = m.global.constants.colors.hinted.grey9
-
     m.itemThirdTitle.color = m.global.constants.colors.hinted.grey9
 end sub
 
@@ -57,8 +55,5 @@ sub onGetFocus()
 end sub
 
 sub showrowfocus()
-    ' scale = 1 + (m.top.rowFocusPercent * 0.08)
-    ' m.itemposter.scale = [scale, scale]
-    ' m.itemlabel.opacity = m.top.rowFocusPercent
     m.itemmask.opacity = 0.75 - (m.top.rowFocusPercent * 0.75)
 end sub

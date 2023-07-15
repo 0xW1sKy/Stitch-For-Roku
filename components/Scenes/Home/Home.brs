@@ -33,13 +33,15 @@ function buildContentNodeFromShelves(shelves)
         catch e
             ? "TITLE ERROR: "; e
             temp_title = shelf.node.title.fallbackLocalizedTitle
+            ? "Title With Problem: "; temp_title
         end try
         row.title = temp_title
         for each stream in shelf.node.content.edges
             streamnode = stream.node
             ' type_name = stream.node.__typename
-            try
-                if stream.node.type <> invalid and stream.node.type = "live"
+            ' try
+            if stream.node <> invalid and stream.node["__typename"].ToStr() <> invalid
+                if stream.node["__typename"].ToStr() = "Stream"
                     rowItem = createObject("RoSGNode", "TwitchContentNode")
                     rowItem.contentId = stream.node.Id
                     rowItem.contentType = "LIVE"
@@ -58,7 +60,7 @@ function buildContentNodeFromShelves(shelves)
                     ' rowItem.ShortDescriptionLine1 = streamnode.viewersCount
                     ' rowItem.ShortDescriptionLine2 = streamnode.game.displayName
                     row.appendChild(rowItem)
-                else
+                else if stream.node["__typename"].ToStr() = "Game"
                     rowItem = createObject("RoSGNode", "TwitchContentNode")
                     rowItem.contentId = stream.node.Id
                     rowItem.contentType = "GAME"
@@ -73,9 +75,10 @@ function buildContentNodeFromShelves(shelves)
                     ' rowItem.ShortDescriptionLine1 = streamnode.viewersCount
                     row.appendChild(rowItem)
                 end if
-            catch e
-                ? "Error: "; e
-            end try
+            end if
+            ' catch e
+            '     ? "Error: "; e
+            ' end try
         end for
         contentCollection.appendChild(row)
     end for
@@ -151,6 +154,7 @@ end function
 sub handleItemSelected()
     selectedRow = m.rowlist.content.getchild(m.rowlist.rowItemSelected[0])
     selectedItem = selectedRow.getChild(m.rowlist.rowItemSelected[1])
+    ? "Selected: "; selectedItem
     m.top.contentSelected = selectedItem
 end sub
 

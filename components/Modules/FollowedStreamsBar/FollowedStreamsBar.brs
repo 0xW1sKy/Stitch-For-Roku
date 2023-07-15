@@ -50,7 +50,7 @@ sub onFollowedStreamsChange()
             group.display_name = stream.streamerDisplayName
             group.game = stream.gameDisplayName
             group.content = stream
-            group.translation = "[10," + translation.ToStr() + "]"
+            group.translation = "[8," + translation.ToStr() + "]"
             m.top.appendChild(group)
             translation += 60
         end for
