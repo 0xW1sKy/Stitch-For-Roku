@@ -411,3 +411,37 @@ function unfollowChannel() as object
     end if
     m.top.control = "STOP"
 end function
+
+
+function getBrowsePageQuery()
+    variables = {
+        "limit": 30,
+        "options": {
+            "recommendationsContext": {
+                "platform": "web"
+            },
+            "requestID": "JIRA-VXP-2397",
+            "sort": "VIEWER_COUNT",
+            "tags": []
+        }
+    }
+    if m.top.request.cursor <> invalid
+        variables["cursor"] = m.top.request.cursor
+    end if
+    rsp = TwitchGraphQLRequest({
+        "operationName": "BrowsePage_AllDirectories",
+        "variables": variables
+        "extensions": {
+            "persistedQuery": {
+                "version": 1,
+                "sha256Hash": "1d1914ca3cbfaa607ecd5595b2e305e96acf987c8f25328f7713b25f604c4668"
+            }
+        }
+    })
+    if rsp <> invalid
+        m.top.response = rsp
+    else
+        m.top.response = { "response": invalid }
+    end if
+    m.top.control = "STOP"
+end function

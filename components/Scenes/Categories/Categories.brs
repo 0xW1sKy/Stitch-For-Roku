@@ -7,7 +7,7 @@ sub init()
     ' observe content so we can know when feed content will be parsed
     m.GetContentTask.observeField("response", "handleRecommendedSections")
     m.GetContentTask.request = {
-        type: "getCategoriesQuery"
+        type: "getBrowsePageQuery"
     }
     m.GetContentTask.functionName = m.GetContentTask.request.type
     m.GetContentTask.control = "run"
@@ -27,13 +27,13 @@ function buildContentNodeFromShelves(games)
         rowItem.viewersCount = game.node.viewersCount
         rowItem.contentTitle = game.node.displayName
         rowItem.gameDisplayName = game.node.displayName
-        rowItem.gameBoxArtUrl = Left(game.node.boxArtUrl, Len(game.node.boxArtUrl) - 20) + "188x250.jpg"
+        rowItem.gameBoxArtUrl = Left(game.node.avatarUrl, Len(game.node.avatarUrl) - 11) + "188x250.jpg"
         rowItem.gameId = game.node.Id
         rowItem.gameName = game.node.name
 
         rowItem.Title = game.node.displayName
         rowItem.secondaryTitle = game.node.viewersCount
-        rowItem.HDPosterUrl = Left(game.node.boxArtUrl, Len(game.node.boxArtUrl) - 20) + "188x250.jpg"
+        rowItem.HDPosterUrl = Left(game.node.avatarUrl, Len(game.node.avatarUrl) - 11) + "188x250.jpg"
         rowItem.ShortDescriptionLine1 = game.node.viewersCount
         row.appendChild(rowItem)
         if row.getChildCount() = 5
@@ -45,8 +45,16 @@ end function
 
 
 sub handleRecommendedSections()
-    if m.GetContentTask.response.data <> invalid and m.GetContentTask.response.data.games <> invalid
-        contentCollection = buildContentNodeFromShelves(m.GetContentTask.response.data.games.edges)
+    ? "Pause"
+    if m.GetContentTask.response.data <> invalid and m.GetContentTask.response.data.directoriesWithTags <> invalid
+        contentCollection = buildContentNodeFromShelves(m.GetContentTask.response.data.directoriesWithTags.edges)
+        if m.GetContentTask.response.data.pageInfo <> invalid
+            if m.GetContentTask.response.data.pageInfo.hasNexPage
+                if m.GetContentTask.response.data.directoriesWithTags.edges[-1].cursor <> invalid
+                    m.top.cursor = m.GetContentTask.response.data.directoriesWithTags.edges[-1].cursor
+                end if
+            end if
+        end if
     else
         for each error in m.GetContentTask.response.errors
             ? "RESP: "; error.message
@@ -55,8 +63,7 @@ sub handleRecommendedSections()
     updateRowList(contentCollection)
 end sub
 
-
-function updateRowList(contentCollection)
+function buildRowData(contentCollection)
     rowItemSize = []
     showRowLabel = []
     rowHeights = []
@@ -86,11 +93,24 @@ function updateRowList(contentCollection)
             end if
         end if
     end for
-    m.rowList.rowHeights = rowHeights
-    m.rowlist.showRowLabel = showRowLabel
-    m.rowlist.rowItemSize = rowItemSize
-    m.rowlist.content = contentCollection
-    m.rowlist.numRows = contentCollection.getChildCount()
+    return {
+        rowHeights: rowHeights
+        showRowLabel: showRowLabel
+        rowItemSize: rowItemSize
+        content: contentCollection
+        numRows: contentCollection.getChildCount()
+    }
+end function
+
+function updateRowList(contentCollection)
+    rowData = buildRowData(contentCollection)
+    if m.rowlist.content <> invalid
+        updatedContent = m.rowlist.content.append(rowData.content)
+    else
+        updatedcontent = rowData.content
+    end if
+    m.rowlist.content = updatedContent
+    m.rowlist.numRows = updatedContent.getChildCount()
 end function
 
 sub handleItemSelected()

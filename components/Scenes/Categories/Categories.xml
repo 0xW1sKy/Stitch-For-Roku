@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component name="Categories" extends="SceneManagerGroup" initialFocus="exampleRowList">
+    <interface>
+        <field id="cursor" type="string" />
+    </interface>
     <script type="text/brightscript" uri="Categories.brs" />
     <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
     <children>
@@ -10,11 +13,11 @@
             translation="[ 130, 120 ]"
             itemComponentName="VideoItem"
             numRows="4"
-            rowItemSize="[[320,180]]"
-            rowItemSpacing="[[30,0]]"
-            itemSize="[1080,295]"
-            itemSpacing="[ 0, 40 ]"
-            showRowLabel="[ true ]"
+            rowItemSpacing="[[30,60]]"
+            itemSize="[1080,325]"
+            rowItemSize="[[188, 250]]"
+            rowHeights="[325]"
+            showRowLabel="[ false ]"
             focusBitmapUri="pkg:/images/focusIndicator.9.png"
             vertFocusAnimationStyle="fixedFocus"
             rowFocusAnimationStyle="floatingFocus"
