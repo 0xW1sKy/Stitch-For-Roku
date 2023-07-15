@@ -48,10 +48,11 @@ sub handleRecommendedSections()
     ? "Pause"
     if m.GetContentTask.response.data <> invalid and m.GetContentTask.response.data.directoriesWithTags <> invalid
         contentCollection = buildContentNodeFromShelves(m.GetContentTask.response.data.directoriesWithTags.edges)
-        if m.GetContentTask.response.data.pageInfo <> invalid
-            if m.GetContentTask.response.data.pageInfo.hasNexPage
-                if m.GetContentTask.response.data.directoriesWithTags.edges[-1].cursor <> invalid
-                    m.top.cursor = m.GetContentTask.response.data.directoriesWithTags.edges[-1].cursor
+        ? "pause"
+        if m.GetContentTask.response.data.directoriesWithTags.pageInfo <> invalid
+            if m.GetContentTask.response.data.directoriesWithTags.pageInfo.hasNextPage
+                if m.GetContentTask.response.data.directoriesWithTags.edges.peek().cursor <> invalid
+                    m.top.cursor = m.GetContentTask.response.data.directoriesWithTags.edges.peek().cursor
                 end if
             end if
         end if
@@ -61,6 +62,18 @@ sub handleRecommendedSections()
         end for
     end if
     updateRowList(contentCollection)
+end sub
+
+sub appendMoreRows()
+    m.GetContentTask = CreateObject("roSGNode", "TwitchApiTask") ' create task for feed retrieving
+    ' observe content so we can know when feed content will be parsed
+    m.GetContentTask.observeField("response", "handleRecommendedSections")
+    m.GetContentTask.request = {
+        type: "getBrowsePageQuery"
+        cursor: m.top.cursor
+    }
+    m.GetContentTask.functionName = m.GetContentTask.request.type
+    m.GetContentTask.control = "run"
 end sub
 
 function buildRowData(contentCollection)
@@ -105,12 +118,13 @@ end function
 function updateRowList(contentCollection)
     rowData = buildRowData(contentCollection)
     if m.rowlist.content <> invalid
-        updatedContent = m.rowlist.content.append(rowData.content)
+        for i = 0 to (rowData.content.getChildCount() - 1) step 1
+            m.rowlist.content.appendChild(rowData.content.getchild(i))
+        end for
     else
-        updatedcontent = rowData.content
+        m.rowlist.content = rowData.content
     end if
-    m.rowlist.content = updatedContent
-    m.rowlist.numRows = updatedContent.getChildCount()
+    m.rowlist.numRows = m.rowlist.content.getChildCount()
 end function
 
 sub handleItemSelected()
@@ -132,6 +146,10 @@ function onKeyEvent(key as string, press as boolean) as boolean
         ? "Home Scene Key Event: "; key
         if key = "up" or key = "back"
             m.top.backPressed = true
+            return true
+        end if
+        if key = "down"
+            appendMoreRows()
             return true
         end if
     end if
