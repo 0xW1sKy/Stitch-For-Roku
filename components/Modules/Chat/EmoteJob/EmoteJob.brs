@@ -69,7 +69,7 @@ function invokerest(link as string) as object
         }
         method: "GET"
     })
-    response_string = rsp = ParseJSON(req.send())
+    response_string = ParseJSON(req.send())
     return ParseJson(response_string)
 end function
 

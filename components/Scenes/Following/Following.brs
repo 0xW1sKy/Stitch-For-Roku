@@ -89,19 +89,19 @@ function buildAllChannels(shelves)
 end function
 
 
-sub handleRecommendedSections()
-    if m.getcontentTask.response.data <> invalid and m.GetcontentTask.response.data.user <> invalid and m.GetcontentTask.response.data.user.followedLiveUsers <> invalid
-        liveChannels = buildLiveChannels(m.GetContentTask.response.data.follows.edges)
-    end if
-    if m.GetContentTask.response.data <> invalid and m.GetContentTask.response.data.follows <> invalid
-        contentCollection = buildContentNodeFromShelves(m.GetContentTask.response.data.follows.edges)
-    else
-        for each error in m.GetContentTask.response.errors
-            ? "RESP: "; error.message
-        end for
-    end if
-    updateRowList(contentCollection)
-end sub
+' sub handleRecommendedSections()
+'     if m.getcontentTask.response.data <> invalid and m.GetcontentTask.response.data.user <> invalid and m.GetcontentTask.response.data.user.followedLiveUsers <> invalid
+'         liveChannels = buildLiveChannels(m.GetContentTask.response.data.follows.edges)
+'     end if
+'     if m.GetContentTask.response.data <> invalid and m.GetContentTask.response.data.follows <> invalid
+'         contentCollection = buildContentNodeFromShelves(m.GetContentTask.response.data.follows.edges)
+'     else
+'         for each error in m.GetContentTask.response.errors
+'             ? "RESP: "; error.message
+'         end for
+'     end if
+'     updateRowList(contentCollection)
+' end sub
 
 ' function createRowList()
 '     newRowList = createObject("RoSGNode", "RowList")

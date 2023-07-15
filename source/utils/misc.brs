@@ -110,15 +110,6 @@ function lastFocusedChild(obj as object) as object
     end if
 end function
 
-
-function message_dialog(message = "" as string)
-    return show_dialog(message, ["OK"])
-end function
-
-function option_dialog(options, message = "", defaultSelection = 0) as integer
-    return show_dialog(message, options, defaultSelection)
-end function
-
 sub setFieldTextValue(field, value)
     node = m.top.findNode(field)
     if node = invalid or value = invalid then return
@@ -278,14 +269,6 @@ function toString(input, replaceInvalid = false) as string
     end if
     return str(input)
 end function
-
-sub startMediaLoadingSpinner()
-    dialog = createObject("roSGNode", "ProgressDialog")
-    dialog.id = "invisibiledialog"
-    dialog.visible = false
-    m.scene.dialog = dialog
-    startLoadingSpinner()
-end sub
 
 function select(arr, start = invalid, finish = invalid, step_ = 1):
     if step_ = 0 then print "ValueError: slice step cannot be zero" : stop
