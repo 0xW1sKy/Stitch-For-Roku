@@ -1,10 +1,13 @@
 ' Set global constants
 sub setConstants()
     globals = m.screen.getGlobalNode()
-
+    deviceInfo = CreateObject("roDeviceInfo")
+    uiResolutionWidth = deviceInfo.GetUIResolution().width
+    scaleFactor = uiResolutionWidth / 1280
     ' Set Global Constants
     globals.addFields({
         constants: {
+            maskScaleFactor: scaleFactor
             defaultIcons: {
                 search: "pkg:/images/iconSearch.png"
                 settings: "pkg:/images/iconSettings.png"
