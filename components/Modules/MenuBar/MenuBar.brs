@@ -92,9 +92,13 @@ sub handleUserLoginResponse()
             set_user_setting("display_name", stream.display_name)
             set_user_setting("profile_image_url", stream.profile_image_url)
         end for
-        m.menuOptions.getChild(6).iconUri = get_user_setting("profile_image_url")
-        m.menuOptions.getChild(6).focusedIconUri = get_user_setting("profile_image_url")
-        m.top.updateUserIcon = false
+        for i = 0 to (m.top.menuOptions.getChildCount() - 1)
+            if m.menuOptions.getchild(i).id = "LoginPage"
+                m.menuOptions.getChild(i).iconUri = get_user_setting("profile_image_url")
+                m.menuOptions.getChild(i).focusedIconUri = get_user_setting("profile_image_url")
+                m.top.updateUserIcon = false
+            end if
+        end for
     end if
 end sub
 
