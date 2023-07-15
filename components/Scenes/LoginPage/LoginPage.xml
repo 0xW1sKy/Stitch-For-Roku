@@ -14,20 +14,20 @@
             text="LoginPageTopText"
             color="0xEFEFF1FF"
             fontSize="18"
-            fontUri="pkg:/fonts/Roobert-SemiBold.ttf" />
+            fontUri="pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf" />
         <SimpleLabel
             translation="[300,302]"
             id="code"
             text=""
             color="0xEFEFF1FF"
             fontSize="36"
-            fontUri="pkg:/fonts/JetBrainsMono-Bold.ttf" />
+            fontUri="pkg:/fonts/KlokanTechNotoSansCJK-Bold.otf" />
         <SimpleLabel
             translation="[100,402]"
             text="LoginPageBottomText"
             color="0xEFEFF1FF"
             fontSize="18"
-            fontUri="pkg:/fonts/Roobert-SemiBold.ttf" />
+            fontUri="pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf" />
     </children>
     <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
 </component>

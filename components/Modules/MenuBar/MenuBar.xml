@@ -36,7 +36,7 @@
         <field id="menuOptionsTranslation" type="vector2d" value="[15,0]"
             alias="MenuOptions.translation" />
         <field id="menuFontSize" type="int" value="20" />
-        <field id="menuFontUri" type="uri" value="pkg:/fonts/Inter-SemiBold.ttf" />
+        <field id="menuFontUri" type="uri" value="pkg:/fonts/KlokanTechNotoSansCJK-Bold.otf" />
         <field id="showSearchIcon" type="bool" value="true" />
         <field id="showSettingsIcon" type="bool" value="true" />
         <field id="showLoginIcon" type="bool" value="true" />
