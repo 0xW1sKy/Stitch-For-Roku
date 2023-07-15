@@ -10,7 +10,7 @@
           <field id="content" type="node" />
           <!-- <field id="maskSize" type="vector2d" value="[50,50]" alias="maskId.maskSize" /> -->
           <field id="focused" type="bool" value="false"
-               alias="selectionIndicator.visible, selected.visible, streamerName.visible, gameId.visible"
+               alias="selected.visible, streamerName.visible, gameId.visible"
                onChange="handleBoundingWidth" />
           <field id="translation" type="vector2d" alias="parent.translation" />
      </interface>
@@ -23,6 +23,7 @@
                <Poster
                     id="selectionIndicator"
                     uri="pkg:/images/purple_circle.png"
+                    visible="false"
                     width="52"
                     height="52"
                />

@@ -137,6 +137,7 @@ function onKeyEvent(key, press) as boolean
         if key = "up"
             if m.activeNode.id <> "GamePage" and m.activeNode.id <> "ChannelPage" and m.activeNode.id <> "VideoPlayer"
                 m.followedStreamBar.itemHasFocus = false
+                m.activeNode.setFocus(false)
                 m.menu.setFocus(true)
             end if
         end if

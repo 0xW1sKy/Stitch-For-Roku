@@ -12,4 +12,9 @@ sub handleBoundingWidth()
      else
           m.selected.width = m.gameId.localBoundingRect().width + 36
      end if
+     if m.top.focused
+          m.streamerProfile.scale = [1.1, 1.1]
+     else
+          m.streamerProfile.scale = [1, 1]
+     end if
 end sub
