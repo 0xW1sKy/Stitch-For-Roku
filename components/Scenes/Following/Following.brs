@@ -9,7 +9,7 @@ sub init()
     m.offlineList = m.top.findNode("offlineList")
     m.GetContentTask = CreateObject("roSGNode", "TwitchApiTask") ' create task for feed retrieving
     ' observe content so we can know when feed content will be parsed
-    m.GetContentTask.observeField("response", "handleRecommendedSections")
+    m.GetContentTask.observeField("response", "decideRoute")
     m.GetContentTask.request = {
         type: "getFollowingPageQuery"
     }
@@ -21,6 +21,70 @@ function TimeStamp()
     date = CreateObject("roDateTime")
     return date.AsSeconds()
 end function
+
+sub decideRoute()
+    ? "DecideRoute"; TimeStamp()
+    if get_setting("active_user") <> invalid and get_setting("active_user") <> "default"
+        ? "Route -> handleRecommendedSections"
+        handleRecommendedSections()
+    else
+        ? "Route -> handleDefaultSections"
+        handleDefaultSections()
+    end if
+end sub
+
+sub handleDefaultSections()
+    contentCollection = createObject("RoSGNode", "ContentNode")
+    if m.GetcontentTask.response.data <> invalid and m.GetcontentTask.response.data.shelves <> invalid
+        for each streamRow in m.GetcontentTask.response.data.shelves.edges
+            row = createObject("RoSGNode", "ContentNode")
+            temp_title = ""
+            try
+                for each wordblock in streamRow.node.title.localizedTitleTokens
+                    if wordblock.node.__typename = "TextToken"
+                        temp_title = Substitute("{0}{1}", temp_title, wordblock.node.text)
+                    end if
+                    if wordblock.node.__typename = "Game"
+                        temp_title = Substitute("{0}{1}", temp_title, wordblock.node.displayName)
+                    end if
+                    if wordblock.node.__typename = "BrowsableCollection"
+                        temp_title = streamRow.node.title.fallbackLocalizedTitle
+                    end if
+                end for
+            catch e
+                ? "TITLE ERROR: "; e
+                temp_title = streamRow.node.title.fallbackLocalizedTitle
+                ? "Title With Problem: "; temp_title
+            end try
+            row.title = temp_title
+            for each stream in streamRow.node.content.edges
+                streamnode = stream.node
+                ' type_name = stream.node.__typename
+                if stream.node["__typename"].toStr() <> invalid and stream.node["__typename"].toStr() = "Stream"
+                    rowItem = createObject("RoSGNode", "TwitchContentNode")
+                    rowItem.contentId = stream.node.Id
+                    rowItem.contentType = "LIVE"
+                    rowItem.previewImageURL = Substitute("https://static-cdn.jtvnw.net/previews-ttv/live_user_{0}-{1}x{2}.jpg", stream.node.broadcaster.login, "320", "180")
+                    rowItem.contentTitle = stream.node.broadcaster.broadcastSettings.title
+                    rowItem.viewersCount = stream.node.viewersCount
+                    rowItem.streamerDisplayName = stream.node.broadcaster.displayName
+                    rowItem.streamerLogin = stream.node.broadcaster.login
+                    rowItem.streamerId = stream.node.broadcaster.id
+                    rowItem.streamerProfileImageUrl = stream.node.broadcaster.profileImageURL
+                    rowItem.gameDisplayName = stream.node.game.displayName
+                    rowItem.gameBoxArtUrl = Left(stream.node.game.boxArtUrl, Len(stream.node.game.boxArtUrl) - 20) + "188x250.jpg"
+                    rowItem.gameId = stream.node.game.Id
+                    rowItem.gameName = stream.node.game.name
+                    row.appendChild(rowItem)
+                end if
+            end for
+            if row.getchildcount() > 0
+                contentCollection.appendChild(row)
+            end if
+        end for
+    end if
+    updateRowList(contentCollection)
+end sub
 
 sub handleRecommendedSections()
     ? "handleRecommendedSections: "; TimeStamp()
