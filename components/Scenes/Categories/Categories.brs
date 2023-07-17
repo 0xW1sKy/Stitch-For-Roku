@@ -59,7 +59,7 @@ sub handleRecommendedSections()
         end if
     else
         for each error in m.GetContentTask.response.errors
-            ? "RESP: "; error.message
+            ' ? "RESP: "; error.message
         end for
     end if
     updateRowList(contentCollection)

@@ -54,7 +54,7 @@ sub handleRendezvouzToken()
     ? "handle Rendezvouz token"
     if m.RendezvouzTask <> invalid
         response = m.RendezvouzTask.response
-        ? "Response "; response
+        ' ? "Response "; response
         set_user_setting("temp_device_code", response.device_code)
         m.code.text = response.user_code
         m.OauthTask = CreateObject("roSGNode", "TwitchApiTask") ' create task for feed retrieving

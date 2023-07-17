@@ -5,6 +5,7 @@
         "ropm": "^0.10.12"
     },
     "dependencies": {
+        "@npmcli/fs": "^3.1.0",
         "@rokucommunity/bslib": "^0.1.1",
         "bslib": "npm:@rokucommunity/bslib@^0.1.1"
     },

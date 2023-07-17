@@ -1,10 +1,10 @@
 sub init()
     m.videoPlayer = m.top.findNode("videoWindow")
+    m.videoPlayer.observeField("QualityChangeRequest", "onQualitySelectButtonPressed")
     ' m.videoPlayer.observeField("back", "onVideoPlayerBack")
     videoBookmarks = get_user_setting("VideoBookmarks", "")
     if videoBookmarks <> ""
         m.videoPlayer.videoBookmarks = ParseJSON(videoBookmarks)
-        ? "MainScene >> ParseJSON > " m.videoPlayer.videoBookmarks
     else
         m.videoPlayer.videoBookmarks = {}
     end if
@@ -12,7 +12,31 @@ sub init()
     m.videoPlayer.observeField("toggleChat", "onToggleChat")
     m.chatWindow = m.top.findNode("chat")
     m.chatWindow.observeField("visible", "onChatVisibilityChange")
-    ' m.chatWindow.loggedInUsername =
+end sub
+
+sub onQualitySelectButtonPressed()
+    if m.videoplayer.qualityChangeRequestflag = true
+        m.videoplayer.qualityChangeRequestFlag = false
+        vidContent = createObject("roSGNode", "ContentNode")
+        vidContent.title = m.top.contentRequested.contentTitle
+        vidContent.url = m.videoplayer.qualityChangeRequest
+        vidContent.streamFormat = m.videoPlayer.content.streamFormat
+        m.videoPlayer.video_id = m.top.contentRequested.contentId
+        m.videoPlayer.streamUrls = m.videoplayer.streamUrls
+        m.videoPlayer.streamQualities = m.videoplayer.streamQualities
+        m.videoPlayer.streamContentIds = m.videoplayer.streamContentIds
+        m.videoPlayer.streamBitrates = m.videoplayer.streamBitrates
+        m.videoPlayer.streamStickyHttpRedirects = m.videoplayer.streamStickyHttpRedirects
+        m.videoPlayer.channelUsername = m.top.contentRequested.streamerDisplayName
+        m.videoPlayer.channelAvatar = m.top.contentRequested.streamerProfileImageUrl
+        m.videoPlayer.videoTitle = m.top.contentRequested.contentTitle
+        m.videoplayer.content = vidContent
+        ' m.videoplayer.visible = true
+        ' m.videoplayer.setFocus(true)
+        ' m.videoplayer.enableCookies()
+        checkBookmarks()
+        m.videoplayer.control = "play"
+    end if
 end sub
 
 sub onToggleChat()
@@ -37,7 +61,6 @@ end sub
 
 
 function handleContent()
-    ?"Content Requested!"
     if m.top.contentRequested.contentType = "CLIP"
         playClip()
     else
@@ -67,7 +90,6 @@ function handleContent()
 end function
 
 function handleResponse()
-    ? "handleResponse"
     if m.top.contentRequested.contentType = "VOD"
         usherUrl = "https://usher.ttvnw.net/vod/" + m.gettwitchdatatask.response.data.video.id + ".m3u8?playlist_include_framerate=true&allow_source=true&player_type=pulsar&player_backend=mediaplayer&nauth=" + m.gettwitchdatatask.response.data.video.playbackAccessToken.value.EncodeUri() + "&nauthsig=" + m.gettwitchdatatask.response.data.video.playbackAccessToken.signature
     else if m.top.contentRequested.contentType = "LIVE"
@@ -86,10 +108,9 @@ function handleResponse()
         method: "GET"
     }
     m.usherRequestTask.control = "RUN"
-    ? "got this far"
 end function
+
 function handleUsherResponse()
-    ? "handleUsherResponse"
     rsp = m.usherRequestTask.response.data
     list = rsp.Split(chr(10))
     first_stream_link = ""
@@ -150,6 +171,10 @@ function playClip()
     vidContent.title = m.top.contentRequested.contentTitle
     vidContent.url = Left(m.top.contentRequested.previewImageUrl, Len(m.top.contentRequested.previewImageUrl) - 20) + ".mp4"
     vidContent.streamFormat = "mp4"
+    m.videoPlayer.video_id = m.top.contentRequested.contentId
+    m.videoPlayer.streamUrls = [vidContent.url]
+    m.videoPlayer.streamQualities = ["HD"]
+    m.videoPlayer.streamContentIds = ["Original"]
     m.videoPlayer.channelUsername = m.top.contentRequested.streamerDisplayName
     m.videoPlayer.channelAvatar = m.top.contentRequested.streamerProfileImageUrl
     m.videoPlayer.videoTitle = m.top.contentRequested.contentTitle
@@ -158,6 +183,7 @@ function playClip()
     m.videoplayer.setFocus(true)
     m.videoplayer.enableCookies()
     m.chatWindow.visible = false
+    checkBookmarks()
     m.videoplayer.control = "play"
 end function
 
@@ -166,7 +192,12 @@ function playVideo(data)
     vidContent.title = m.top.contentRequested.contentTitle
     vidContent.url = data.streamUrls[0]
     vidContent.streamFormat = "hls"
-    ? "Pause"
+    m.videoPlayer.video_id = m.top.contentRequested.contentId
+    m.videoPlayer.streamUrls = data.streamUrls
+    m.videoPlayer.streamQualities = data.streamQualities
+    m.videoPlayer.streamContentIds = data.streamContentIds
+    m.videoPlayer.streamBitrates = data.streamBitrates
+    m.videoPlayer.streamStickyHttpRedirects = data.streamStickyHttpRedirects
     m.videoPlayer.channelUsername = m.top.contentRequested.streamerDisplayName
     m.videoPlayer.channelAvatar = m.top.contentRequested.streamerProfileImageUrl
     m.videoPlayer.videoTitle = m.top.contentRequested.contentTitle
@@ -174,6 +205,7 @@ function playVideo(data)
     m.videoplayer.visible = true
     m.videoplayer.setFocus(true)
     m.videoplayer.enableCookies()
+    checkBookmarks()
     m.videoplayer.control = "play"
     ' I'm too tired to do this better, but channel_id needs to be set before channel
     m.chatWindow.channel_id = m.top.contentRequested.streamerId
@@ -186,13 +218,21 @@ function playVideo(data)
     end if
 end function
 
-
+function checkBookmarks()
+    ' ? "Check the bookmark"
+    if m.videoPlayer.video_id <> invalid
+        ' ?"video id is valid: "; m.videoPlayer.video_id
+        if m.videoPlayer.videoBookmarks.DoesExist(m.videoPlayer.video_id)
+            ' ? "Jump To Position From Bookmarks > " m.videoPlayer.videoBookmarks[m.videoPlayer.video_id]
+            m.videoPlayer.seek = Val(m.videoPlayer.videoBookmarks[m.videoPlayer.video_id])
+        end if
+    end if
+end function
 
 function onKeyEvent(key as string, press as boolean) as boolean
     if press
         ? "Home Scene Key Event: "; key
         if key = "back"
-            m.chatWindow.control = "stop"
             m.top.backPressed = true
             return true
         end if

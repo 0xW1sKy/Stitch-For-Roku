@@ -71,7 +71,8 @@ function invokerest(link as string) as object
         method: "GET"
     })
     response_string = ParseJSON(req.send())
-    return ParseJson(response_string)
+    ' ? "responseString: "; response_string
+    return response_string
 end function
 
 sub getChannel7tvEmotes(channel_id)
@@ -176,7 +177,6 @@ function main()
     ? "[EmoteJob] - getAllEmotes"
     getTwitchBadges()
     channel_id = m.top.channel_id
-    ? "channel id:" channel_id
     getChannelTTVEmotes(channel_id)
     getChannelTTVFrankerEmotes(channel_id)
     getChannel7tvEmotes(channel_id)

@@ -23,7 +23,7 @@ sub onVideoChange()
 end sub
 
 sub onEnterChannel()
-    ? "Chat >> onEnterChannel > " m.top.channel
+    ' ? "Chat >> onEnterChannel > " m.top.channel
     m.chat = CreateObject("roSGNode", "ChatJob")
     m.chat.observeField("nextComment", "onNewComment")
     m.chat.observeField("clientComment", "onNewComment")
@@ -32,6 +32,7 @@ sub onEnterChannel()
     m.chat.control = "run"
     m.EmoteJob = CreateObject("roSGNode", "EmoteJob")
     m.EmoteJob.channel_id = m.top.channel_id
+    m.EmoteJob.channel = m.top.channel
     m.EmoteJob.control = "run"
 end sub
 
@@ -378,11 +379,9 @@ sub onNewComment()
 
     group.appendChild(username)
     m.chatPanel.appendChild(group)
-    ? "tran: " m.translation + y_translation
-    if m.translation + y_translation > 700 ' ? This one maybe?
+    if m.translation + y_translation > 700
         for each chatmessage in m.chatPanel.getChildren(-1, 0)
-            if chatmessage.translation[1] - y_translation < -150 ' ? if not, its this one
-                ? "y_translation: "; y_translation
+            if chatmessage.translation[1] - y_translation < -150 ' Wait until it's off the screen to remove it.
                 m.chatPanel.removeChild(chatmessage)
             else
                 chatmessage.translation = [0, (chatmessage.translation[1] - y_translation)]

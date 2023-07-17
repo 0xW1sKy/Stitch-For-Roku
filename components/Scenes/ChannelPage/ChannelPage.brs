@@ -87,12 +87,11 @@ sub updateChannelInfo()
     m.avatar.uri = m.GetcontentTask.response.data.channel.profileImageUrl
     channelContent = buildContentNodeFromShelves(m.GetcontentTask.response.data)
     updateRowList(channelContent)
-    ? "Resp: "; m.GetcontentTask.response
-    ? "Resp: "; m.GetcontentTask.response.data
+    ' ? "Resp: "; m.GetcontentTask.response
+    ' ? "Resp: "; m.GetcontentTask.response.data
 end sub
 
 function buildContentNodeFromShelves(inputData)
-    ? "pause"
     shelves = inputData.channel.videoShelves.edges
     contentCollection = createObject("RoSGNode", "ContentNode")
     if inputData.channel.stream <> invalid
@@ -174,7 +173,6 @@ function updateRowList(contentCollection)
 end function
 
 function handleItemSelected()
-    ? "Item Selected"
     selectedRow = m.rowlist.content.getchild(m.rowlist.rowItemSelected[0])
     selectedItem = selectedRow.getChild(m.rowlist.rowItemSelected[1])
     m.top.playContent = true

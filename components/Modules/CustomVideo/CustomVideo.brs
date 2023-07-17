@@ -7,16 +7,13 @@ function init()
     m.progressDot = m.top.findNode("progressDot")
     m.timeProgress = m.top.findNode("timeProgress")
     m.timeDuration = m.top.findNode("timeDuration")
-    'm.controlSelectRect = m.top.findNode("controlSelectRect")
     m.controlButton = m.top.findNode("controlButton")
     m.timeTravelButton = m.top.findNode("timeTravelButton")
     m.messagesButton = m.top.findNode("messagesButton")
     m.qualitySelectButton = m.top.findNode("qualitySelectButton")
     m.QualityDialog = m.top.findNode("QualityDialog")
     m.glow = m.top.findNode("bg-glow")
-    'm.backButton = m.top.findNode("backButton")
     m.timeTravelRect = m.top.findNode("timeTravelRect")
-    ' m.top.observeField("position", "onVideoPositionChange")
     m.currentProgressBarState = 0
     m.currentPositionSeconds = 0
     m.currentPositionUpdated = false
@@ -60,11 +57,6 @@ function init()
 
     deviceInfo = CreateObject("roDeviceInfo")
     uiResolutionWidth = deviceInfo.GetUIResolution().width
-
-    ' if uiResolutionWidth = 1920
-    '     m.top.findNode("profileImageMask").maskSize = [75, 75]
-    ' end if
-
     m.sec = createObject("roRegistrySection", "VideoSettings")
 
     m.buttonHoldTimer = createObject("roSGNode", "Timer")
@@ -76,8 +68,6 @@ function init()
     m.buttonHeld = invalid
     m.scrollInterval = 10
     m.top.streamLayoutMode = 0
-    ' m.progressBar.state = 2
-
 end function
 
 
@@ -108,32 +98,28 @@ end function
 
 sub onQualityButtonSelect()
     m.QualityDialog.visible = false
+    m.QualityDialog.setFocus(false)
     resetProgressBar()
-    ? "Pressed: "; m.QualityDialog.buttonSelected
     m.progressBar.getParent().setFocus(true)
     m.top.control = "pause"
     m.top.qualityChangeRequestFlag = true
     m.top.qualityChangeRequest = m.top.STREAMURLS[m.QualityDialog.buttonSelected]
-    m.top.back = true
 end sub
 
 sub onQualitySelectButtonPressed()
-
-    ' set up the dialog
-
-    m.QualityDialog.title = "Please Choose Your Video Quality"
-    m.QualityDialog.buttons = m.top.STREAMCONTENTIDS
-    m.QualityDialog.observeFieldScoped("buttonSelected", "onQualityButtonSelect")
-    m.QualityDialog.visible = true
-    m.lastFocusedchild = m.top.focusedChild
-    m.QualityDialog.setFocus(true)
-    ' display the dialog
+    if m.top.STREAMCONTENTIDS <> invalid and m.top.STREAMCONTENTIDS.count() > 1
+        m.QualityDialog.title = "Please Choose Your Video Quality"
+        m.QualityDialog.buttons = m.top.STREAMCONTENTIDS
+        m.QualityDialog.observeFieldScoped("buttonSelected", "onQualityButtonSelect")
+        m.QualityDialog.visible = true
+        m.lastFocusedchild = m.top.focusedChild
+        m.QualityDialog.setFocus(true)
+    end if
 end sub
 
 sub onChatVisibilityChange()
     if m.top.chatIsVisible
         m.progressBarBase.width = 950
-        'm.progressBarProgress.width = 810
         m.glow.translation = [534, 32]
         m.timeTravelButton.translation = [390, 51]
         m.controlButton.translation = [476, 53]
@@ -141,7 +127,6 @@ sub onChatVisibilityChange()
         m.timeDuration.translation = [950, 61]
     else
         m.progressBarBase.width = 1200
-        'm.progressBarProgress.width = 1200
         m.glow.translation = [692, 32]
         m.timeTravelButton.translation = [548, 51]
         m.controlButton.translation = [634, 53]
@@ -149,21 +134,14 @@ sub onChatVisibilityChange()
         m.timeDuration.translation = [1198, 61]
     end if
 end sub
-' m.controlButton.translation = [634, 53]
+
 sub onVideoStateChange()
-    ? "State is: "; m.top.state
-    ' if m.top.state = "buffering"
-    ' end if
     if m.top.state = "playing"
-        ' showSpinner()
+        m.top.setFocus(true)
     end if
 end sub
 
 sub onButtonHold()
-    ? "Detected Button Hold"
-    ? "button held: "; m.buttonHeld
-    ? "scroll interval: "; m.scrollInterval
-    ? "currentPositionSeconds: "; m.currentPositionSeconds
     if m.buttonHeld <> invalid
         if m.buttonHeld = "right"
             m.currentPositionSeconds += m.scrollInterval
@@ -210,16 +188,13 @@ sub onButtonHold()
             end if
         end if
     end if
-    ? "Ending Seconds; "; m.currentPositionSeconds
-    ? "Ending Duration; "; m.top.duration
-    ? "Ending Interval; "; m.scrollInterval
     m.timeProgress.text = convertToReadableTimeFormat(m.currentPositionSeconds)
     m.timeDuration.text = convertToReadableTimeFormat(m.top.duration)
     m.scrollInterval += 10
 end sub
 
 function convertToReadableTimeFormat(time) as string
-    time = Int(time) '+ m.top.streamDurationSeconds
+    time = Int(time)
     if time < 3600
         seconds = Int((time mod 60))
         if seconds < 10
@@ -267,8 +242,6 @@ sub showThumbnail()
         else
             m.thumbnailImage.translation = [(-thumbnailCol * m.top.thumbnailInfo.width) * 0.66, (-thumbnailRow * m.top.thumbnailInfo.height) * 0.66]
         end if
-        '? thumbnailPosOverall " " thumbnailPosCurrent
-        '? m.currentPositionSeconds " " m.top.thumbnailInfo.interval " " m.top.thumbnailInfo.cols " " m.top.thumbnailInfo.width " " m.top.thumbnailInfo.height
         if m.top.thumbnailInfo.info_url <> invalid and m.top.thumbnailInfo.thumbnail_parts[Int(thumbnailPosOverall / thumbnailsPerPart)] <> invalid
             m.thumbnailImage.uri = m.top.thumbnailInfo.info_url + m.top.thumbnailInfo.thumbnail_parts[Int(thumbnailPosOverall / thumbnailsPerPart)]
         end if
@@ -319,10 +292,6 @@ function saveVideoBookmark() as void
         end if
 
         m.top.videoBookmarks = tempBookmarks
-
-        ? "CustomVideo >> videoBookmarks > " videoBookmarks
-
-        'sec = createObject("roRegistrySection", "VideoSettings")
         set_user_setting("VideoBookmarks", videoBookmarks)
     end if
 end function
@@ -344,7 +313,6 @@ sub onChannelInfoChange()
 end sub
 
 function onKeyEvent(key, press) as boolean
-    ?"KEY: "; key press
     handled = false
     if press
         if key = "up"
@@ -355,15 +323,7 @@ function onKeyEvent(key, press) as boolean
                 h = m.controlButton.height
                 m.glow.translation = [m.controlButton.translation[0] - 30 + w / 2, m.controlButton.translation[1] - 30 + h / 2]
                 m.controlButton.blendColor = "0xBD00FFFF"
-                'm.controlSelectRect.visible = true
             else if m.currentProgressBarState = 1
-                ' m.currentProgressBarState = 5
-                ' m.progressBarBase.height = 2
-                ' m.progressBarProgress.height = 2
-                ' m.controlButton.blendColor = "0xFFFFFFFF"
-                ' m.backButton.blendColor = "0xBD00FFFF"
-                ' 'm.controlSelectRect.visible = false
-                ' m.thumbnailImage.visible = true
             else if m.currentProgressBarState = 2
                 m.currentProgressBarState = 0
                 m.progressBarBase.height = 2
@@ -371,9 +331,6 @@ function onKeyEvent(key, press) as boolean
                 m.progressBar.visible = false
                 m.thumbnailImage.visible = false
             else if m.currentProgressBarState = 3
-                ' m.currentProgressBarState = 4
-                ' m.timeTravelButton.blendColor = "0xFFFFFFFF"
-                ' m.messagesButton.blendColor = "0xBD00FFFF"
             else if m.currentProgressBarState = 6
                 number = (Int(Val(m.timeTravelTimeSlot[m.focusedTimeSlot].getChild(0).text)) + 1)
                 if m.focusedTimeSlot = 2 or m.focusedTimeSlot = 4
@@ -529,14 +486,12 @@ function onKeyEvent(key, press) as boolean
                 m.currentProgressBarState = 0
                 m.timeTravelRect.visible = false
                 m.progressBar.visible = false
-                'm.controlSelectRect.visible = false
                 m.currentPositionUpdated = false
                 m.thumbnailImage.uri = ""
                 saveVideoBookmark()
                 m.top.thumbnailInfo = invalid
             end if
         else if key = "OK"
-            ? "CustomVideo >> OK"
             if m.currentProgressBarState = 1
                 if m.top.state = "paused"
                     m.top.control = "resume"
@@ -552,7 +507,6 @@ function onKeyEvent(key, press) as boolean
                 m.controlButton.uri = "pkg:/images/pause.png"
                 m.currentPositionUpdated = false
                 m.currentProgressBarState = 1
-                'm.progressBarFocused = not m.progressBarFocused
                 return true
             else if m.currentProgressBarState = 3
                 m.currentProgressBarState = 6
@@ -570,12 +524,10 @@ function onKeyEvent(key, press) as boolean
                 m.currentPositionSeconds = 0
                 m.currentProgressBarState = 0
                 m.progressBar.visible = false
-                'm.controlSelectRect.visible = false
                 m.currentPositionUpdated = false
                 m.thumbnailImage.uri = ""
                 saveVideoBookmark()
                 m.top.thumbnailInfo = invalid
-                'm.backButton.blendColor = "0xFFFFFFFF"
                 m.top.back = true
                 return true
             else if m.currentProgressBarState = 6
@@ -601,9 +553,7 @@ function onKeyEvent(key, press) as boolean
             else if m.currentProgressBarState = 8
                 onQualitySelectButtonPressed()
             end if
-            'return true
         else if key = "fastforward"
-            ? "In Fast Forward"
             m.progressBar.visible = true
             w = m.controlButton.width
             h = m.controlButton.height
@@ -611,17 +561,13 @@ function onKeyEvent(key, press) as boolean
             m.controlButton.blendColor = "0xBD00FFFF"
             m.currentProgressBarState = 2
             if m.currentPositionUpdated = false
-                ? "In Fast Forward currentPositionUpdated = False"
                 m.currentPositionSeconds = m.top.position
                 m.currentPositionUpdated = true
                 m.top.control = "pause"
                 m.controlButton.uri = "pkg:/images/play.png"
             end if
             m.currentPositionSeconds += 10
-            ? "Position"; m.currentPositionSeconds
-            ? "Duration: "; m.top.duration
             if m.currentPositionSeconds > m.top.duration
-                ?"This should be true"
                 m.currentPositionSeconds = m.top.duration
             end if
             m.progressBarProgress.width = m.progressBarBase.width * (m.currentPositionSeconds / m.top.duration)
@@ -645,8 +591,6 @@ function onKeyEvent(key, press) as boolean
             end if
             m.buttonHeld = "right"
             m.buttonHoldTimer.control = "start"
-            ' m.buttonHeld = "right"
-            ' m.buttonHoldTimer.control = "start"
         else if key = "rewind"
             m.progressBar.visible = true
             w = m.controlButton.width
@@ -677,7 +621,6 @@ function onKeyEvent(key, press) as boolean
 
                 m.progressBarProgress.width = m.progressBarBase.width * (m.currentPositionSeconds / m.top.duration)
                 m.progressDot.translation = [m.progressBarBase.width * (m.currentPositionSeconds / m.top.duration) + 33, 77]
-                'm.thumbnails.translation = [m.progressBarProgress.width - m.top.thumbnailInfo.width / 2, -150]
                 m.timeProgress.text = convertToReadableTimeFormat(m.currentPositionSeconds)
                 m.timeDuration.text = convertToReadableTimeFormat(m.top.duration)
                 if m.top.thumbnailInfo.width <> invalid
@@ -692,7 +635,6 @@ function onKeyEvent(key, press) as boolean
                 m.controlButton.uri = "pkg:/images/pause.png"
                 m.currentPositionUpdated = false
                 m.currentProgressBarState = 1
-                'm.progressBarFocused = not m.progressBarFocused
             else
                 if m.top.state = "paused"
                     m.top.control = "resume"
@@ -707,7 +649,6 @@ function onKeyEvent(key, press) as boolean
         end if
     else if not press
         if key = "rewind" or key = "fastforward"
-            ?"key: " key " press: " press
             m.scrollInterval = 10
             m.buttonHeld = invalid
             m.buttonHoldTimer.control = "stop"
