@@ -10,6 +10,7 @@
     <script type="text/brightscript" uri="LoginPage.brs" />
     <children>
         <SimpleLabel
+            id="topText"
             translation="[100,172]"
             text="LoginPageTopText"
             color="0xEFEFF1FF"
@@ -23,11 +24,13 @@
             fontSize="36"
             fontUri="pkg:/fonts/KlokanTechNotoSansCJK-Bold.otf" />
         <SimpleLabel
+            id="bottomText"
             translation="[100,402]"
             text="LoginPageBottomText"
             color="0xEFEFF1FF"
             fontSize="18"
             fontUri="pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf" />
+        <ButtonGroup id="buttonGroup" visible="false" translation="[100,172]" />
     </children>
     <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
 </component>

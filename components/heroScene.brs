@@ -59,14 +59,25 @@ end function
 
 sub onLoginFinished()
     m.menu.updateUserIcon = true
+    if get_user_setting("device_code") = invalid
+        m.getDeviceCodeTask = CreateObject("roSGNode", "TwitchApiTask")
+        m.getDeviceCodeTask.observeField("response", "handleDeviceCode")
+        m.getDeviceCodeTask.request = {
+            type: "getRendezvouzToken"
+        }
+        m.getDeviceCodeTask.functionName = m.getDeviceCodeTask.request.type
+        m.getDeviceCodeTask.control = "run"
+    end if
 end sub
 
 function onMenuSelection()
     refreshFollowBar()
-    if m.activeNode <> invalid
-        if m.activeNode.id.toStr() <> m.menu.focusedChild.focusedChild.id.toStr()
-            m.top.removeChild(m.activeNode)
-            m.activeNode = invalid
+    if m.menu.focusedChild <> invalid
+        if m.activeNode <> invalid
+            if m.activeNode.id.toStr() <> m.menu.focusedChild.focusedChild.id.toStr()
+                m.top.removeChild(m.activeNode)
+                m.activeNode = invalid
+            end if
         end if
     end if
     if m.activeNode = invalid

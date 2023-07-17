@@ -1,5 +1,9 @@
 sub init()
+    m.top.observeField("itemHasFocus", "onGetfocus")
     m.code = m.top.findNode("code")
+    m.loginText = m.top.findNode("topText")
+    m.bottomText = m.top.findNode("bottomText")
+    m.buttonGroup = m.top.findNode("buttonGroup")
     RunContentTask()
 end sub
 
@@ -30,7 +34,7 @@ sub handleUserLogin()
         ' Parent = heroScene, child 1 = MenuBar, child 3 = ButtonGroup, child 6 = loginIconButton
         m.top.finished = true
     end if
-    m.top.backPressed = true
+    RunContentTask()
 end sub
 
 function getUserLogin()
@@ -64,16 +68,56 @@ sub handleRendezvouzToken()
     end if
 end sub
 ' m.top.finished = true
+sub onButtonSelected()
+    ? "buttonSelected: "; m.buttonGroup.buttonSelected
+    if m.buttonGroup.buttonSelected = 0
+        active_user = get_setting("active_user", "default")
+        if active_user <> "default"
+            NukeRegistry(active_user)
+            set_setting("active_user", "default")
+            m.top.finished = true
+            RunContentTask()
+        end if
+    end if
+end sub
+
+sub onGetFocus()
+    ? "got focus"
+    if m.top.focusedChild = invalid
+        if m.buttonGroup.visible
+            m.buttonGroup.setFocus(true)
+        end if
+        ' else if m.rowlist.focusedchild.id = "exampleRowList"
+        '     m.rowlist.focusedChild.setFocus(true)
+    end if
+
+end sub
+
 sub RunContentTask()
-    ? "[LoginPage] - RunContentTask"
-    m.RendezvouzTask = CreateObject("roSGNode", "TwitchApiTask") ' create task for feed retrieving
-    ' observe content so we can know when feed content will be parsed
-    m.RendezvouzTask.observeField("response", "handleRendezvouzToken")
-    m.RendezvouzTask.request = {
-        type: "getRendezvouzToken"
-    }
-    m.RendezvouzTask.functionName = m.RendezvouzTask.request.type
-    m.RendezvouzTask.control = "run"
+    ? "active User: "; get_setting("active_user", "default")
+    if get_setting("active_user", "default") <> "default"
+        m.buttonGroup.observeField("buttonSelected", "onButtonSelected")
+        m.buttonGroup.buttons = [tr("Log Out")]
+        m.code.visible = false
+        m.loginText.visible = false
+        m.bottomText.visible = false
+        m.buttonGroup.visible = true
+        m.buttonGroup.setFocus(true)
+    else
+        ? "[LoginPage] - RunContentTask"
+        m.code.visible = true
+        m.loginText.visible = true
+        m.bottomText.visible = true
+        m.buttonGroup.visible = false
+        m.RendezvouzTask = CreateObject("roSGNode", "TwitchApiTask") ' create task for feed retrieving
+        ' observe content so we can know when feed content will be parsed
+        m.RendezvouzTask.observeField("response", "handleRendezvouzToken")
+        m.RendezvouzTask.request = {
+            type: "getRendezvouzToken"
+        }
+        m.RendezvouzTask.functionName = m.RendezvouzTask.request.type
+        m.RendezvouzTask.control = "run"
+    end if
 end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
