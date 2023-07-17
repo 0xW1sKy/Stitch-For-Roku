@@ -36,32 +36,33 @@ sub handleRecommendedSections()
         row.title = tr("followedLiveUsers")
         first = true
         itemsPerRow = 3
-        for i = 0 to (m.GetcontentTask.response.data.user.followedLiveUsers.edges.count() - 1) step 1
+        liveFollows = []
+        for each liveUser in m.GetcontentTask.response.data.user.followedLiveUsers.edges
+            stream = liveUser.node.stream
+            rowItem = createObject("RoSGNode", "TwitchContentNode")
+            rowItem.contentId = stream.Id
+            rowItem.contentType = "LIVE"
+            rowItem.previewImageURL = Substitute("https://static-cdn.jtvnw.net/previews-ttv/live_user_{0}-{1}x{2}.jpg", stream.broadcaster.login, "320", "180")
+            rowItem.contentTitle = stream.broadcaster.broadcastSettings.title
+            rowItem.viewersCount = stream.viewersCount
+            rowItem.streamerDisplayName = stream.broadcaster.displayName
+            rowItem.streamerLogin = stream.broadcaster.login
+            rowItem.streamerId = stream.broadcaster.id
+            rowItem.streamerProfileImageUrl = stream.broadcaster.profileImageURL
+            rowItem.gameDisplayName = stream.game.displayName
+            rowItem.gameBoxArtUrl = Left(stream.game.boxArtUrl, Len(stream.game.boxArtUrl) - 20) + "188x250.jpg"
+            rowItem.gameId = stream.game.Id
+            rowItem.gameName = stream.game.name
+            liveFollows.push(rowItem)
+        end for
+        liveFollows.sortBy("streamerLogin")
+        for i = 0 to (liveFollows.count() - 1) step 1
             if first
                 first = false
             else if i mod itemsPerRow = 0
                 row = createObject("RoSGNode", "ContentNode")
             end if
-            ' for each stream in m.GetcontentTask.response.data.user.followedLiveUsers.edges
-            stream = m.GetcontentTask.response.data.user.followedLiveUsers.edges[i].node.stream
-            ' type_name = stream.node.__typename
-            if stream["__typename"].toStr() <> invalid and stream["__typename"].toStr() = "Stream"
-                rowItem = createObject("RoSGNode", "TwitchContentNode")
-                rowItem.contentId = stream.Id
-                rowItem.contentType = "LIVE"
-                rowItem.previewImageURL = Substitute("https://static-cdn.jtvnw.net/previews-ttv/live_user_{0}-{1}x{2}.jpg", stream.broadcaster.login, "320", "180")
-                rowItem.contentTitle = stream.broadcaster.broadcastSettings.title
-                rowItem.viewersCount = stream.viewersCount
-                rowItem.streamerDisplayName = stream.broadcaster.displayName
-                rowItem.streamerLogin = stream.broadcaster.login
-                rowItem.streamerId = stream.broadcaster.id
-                rowItem.streamerProfileImageUrl = stream.broadcaster.profileImageURL
-                rowItem.gameDisplayName = stream.game.displayName
-                rowItem.gameBoxArtUrl = Left(stream.game.boxArtUrl, Len(stream.game.boxArtUrl) - 20) + "188x250.jpg"
-                rowItem.gameId = stream.game.Id
-                rowItem.gameName = stream.game.name
-                row.appendChild(rowItem)
-            end if
+            row.appendChild(liveFollows[i])
             appended = false
             if row.getChildCount() = itemsPerRow
                 contentCollection.appendChild(row)
@@ -78,15 +79,10 @@ sub handleRecommendedSections()
         row.title = tr("followedOfflineUsers")
         first = true
         itemsPerRow = 6
-        m.GetcontentTask.response.data.user.follows.edges.sortBy("node.login")
-        for i = 0 to (m.GetcontentTask.response.data.user.follows.edges.count() - 1) step 1
-            ? "OfflineSection Start: "; TimeStamp()
-            if first
-                first = false
-            else if i mod itemsPerRow = 0
-                row = createObject("RoSGNode", "ContentNode")
-            end if
-            stream = m.GetcontentTask.response.data.user.follows.edges[i]
+        ? "OfflineSection Start: "; TimeStamp()
+        streams = []
+        ? "OfflineSection ContentStart: "; TimeStamp()
+        for each stream in m.GetcontentTask.response.data.user.follows.edges
             try
                 rowItem = createObject("RoSGNode", "TwitchContentNode")
                 rowItem.contentId = stream.node.Id
@@ -102,11 +98,20 @@ sub handleRecommendedSections()
                 ' rowItem.gameBoxArtUrl = Left(stream.node.game.boxArtUrl, Len(stream.node.game.boxArtUrl) - 20) + "188x250.jpg"
                 ' rowItem.gameId = stream.node.game.Id
                 ' rowItem.gameName = stream.node.game.name
-                row.appendChild(rowItem)
+                streams.push(rowItem)
             catch e
                 ? "error: "; e
             end try
-            ' end if
+        end for
+        ? "OfflineSection ContentEnd: "; TimeStamp()
+        streams.sortBy("streamerLogin")
+        for i = 0 to (streams.count() - 1) step 1
+            if first
+                first = false
+            else if i mod itemsPerRow = 0
+                row = createObject("RoSGNode", "ContentNode")
+            end if
+            row.appendChild(streams[i])
             appended = false
             if row.getChildCount() = itemsPerRow
                 contentCollection.appendChild(row)

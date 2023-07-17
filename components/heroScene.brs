@@ -91,11 +91,9 @@ end sub
 sub onContentSelected()
     if m.activeNode.contentSelected.contentType = "GAME"
         id = "GamePage"
-    end if
-    if m.activeNode.contentSelected.contentType = "LIVE" or m.activeNode.contentSelected.contentType = "VOD"
+    else if m.activeNode.contentSelected.contentType = "LIVE" or m.activeNode.contentSelected.contentType = "VOD" or m.activeNode.contentSelected.contentType = "USER"
         id = "ChannelPage"
-    end if
-    if m.activeNode.playContent = true
+    else if m.activeNode.playContent = true
         id = "VideoPlayer"
     end if
     content = m.activeNode.contentSelected
