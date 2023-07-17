@@ -2,9 +2,9 @@ sub init()
     m.chatPanel = m.top.findNode("chatPanel")
     m.keyboard = m.top.findNode("keyboard")
     m.chatButton = m.top.findNode("chatButton")
-    m.translation = 0
-    ' m.top.observeField("visible", "onInvisible")
-    ' m.chat.control = "run"
+    ' determines how far down the screen the first message will appear
+    ' set to 700 to have first message at bottom of screen.
+    m.translation = 700
 end sub
 
 sub onInvisible()
@@ -378,8 +378,6 @@ sub onNewComment()
 
     group.appendChild(username)
     m.chatPanel.appendChild(group)
-    ' TODO: make chat scroll a lot further off screen to turn it into an infinite scroll experience
-    ' TODO: this is to stop blocks of text from disappearing when they reach top of screen
     ? "tran: " m.translation + y_translation
     if m.translation + y_translation > 700 ' ? This one maybe?
         for each chatmessage in m.chatPanel.getChildren(-1, 0)
