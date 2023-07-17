@@ -144,12 +144,16 @@ function main()
                             first = 0
                         end if
                     end if
-                    if sendWaitingMessage
-                        if commentAge = 30
-                            sendWaitingMessage = false
-                            m.top.nextComment = "display-name=System;user-type= :test!test@test.tmi.twitch.tv PRIVMSG #test :ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream  " ' whitespace at end is removed by comment parser
-                        else
-                            m.top.nextComment = queue[0]
+                    if sendWaitingMessage <> invalid
+                        if sendWaitingMessage = true
+                            if commentAge = 30
+                                sendWaitingMessage = false
+                                m.top.nextComment = "display-name=System;user-type= :test!test@test.tmi.twitch.tv PRIVMSG #test :ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream  " ' whitespace at end is removed by comment parser
+                            else
+                                if queue[0] <> invalid
+                                    m.top.nextComment = queue[0]
+                                end if
+                            end if
                         end if
                     end if
                 end if
