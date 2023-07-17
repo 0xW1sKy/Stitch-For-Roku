@@ -7,7 +7,7 @@
     <script type="text/brightscript" uri="CirclePoster.brs" />
     <interface>
         <field id="itemContent" type="node" onChange="showcontent" />
-        <field id="maskUri" type="uri" value="pkg:/images/profile-mask-1000.png" alias="exampleMaskGroup.maskuri" />
+        <field id="maskUri" type="uri" value="pkg:/images/profile-mask-540.png" alias="exampleMaskGroup.maskuri" />
         <field id="width" type="integer" alias="examplePoster.width" />
         <field id="height" type="integer" alias="examplePoster.height" />
         <field id="uri" type="uri" alias="examplePoster.uri" onChange="updateMask" />
@@ -16,12 +16,12 @@
     </interface>
     <children>
         <MaskGroup
-            id="MaskGroup2" maskUri="pkg:/images/profile-mask-1000.png" visible="true">
-            <Poster id="outline" uri="pkg:/images/profile-mask-1000-white.png" blendColor="0xFFFFFFFF" width="50" height="50" visible="false" />
+            id="MaskGroup2" maskUri="pkg:/images/profile-mask-540.png" visible="true">
+            <Poster id="outline" uri="pkg:/images/profile-mask-540-white.png" blendColor="0xFFFFFFFF" width="50" height="50" visible="false" />
         </MaskGroup>
         <MaskGroup
             id="exampleMaskGroup">
-            <Poster id="background" uri="pkg:/images/profile-mask-1000.png" width="50" height="50" />
+            <Poster id="background" uri="pkg:/images/profile-mask-540.png" width="50" height="50" />
             <Poster
                 id="examplePoster"
             />

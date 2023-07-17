@@ -11,7 +11,6 @@
     <script type="text/brightscript" uri="VideoItem.brs" />
     <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
     <children>
-
         <Poster
             id="itemPoster"
             height="180"
@@ -25,15 +24,16 @@
                 height="25"
                 width="50"
                 translation="[5,5]" />
-            <Rectangle
-                id="itemMask"
-                color="0x0e0e10ff"
-                visible="false"
-                opacity="0.75"
-                width="512"
-                height="288"
-                scaleRotateCenter="[ 256.0, 144.0 ]" />
         </Poster>
+        <CirclePoster id="circlePoster" height="150" width="150" visible="false" />
+        <Rectangle
+            id="itemMask"
+            color="0x0e0e10ff"
+            visible="false"
+            opacity="0.75"
+            width="512"
+            height="288"
+            scaleRotateCenter="[ 256.0, 144.0 ]" />
         <EmojiLabel
             id="itemLabel"
             height="30"

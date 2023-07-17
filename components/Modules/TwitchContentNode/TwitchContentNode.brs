@@ -15,6 +15,11 @@ function updateViewersDisplay()
     m.top.viewersDisplay = Substitute("{0} {1}", numberToText(m.top.viewersCount), suffix)
 end function
 
+function updateFollowerDisplay()
+    suffix = tr("Followers")
+    m.top.followerDisplay = Substitute("{0} {1}", numberToText(m.top.followerCount), suffix)
+end function
+
 sub updateRelativePublishDate()
     m.top.relativePublishDate = getRelativeTimePublished(m.top.datePublished)
 end sub

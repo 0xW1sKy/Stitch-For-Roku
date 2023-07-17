@@ -6,6 +6,7 @@ end sub
 
 sub showcontent()
     m.itemposter = m.top.findNode("itemPoster")
+    m.circlePoster = m.top.findNode("circlePoster")
     m.liveicon = m.top.findNode("liveIcon")
     m.itemSubtitle = m.top.findNode("itemSubtitle")
     m.itemThirdTitle = m.top.findNode("itemThirdTitle")
@@ -38,6 +39,19 @@ sub showcontent()
     if itemcontent.contentType = "VOD" or itemcontent.contentType = "CLIP"
         m.liveicon.visible = false
         m.itemThirdTitle.text = itemcontent.gameDisplayName
+    end if
+    if itemcontent.contentType = "USER"
+        m.itemposter.visible = false
+        m.circlePoster.uri = itemcontent.streamerProfileImageUrl
+        m.circlePoster.visible = true
+        m.itemlabel.maxwidth = 150
+        m.itemlabel.translation = "[0,160]"
+        m.itemSubtitle.translation = "[0, 170]"
+        m.itemThirdTitle.translation = "[0, 180]"
+        m.liveicon.visible = false
+        m.itemViewers.visible = false
+        m.viewsRect.visible = false
+        m.itemSubtitle.text = itemcontent.followerDisplay
     end if
     m.itemlabel.text = itemcontent.contentTitle
     m.itemSubtitle.color = m.global.constants.colors.hinted.grey9
