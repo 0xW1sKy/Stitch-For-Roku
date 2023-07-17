@@ -41,6 +41,7 @@ function doScroll()
             m.timer.repeat = true
             ' this sleep is so that when you change from one item to another,
             ' you have enough time to read the first 1-2 words before scrolling.
+            sleep(200)
             m.animation.control = "start"
             m.timer.control = "start"
             m.animation.duration = (m.top.width / m.top.maxWidth) * 2
