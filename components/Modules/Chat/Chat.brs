@@ -378,10 +378,13 @@ sub onNewComment()
 
     group.appendChild(username)
     m.chatPanel.appendChild(group)
-
-    if m.translation + y_translation > 700
+    ' TODO: make chat scroll a lot further off screen to turn it into an infinite scroll experience
+    ' TODO: this is to stop blocks of text from disappearing when they reach top of screen
+    ? "tran: " m.translation + y_translation
+    if m.translation + y_translation > 700 ' ? This one maybe?
         for each chatmessage in m.chatPanel.getChildren(-1, 0)
-            if chatmessage.translation[1] - y_translation < 0
+            if chatmessage.translation[1] - y_translation < -150 ' ? if not, its this one
+                ? "y_translation: "; y_translation
                 m.chatPanel.removeChild(chatmessage)
             else
                 chatmessage.translation = [0, (chatmessage.translation[1] - y_translation)]

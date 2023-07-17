@@ -180,6 +180,7 @@ function playVideo(data)
     m.chatWindow.channel = m.top.contentRequested.streamerLogin
     if get_user_setting("ChatOption", "true") = "true"
         m.chatWindow.visible = true
+        m.videoPlayer.chatIsVisible = m.chatWindow.visible
     else
         m.chatWindow.visible = false
     end if

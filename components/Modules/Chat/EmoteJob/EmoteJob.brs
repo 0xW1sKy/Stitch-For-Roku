@@ -53,6 +53,7 @@ function getTwitchBadges()
             end if
         end if
     catch e
+        ? "Error grabbing twitch badges"
     end try
     if m.global.twitchBadges = invalid
         m.global.addFields({ twitchBadges: badgelist })
@@ -87,6 +88,7 @@ sub getChannel7tvEmotes(channel_id)
             end if
         end if
     catch e
+        ? "Error grabbing 7tv badges"
     end try
     if m.global.channel7TVEmotes = invalid
         m.global.addFields({ channel7TVEmotes: assocEmotes })
@@ -105,6 +107,7 @@ sub getGlobal7tvEmotes()
             assocEmotes[emote.name] = uri
         end for
     catch e
+        ? "Error grabbing global7tv badges"
     end try
     if m.global.global7TVEmotes = invalid
         m.global.addFields({ global7TVEmotes: assocEmotes })
@@ -122,6 +125,7 @@ function getGlobalTTVEmotes()
             assocEmotes[emote.code] = emote.id
         end for
     catch e
+        ? "Error grabbing globalttv badges"
     end try
     if m.global.globalTTVEmotes = invalid
         m.global.addFields({ globalTTVEmotes: assocEmotes })
@@ -139,6 +143,7 @@ function getChannelTTVFrankerEmotes(channel_id)
             assocEmotes[emote.code] = emote.images["1x"]
         end for
     catch e
+        ? "Error grabbing channelttvfranker badges"
     end try
     if m.global.channelTTVFrankerEmotes = invalid
         m.global.addFields({ channelTTVFrankerEmotes: assocEmotes })
@@ -158,6 +163,7 @@ function getChannelTTVEmotes(channel_id)
             end for
         end if
     catch e
+        ? "Error grabbing channelttv badges"
     end try
     if m.global.channelTTVEmotes = invalid
         m.global.addFields({ channelTTVEmotes: assocEmotes })
@@ -170,6 +176,7 @@ function main()
     ? "[EmoteJob] - getAllEmotes"
     getTwitchBadges()
     channel_id = m.top.channel_id
+    ? "channel id:" channel_id
     getChannelTTVEmotes(channel_id)
     getChannelTTVFrankerEmotes(channel_id)
     getChannel7tvEmotes(channel_id)

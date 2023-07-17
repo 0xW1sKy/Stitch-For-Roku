@@ -101,10 +101,10 @@ function main()
                     end if
                 end if
             end if
-            if sendWaitingMessage and m.top.readyForNextComment
-                sendWaitingMessage = false
-                m.top.nextComment = "display-name=System;user-type= :test!test@test.tmi.twitch.tv PRIVMSG #test :Delaying Chat to sync to stream. Please hold...  " ' whitespace at end is removed by comment parser
-            end if
+            ' if sendWaitingMessage and m.top.readyForNextComment
+            '     sendWaitingMessage = false
+            '     m.top.nextComment = "display-name=System;user-type= :test!test@test.tmi.twitch.tv PRIVMSG #test :Delaying Chat to sync to stream. Please hold...  " ' whitespace at end is removed by comment parser
+            ' end if
             if m.top.readyForNextComment and queue.count() > 0
                 ' Check if delay is complete using irc timestamp
                 oldestComment = queue.peek()
@@ -142,6 +142,14 @@ function main()
                             first += 1
                         else
                             first = 0
+                        end if
+                    end if
+                    if sendWaitingMessage
+                        if commentAge = 30
+                            sendWaitingMessage = false
+                            m.top.nextComment = "display-name=System;user-type= :test!test@test.tmi.twitch.tv PRIVMSG #test :ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream  " ' whitespace at end is removed by comment parser
+                        else
+                            m.top.nextComment = queue[0]
                         end if
                     end if
                 end if
