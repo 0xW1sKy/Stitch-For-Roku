@@ -107,5 +107,15 @@
             <translation>Offline Channels</translation>
             <context>Shown above a list of streamers that the app user follows that are not currently live</context>
         </message>
+        <message>
+            <source>Channels</source>
+            <translation>Channels</translation>
+            <context>Shown above a list of streamers in the search results page</context>
+        </message>
+        <message>
+            <source>VODs</source>
+            <translation>VODs</translation>
+            <context>Shown above a list of past stream broadcasts in the search results page</context>
+        </message>
     </context>
 </TS>

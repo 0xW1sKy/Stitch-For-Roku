@@ -162,14 +162,14 @@ function buildContentNodeFromShelves(shelves)
         firstRow.appendChild(rowItem)
     end for
     secondRow = createObject("roSGNode", "ContentNode")
-    secondRow.title = tr("Users")
+    secondRow.title = tr("Channels")
     for each User in Users
         rowItem = createObject("RoSGNode", "TwitchContentNode")
         setContentFields(rowItem, User)
         secondRow.appendChild(rowItem)
     end for
     thirdRow = createObject("roSGNode", "ContentNode")
-    thirdRow.title = tr("Games")
+    thirdRow.title = tr("Categories")
     for each Game in Games
         rowItem = createObject("RoSGNode", "TwitchContentNode")
         setContentFields(rowItem, Game)
