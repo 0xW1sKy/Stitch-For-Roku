@@ -142,10 +142,9 @@ function buildContentNodeFromShelves(shelves)
         end if
         rowItem.contentTitle = VOD.title
         rowItem.viewersCount = VOD.viewCount
-        ' rowItem.streamerDisplayName = item.stream.broadcaster.displayName
-        ' rowItem.streamerLogin = item.stream.broadcaster.login
-        ' rowItem.streamerId = item.stream.broadcaster.id
-        ' rowItem.streamerProfileImageUrl = item.stream.broadcaster.profileImageURL
+        rowItem.streamerDisplayName = VOD.owner.displayName
+        rowItem.streamerLogin = VOD.owner.login
+        rowItem.streamerId = VOD.owner.id
         if VOD.game <> invalid
             rowItem.gameDisplayName = VOD.game.displayName
             rowItem.gameBoxArtUrl = Left(VOD.game.boxArtUrl, Len(VOD.game.boxArtUrl) - 20) + "188x250.jpg"
@@ -193,7 +192,7 @@ function buildContentNodeFromShelves(shelves)
     end if
     if secondRow.getchildCount() > 0
         rowItemSize.push([150, 150])
-        rowHeights.push(190)
+        rowHeights.push(200)
         AllContent.appendChild(secondRow)
     end if
     if thirdRow.getchildCount() > 0
