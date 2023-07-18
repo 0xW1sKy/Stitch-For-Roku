@@ -72,5 +72,40 @@
             <source>Video Framerate</source>
             <translation>Taxa de atualização</translation>
         </message>
+        <message>
+            <source>Home</source>
+            <translation>Início</translation>
+            <context>User's "home" page / fyp</context>
+        </message>
+        <message>
+            <source>Viewers</source>
+            <translation>pessoas assistindo</translation>
+            <context>displayed after the count of current viewership of a stream. i.e. this streamer has 200 viewers</context>
+        </message>
+        <message>
+            <source>Views</source>
+            <translation>Visualizações</translation>
+            <context>The count of users that have watched a VOD/CLIP</context>
+        </message>
+        <message>
+            <source>Followers</source>
+            <translation>Seguidores</translation>
+            <context>Count of users that are currenlty 'following' a user on their Twitch account</context>
+        </message>
+        <message>
+            <source>Log Out</source>
+            <translation>Sair</translation>
+            <context>Shown on the user's profile page to disconnect their account from the app</context>
+        </message>
+        <message>
+            <source>followedLiveUsers</source>
+            <translation>Eles estão ao vivo!</translation>
+            <context>Title shown above a list of streamers that the app user follows that are currently live streaming</context>
+        </message>
+        <message>
+            <source>followedOfflineUsers</source>
+            <translation>Canais Offline</translation>
+            <context>Shown above a list of streamers that the app user follows that are not currently live</context>
+        </message>
     </context>
 </TS>
