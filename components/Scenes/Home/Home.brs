@@ -52,10 +52,12 @@ function buildContentNodeFromShelves(shelves)
                     rowItem.streamerLogin = stream.node.broadcaster.login
                     rowItem.streamerId = stream.node.broadcaster.id
                     rowItem.streamerProfileImageUrl = stream.node.broadcaster.profileImageURL
-                    rowItem.gameDisplayName = stream.node.game.displayName
-                    rowItem.gameBoxArtUrl = Left(stream.node.game.boxArtUrl, Len(stream.node.game.boxArtUrl) - 20) + "188x250.jpg"
-                    rowItem.gameId = stream.node.game.Id
-                    rowItem.gameName = stream.node.game.name
+                    if stream.node.game <> invalid
+                        rowItem.gameDisplayName = stream.node.game.displayName
+                        rowItem.gameBoxArtUrl = Left(stream.node.game.boxArtUrl, Len(stream.node.game.boxArtUrl) - 20) + "188x250.jpg"
+                        rowItem.gameId = stream.node.game.Id
+                        rowItem.gameName = stream.node.game.name
+                    end if
                     ' rowItem.secondaryTitle = streamnode.broadcaster.displayName
                     ' rowItem.ShortDescriptionLine1 = streamnode.viewersCount
                     ' rowItem.ShortDescriptionLine2 = streamnode.game.displayName

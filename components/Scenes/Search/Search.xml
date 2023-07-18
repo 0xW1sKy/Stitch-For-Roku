@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component name="Search" extends="SceneManagerGroup" initialFocus="exampleRowList">
+<component name="Search" extends="SceneManagerGroup" initialFocus="keyboard">
     <script type="text/brightscript" uri="Search.brs" />
     <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
     <children>
+        <DynamicMiniKeyboard
+            id="keyboard"
+            translation="[80,130]" />
         <RowList
             id="exampleRowList"
+            translation = "[500, 120]"
             rowLabelOffset="[[0,10]]"
             rowLabelFont="font:LargeBoldSystemFont"
-            translation="[ 130, 120 ]"
             itemComponentName="VideoItem"
             numRows="4"
             rowItemSize="[[320,180]]"
