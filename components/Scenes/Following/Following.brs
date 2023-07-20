@@ -85,7 +85,9 @@ sub handleDefaultSections()
             end if
         end for
     end if
-    updateRowList(contentCollection)
+    if contentCollection.getChildCount() > 0
+        updateRowList(contentCollection)
+    end if
 end sub
 
 sub handleRecommendedSections()
@@ -189,7 +191,9 @@ sub handleRecommendedSections()
         end if
         ? "OfflineStreamSection Complete: "; TimeStamp()
     end if
-    updateRowList(contentCollection)
+    if contentCollection.getchildCount() > 0
+        updateRowList(contentCollection)
+    end if
 end sub
 
 function updateRowList(contentCollection)
