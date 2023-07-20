@@ -18,7 +18,7 @@
         <Rectangle
             visible="true"
             color="0x000000FF"
-            width="255"
+            width="270"
             height="720"
             opacity="0.85"
             translation="[1025,0]" />
