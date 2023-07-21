@@ -9,15 +9,21 @@ sub init()
     m.max = 11
     deviceInfo = CreateObject("roDeviceInfo")
     uiResolutionWidth = deviceInfo.GetUIResolution().width
+    refreshFollowBar()
+    m.refreshTimer = createObject("roSGNode", "Timer")
+    m.refreshTimer.observeField("fire", "refreshFollowBar")
+    m.refreshTimer.repeat = true
+    m.refreshTimer.duration = "60"
+    m.refreshTimer.control = "start"
 end sub
 
 sub refreshFollowBar()
-    if m.top.refreshFollowBar = true
-        m.followBarJob = CreateObject("roSGNode", "followedStreamsBarJob")
-        m.followBarJob.observeField("result", "onFollowedStreamsChange")
-        m.followBarJob.control = "run"
-    end if
-    m.top.refreshFollowBar = false
+    ' if m.top.refreshFollowBar = true
+    m.followBarJob = CreateObject("roSGNode", "followedStreamsBarJob")
+    m.followBarJob.observeField("result", "onFollowedStreamsChange")
+    m.followBarJob.control = "run"
+    ' end if
+    ' m.top.refreshFollowBar = false
 end sub
 
 sub numberToText(number) as object

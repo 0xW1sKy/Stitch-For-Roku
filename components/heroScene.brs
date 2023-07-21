@@ -23,7 +23,6 @@ sub init()
         onMenuSelection()
     end if
     m.footprints = []
-    refreshFollowBar()
 end sub
 
 function refreshFollowBar()
@@ -34,6 +33,7 @@ function handleDeviceCode()
     if m.getDeviceCodeTask <> invalid
         response = m.getDeviceCodeTask.response
         set_user_setting("device_code", response.device_code)
+        m.followedStreamBar.callFunc("refreshFollowBar")
     end if
     onMenuSelection()
 end function
@@ -67,11 +67,13 @@ sub onLoginFinished()
         }
         m.getDeviceCodeTask.functionName = m.getDeviceCodeTask.request.type
         m.getDeviceCodeTask.control = "run"
+    else
+        m.followedStreamBar.callFunc("refreshFollowBar")
     end if
 end sub
 
 function onMenuSelection()
-    refreshFollowBar()
+    ' refreshFollowBar()
     if m.menu.focusedChild <> invalid
         if m.activeNode <> invalid
             if m.activeNode.id.toStr() <> m.menu.focusedChild.focusedChild.id.toStr()

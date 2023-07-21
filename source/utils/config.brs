@@ -101,15 +101,28 @@ function getTokenFromRegistry()
     }
 end function
 
+function getRegistryKeys(section = invalid)
+    Registry = CreateObject("roRegistry")
+    if section = invalid
+        output = {}
+        for each section in Registry.GetSectionList()
+            RegistrySection = CreateObject("roRegistrySection", section)
+            output[section] = RegistrySection.GetKeyList()
+        end for
+    else
+        RegistrySection = CreateObject("roRegistrySection", section)
+        output = RegistrySection.GetKeyList()
+    end if
+    return output
+end function
+
 function NukeRegistry(section = invalid)
     ? "Erasing Registry"
     Registry = CreateObject("roRegistry")
-    i = 0
     if section = invalid
         for each section in Registry.GetSectionList()
             RegistrySection = CreateObject("roRegistrySection", section)
             for each key in RegistrySection.GetKeyList()
-                i = i + 1
                 print "Deleting " section + ":" key
                 RegistrySection.Delete(key)
             end for
@@ -119,7 +132,6 @@ function NukeRegistry(section = invalid)
     else
         RegistrySection = CreateObject("roRegistrySection", section)
         for each key in RegistrySection.GetKeyList()
-            i = i + 1
             print "Deleting " section + ":" key
             RegistrySection.Delete(key)
         end for

@@ -6,8 +6,7 @@
         <field id="itemHasFocus" type="bool" onChange="onGetFocus" alwaysNotify="true" />
         <field id="streamerSelected" type="string" alwaysNotify="true" />
         <field id="contentSelected" type="node" alwaysNotify="true" />
-        <!-- <field id="followedStreams" type="array" onChange="onFollowedStreamsChange" /> -->
-        <field id="refreshFollowBar" type="boolean" onChange="refreshFollowBar" />
+        <function name="refreshFollowBar" />
     </interface>
 
     <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
