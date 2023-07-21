@@ -58,11 +58,10 @@ sub handleDefaultSections()
                     ? "Title With Problem: "; temp_title
                 end try
                 row.title = temp_title
+                jsonStreams = []
                 for each stream in streamRow.node.content.edges
-                    streamnode = stream.node
-                    ' type_name = stream.node.__typename
                     if stream.node["__typename"].toStr() <> invalid and stream.node["__typename"].toStr() = "Stream"
-                        rowItem = createObject("RoSGNode", "TwitchContentNode")
+                        rowItem = {}
                         rowItem.contentId = stream.node.Id
                         rowItem.contentType = "LIVE"
                         rowItem.previewImageURL = Substitute("https://static-cdn.jtvnw.net/previews-ttv/live_user_{0}-{1}x{2}.jpg", stream.node.broadcaster.login, "320", "180")
@@ -78,8 +77,13 @@ sub handleDefaultSections()
                             rowItem.gameId = stream.node.game.Id
                             rowItem.gameName = stream.node.game.name
                         end if
-                        row.appendChild(rowItem)
+                        jsonStreams.push(rowItem)
                     end if
+                end for
+                for each stream in jsonStreams
+                    rowItem = createObject("RoSGNode", "TwitchContentNode")
+                    setContentFields(rowItem, stream)
+                    row.appendChild(rowItem)
                 end for
                 if row.getchildcount() > 0
                     contentCollection.appendChild(row)
@@ -89,6 +93,57 @@ sub handleDefaultSections()
         end if
     end if
 end sub
+
+
+
+function setContentFields(twitchContentNode, fields)
+    if fields.contentId <> invalid
+        twitchContentNode.contentId = fields.contentId
+    end if
+    if fields.contentType <> invalid
+        twitchContentNode.contentType = fields.contentType
+    end if
+    if fields.previewImageURL <> invalid
+        twitchContentNode.previewImageUrl = fields.previewImageURL
+    end if
+    if fields.contentTitle <> invalid
+        twitchContentNode.contentTitle = fields.contentTitle
+    end if
+    if fields.viewersCount <> invalid
+        twitchContentNode.viewersCount = fields.viewersCount
+    end if
+    if fields.followerCount <> invalid
+        twitchContentNode.followerCount = fields.followerCount
+    end if
+    if fields.streamerDisplayName <> invalid
+        twitchContentNode.streamerDisplayName = fields.streamerDisplayName
+    end if
+    if fields.streamerLogin <> invalid
+        twitchContentNode.streamerLogin = fields.streamerLogin
+    end if
+    if fields.streamerid <> invalid
+        twitchContentNode.streamerId = fields.streamerId
+    end if
+    if fields.streamerProfileImageUrl <> invalid
+        twitchContentNode.streamerProfileImageUrl = fields.streamerProfileImageUrl
+    end if
+    if fields.followerCount <> invalid
+        twitchContentNode.followerCount = fields.followerCount
+    end if
+    if fields.gameDisplayName <> invalid
+        twitchContentNode.gameDisplayName = fields.gameDisplayName
+    end if
+    if fields.gameBoxArtUrl <> invalid
+        twitchContentNode.gameBoxArtUrl = fields.gameBoxArtUrl
+    end if
+    if fields.gameId <> invalid
+        twitchContentNode.gameId = fields.gameId
+    end if
+    if fields.gameName <> invalid
+        twitchContentNode.gameName = fields.gameName
+    end if
+end function
+
 
 sub handleRecommendedSections()
     ? "handleRecommendedSections: "; TimeStamp()
@@ -108,7 +163,7 @@ sub handleRecommendedSections()
             liveFollows = []
             for each liveUser in m.GetcontentTask.response.data.user.followedLiveUsers.edges
                 stream = liveUser.node.stream
-                rowItem = createObject("RoSGNode", "TwitchContentNode")
+                rowItem = {}
                 rowItem.contentId = stream.Id
                 rowItem.contentType = "LIVE"
                 rowItem.previewImageURL = Substitute("https://static-cdn.jtvnw.net/previews-ttv/live_user_{0}-{1}x{2}.jpg", stream.broadcaster.login, "320", "180")
@@ -132,7 +187,9 @@ sub handleRecommendedSections()
                 else if i mod itemsPerRow = 0
                     row = createObject("RoSGNode", "ContentNode")
                 end if
-                row.appendChild(liveFollows[i])
+                twitchContentNode = createObject("roSGNode", "TwitchContentNode")
+                setContentFields(twitchContentNode, liveFollows[i])
+                row.appendChild(twitchContentNode)
                 appended = false
                 if row.getChildCount() = itemsPerRow
                     contentCollection.appendChild(row)
@@ -156,7 +213,7 @@ sub handleRecommendedSections()
             ? "OfflineSection ContentStart: "; TimeStamp()
             for each stream in m.GetcontentTask.response.data.user.follows.edges
                 try
-                    rowItem = createObject("RoSGNode", "TwitchContentNode")
+                    rowItem = {}
                     rowItem.contentId = stream.node.Id
                     rowItem.contentType = "USER"
                     rowItem.previewImageURL = Substitute("https://static-cdn.jtvnw.net/previews-ttv/live_user_{0}-{1}x{2}.jpg", stream.node.login, "320", "180")
@@ -184,7 +241,9 @@ sub handleRecommendedSections()
                 else if i mod itemsPerRow = 0
                     row = createObject("RoSGNode", "ContentNode")
                 end if
-                row.appendChild(streams[i])
+                twitchContentNode = createObject("roSGNode", "TwitchContentNode")
+                setContentFields(twitchContentNode, streams[i])
+                row.appendChild(twitchContentNode)
                 appended = false
                 if row.getChildCount() = itemsPerRow
                     contentCollection.appendChild(row)
@@ -244,6 +303,7 @@ function updateRowList(contentCollection)
     m.rowlist.content = contentCollection
     m.rowlist.numRows = m.rowlist.content.getChildCount()
     m.rowlist.rowlabelcolor = m.global.constants.colors.twitch.purple10
+    ? "updateRowList Done: "; TimeStamp()
 end function
 
 sub handleItemSelected()
