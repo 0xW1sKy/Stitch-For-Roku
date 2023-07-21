@@ -125,6 +125,7 @@ sub handleRecommendedSections()
                 liveFollows.push(rowItem)
             end for
             liveFollows.sortBy("streamerLogin")
+            appended = false
             for i = 0 to (liveFollows.count() - 1) step 1
                 if first
                     first = false
@@ -176,6 +177,7 @@ sub handleRecommendedSections()
             end for
             ? "OfflineSection ContentEnd: "; TimeStamp()
             streams.sortBy("streamerLogin")
+            appended = false
             for i = 0 to (streams.count() - 1) step 1
                 if first
                     first = false
