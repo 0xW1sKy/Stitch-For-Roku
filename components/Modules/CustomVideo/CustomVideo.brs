@@ -158,7 +158,7 @@ function hideOverlay()
 end function
 
 sub onFadeAway()
-    if not m.timeTravelRect.visible
+    if not m.timeTravelRect.visible and not m.QualityDialog.visible
         hideOverlay()
     end if
 end sub
