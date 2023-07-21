@@ -283,6 +283,10 @@ function select(arr, start = invalid, finish = invalid, step_ = 1):
     return res
 end function
 
+function TimeStamp()
+    date = CreateObject("roDateTime")
+    return date.AsSeconds()
+end function
 
 ' Helper function to add and set fields of a content node
 function AddAndSetFields(node as object, aa as object)

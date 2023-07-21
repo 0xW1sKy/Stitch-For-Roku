@@ -17,11 +17,6 @@ sub init()
     m.getcontentTask.control = "run"
 end sub
 
-function TimeStamp()
-    date = CreateObject("roDateTime")
-    return date.AsSeconds()
-end function
-
 sub decideRoute()
     ? "DecideRoute"; TimeStamp()
     if get_setting("active_user") <> invalid and get_setting("active_user") <> "default"

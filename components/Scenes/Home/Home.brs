@@ -1,4 +1,5 @@
 sub init()
+    ? "init: "; TimeStamp()
     m.top.observeField("focusedChild", "onGetfocus")
     ' m.top.observeField("itemFocused", "onGetFocus")
     m.rowlist = m.top.findNode("exampleRowList")
@@ -13,20 +14,74 @@ sub init()
     m.getcontentTask.control = "run"
 end sub
 
+function setContentFields(twitchContentNode, fields)
+    if fields.contentId <> invalid
+        twitchContentNode.contentId = fields.contentId
+    end if
+    if fields.contentType <> invalid
+        twitchContentNode.contentType = fields.contentType
+    end if
+    if fields.previewImageURL <> invalid
+        twitchContentNode.previewImageUrl = fields.previewImageURL
+    end if
+    if fields.contentTitle <> invalid
+        twitchContentNode.contentTitle = fields.contentTitle
+    end if
+    if fields.viewersCount <> invalid
+        twitchContentNode.viewersCount = fields.viewersCount
+    end if
+    if fields.followerCount <> invalid
+        twitchContentNode.followerCount = fields.followerCount
+    end if
+    if fields.streamerDisplayName <> invalid
+        twitchContentNode.streamerDisplayName = fields.streamerDisplayName
+    end if
+    if fields.streamerLogin <> invalid
+        twitchContentNode.streamerLogin = fields.streamerLogin
+    end if
+    if fields.streamerid <> invalid
+        twitchContentNode.streamerId = fields.streamerId
+    end if
+    if fields.streamerProfileImageUrl <> invalid
+        twitchContentNode.streamerProfileImageUrl = fields.streamerProfileImageUrl
+    end if
+    if fields.followerCount <> invalid
+        twitchContentNode.followerCount = fields.followerCount
+    end if
+    if fields.gameDisplayName <> invalid
+        twitchContentNode.gameDisplayName = fields.gameDisplayName
+    end if
+    if fields.gameBoxArtUrl <> invalid
+        twitchContentNode.gameBoxArtUrl = fields.gameBoxArtUrl
+    end if
+    if fields.gameId <> invalid
+        twitchContentNode.gameId = fields.gameId
+    end if
+    if fields.gameName <> invalid
+        twitchContentNode.gameName = fields.gameName
+    end if
+end function
+
+
 function buildContentNodeFromShelves(shelves)
-    contentCollection = createObject("RoSGNode", "ContentNode")
+    ? "buildContentNodeFromShelves: "; TimeStamp()
+    contentCollection = []
     for each shelf in shelves
-        row = createObject("RoSGNode", "ContentNode")
+        row = { "title": "", "children": [] }
         temp_title = ""
         try
             for each wordblock in shelf.node.title.localizedTitleTokens
-                if wordblock.node.__typename = "TextToken"
-                    temp_title = Substitute("{0}{1}", temp_title, wordblock.node.text)
-                end if
-                if wordblock.node.__typename = "Game"
-                    temp_title = Substitute("{0}{1}", temp_title, wordblock.node.displayName)
-                end if
-                if wordblock.node.__typename = "BrowsableCollection"
+                if wordblock.node <> invalid
+                    if wordblock.node["__typename"] = "TextToken"
+                        temp_title = Substitute("{0}{1}", temp_title, wordblock.node.text)
+                    end if
+                    if wordblock.node["__typename"] = "Game"
+                        temp_title = Substitute("{0}{1}", temp_title, wordblock.node.displayName)
+                    end if
+                    if wordblock.node["__typename"] = "BrowsableCollection"
+                        temp_title = shelf.node.title.fallbackLocalizedTitle
+                    end if
+                else
                     temp_title = shelf.node.title.fallbackLocalizedTitle
                 end if
             end for
@@ -42,7 +97,7 @@ function buildContentNodeFromShelves(shelves)
             ' try
             if stream.node <> invalid and stream.node["__typename"].ToStr() <> invalid
                 if stream.node["__typename"].ToStr() = "Stream"
-                    rowItem = createObject("RoSGNode", "TwitchContentNode")
+                    rowItem = {}
                     rowItem.contentId = stream.node.Id
                     rowItem.contentType = "LIVE"
                     rowItem.previewImageURL = Substitute("https://static-cdn.jtvnw.net/previews-ttv/live_user_{0}-{1}x{2}.jpg", stream.node.broadcaster.login, "320", "180")
@@ -61,9 +116,9 @@ function buildContentNodeFromShelves(shelves)
                     ' rowItem.secondaryTitle = streamnode.broadcaster.displayName
                     ' rowItem.ShortDescriptionLine1 = streamnode.viewersCount
                     ' rowItem.ShortDescriptionLine2 = streamnode.game.displayName
-                    row.appendChild(rowItem)
+                    row.children.push(rowItem)
                 else if stream.node["__typename"].ToStr() = "Game"
-                    rowItem = createObject("RoSGNode", "TwitchContentNode")
+                    rowItem = {}
                     rowItem.contentId = stream.node.Id
                     rowItem.contentType = "GAME"
                     rowItem.viewersCount = stream.node.viewersCount
@@ -75,20 +130,23 @@ function buildContentNodeFromShelves(shelves)
                     ' rowItem.secondaryTitle = streamnode.viewersCount
                     ' rowItem.HDPosterUrl = Left(stream.node.boxArtUrl, Len(stream.node.boxArtUrl) - 20) + "188x250.jpg"
                     ' rowItem.ShortDescriptionLine1 = streamnode.viewersCount
-                    row.appendChild(rowItem)
+                    row.children.push(rowItem)
                 end if
             end if
             ' catch e
             '     ? "Error: "; e
             ' end try
         end for
-        contentCollection.appendChild(row)
+        if row.children.Count() > 0
+            contentCollection.push(row)
+        end if
     end for
     return contentCollection
 end function
 
 
 sub handleRecommendedSections()
+    ? "handleRecommendedSections: "; TimeStamp()
     if m.GetContentTask.response.data <> invalid and m.GetContentTask.response.data.shelves <> invalid
         contentCollection = buildContentNodeFromShelves(m.GetContentTask.response.data.shelves.edges)
     else
@@ -116,7 +174,19 @@ end sub
 '     return newRowList
 ' end function
 
-function updateRowList(contentCollection)
+function updateRowList(jsonContent)
+    ? "updateRowList: "; TimeStamp()
+    contentCollection = createObject("roSGNode", "ContentNode")
+    for each jsonRow in jsonContent
+        row = createObject("roSGNode", "ContentNode")
+        row.title = jsonRow.title
+        for each jsonItem in jsonRow.children
+            twitchContentNode = createObject("roSGNode", "TwitchContentNode")
+            setContentFields(twitchContentNode, jsonItem)
+            row.appendChild(twitchContentNode)
+        end for
+        contentCollection.appendChild(row)
+    end for
     rowItemSize = []
     showRowLabel = []
     rowHeights = []
@@ -145,12 +215,14 @@ function updateRowList(contentCollection)
             end if
         end if
     end for
+    m.rowlist.visible = false
     m.rowList.rowHeights = rowHeights
     m.rowlist.showRowLabel = showRowLabel
     m.rowlist.rowItemSize = rowItemSize
     m.rowlist.content = contentCollection
     m.rowlist.numRows = contentCollection.getChildCount()
     m.rowlist.rowlabelcolor = m.global.constants.colors.twitch.purple10
+    m.rowlist.visible = true
 end function
 
 sub handleItemSelected()
