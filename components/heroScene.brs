@@ -108,7 +108,9 @@ sub onContentSelected()
     if m.activeNode.playContent = true
         id = "VideoPlayer"
     end if
-    content = m.activeNode.contentSelected
+    holdContent = m.activeNode.contentSelected.getFields()
+    content = createObject("roSGNode", "TwitchContentNode")
+    setTwitchContentFields(content, holdContent)
     if m.activeNode <> invalid
         m.footprints.push(m.activeNode)
         m.activeNode = invalid

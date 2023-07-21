@@ -14,55 +14,6 @@ sub init()
     m.getcontentTask.control = "run"
 end sub
 
-function setContentFields(twitchContentNode, fields)
-    if fields.contentId <> invalid
-        twitchContentNode.contentId = fields.contentId
-    end if
-    if fields.contentType <> invalid
-        twitchContentNode.contentType = fields.contentType
-    end if
-    if fields.previewImageURL <> invalid
-        twitchContentNode.previewImageUrl = fields.previewImageURL
-    end if
-    if fields.contentTitle <> invalid
-        twitchContentNode.contentTitle = fields.contentTitle
-    end if
-    if fields.viewersCount <> invalid
-        twitchContentNode.viewersCount = fields.viewersCount
-    end if
-    if fields.followerCount <> invalid
-        twitchContentNode.followerCount = fields.followerCount
-    end if
-    if fields.streamerDisplayName <> invalid
-        twitchContentNode.streamerDisplayName = fields.streamerDisplayName
-    end if
-    if fields.streamerLogin <> invalid
-        twitchContentNode.streamerLogin = fields.streamerLogin
-    end if
-    if fields.streamerid <> invalid
-        twitchContentNode.streamerId = fields.streamerId
-    end if
-    if fields.streamerProfileImageUrl <> invalid
-        twitchContentNode.streamerProfileImageUrl = fields.streamerProfileImageUrl
-    end if
-    if fields.followerCount <> invalid
-        twitchContentNode.followerCount = fields.followerCount
-    end if
-    if fields.gameDisplayName <> invalid
-        twitchContentNode.gameDisplayName = fields.gameDisplayName
-    end if
-    if fields.gameBoxArtUrl <> invalid
-        twitchContentNode.gameBoxArtUrl = fields.gameBoxArtUrl
-    end if
-    if fields.gameId <> invalid
-        twitchContentNode.gameId = fields.gameId
-    end if
-    if fields.gameName <> invalid
-        twitchContentNode.gameName = fields.gameName
-    end if
-end function
-
-
 function buildContentNodeFromShelves(shelves)
     ? "buildContentNodeFromShelves: "; TimeStamp()
     contentCollection = []
@@ -182,7 +133,7 @@ function updateRowList(jsonContent)
         row.title = jsonRow.title
         for each jsonItem in jsonRow.children
             twitchContentNode = createObject("roSGNode", "TwitchContentNode")
-            setContentFields(twitchContentNode, jsonItem)
+            setTwitchContentFields(twitchContentNode, jsonItem)
             row.appendChild(twitchContentNode)
         end for
         contentCollection.appendChild(row)

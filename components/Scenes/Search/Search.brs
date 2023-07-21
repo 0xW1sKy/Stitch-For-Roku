@@ -33,51 +33,6 @@ sub handleRecommendedSections()
     end if
 end sub
 
-function setContentFields(twitchContentNode, fields)
-    if fields.contentId <> invalid
-        twitchContentNode.contentId = fields.contentId
-    end if
-    if fields.contentType <> invalid
-        twitchContentNode.contentType = fields.contentType
-    end if
-    if fields.previewImageURL <> invalid
-        twitchContentNode.previewImageUrl = fields.previewImageURL
-    end if
-    if fields.contentTitle <> invalid
-        twitchContentNode.contentTitle = fields.contentTitle
-    end if
-    if fields.viewersCount <> invalid
-        twitchContentNode.viewersCount = fields.viewersCount
-    end if
-    if fields.streamerDisplayName <> invalid
-        twitchContentNode.streamerDisplayName = fields.streamerDisplayName
-    end if
-    if fields.streamerLogin <> invalid
-        twitchContentNode.streamerLogin = fields.streamerLogin
-    end if
-    if fields.streamerid <> invalid
-        twitchContentNode.streamerId = fields.streamerId
-    end if
-    if fields.streamerProfileImageUrl <> invalid
-        twitchContentNode.streamerProfileImageUrl = fields.streamerProfileImageUrl
-    end if
-    if fields.followerCount <> invalid
-        twitchContentNode.followerCount = fields.followerCount
-    end if
-    if fields.gameDisplayName <> invalid
-        twitchContentNode.gameDisplayName = fields.gameDisplayName
-    end if
-    if fields.gameBoxArtUrl <> invalid
-        twitchContentNode.gameBoxArtUrl = fields.gameBoxArtUrl
-    end if
-    if fields.gameId <> invalid
-        twitchContentNode.gameId = fields.gameId
-    end if
-    if fields.gameName <> invalid
-        twitchContentNode.gameName = fields.gameName
-    end if
-end function
-
 function buildContentNodeFromShelves(shelves)
     LiveChannels = []
     Users = []
@@ -158,28 +113,28 @@ function buildContentNodeFromShelves(shelves)
     firstRow.title = tr("Live Channels")
     for each stream in LiveChannels
         rowItem = createObject("RoSGNode", "TwitchContentNode")
-        setContentFields(rowItem, stream)
+        setTwitchContentFields(rowItem, stream)
         firstRow.appendChild(rowItem)
     end for
     secondRow = createObject("roSGNode", "ContentNode")
     secondRow.title = tr("Channels")
     for each User in Users
         rowItem = createObject("RoSGNode", "TwitchContentNode")
-        setContentFields(rowItem, User)
+        setTwitchContentFields(rowItem, User)
         secondRow.appendChild(rowItem)
     end for
     thirdRow = createObject("roSGNode", "ContentNode")
     thirdRow.title = tr("Categories")
     for each Game in Games
         rowItem = createObject("RoSGNode", "TwitchContentNode")
-        setContentFields(rowItem, Game)
+        setTwitchContentFields(rowItem, Game)
         thirdRow.appendChild(rowItem)
     end for
     fourthRow = createObject("roSGNode", "ContentNode")
     fourthRow.title = tr("VODs")
     for each Vod in Vods
         rowItem = createObject("RoSGNode", "TwitchContentNode")
-        setContentFields(rowItem, Vod)
+        setTwitchContentFields(rowItem, Vod)
         fourthRow.appendChild(rowItem)
     end for
     ' set content and heights

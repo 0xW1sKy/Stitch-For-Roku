@@ -288,6 +288,64 @@ function TimeStamp()
     return date.AsSeconds()
 end function
 
+
+function setTwitchContentFields(twitchContentNode, fields)
+    if fields.contentId <> invalid
+        twitchContentNode.contentId = fields.contentId
+    end if
+    if fields.contentType <> invalid
+        twitchContentNode.contentType = fields.contentType
+    end if
+    if fields.previewImageURL <> invalid
+        twitchContentNode.previewImageUrl = fields.previewImageURL
+    end if
+    if fields.contentTitle <> invalid
+        twitchContentNode.contentTitle = fields.contentTitle
+    end if
+    if fields.viewersCount <> invalid
+        twitchContentNode.viewersCount = fields.viewersCount
+    end if
+    if fields.followerCount <> invalid
+        twitchContentNode.followerCount = fields.followerCount
+    end if
+    if fields.streamerDisplayName <> invalid
+        twitchContentNode.streamerDisplayName = fields.streamerDisplayName
+    end if
+    if fields.streamerLogin <> invalid
+        twitchContentNode.streamerLogin = fields.streamerLogin
+    end if
+    if fields.streamerid <> invalid
+        twitchContentNode.streamerId = fields.streamerId
+    end if
+    if fields.streamerProfileImageUrl <> invalid
+        twitchContentNode.streamerProfileImageUrl = fields.streamerProfileImageUrl
+    end if
+    if fields.followerCount <> invalid
+        twitchContentNode.followerCount = fields.followerCount
+    end if
+    if fields.gameDisplayName <> invalid
+        twitchContentNode.gameDisplayName = fields.gameDisplayName
+    end if
+    if fields.gameBoxArtUrl <> invalid
+        twitchContentNode.gameBoxArtUrl = fields.gameBoxArtUrl
+    end if
+    if fields.gameId <> invalid
+        twitchContentNode.gameId = fields.gameId
+    end if
+    if fields.gameName <> invalid
+        twitchContentNode.gameName = fields.gameName
+    end if
+    if fields.url <> invalid
+        twitchContentNode.url = fields.url
+    end if
+    if fields.clipslug <> invalid
+        twitchContentNode.clipslug = fields.clipslug
+    end if
+    if fields.datePublished <> invalid
+        twitchContentNode.datePublished = fields.datePublished
+    end if
+end function
+
 ' Helper function to add and set fields of a content node
 function AddAndSetFields(node as object, aa as object)
     'This gets called for every content node -- no logging since it's pretty verbose

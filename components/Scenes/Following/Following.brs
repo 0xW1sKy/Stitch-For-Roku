@@ -79,7 +79,7 @@ sub handleDefaultSections()
                 end for
                 for each stream in jsonStreams
                     rowItem = createObject("RoSGNode", "TwitchContentNode")
-                    setContentFields(rowItem, stream)
+                    setTwitchContentFields(rowItem, stream)
                     row.appendChild(rowItem)
                 end for
                 if row.getchildcount() > 0
@@ -91,55 +91,6 @@ sub handleDefaultSections()
     end if
 end sub
 
-
-
-function setContentFields(twitchContentNode, fields)
-    if fields.contentId <> invalid
-        twitchContentNode.contentId = fields.contentId
-    end if
-    if fields.contentType <> invalid
-        twitchContentNode.contentType = fields.contentType
-    end if
-    if fields.previewImageURL <> invalid
-        twitchContentNode.previewImageUrl = fields.previewImageURL
-    end if
-    if fields.contentTitle <> invalid
-        twitchContentNode.contentTitle = fields.contentTitle
-    end if
-    if fields.viewersCount <> invalid
-        twitchContentNode.viewersCount = fields.viewersCount
-    end if
-    if fields.followerCount <> invalid
-        twitchContentNode.followerCount = fields.followerCount
-    end if
-    if fields.streamerDisplayName <> invalid
-        twitchContentNode.streamerDisplayName = fields.streamerDisplayName
-    end if
-    if fields.streamerLogin <> invalid
-        twitchContentNode.streamerLogin = fields.streamerLogin
-    end if
-    if fields.streamerid <> invalid
-        twitchContentNode.streamerId = fields.streamerId
-    end if
-    if fields.streamerProfileImageUrl <> invalid
-        twitchContentNode.streamerProfileImageUrl = fields.streamerProfileImageUrl
-    end if
-    if fields.followerCount <> invalid
-        twitchContentNode.followerCount = fields.followerCount
-    end if
-    if fields.gameDisplayName <> invalid
-        twitchContentNode.gameDisplayName = fields.gameDisplayName
-    end if
-    if fields.gameBoxArtUrl <> invalid
-        twitchContentNode.gameBoxArtUrl = fields.gameBoxArtUrl
-    end if
-    if fields.gameId <> invalid
-        twitchContentNode.gameId = fields.gameId
-    end if
-    if fields.gameName <> invalid
-        twitchContentNode.gameName = fields.gameName
-    end if
-end function
 
 
 sub handleRecommendedSections()
@@ -185,7 +136,7 @@ sub handleRecommendedSections()
                     row = createObject("RoSGNode", "ContentNode")
                 end if
                 twitchContentNode = createObject("roSGNode", "TwitchContentNode")
-                setContentFields(twitchContentNode, liveFollows[i])
+                setTwitchContentFields(twitchContentNode, liveFollows[i])
                 row.appendChild(twitchContentNode)
                 appended = false
                 if row.getChildCount() = itemsPerRow
@@ -239,7 +190,7 @@ sub handleRecommendedSections()
                     row = createObject("RoSGNode", "ContentNode")
                 end if
                 twitchContentNode = createObject("roSGNode", "TwitchContentNode")
-                setContentFields(twitchContentNode, streams[i])
+                setTwitchContentFields(twitchContentNode, streams[i])
                 row.appendChild(twitchContentNode)
                 appended = false
                 if row.getChildCount() = itemsPerRow
