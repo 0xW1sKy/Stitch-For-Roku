@@ -45,11 +45,11 @@
             <translation>Pesquisar</translation>
         </message>
         <message>
-            <source>Go to https://www.twitch.tv/activate and type the following code:</source>
+            <source>LoginPageTopText</source>
             <translation>Abra https://www.twitch.tv/activate no navegador e digite o código abaixo:</translation>
         </message>
         <message>
-            <source>Stitch should log you in soon after you authorize your account for use.</source>
+            <source>LoginPageBottomText</source>
             <translation>Stitch deve te conectar logo após você autorizar o uso da sua conta.</translation>
         </message>
         <message>
