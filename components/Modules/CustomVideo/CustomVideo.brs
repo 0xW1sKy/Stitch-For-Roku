@@ -59,6 +59,12 @@ function init()
     uiResolutionWidth = deviceInfo.GetUIResolution().width
     m.sec = createObject("roRegistrySection", "VideoSettings")
 
+    m.fadeAwayTimer = createObject("roSGNode", "Timer")
+    m.fadeAwayTimer.observeField("fire", "onFadeAway")
+    m.fadeAwayTimer.repeat = false
+    m.fadeAwayTimer.duration = "8"
+    m.fadeAwayTimer.control = "stop"
+
     m.buttonHoldTimer = createObject("roSGNode", "Timer")
     m.buttonHoldTimer.observeField("fire", "onButtonHold")
     m.buttonHoldTimer.repeat = true
@@ -138,6 +144,22 @@ end sub
 sub onVideoStateChange()
     if m.top.state = "playing"
         m.top.setFocus(true)
+    end if
+end sub
+
+function hideOverlay()
+    m.controlButton.blendColor = "0xFFFFFFFF"
+    m.messagesButton.blendColor = "0xFFFFFFFF"
+    m.timeTravelButton.blendColor = "0xFFFFFFFF"
+    m.qualitySelectButton.blendColor = "0xFFFFFFFF"
+    m.currentProgressBarState = 0
+    m.thumbnailImage.visible = false
+    m.progressBar.visible = false
+end function
+
+sub onFadeAway()
+    if not m.timeTravelRect.visible
+        hideOverlay()
     end if
 end sub
 
@@ -315,6 +337,8 @@ end sub
 function onKeyEvent(key, press) as boolean
     handled = false
     if press
+        m.fadeAwayTimer.control = "stop"
+        m.fadeAwayTimer.control = "start"
         if key = "up"
             if m.currentProgressBarState = 0
                 m.currentProgressBarState = 1
@@ -467,13 +491,7 @@ function onKeyEvent(key, press) as boolean
                 end if
                 m.timeTravelTimeSlot[m.focusedTimeSlot].getChild(0).text = number.ToStr()
             else
-                m.controlButton.blendColor = "0xFFFFFFFF"
-                m.messagesButton.blendColor = "0xFFFFFFFF"
-                m.timeTravelButton.blendColor = "0xFFFFFFFF"
-                m.qualitySelectButton.blendColor = "0xFFFFFFFF"
-                m.currentProgressBarState = 0
-                m.thumbnailImage.visible = false
-                m.progressBar.visible = false
+                hideOverlay()
                 return true
             end if
         else if key = "back"
