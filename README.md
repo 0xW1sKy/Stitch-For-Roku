@@ -1,6 +1,7 @@
 # Stitch (for Roku)
 
-A Homebrew Twitch app for Roku. Still buggy, so feel free to suggest improvements or make pull requests.
+A 2023 Twitch app for Roku.
+<https://my.roku.com/account/add?channel=LL5GKQ>
 
 ## Discord
 
@@ -11,10 +12,6 @@ Because people have been asking for it, here is a discord server you can join fo
 ## Support
 
 Best way to support Stitch is interaction with this project. Contributions are welcome.
-
-## How to Install
-
-<https://my.roku.com/account/add?channel=LL5GKQ>
 
 ## Message from the repo owner
 
