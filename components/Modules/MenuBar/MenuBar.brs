@@ -6,6 +6,8 @@ sub init()
     m.headerRect = m.top.findNode("headerRect")
     m.menuOptions = m.top.findNode("MenuOptions")
     m.top.observeField("focusedChild", "onGetfocus")
+    m.top.menuTextColor = m.global.constants.colors.muted.ice
+    m.top.menuFocusColor = m.global.constants.colors.twitch.purple10
 end sub
 
 sub onGetfocus()
@@ -29,7 +31,7 @@ function buildIcon(icon)
     newItem.height = m.top.menuOptionsHeight
     newItem.focusFootprintBitmapUri = "pkg:/images/FocusFootprint.9.png"
     newItem.focusBitmapUri = "pkg:/images/FocusFootprint.9.png"
-    newItem.showFocusFootprint = true
+    newItem.showFocusFootprint = false
     newItem.getchild(3).blendColor = m.top.menuTextColor
     newItem.getchild(3).width = m.top.menuFontSize * 2
     newItem.getchild(3).height = m.top.menuFontSize * 2
@@ -59,7 +61,7 @@ sub updateMenuOptions()
             newItem.minChars = (140 / m.top.menuOptionsText.count())
             newItem.focusedTextFont = font
             newItem.textColor = m.top.menuTextColor
-            newItem.focusedTextColor = m.top.menuTextColor
+            newItem.focusedTextColor = m.top.menuFocusColor
             newItem.iconUri = ""
             newItem.focusedIconUri = ""
             newItem.height = m.top.menuOptionsHeight

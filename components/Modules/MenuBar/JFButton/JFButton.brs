@@ -2,7 +2,7 @@ sub init()
     m.top.observeFieldScoped("text", "onTextChanged")
     m.top.iconUri = ""
     m.top.focusedIconUri = ""
-    m.top.showFocusFootprint = true
+    m.top.showFocusFootprint = false
     m.top.minWidth = 0
 end sub
 
@@ -19,6 +19,6 @@ sub onTextChanged()
         else
             m.top.text = Chr(160) + m.top.text
         end if
-        addSpaceAfter = addSpaceAfter = false
+        addSpaceAfter = not addSpaceAfter
     end while
 end sub
