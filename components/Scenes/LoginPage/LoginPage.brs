@@ -72,11 +72,20 @@ sub onButtonSelected()
     ? "buttonSelected: "; m.buttonGroup.buttonSelected
     if m.buttonGroup.buttonSelected = 0
         active_user = get_setting("active_user", "default")
-        if active_user <> "default"
-            NukeRegistry(active_user)
+        if active_user <> "default" or get_user_setting("display_name") <> invalid
+            try
+                NukeRegistry("default")
+            catch e
+                ? "error while logging out: "; e
+            end try
+            try
+                NukeRegistry(active_user)
+            catch e
+                ? "error while logging out: "; e
+            end try
             set_setting("active_user", "default")
-            m.top.finished = true
             RunContentTask()
+            m.top.finished = true
         end if
     end if
 end sub
@@ -96,6 +105,14 @@ end sub
 sub RunContentTask()
     ? "active User: "; get_setting("active_user", "default")
     if get_setting("active_user", "default") <> "default"
+        m.buttonGroup.observeField("buttonSelected", "onButtonSelected")
+        m.buttonGroup.buttons = [tr("Log Out")]
+        m.code.visible = false
+        m.loginText.visible = false
+        m.bottomText.visible = false
+        m.buttonGroup.visible = true
+        m.buttonGroup.setFocus(true)
+    else if get_user_setting("display_name") <> invalid
         m.buttonGroup.observeField("buttonSelected", "onButtonSelected")
         m.buttonGroup.buttons = [tr("Log Out")]
         m.code.visible = false

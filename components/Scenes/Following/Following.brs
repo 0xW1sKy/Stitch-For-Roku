@@ -55,24 +55,26 @@ sub handleDefaultSections()
                 row.title = temp_title
                 jsonStreams = []
                 for each stream in streamRow.node.content.edges
-                    if stream.node["__typename"].toStr() <> invalid and stream.node["__typename"].toStr() = "Stream"
-                        rowItem = {}
-                        rowItem.contentId = stream.node.Id
-                        rowItem.contentType = "LIVE"
-                        rowItem.previewImageURL = Substitute("https://static-cdn.jtvnw.net/previews-ttv/live_user_{0}-{1}x{2}.jpg", stream.node.broadcaster.login, "320", "180")
-                        rowItem.contentTitle = stream.node.broadcaster.broadcastSettings.title
-                        rowItem.viewersCount = stream.node.viewersCount
-                        rowItem.streamerDisplayName = stream.node.broadcaster.displayName
-                        rowItem.streamerLogin = stream.node.broadcaster.login
-                        rowItem.streamerId = stream.node.broadcaster.id
-                        rowItem.streamerProfileImageUrl = stream.node.broadcaster.profileImageURL
-                        if stream.node.game <> invalid
-                            rowItem.gameDisplayName = stream.node.game.displayName
-                            rowItem.gameBoxArtUrl = Left(stream.node.game.boxArtUrl, Len(stream.node.game.boxArtUrl) - 20) + "188x250.jpg"
-                            rowItem.gameId = stream.node.game.Id
-                            rowItem.gameName = stream.node.game.name
+                    if stream.node <> invalid
+                        if stream.node["__typename"].toStr() <> invalid and stream.node["__typename"].toStr() = "Stream"
+                            rowItem = {}
+                            rowItem.contentId = stream.node.Id
+                            rowItem.contentType = "LIVE"
+                            rowItem.previewImageURL = Substitute("https://static-cdn.jtvnw.net/previews-ttv/live_user_{0}-{1}x{2}.jpg", stream.node.broadcaster.login, "320", "180")
+                            rowItem.contentTitle = stream.node.broadcaster.broadcastSettings.title
+                            rowItem.viewersCount = stream.node.viewersCount
+                            rowItem.streamerDisplayName = stream.node.broadcaster.displayName
+                            rowItem.streamerLogin = stream.node.broadcaster.login
+                            rowItem.streamerId = stream.node.broadcaster.id
+                            rowItem.streamerProfileImageUrl = stream.node.broadcaster.profileImageURL
+                            if stream.node.game <> invalid
+                                rowItem.gameDisplayName = stream.node.game.displayName
+                                rowItem.gameBoxArtUrl = Left(stream.node.game.boxArtUrl, Len(stream.node.game.boxArtUrl) - 20) + "188x250.jpg"
+                                rowItem.gameId = stream.node.game.Id
+                                rowItem.gameName = stream.node.game.name
+                            end if
+                            jsonStreams.push(rowItem)
                         end if
-                        jsonStreams.push(rowItem)
                     end if
                 end for
                 for each stream in jsonStreams

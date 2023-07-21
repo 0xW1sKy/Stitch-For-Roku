@@ -13,12 +13,15 @@ end function
 
 function TwitchGraphQLRequest(data)
     access_token = invalid
+    device_code = invalid
     ' doubled up here in stead of defaulting to "" because access_token is dependent on device_code
     if get_user_setting("device_code") <> invalid
         device_code = get_user_setting("device_code")
         if get_user_setting("access_token") <> invalid
             access_token = "OAuth " + get_user_setting("access_token")
         end if
+    else
+        return invalid
     end if
     reqHeaders = {
         "Accept": "*/*"
