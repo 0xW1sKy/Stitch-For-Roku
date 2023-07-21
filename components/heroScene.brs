@@ -155,16 +155,20 @@ function onKeyEvent(key, press) as boolean
         end if
         if key = "left"
             if m.activeNode.id <> "GamePage" and m.activeNode.id <> "ChannelPage" and m.activeNode.id <> "VideoPlayer"
-                m.activeNode.setFocus(false)
-                m.followedStreamBar.setFocus(true)
-                m.followedStreamBar.itemHasFocus = true
-                return true
+                if get_user_setting("FollowBarOption", "true") = "true"
+                    m.activeNode.setFocus(false)
+                    m.followedStreamBar.setFocus(true)
+                    m.followedStreamBar.itemHasFocus = true
+                    return true
+                end if
             end if
         end if
         if key = "right"
-            m.followedStreamBar.itemHasFocus = false
-            m.activeNode.setFocus(true)
-            return true
+            if get_user_setting("FollowBarOption", "true") = "true"
+                m.followedStreamBar.itemHasFocus = false
+                m.activeNode.setFocus(true)
+                return true
+            end if
         end if
     end if
     ' if key = "up"

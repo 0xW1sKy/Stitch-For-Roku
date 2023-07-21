@@ -51,5 +51,12 @@
                 "id": "30"
             }
         ]
+    },
+    {
+        "title": "Enable Following Bar",
+        "description": "Enables or Disables streams from appearing in the following bar.",
+        "settingName": "FollowBarOption",
+        "type": "bool",
+        "default": "true"
     }
 ]

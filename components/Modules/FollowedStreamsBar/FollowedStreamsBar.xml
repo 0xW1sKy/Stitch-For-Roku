@@ -10,6 +10,7 @@
         <field id="refreshFollowBar" type="boolean" onChange="refreshFollowBar" />
     </interface>
 
+    <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
     <script type="text/brightscript" uri="FollowedStreamsBar.brs" />
 
     <children>
