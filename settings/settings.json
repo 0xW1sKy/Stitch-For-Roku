@@ -58,5 +58,12 @@
         "settingName": "FollowBarOption",
         "type": "bool",
         "default": "true"
+    },
+    {
+        "title": "Enable Chat Web Traffic",
+        "description": "This disables the chat window from sending/receiving web requests.",
+        "settingName": "ChatWebOption",
+        "type": "bool",
+        "default": "true"
     }
 ]

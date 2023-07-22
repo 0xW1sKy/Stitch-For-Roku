@@ -148,7 +148,7 @@ function updateRowList(contentCollection)
         end if
         showRowLabel.push(hasRowLabel)
         defaultRowHeight = 275
-        if row.getchild(0).contentType = "LIVE" or row.getchild(0).contentType = "VOD"
+        if row?.getchild(0)?.contentType = "LIVE" or row?.getchild(0)?.contentType = "VOD"
             rowItemSize.push([320, 180])
             if hasRowLabel
                 rowHeights.push(275)
@@ -156,7 +156,7 @@ function updateRowList(contentCollection)
                 rowHeights.push(235)
             end if
         end if
-        if row.getchild(0).contentType = "GAME"
+        if row?.getchild(0)?.contentType = "GAME"
             rowItemSize.push([188, 250])
             if hasRowLabel
                 rowHeights.push(325)
