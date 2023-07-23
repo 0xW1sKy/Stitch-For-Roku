@@ -3,11 +3,7 @@
     "host": "10.0.0.43",
     "username": "rokudev",
     "password": "1111",
-    "sourceMap": true,
-    "allowBrighterScriptInBrightScript": true,
-    "deploy": false,
-    "retainStagingDir": true,
-    "createPackage": true,
+    "deploy": true,
     "stagingDir": "./out/.debugStaging",
     "files": [
         "source/**/*",

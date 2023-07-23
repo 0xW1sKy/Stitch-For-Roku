@@ -16,11 +16,11 @@ end sub
 
 sub onQualitySelectButtonPressed()
     if m.videoplayer.qualityChangeRequestflag = true
-        m.videoplayer.qualityChangeRequestFlag = false
         vidContent = createObject("roSGNode", "ContentNode")
         vidContent.title = m.top.contentRequested.contentTitle
         vidContent.url = m.videoplayer.qualityChangeRequest
         vidContent.streamFormat = m.videoPlayer.content.streamFormat
+        ' m.videoPlayer.ClearContent()
         m.videoPlayer.video_id = m.top.contentRequested.contentId
         m.videoPlayer.streamUrls = m.videoplayer.streamUrls
         m.videoPlayer.streamQualities = m.videoplayer.streamQualities
@@ -30,12 +30,14 @@ sub onQualitySelectButtonPressed()
         m.videoPlayer.channelUsername = m.top.contentRequested.streamerDisplayName
         m.videoPlayer.channelAvatar = m.top.contentRequested.streamerProfileImageUrl
         m.videoPlayer.videoTitle = m.top.contentRequested.contentTitle
-        m.videoplayer.content = vidContent
+        m.videoPlayer.content = vidContent
         ' m.videoplayer.visible = true
         ' m.videoplayer.setFocus(true)
         ' m.videoplayer.enableCookies()
         checkBookmarks()
         m.videoplayer.control = "play"
+        m.videoplayer.qualityChangeRequestFlag = false
+        ' m.videoPlayer.visible = true
     end if
 end sub
 
@@ -252,7 +254,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
         ? "Home Scene Key Event: "; key
         if key = "back"
             m.top.backPressed = true
-            return true
+            return false
         end if
         if key = "OK"
             ? "selected"

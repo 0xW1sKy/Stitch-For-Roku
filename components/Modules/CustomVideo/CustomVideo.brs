@@ -107,7 +107,6 @@ sub onQualityButtonSelect()
     m.QualityDialog.setFocus(false)
     resetProgressBar()
     m.progressBar.getParent().setFocus(true)
-    m.top.control = "pause"
     m.top.qualityChangeRequestFlag = true
     m.top.qualityChangeRequest = m.top.STREAMURLS[m.QualityDialog.buttonSelected]
 end sub
@@ -498,7 +497,6 @@ function onKeyEvent(key, press) as boolean
             if m.timeTravelRect.visible
                 m.timeTravelRect.visible = false
                 m.currentProgressBarState = 3
-                handled = true
             else
                 m.currentPositionSeconds = 0
                 m.currentProgressBarState = 0

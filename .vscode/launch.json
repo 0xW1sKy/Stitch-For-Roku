@@ -7,17 +7,6 @@
         {
             "type": "brightscript",
             "request": "launch",
-            "rootDir": "${workspaceFolder}/out/.debugStaging",
-            "name": "BrightScript Debug: Launch (Watch)",
-            "stopOnEntry": false,
-            //kick off the bsc watcher before launching
-            "preLaunchTask": "watch",
-            "enableDebuggerAutoRecovery": false,
-            "stopDebuggerOnAppExit": false
-        },
-        {
-            "type": "brightscript",
-            "request": "launch",
             "name": "BrightScript Debug: Launch",
             "rootDir": "${workspaceFolder}/out/.debugStaging",
             "stopOnEntry": false,
@@ -27,7 +16,9 @@
             "enableDebugProtocol": true,
             "rendezvousTracking": false,
             //run the BrighterScript build before each launch
-            "preLaunchTask": "build"
+            "preLaunchTask": "build",
+            "enableSourceMaps": true,
+            "retainStagingFolder": true
         }
     ]
 }
