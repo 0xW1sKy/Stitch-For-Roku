@@ -9,10 +9,14 @@
     {
         "title": "Video Quality",
         "description": "",
-        "settingName": "VideoQuality",
+        "settingName": "VideoQualitySetting",
         "type": "radio",
         "default": "1080",
         "options": [
+            {
+                "title":"Maximum",
+                "id":"100000"
+            },
             {
                 "title": "1080p",
                 "id": "1080"
@@ -38,10 +42,14 @@
     {
         "title": "Video Framerate",
         "description": "",
-        "settingName": "VideoFramerate",
+        "settingName": "VideoFramerateSetting",
         "type": "radio",
         "default": "30",
         "options": [
+            {
+                "title":"Maximum",
+                "id":"10000"
+            },
             {
                 "title": "60 fps",
                 "id": "60"

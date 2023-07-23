@@ -156,13 +156,13 @@ function handleUsherResponse()
         resolution = value.split("p")[0]
         fps = value.split("p")[1]
         if resolution <> invalid
-            if resolution.ToInt() > get_user_setting("VideoQuality").ToInt()
+            if resolution.ToInt() > get_user_setting("VideoQualitySetting").ToInt()
                 ? "Res Skip: "; value
                 continue for
             end if
         end if
         if fps <> invalid
-            if fps.ToInt() > get_user_setting("VideoFramerate").ToInt()
+            if fps.ToInt() > get_user_setting("VideoFramerateSetting").ToInt()
                 ? "Fps Skip: "; value
                 continue for
             end if
