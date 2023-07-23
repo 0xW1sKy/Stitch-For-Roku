@@ -1,5 +1,6 @@
 *.zip
 .out/
+dist/
 out/
 template.env
 .dev
