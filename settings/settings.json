@@ -11,27 +11,27 @@
         "description": "",
         "settingName": "VideoQuality",
         "type": "radio",
-        "default": "1",
+        "default": "1080",
         "options": [
             {
                 "title": "1080p",
-                "id": "1"
+                "id": "1080"
             },
             {
                 "title": "720p",
-                "id": "3"
+                "id": "720"
             },
             {
                 "title": "480p",
-                "id": "4"
+                "id": "480"
             },
             {
                 "title": "360p",
-                "id": "5"
+                "id": "360"
             },
             {
                 "title": "160p",
-                "id": "6"
+                "id": "160"
             }
         ]
     },
@@ -40,7 +40,7 @@
         "description": "",
         "settingName": "VideoFramerate",
         "type": "radio",
-        "default": "1",
+        "default": "30",
         "options": [
             {
                 "title": "60 fps",
@@ -60,7 +60,7 @@
         "default": "true"
     },
     {
-        "title": "Enable Chat Web Traffic",
+        "title": "Enable Chat Job",
         "description": "This disables the chat window from sending/receiving web requests.",
         "settingName": "ChatWebOption",
         "type": "bool",

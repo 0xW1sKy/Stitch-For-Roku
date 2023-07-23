@@ -136,24 +136,42 @@ function handleUsherResponse()
     stream_content_ids = []
     stream_sticky = []
     for each stream_item in stream_objects
-        stream_bitrates.push(Int(Val(stream_item["BANDWIDTH"])) / 1000)
         if stream_item["VIDEO"] = "chunked"
-            value = stream_item["RESOLUTION"].split("x")[1] + "p"
+            res = stream_item["RESOLUTION"].split("x")[1]
             if stream_item["FRAME-RATE"] <> invalid
-                value = value + stream_item["FRAME-RATE"].split(".")[0]
+                fps = stream_item["FRAME-RATE"].split(".")[0]
+            end if
+            value = res + "p"
+            if fps <> invalid
+                value = value + fps
             end if
         else
             value = stream_item["VIDEO"]
         end if
+        if Int(Val(stream_item["RESOLUTION"].split("x")[1])) >= 720
+            stream_quality = "HD"
+        else
+            stream_quality = "SD"
+        end if
+        resolution = value.split("p")[0]
+        fps = value.split("p")[1]
+        if resolution <> invalid
+            if resolution.ToInt() > get_user_setting("VideoQuality").ToInt()
+                ? "Res Skip: "; value
+                continue for
+            end if
+        end if
+        if fps <> invalid
+            if fps.ToInt() > get_user_setting("VideoFramerate").ToInt()
+                ? "Fps Skip: "; value
+                continue for
+            end if
+        end if
+        stream_qualities.push(stream_quality)
         stream_content_ids.push(value)
         stream_urls.push(stream_item["URL"])
-        if Int(Val(stream_item["RESOLUTION"].split("x")[1])) >= 720
-            stream_qualities.push("HD")
-        else
-            stream_qualities.push("SD")
-        end if
+        stream_bitrates.push(Int(Val(stream_item["BANDWIDTH"])) / 1000)
         stream_sticky.push("false")
-
     end for
     ' The stream needs a couple of seconds to load on AWS's server side before we display back to user.
     ' The idea is that this will provide a better user experience by removing stuttering.
