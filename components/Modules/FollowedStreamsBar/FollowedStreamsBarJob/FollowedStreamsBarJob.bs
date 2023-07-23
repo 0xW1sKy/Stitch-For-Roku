@@ -1,0 +1,412 @@
+sub init()
+    m.top.functionName = "updateFollowBar"
+end sub
+
+sub updateFollowBar()
+    access_token = ""
+    device_code = ""
+    di = CreateObject("roDeviceInfo")
+    ' doubled up here in stead of defaulting to "" because access_token is dependent on device_code
+    if get_user_setting("device_code") <> invalid
+        device_code = get_user_setting("device_code")
+        if get_user_setting("access_token") <> invalid
+            access_token = "OAuth " + get_user_setting("access_token")
+        end if
+    end if
+    req = HttpRequest({
+        url: "https://gql.twitch.tv/gql"
+        headers: {
+            "Accept": "*/*"
+            "Authorization": access_token
+            "Client-Id": "ue6666qo983tsx6so1t0vnawi233wa"
+            "Device-ID": device_code
+            "Origin": "https://switch.tv.twitch.tv"
+            "Referer": "https://switch.tv.twitch.tv/"
+        }
+        method: "POST"
+        data: {
+            query: `query FollowingPage_Query(
+                $first: Int!
+                $liveUserCursor: Cursor
+                $offlineUserCursor: Cursor
+                $followedGameType: FollowedGamesType
+                $categoryFirst: Int!
+                $itemsPerRow: Int!
+                $limit: Int!
+                $platform: String!
+                $requestID: String!
+            ) {
+                user {
+                    followedLiveUsers(first: $first, after: $liveUserCursor) {
+                        edges {
+                            node {
+                                id
+                                __typename
+                            }
+                        }
+                    }
+                    follows(first: $first, after: $offlineUserCursor) {
+                        edges {
+                            node {
+                                id
+                                __typename
+                                stream {
+                                    id
+                                    __typename
+                                }
+                            }
+                        }
+                    }
+                    followedGames(first: $categoryFirst, type: $followedGameType) {
+                        nodes {
+                            id
+                            __typename
+                        }
+                    }
+                    ...LiveStreamInfiniteShelf_followedLiveUsers
+                    ...OfflineInfiniteShelf_followedUsers
+                    ...CategoryShelf_followedCategories
+                    id
+                    __typename
+                }
+                ...FollowingPageEmpty_Query
+            }
+
+            fragment CategoryBannerContent_category on Game {
+                streams(first: 1) {
+                    edges {
+                        node {
+                            ...FollowingLiveStreamBannerContent_stream
+                            id
+                            __typename
+                        }
+                    }
+                }
+            }
+
+            fragment CategoryShelf_followedCategories on User {
+                followedGames(first: $categoryFirst, type: $followedGameType) {
+                    nodes {
+                        id
+                        __typename
+                        displayName
+                        developers
+                        boxArtURL
+                        ...FocusableCategoryCard_category
+                        ...CategoryBannerContent_category
+                        streams(first: 1) {
+                            edges {
+                                node {
+                                    previewImageURL
+                                    id
+                                    __typename
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            fragment FocusableCategoryCard_category on Game {
+                id
+                __typename
+                name
+                displayName
+                viewersCount
+                boxArtURL
+            }
+
+            fragment FocusableOfflineChannelCard_channel on User {
+                displayName
+                followers {
+                    totalCount
+                }
+                lastBroadcast {
+                    startedAt
+                    id
+                    __typename
+                }
+                login
+                profileImageURL(width: 300)
+            }
+
+            fragment FocusableStreamCard_stream on Stream {
+                broadcaster {
+                    displayName
+                    login
+                    broadcastSettings {
+                        title
+                        id
+                        __typename
+                    }
+                    profileImageURL(width: 50)
+                    id
+                    __typename
+                }
+                game {
+                    displayName
+                    name
+                    id
+                    __typename
+                }
+                id
+                __typename
+                previewImageURL
+                type
+                viewersCount
+            }
+
+            fragment FollowingLiveStreamBannerContent_stream on Stream {
+                game {
+                    displayName
+                    id
+                    __typename
+                }
+                broadcaster {
+                    broadcastSettings {
+                        title
+                        id
+                        __typename
+                    }
+                    displayName
+                    id
+                    __typename
+                }
+            }
+
+            fragment FollowingPageEmpty_Query on Query {
+                shelves(itemsPerRow: $itemsPerRow, first: $limit, platform: $platform, requestID: $requestID) {
+                    edges {
+                        node {
+                            id
+                            __typename
+                            title {
+                                fallbackLocalizedTitle
+                                localizedTitleTokens {
+                                    node {
+                                        __typename
+                                        ... on Game {
+                                            __typename
+                                            displayName
+                                            name
+                                            id
+                                            __typename
+                                        }
+                                        ... on TextToken {
+                                            __typename
+                                            text
+                                            location
+                                        }
+                                        ... on BrowsableCollection {
+                                            id
+                                            __typename
+                                        }
+                                        ... on Tag {
+                                            id
+                                            __typename
+                                        }
+                                        ... on User {
+                                            id
+                                            __typename
+                                        }
+                                    }
+                                }
+                            }
+                            trackingInfo {
+                                rowName
+                            }
+                            content {
+                                edges {
+                                    trackingID
+                                    node {
+                                        __typename
+                                        __isShelfContent: __typename
+                                        ... on Stream {
+                                            id
+                                            __typename
+                                            previewImageURL
+                                            broadcaster {
+                                                displayName
+                                                broadcastSettings {
+                                                    title
+                                                    id
+                                                    __typename
+                                                }
+                                                id
+                                                __typename
+                                            }
+                                            game {
+                                                displayName
+                                                boxArtURL
+                                                id
+                                                __typename
+                                            }
+                                            ...FocusableStreamCard_stream
+                                        }
+                                        ... on Game {
+                                            ...FocusableCategoryCard_category
+                                            id
+                                            __typename
+                                            streams(first: 1) {
+                                                edges {
+                                                    node {
+                                                        id
+                                                        __typename
+                                                        previewImageURL
+                                                        broadcaster {
+                                                            displayName
+                                                            broadcastSettings {
+                                                                title
+                                                                id
+                                                                __typename
+                                                            }
+                                                            id
+                                                            __typename
+                                                        }
+                                                        game {
+                                                            displayName
+                                                            boxArtURL
+                                                            id
+                                                            __typename
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        ... on Clip {
+                                            id
+                                            __typename
+                                        }
+                                        ... on Tag {
+                                            id
+                                            __typename
+                                        }
+                                        ... on Video {
+                                            id
+                                            __typename
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            fragment LiveStreamInfiniteShelf_followedLiveUsers on User {
+                followedLiveUsers(first: $first, after: $liveUserCursor) {
+                    edges {
+                        cursor
+                        node {
+                            id
+                            __typename
+                            displayName
+                            stream {
+                                previewImageURL
+                                game {
+                                    boxArtURL
+                                    id
+                                    __typename
+                                }
+                                ...FollowingLiveStreamBannerContent_stream
+                                ...FocusableStreamCard_stream
+                                id
+                                __typename
+                            }
+                        }
+                    }
+                }
+            }
+
+            fragment OfflineBannerContent_user on User {
+                displayName
+                lastBroadcast {
+                    startedAt
+                    game {
+                        displayName
+                        id
+                        __typename
+                    }
+                    id
+                    __typename
+                }
+                stream {
+                    id
+                    __typename
+                }
+            }
+
+            fragment OfflineInfiniteShelf_followedUsers on User {
+                follows(first: $first, after: $offlineUserCursor) {
+                    edges {
+                        cursor
+                        node {
+                            id
+                            __typename
+                            bannerImageURL
+                            displayName
+                            lastBroadcast {
+                                game {
+                                    boxArtURL
+                                    id
+                                    __typename
+                                }
+                                id
+                                __typename
+                            }
+                            stream {
+                                id
+                                __typename
+                            }
+                            ...OfflineBannerContent_user
+                            ...FocusableOfflineChannelCard_channel
+                        }
+                    }
+                }
+            }`
+            variables: {
+                "first": 100
+                ' "liveUserCursor": ""
+                ' "offlineUserCursor": ""
+                "followedGameType": "ALL"
+                "categoryFirst": 100
+                "itemsPerRow": 25
+                "limit": 8
+                "platform": "switch_web_tv"
+                "requestID": di.GetRandomUUID()
+            }
+        }
+    })
+    rsp = ParseJSON(req.send())
+    contentCollection = []
+    if rsp?.data?.shelves <> invalid
+        for each stream in rsp.data.shelves.edges[0].node.content.edges
+            streamnode = stream.node
+            ' type_name = stream.node.__typename
+            try
+                if stream.node.type <> invalid and stream.node.type = "live"
+                    rowItem = createObject("RoSGNode", "TwitchContentNode")
+                    rowItem.contentId = stream.node.Id
+                    rowItem.contentType = "LIVE"
+                    rowItem.previewImageURL = Substitute("https://static-cdn.jtvnw.net/previews-ttv/live_user_{0}-{1}x{2}.jpg", stream.node.broadcaster.login, "320", "180")
+                    rowItem.contentTitle = stream.node.broadcaster.broadcastSettings.title
+                    rowItem.viewersCount = stream.node.viewersCount
+                    rowItem.streamerDisplayName = stream.node.broadcaster.displayName
+                    rowItem.streamerLogin = stream.node.broadcaster.login
+                    rowItem.streamerId = stream.node.broadcaster.id
+                    rowItem.streamerProfileImageUrl = stream.node.broadcaster.profileImageURL
+                    rowItem.gameDisplayName = stream.node.game.displayName
+                    rowItem.gameBoxArtUrl = Left(stream.node.game.boxArtUrl, Len(stream.node.game.boxArtUrl) - 20) + "188x250.jpg"
+                    rowItem.gameId = stream.node.game.Id
+                    rowItem.gameName = stream.node.game.name
+                    contentCollection.push(rowItem)
+                end if
+            catch e
+                ? "Error: "; e
+            end try
+        end for
+    end if
+    if contentCollection.count() > 0
+        m.top.result = contentCollection
+    end if
+end sub

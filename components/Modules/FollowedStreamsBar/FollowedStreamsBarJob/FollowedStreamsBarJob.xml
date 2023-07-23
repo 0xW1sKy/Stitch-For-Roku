@@ -6,8 +6,9 @@
         <field id="result" type="array" />
     </interface>
 
-    <script type="text/brightscript" uri="FollowedStreamsBarJob.brs" />
+    <script type="text/brightscript" uri="FollowedStreamsBarJob.bs" />
     <script type="text/brightscript" uri="pkg:/source/utils/http.brs" />
     <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
+    <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
 
 </component>

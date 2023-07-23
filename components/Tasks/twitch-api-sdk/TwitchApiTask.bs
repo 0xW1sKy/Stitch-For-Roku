@@ -285,7 +285,30 @@ end function
 
 function getStreamPlayerQuery()
     rsp = TwitchGraphQLRequest({
-        query: "query StreamPlayer_Query(" + chr(10) + "  $login: String!" + chr(10) + "  $playerType: String!" + chr(10) + "  $platform: String!" + chr(10) + "  $skipPlayToken: Boolean!" + chr(10) + ") {" + chr(10) + "  ...StreamPlayer_token" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment StreamPlayer_token on Query {" + chr(10) + "  user(login: $login) {" + chr(10) + "    login" + chr(10) + "    stream @skip(if: $skipPlayToken) {" + chr(10) + "      playbackAccessToken(params: {platform: $platform, playerType: $playerType}) {" + chr(10) + "        signature" + chr(10) + "        value" + chr(10) + "      }" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "    }" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "}" + chr(10) + ""
+        query: `query StreamPlayer_Query(
+            $login: String!
+            $playerType: String!
+            $platform: String!
+            $skipPlayToken: Boolean!
+            ) {
+            ...StreamPlayer_token
+            }
+
+            fragment StreamPlayer_token on Query {
+            user(login: $login) {
+                login
+                stream @skip(if: $skipPlayToken) {
+                    playbackAccessToken(params: {platform: $platform, playerType: $playerType}) {
+                        signature
+                        value
+                    }
+                    id
+                    __typename
+                }
+                id
+                __typename
+            }
+        }`
         variables: {
             "login": m.top.request.params.id
             "platform": "switch_web_tv"
@@ -303,7 +326,24 @@ end function
 
 function getVodPlayerWrapperQuery() as object
     rsp = TwitchGraphQLRequest({
-        query: "query VodPlayerWrapper_Query(" + chr(10) + "  $videoId: ID!" + chr(10) + "  $platform: String!" + chr(10) + "  $playerType: String!" + chr(10) + "  $skipPlayToken: Boolean!" + chr(10) + ") {" + chr(10) + "  ...VodPlayerWrapper_token" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment VodPlayerWrapper_token on Query {" + chr(10) + "  video(id: $videoId) @skip(if: $skipPlayToken) {" + chr(10) + "    playbackAccessToken(params: {platform: $platform, playerType: $playerType}) {" + chr(10) + "      signature" + chr(10) + "      value" + chr(10) + "    }" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "}" + chr(10) + ""
+        query: `query VodPlayerWrapper_Query(
+            $videoId: ID!
+            $platform: String!
+            $playerType: String!
+            $skipPlayToken: Boolean!
+            ) {
+            ...VodPlayerWrapper_token
+            }
+            fragment VodPlayerWrapper_token on Query {
+            video(id: $videoId) @skip(if: $skipPlayToken) {
+                playbackAccessToken(params: {platform: $platform, playerType: $playerType}) {
+                    signature
+                   value
+                }
+                id
+                __typename
+            }
+        }`
         variables: {
             "videoId": m.top.request.params.id
             "platform": "switch_web_tv"
@@ -322,7 +362,166 @@ end function
 
 function getChannelInterstitialQuery() as object
     rsp = TwitchGraphQLRequest({
-        query: "query ChannelInterstitial_Query(" + chr(10) + "  $login: String!" + chr(10) + "  $platform: String!" + chr(10) + "  $playerType: String!" + chr(10) + "  $skipPlayToken: Boolean!" + chr(10) + ") {" + chr(10) + "  channel: user(login: $login) {" + chr(10) + "    ...InterstitialLayout_channel" + chr(10) + "    ...StreamDetails_channel" + chr(10) + "    ...StreamPlayer_channel" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "    login" + chr(10) + "    displayName" + chr(10) + "    broadcastSettings {" + chr(10) + "      isMature" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "    }" + chr(10) + "    stream {" + chr(10) + "      restrictionType" + chr(10) + "      self {" + chr(10) + "        canWatch" + chr(10) + "      }" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "      type" + chr(10) + "    }" + chr(10) + "    hosting {" + chr(10) + "      displayName" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "      login" + chr(10) + "      stream {" + chr(10) + "        id" + chr(10) + "        __typename" + chr(10) + "        type" + chr(10) + "      }" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "  currentUser {" + chr(10) + "    ...StreamPlayer_currentUser" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "    login" + chr(10) + "    roles {" + chr(10) + "      isStaff" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "  ...StreamPlayer_token" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment BroadcasterOverview_channel on User {" + chr(10) + "  login" + chr(10) + "  displayName" + chr(10) + "  followers {" + chr(10) + "    totalCount" + chr(10) + "  }" + chr(10) + "  primaryColorHex" + chr(10) + "  primaryTeam {" + chr(10) + "    displayName" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "  profileImageURL(width: 70)" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment ChannelDescription_channel on User {" + chr(10) + "  description" + chr(10) + "  displayName" + chr(10) + "  login" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment FocusableFollowButton_channel on User {" + chr(10) + "  login" + chr(10) + "  id" + chr(10) + "  __typename" + chr(10) + "  self {" + chr(10) + "    follower {" + chr(10) + "      followedAt" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment InterstitialButtonRow_channel on User {" + chr(10) + "  ...FocusableFollowButton_channel" + chr(10) + "  login" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment InterstitialLayout_channel on User {" + chr(10) + "  ...BroadcasterOverview_channel" + chr(10) + "  ...ChannelDescription_channel" + chr(10) + "  ...InterstitialButtonRow_channel" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment StreamDetails_channel on User {" + chr(10) + "  broadcastSettings {" + chr(10) + "    game {" + chr(10) + "      boxArtURL" + chr(10) + "      displayName" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "    }" + chr(10) + "    title" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "  stream {" + chr(10) + "    viewersCount" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment StreamPlayer_channel on User {" + chr(10) + "  id" + chr(10) + "  __typename" + chr(10) + "  login" + chr(10) + "  roles {" + chr(10) + "    isPartner" + chr(10) + "  }" + chr(10) + "  self {" + chr(10) + "    subscriptionBenefit {" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "  stream {" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "    game {" + chr(10) + "      name" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "    }" + chr(10) + "    previewImageURL" + chr(10) + "  }" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment StreamPlayer_currentUser on User {" + chr(10) + "  hasTurbo" + chr(10) + "  id" + chr(10) + "  __typename" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment StreamPlayer_token on Query {" + chr(10) + "  user(login: $login) {" + chr(10) + "    login" + chr(10) + "    stream @skip(if: $skipPlayToken) {" + chr(10) + "      playbackAccessToken(params: {platform: $platform, playerType: $playerType}) {" + chr(10) + "        signature" + chr(10) + "        value" + chr(10) + "      }" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "    }" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "}" + chr(10) + ""
+        query: `query ChannelInterstitial_Query(
+            $login: String!
+            $platform: String!
+            $playerType: String!
+            $skipPlayToken: Boolean!
+            ) {
+            channel: user(login: $login) {
+                ...InterstitialLayout_channel
+                ...StreamDetails_channel
+                ...StreamPlayer_channel
+                id
+                __typename
+                login
+                displayName
+                broadcastSettings {
+                    isMature
+                    id
+                    __typename
+                }
+                stream {
+                    restrictionType
+                    self {
+                        canWatch
+                    }
+                    id
+                    __typename
+                    type
+                }
+                hosting {
+                    displayName
+                    id
+                    __typename
+                    login
+                    stream {
+                        id
+                        __typename
+                        type
+                    }
+                }
+            }
+            currentUser {
+                ...StreamPlayer_currentUser
+                id
+                __typename
+                login
+                roles {
+                    isStaff
+                }
+            }
+            ...StreamPlayer_token
+        }
+
+        fragment BroadcasterOverview_channel on User {
+            login
+            displayName
+            followers {
+                totalCount
+            }
+            primaryColorHex
+            primaryTeam {
+                displayName
+                id
+                __typename
+            }
+            profileImageURL(width: 70)
+        }
+
+        fragment ChannelDescription_channel on User {
+            description
+            displayName
+            login
+        }
+
+        fragment FocusableFollowButton_channel on User {
+            login
+            id
+            __typename
+            self {
+                follower {
+                    followedAt
+                }
+            }
+        }
+
+        fragment InterstitialButtonRow_channel on User {
+            ...FocusableFollowButton_channel
+            login
+        }
+
+        fragment InterstitialLayout_channel on User {
+            ...BroadcasterOverview_channel
+            ...ChannelDescription_channel
+            ...InterstitialButtonRow_channel
+        }
+
+        fragment StreamDetails_channel on User {
+            broadcastSettings {
+                game {
+                    boxArtURL
+                    displayName
+                    id
+                    __typename
+                }
+                title
+                id
+                __typename
+            }
+            stream {
+                viewersCount
+                id
+                __typename
+            }
+        }
+
+        fragment StreamPlayer_channel on User {
+            id
+            __typename
+            login
+            roles {
+                isPartner
+            }
+            self {
+                subscriptionBenefit {
+                    id
+                    __typename
+                }
+            }
+            stream {
+                id
+                __typename
+                game {
+                    name
+                    id
+                    __typename
+                }
+                previewImageURL
+            }
+        }
+
+        fragment StreamPlayer_currentUser on User {
+            hasTurbo
+            id
+            __typename
+        }
+
+        fragment StreamPlayer_token on Query {
+            user(login: $login) {
+                login
+                stream @skip(if: $skipPlayToken) {
+                    playbackAccessToken(params: {platform: $platform, playerType: $playerType}) {
+                        signature
+                        value
+                    }
+                    id
+                    __typename
+                }
+                id
+                __typename
+            }
+        }`
         variables: {
             "login": m.top.request.params.id
             "platform": "switch_web_tv"
@@ -340,7 +539,437 @@ end function
 
 function getChannelHomeQuery() as object
     rsp = TwitchGraphQLRequest({
-        query: "query ChannelHome_Query(" + chr(10) + "  $login: String!" + chr(10) + "  $platform: String!" + chr(10) + "  $playerType: String!" + chr(10) + "  $skipPlayToken: Boolean!" + chr(10) + ") {" + chr(10) + "  channel: user(login: $login) {" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "    login" + chr(10) + "    stream {" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "    }" + chr(10) + "    videoShelves {" + chr(10) + "      edges {" + chr(10) + "        node {" + chr(10) + "          id" + chr(10) + "          __typename" + chr(10) + "          title" + chr(10) + "          items {" + chr(10) + "            __typename" + chr(10) + "            __isVideoShelfItem: __typename" + chr(10) + "            ... on Clip {" + chr(10) + "              ...FocusableClipCard_clip" + chr(10) + "            }" + chr(10) + "            ... on Video {" + chr(10) + "              ...FocusableVodCard_video" + chr(10) + "            }" + chr(10) + "          }" + chr(10) + "        }" + chr(10) + "      }" + chr(10) + "    }" + chr(10) + "    ...ProfileBanner_channel" + chr(10) + "  }" + chr(10) + "  currentUser {" + chr(10) + "    ...ProfileBanner_currentUser" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "    login" + chr(10) + "    roles {" + chr(10) + "      isStaff" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "  ...StreamPlayer_token" + chr(10) + "  ...VodPreviewPlayerWrapper_previewToken" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment BannerButtonsRow_channel on User {" + chr(10) + "  ...FocusableFollowButton_channel" + chr(10) + "  displayName" + chr(10) + "  hosting {" + chr(10) + "    displayName" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "    login" + chr(10) + "    stream {" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "      type" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "  id" + chr(10) + "  __typename" + chr(10) + "  login" + chr(10) + "  stream {" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "    type" + chr(10) + "  }" + chr(10) + "  videos(first: 1, sort: TIME) {" + chr(10) + "    edges {" + chr(10) + "      node {" + chr(10) + "        id" + chr(10) + "        __typename" + chr(10) + "      }" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment BannerChannelStatus_channel on User {" + chr(10) + "  displayName" + chr(10) + "  hosting {" + chr(10) + "    displayName" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "    login" + chr(10) + "    stream {" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "      type" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "  id" + chr(10) + "  __typename" + chr(10) + "  login" + chr(10) + "  stream {" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "    type" + chr(10) + "  }" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment DefaultPreviewContent_channel on User {" + chr(10) + "  ...SwitchPreviewContent_channel" + chr(10) + "  ...StreamPreviewPlayer_channel" + chr(10) + "  hosting {" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "    login" + chr(10) + "    stream {" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "      type" + chr(10) + "      viewersCount" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "  id" + chr(10) + "  __typename" + chr(10) + "  login" + chr(10) + "  stream {" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "    type" + chr(10) + "    viewersCount" + chr(10) + "  }" + chr(10) + "  videos(first: 1, sort: TIME) {" + chr(10) + "    edges {" + chr(10) + "      node {" + chr(10) + "        id" + chr(10) + "        __typename" + chr(10) + "        previewThumbnailURL" + chr(10) + "        ...VodPreviewPlayer_video" + chr(10) + "      }" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment DefaultPreviewContent_currentUser on User {" + chr(10) + "  ...StreamPreviewPlayer_currentUser" + chr(10) + "  ...VodPreviewPlayer_currentUser" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment FocusableClipCard_clip on Clip {" + chr(10) + "  broadcaster {" + chr(10) + "    login" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "  createdAt" + chr(10) + "  durationSeconds" + chr(10) + "  game {" + chr(10) + "    boxArtURL" + chr(10) + "    displayName" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "  id" + chr(10) + "  __typename" + chr(10) + "  slug" + chr(10) + "  thumbnailURL" + chr(10) + "  title" + chr(10) + "  viewCount" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment FocusableFollowButton_channel on User {" + chr(10) + "  login" + chr(10) + "  id" + chr(10) + "  __typename" + chr(10) + "  self {" + chr(10) + "    follower {" + chr(10) + "      followedAt" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment FocusableVodCard_video on Video {" + chr(10) + "  createdAt" + chr(10) + "  lengthSeconds" + chr(10) + "  game {" + chr(10) + "    boxArtURL" + chr(10) + "    displayName" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "  id" + chr(10) + "  __typename" + chr(10) + "  previewThumbnailURL" + chr(10) + "  self {" + chr(10) + "    viewingHistory {" + chr(10) + "      position" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "  title" + chr(10) + "  viewCount" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment ProfileBanner_channel on User {" + chr(10) + "  ...BannerButtonsRow_channel" + chr(10) + "  ...BannerChannelStatus_channel" + chr(10) + "  ...SwitchPreviewContent_channel" + chr(10) + "  ...DefaultPreviewContent_channel" + chr(10) + "  description" + chr(10) + "  displayName" + chr(10) + "  followers {" + chr(10) + "    totalCount" + chr(10) + "  }" + chr(10) + "  hosting {" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "    login" + chr(10) + "    profileImageURL(width: 150)" + chr(10) + "  }" + chr(10) + "  id" + chr(10) + "  __typename" + chr(10) + "  login" + chr(10) + "  profileImageURL(width: 150)" + chr(10) + "  profileViewCount" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment ProfileBanner_currentUser on User {" + chr(10) + "  ...DefaultPreviewContent_currentUser" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment StreamPlayer_channel on User {" + chr(10) + "  id" + chr(10) + "  __typename" + chr(10) + "  login" + chr(10) + "  roles {" + chr(10) + "    isPartner" + chr(10) + "  }" + chr(10) + "  self {" + chr(10) + "    subscriptionBenefit {" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "  stream {" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "    game {" + chr(10) + "      name" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "    }" + chr(10) + "    previewImageURL" + chr(10) + "  }" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment StreamPlayer_currentUser on User {" + chr(10) + "  hasTurbo" + chr(10) + "  id" + chr(10) + "  __typename" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment StreamPlayer_token on Query {" + chr(10) + "  user(login: $login) {" + chr(10) + "    login" + chr(10) + "    stream @skip(if: $skipPlayToken) {" + chr(10) + "      playbackAccessToken(params: {platform: $platform, playerType: $playerType}) {" + chr(10) + "        signature" + chr(10) + "        value" + chr(10) + "      }" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "    }" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment StreamPreviewPlayer_channel on User {" + chr(10) + "  hosting {" + chr(10) + "    ...StreamPlayer_channel" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "    login" + chr(10) + "    stream {" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "      type" + chr(10) + "      viewersCount" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "  ...StreamPlayer_channel" + chr(10) + "  id" + chr(10) + "  __typename" + chr(10) + "  login" + chr(10) + "  stream {" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "    type" + chr(10) + "    viewersCount" + chr(10) + "    restrictionType" + chr(10) + "    self {" + chr(10) + "      canWatch" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "  displayName" + chr(10) + "  broadcastSettings {" + chr(10) + "    isMature" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment StreamPreviewPlayer_currentUser on User {" + chr(10) + "  ...StreamPlayer_currentUser" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment SwitchPreviewContent_channel on User {" + chr(10) + "  id" + chr(10) + "  __typename" + chr(10) + "  login" + chr(10) + "  stream {" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "    previewImageURL" + chr(10) + "  }" + chr(10) + "  videos(first: 1, sort: TIME) {" + chr(10) + "    edges {" + chr(10) + "      node {" + chr(10) + "        id" + chr(10) + "        __typename" + chr(10) + "        previewThumbnailURL" + chr(10) + "      }" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment VodPlayerBase_currentUser on User {" + chr(10) + "  id" + chr(10) + "  __typename" + chr(10) + "  hasTurbo" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment VodPlayerBase_video on Video {" + chr(10) + "  broadcastType" + chr(10) + "  id" + chr(10) + "  __typename" + chr(10) + "  game {" + chr(10) + "    name" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "  owner {" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "    login" + chr(10) + "    roles {" + chr(10) + "      isPartner" + chr(10) + "    }" + chr(10) + "    self {" + chr(10) + "      subscriptionBenefit {" + chr(10) + "        id" + chr(10) + "        __typename" + chr(10) + "      }" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "  self {" + chr(10) + "    viewingHistory {" + chr(10) + "      position" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment VodPlayerOverlay_video on Video {" + chr(10) + "  createdAt" + chr(10) + "  lengthSeconds" + chr(10) + "  viewCount" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment VodPreviewPlayerWrapper_previewToken on Query {" + chr(10) + "  user(login: $login) @skip(if: $skipPlayToken) {" + chr(10) + "    videos(first: 1) {" + chr(10) + "      edges {" + chr(10) + "        node {" + chr(10) + "          playbackAccessToken(params: {platform: $platform, playerType: $playerType}) {" + chr(10) + "            signature" + chr(10) + "            value" + chr(10) + "          }" + chr(10) + "          id" + chr(10) + "          __typename" + chr(10) + "        }" + chr(10) + "      }" + chr(10) + "    }" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment VodPreviewPlayer_currentUser on User {" + chr(10) + "  ...VodPlayerBase_currentUser" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment VodPreviewPlayer_video on Video {" + chr(10) + "  ...VodPlayerBase_video" + chr(10) + "  ...VodPlayerOverlay_video" + chr(10) + "  muteInfo {" + chr(10) + "    mutedSegmentConnection {" + chr(10) + "      nodes {" + chr(10) + "        duration" + chr(10) + "      }" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "  owner {" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "    login" + chr(10) + "    broadcastSettings {" + chr(10) + "      isMature" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "    }" + chr(10) + "    subscriptionProducts {" + chr(10) + "      displayName" + chr(10) + "      hasSubonlyVideoArchive" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "    }" + chr(10) + "    displayName" + chr(10) + "  }" + chr(10) + "  resourceRestriction {" + chr(10) + "    type" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "  self {" + chr(10) + "    isRestricted" + chr(10) + "  }" + chr(10) + "}" + chr(10) + "",
+        query: `query ChannelHome_Query(
+            $login: String!
+            $platform: String!
+            $playerType: String!
+            $skipPlayToken: Boolean!
+        ) {
+            channel: user(login: $login) {
+                id
+                __typename
+                login
+                stream {
+                    id
+                    __typename
+                }
+                videoShelves {
+                    edges {
+                        node {
+                            id
+                            __typename
+                            title
+                            items {
+                                __typename
+                                __isVideoShelfItem: __typename
+                                ... on Clip {
+                                    ...FocusableClipCard_clip
+                                }
+                                ... on Video {
+                                    ...FocusableVodCard_video
+                                }
+                            }
+                        }
+                    }
+                }
+                ...ProfileBanner_channel
+            }
+            currentUser {
+                ...ProfileBanner_currentUser
+                id
+                __typename
+                login
+                roles {
+                    isStaff
+                }
+            }
+            ...StreamPlayer_token
+            ...VodPreviewPlayerWrapper_previewToken
+        }
+
+        fragment BannerButtonsRow_channel on User {
+            ...FocusableFollowButton_channel
+            displayName
+            hosting {
+                displayName
+                id
+                __typename
+                login
+                stream {
+                    id
+                    __typename
+                    type
+                }
+            }
+            id
+            __typename
+            login
+            stream {
+                id
+                __typename
+                type
+            }
+            videos(first: 1, sort: TIME) {
+                edges {
+                    node {
+                        id
+                        __typename
+                    }
+                }
+            }
+        }
+
+        fragment BannerChannelStatus_channel on User {
+            displayName
+            hosting {
+                displayName
+                id
+                __typename
+                login
+                stream {
+                    id
+                    __typename
+                    type
+                }
+            }
+            id
+            __typename
+            login
+            stream {
+                id
+                __typename
+                type
+            }
+        }
+
+        fragment DefaultPreviewContent_channel on User {
+            ...SwitchPreviewContent_channel
+            ...StreamPreviewPlayer_channel
+            hosting {
+                id
+                __typename
+                login
+                stream {
+                    id
+                    __typename
+                    type
+                    viewersCount
+                }
+            }
+            id
+            __typename
+            login
+            stream {
+                id
+                __typename
+                type
+                viewersCount
+            }
+            videos(first: 1, sort: TIME) {
+                edges {
+                    node {
+                        id
+                        __typename
+                        previewThumbnailURL
+                        ...VodPreviewPlayer_video
+                    }
+                }
+            }
+        }
+
+        fragment DefaultPreviewContent_currentUser on User {
+            ...StreamPreviewPlayer_currentUser
+            ...VodPreviewPlayer_currentUser
+        }
+
+        fragment FocusableClipCard_clip on Clip {
+            broadcaster {
+                login
+                id
+                __typename
+            }
+            createdAt
+            durationSeconds
+            game {
+                boxArtURL
+                displayName
+                id
+                __typename
+            }
+            id
+            __typename
+            slug
+            thumbnailURL
+            title
+            viewCount
+        }
+
+        fragment FocusableFollowButton_channel on User {
+            login
+            id
+            __typename
+            self {
+                follower {
+                    followedAt
+                }
+            }
+        }
+
+        fragment FocusableVodCard_video on Video {
+            createdAt
+            lengthSeconds
+            game {
+                boxArtURL
+                displayName
+                id
+                __typename
+            }
+            id
+            __typename
+            previewThumbnailURL
+            self {
+                viewingHistory {
+                    position
+                }
+            }
+            title
+            viewCount
+        }
+
+        fragment ProfileBanner_channel on User {
+            ...BannerButtonsRow_channel
+            ...BannerChannelStatus_channel
+            ...SwitchPreviewContent_channel
+            ...DefaultPreviewContent_channel
+            description
+            displayName
+            followers {
+                totalCount
+            }
+            hosting {
+                id
+                __typename
+                login
+                profileImageURL(width: 150)
+            }
+            id
+            __typename
+            login
+            profileImageURL(width: 150)
+            profileViewCount
+        }
+
+        fragment ProfileBanner_currentUser on User {
+            ...DefaultPreviewContent_currentUser
+        }
+
+        fragment StreamPlayer_channel on User {
+            id
+            __typename
+            login
+            roles {
+                isPartner
+            }
+            self {
+                subscriptionBenefit {
+                    id
+                    __typename
+                }
+            }
+            stream {
+                id
+                __typename
+                game {
+                    name
+                    id
+                    __typename
+                }
+                previewImageURL
+            }
+        }
+
+        fragment StreamPlayer_currentUser on User {
+            hasTurbo
+            id
+            __typename
+        }
+
+        fragment StreamPlayer_token on Query {
+            user(login: $login) {
+                login
+                stream @skip(if: $skipPlayToken) {
+                    playbackAccessToken(params: {platform: $platform, playerType: $playerType}) {
+                        signature
+                        value
+                    }
+                    id
+                    __typename
+                }
+                id
+                __typename
+            }
+        }
+
+        fragment StreamPreviewPlayer_channel on User {
+            hosting {
+                ...StreamPlayer_channel
+                id
+                __typename
+                login
+                stream {
+                    id
+                    __typename
+                    type
+                    viewersCount
+                }
+            }
+            ...StreamPlayer_channel
+            id
+            __typename
+            login
+            stream {
+                id
+                __typename
+                type
+                viewersCount
+                restrictionType
+                self {
+                    canWatch
+                }
+            }
+            displayName
+            broadcastSettings {
+                isMature
+                id
+                __typename
+            }
+        }
+
+        fragment StreamPreviewPlayer_currentUser on User {
+            ...StreamPlayer_currentUser
+        }
+
+        fragment SwitchPreviewContent_channel on User {
+            id
+            __typename
+            login
+            stream {
+                id
+                __typename
+                previewImageURL
+            }
+            videos(first: 1, sort: TIME) {
+                edges {
+                    node {
+                        id
+                        __typename
+                        previewThumbnailURL
+                    }
+                }
+            }
+        }
+
+        fragment VodPlayerBase_currentUser on User {
+            id
+            __typename
+            hasTurbo
+        }
+
+        fragment VodPlayerBase_video on Video {
+            broadcastType
+            id
+            __typename
+            game {
+                name
+                id
+                __typename
+            }
+            owner {
+                id
+                __typename
+                login
+                roles {
+                    isPartner
+                }
+                self {
+                    subscriptionBenefit {
+                        id
+                        __typename
+                    }
+                }
+            }
+            self {
+                viewingHistory {
+                    position
+                }
+            }
+        }
+
+        fragment VodPlayerOverlay_video on Video {
+            createdAt
+            lengthSeconds
+            viewCount
+        }
+
+        fragment VodPreviewPlayerWrapper_previewToken on Query {
+            user(login: $login) @skip(if: $skipPlayToken) {
+                videos(first: 1) {
+                    edges {
+                        node {
+                            playbackAccessToken(params: {platform: $platform, playerType: $playerType}) {
+                                signature
+                                value
+                            }
+                            id
+                            __typename
+                        }
+                    }
+                }
+                id
+                __typename
+            }
+        }
+
+        fragment VodPreviewPlayer_currentUser on User {
+            ...VodPlayerBase_currentUser
+        }
+
+        fragment VodPreviewPlayer_video on Video {
+            ...VodPlayerBase_video
+            ...VodPlayerOverlay_video
+            muteInfo {
+                mutedSegmentConnection {
+                    nodes {
+                        duration
+                    }
+                }
+            }
+            owner {
+                id
+                __typename
+                login
+                broadcastSettings {
+                    isMature
+                    id
+                    __typename
+                }
+                subscriptionProducts {
+                    displayName
+                    hasSubonlyVideoArchive
+                    id
+                    __typename
+                }
+                displayName
+            }
+            resourceRestriction {
+                type
+                id
+                __typename
+            }
+            self {
+                isRestricted
+            }
+        }`
         variables: {
             "login": m.top.request.params.id
             "platform": "switch_web_tv"
@@ -358,7 +987,345 @@ end function
 
 function getFollowingPageQuery() as object
     rsp = TwitchGraphQLRequest({
-        query: "query FollowingPage_Query(" + chr(10) + "  $first: Int!" + chr(10) + "  $liveUserCursor: Cursor" + chr(10) + "  $offlineUserCursor: Cursor" + chr(10) + "  $followedGameType: FollowedGamesType" + chr(10) + "  $categoryFirst: Int!" + chr(10) + "  $itemsPerRow: Int!" + chr(10) + "  $limit: Int!" + chr(10) + "  $platform: String!" + chr(10) + "  $requestID: String!" + chr(10) + ") {" + chr(10) + "  user {" + chr(10) + "    followedLiveUsers(first: $first, after: $liveUserCursor) {" + chr(10) + "      edges {" + chr(10) + "        node {" + chr(10) + "          id" + chr(10) + "          __typename" + chr(10) + "        }" + chr(10) + "      }" + chr(10) + "    }" + chr(10) + "    follows(first: $first, after: $offlineUserCursor) {" + chr(10) + "      edges {" + chr(10) + "        node {" + chr(10) + "          id" + chr(10) + "          __typename" + chr(10) + "          stream {" + chr(10) + "            id" + chr(10) + "            __typename" + chr(10) + "          }" + chr(10) + "        }" + chr(10) + "      }" + chr(10) + "    }" + chr(10) + "    followedGames(first: $categoryFirst, type: $followedGameType) {" + chr(10) + "      nodes {" + chr(10) + "        id" + chr(10) + "        __typename" + chr(10) + "      }" + chr(10) + "    }" + chr(10) + "    ...LiveStreamInfiniteShelf_followedLiveUsers" + chr(10) + "    ...OfflineInfiniteShelf_followedUsers" + chr(10) + "    ...CategoryShelf_followedCategories" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "  ...FollowingPageEmpty_Query" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment CategoryBannerContent_category on Game {" + chr(10) + "  streams(first: 1) {" + chr(10) + "    edges {" + chr(10) + "      node {" + chr(10) + "        ...FollowingLiveStreamBannerContent_stream" + chr(10) + "        id" + chr(10) + "        __typename" + chr(10) + "      }" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment CategoryShelf_followedCategories on User {" + chr(10) + "  followedGames(first: $categoryFirst, type: $followedGameType) {" + chr(10) + "    nodes {" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "      displayName" + chr(10) + "      developers" + chr(10) + "      boxArtURL" + chr(10) + "      ...FocusableCategoryCard_category" + chr(10) + "      ...CategoryBannerContent_category" + chr(10) + "      streams(first: 1) {" + chr(10) + "        edges {" + chr(10) + "          node {" + chr(10) + "            previewImageURL" + chr(10) + "            id" + chr(10) + "            __typename" + chr(10) + "          }" + chr(10) + "        }" + chr(10) + "      }" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment FocusableCategoryCard_category on Game {" + chr(10) + "  id" + chr(10) + "  __typename" + chr(10) + "  name" + chr(10) + "  displayName" + chr(10) + "  viewersCount" + chr(10) + "  boxArtURL" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment FocusableOfflineChannelCard_channel on User {" + chr(10) + "  displayName" + chr(10) + "  followers {" + chr(10) + "    totalCount" + chr(10) + "  }" + chr(10) + "  lastBroadcast {" + chr(10) + "    startedAt" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "  login" + chr(10) + "  profileImageURL(width: 300)" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment FocusableStreamCard_stream on Stream {" + chr(10) + "  broadcaster {" + chr(10) + "    displayName" + chr(10) + "    login" + chr(10) + "    broadcastSettings {" + chr(10) + "      title" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "    }" + chr(10) + "    profileImageURL(width: 50)" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "  game {" + chr(10) + "    displayName" + chr(10) + "    name" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "  id" + chr(10) + "  __typename" + chr(10) + "  previewImageURL" + chr(10) + "  type" + chr(10) + "  viewersCount" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment FollowingLiveStreamBannerContent_stream on Stream {" + chr(10) + "  game {" + chr(10) + "    displayName" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "  broadcaster {" + chr(10) + "    broadcastSettings {" + chr(10) + "      title" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "    }" + chr(10) + "    displayName" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment FollowingPageEmpty_Query on Query {" + chr(10) + "  shelves(itemsPerRow: $itemsPerRow, first: $limit, platform: $platform, requestID: $requestID) {" + chr(10) + "    edges {" + chr(10) + "      node {" + chr(10) + "        id" + chr(10) + "        __typename" + chr(10) + "        title {" + chr(10) + "          fallbackLocalizedTitle" + chr(10) + "          localizedTitleTokens {" + chr(10) + "            node {" + chr(10) + "              __typename" + chr(10) + "              ... on Game {" + chr(10) + "                __typename" + chr(10) + "                displayName" + chr(10) + "                name" + chr(10) + "                id" + chr(10) + "                __typename" + chr(10) + "              }" + chr(10) + "              ... on TextToken {" + chr(10) + "                __typename" + chr(10) + "                text" + chr(10) + "                location" + chr(10) + "              }" + chr(10) + "              ... on BrowsableCollection {" + chr(10) + "                id" + chr(10) + "                __typename" + chr(10) + "              }" + chr(10) + "              ... on Tag {" + chr(10) + "                id" + chr(10) + "                __typename" + chr(10) + "              }" + chr(10) + "              ... on User {" + chr(10) + "                id" + chr(10) + "                __typename" + chr(10) + "              }" + chr(10) + "            }" + chr(10) + "          }" + chr(10) + "        }" + chr(10) + "        trackingInfo {" + chr(10) + "          rowName" + chr(10) + "        }" + chr(10) + "        content {" + chr(10) + "          edges {" + chr(10) + "            trackingID" + chr(10) + "            node {" + chr(10) + "              __typename" + chr(10) + "              __isShelfContent: __typename" + chr(10) + "              ... on Stream {" + chr(10) + "                id" + chr(10) + "                __typename" + chr(10) + "                previewImageURL" + chr(10) + "                broadcaster {" + chr(10) + "                  displayName" + chr(10) + "                  broadcastSettings {" + chr(10) + "                    title" + chr(10) + "                    id" + chr(10) + "                    __typename" + chr(10) + "                  }" + chr(10) + "                  id" + chr(10) + "                  __typename" + chr(10) + "                }" + chr(10) + "                game {" + chr(10) + "                  displayName" + chr(10) + "                  boxArtURL" + chr(10) + "                  id" + chr(10) + "                  __typename" + chr(10) + "                }" + chr(10) + "                ...FocusableStreamCard_stream" + chr(10) + "              }" + chr(10) + "              ... on Game {" + chr(10) + "                ...FocusableCategoryCard_category" + chr(10) + "                id" + chr(10) + "                __typename" + chr(10) + "                streams(first: 1) {" + chr(10) + "                  edges {" + chr(10) + "                    node {" + chr(10) + "                      id" + chr(10) + "                      __typename" + chr(10) + "                      previewImageURL" + chr(10) + "                      broadcaster {" + chr(10) + "                        displayName" + chr(10) + "                        broadcastSettings {" + chr(10) + "                          title" + chr(10) + "                          id" + chr(10) + "                          __typename" + chr(10) + "                        }" + chr(10) + "                        id" + chr(10) + "                        __typename" + chr(10) + "                      }" + chr(10) + "                      game {" + chr(10) + "                        displayName" + chr(10) + "                        boxArtURL" + chr(10) + "                        id" + chr(10) + "                        __typename" + chr(10) + "                      }" + chr(10) + "                    }" + chr(10) + "                  }" + chr(10) + "                }" + chr(10) + "              }" + chr(10) + "              ... on Clip {" + chr(10) + "                id" + chr(10) + "                __typename" + chr(10) + "              }" + chr(10) + "              ... on Tag {" + chr(10) + "                id" + chr(10) + "                __typename" + chr(10) + "              }" + chr(10) + "              ... on Video {" + chr(10) + "                id" + chr(10) + "                __typename" + chr(10) + "              }" + chr(10) + "            }" + chr(10) + "          }" + chr(10) + "        }" + chr(10) + "      }" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment LiveStreamInfiniteShelf_followedLiveUsers on User {" + chr(10) + "  followedLiveUsers(first: $first, after: $liveUserCursor) {" + chr(10) + "    edges {" + chr(10) + "      cursor" + chr(10) + "      node {" + chr(10) + "        id" + chr(10) + "        __typename" + chr(10) + "        displayName" + chr(10) + "        stream {" + chr(10) + "          previewImageURL" + chr(10) + "          game {" + chr(10) + "            boxArtURL" + chr(10) + "            id" + chr(10) + "            __typename" + chr(10) + "          }" + chr(10) + "          ...FollowingLiveStreamBannerContent_stream" + chr(10) + "          ...FocusableStreamCard_stream" + chr(10) + "          id" + chr(10) + "          __typename" + chr(10) + "        }" + chr(10) + "      }" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment OfflineBannerContent_user on User {" + chr(10) + "  displayName" + chr(10) + "  lastBroadcast {" + chr(10) + "    startedAt" + chr(10) + "    game {" + chr(10) + "      displayName" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "    }" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "  stream {" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment OfflineInfiniteShelf_followedUsers on User {" + chr(10) + "  follows(first: $first, after: $offlineUserCursor) {" + chr(10) + "    edges {" + chr(10) + "      cursor" + chr(10) + "      node {" + chr(10) + "        id" + chr(10) + "        __typename" + chr(10) + "        bannerImageURL" + chr(10) + "        displayName" + chr(10) + "        lastBroadcast {" + chr(10) + "          game {" + chr(10) + "            boxArtURL" + chr(10) + "            id" + chr(10) + "            __typename" + chr(10) + "          }" + chr(10) + "          id" + chr(10) + "          __typename" + chr(10) + "        }" + chr(10) + "        stream {" + chr(10) + "          id" + chr(10) + "          __typename" + chr(10) + "        }" + chr(10) + "        ...OfflineBannerContent_user" + chr(10) + "        ...FocusableOfflineChannelCard_channel" + chr(10) + "      }" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "}" + chr(10) + ""
+        query: `query FollowingPage_Query(
+            $first: Int!
+            $liveUserCursor: Cursor
+            $offlineUserCursor: Cursor
+            $followedGameType: FollowedGamesType
+            $categoryFirst: Int!
+            $itemsPerRow: Int!
+            $limit: Int!
+            $platform: String!
+            $requestID: String!
+        ) {
+            user {
+                followedLiveUsers(first: $first, after: $liveUserCursor) {
+                    edges {
+                        node {
+                            id
+                            __typename
+                        }
+                    }
+                }
+                follows(first: $first, after: $offlineUserCursor) {
+                    edges {
+                        node {
+                            id
+                            __typename
+                            stream {
+                                id
+                                __typename
+                            }
+                        }
+                    }
+                }
+                followedGames(first: $categoryFirst, type: $followedGameType) {
+                    nodes {
+                        id
+                        __typename
+                    }
+                }
+                ...LiveStreamInfiniteShelf_followedLiveUsers
+                ...OfflineInfiniteShelf_followedUsers
+                ...CategoryShelf_followedCategories
+                id
+                __typename
+            }
+            ...FollowingPageEmpty_Query
+        }
+
+        fragment CategoryBannerContent_category on Game {
+            streams(first: 1) {
+                edges {
+                    node {
+                        ...FollowingLiveStreamBannerContent_stream
+                        id
+                        __typename
+                    }
+                }
+            }
+        }
+
+        fragment CategoryShelf_followedCategories on User {
+            followedGames(first: $categoryFirst, type: $followedGameType) {
+                nodes {
+                    id
+                    __typename
+                    displayName
+                    developers
+                    boxArtURL
+                    ...FocusableCategoryCard_category
+                    ...CategoryBannerContent_category
+                    streams(first: 1) {
+                        edges {
+                            node {
+                                previewImageURL
+                                id
+                                __typename
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        fragment FocusableCategoryCard_category on Game {
+            id
+            __typename
+            name
+            displayName
+            viewersCount
+            boxArtURL
+        }
+
+        fragment FocusableOfflineChannelCard_channel on User {
+            displayName
+            followers {
+                totalCount
+            }
+            lastBroadcast {
+                startedAt
+                id
+                __typename
+            }
+            login
+            profileImageURL(width: 300)
+        }
+
+        fragment FocusableStreamCard_stream on Stream {
+            broadcaster {
+                displayName
+                login
+                broadcastSettings {
+                    title
+                    id
+                    __typename
+                }
+                profileImageURL(width: 50)
+                id
+                __typename
+            }
+            game {
+                displayName
+                name
+                id
+                __typename
+            }
+            id
+            __typename
+            previewImageURL
+            type
+            viewersCount
+        }
+
+        fragment FollowingLiveStreamBannerContent_stream on Stream {
+            game {
+                displayName
+                id
+                __typename
+            }
+            broadcaster {
+                broadcastSettings {
+                    title
+                    id
+                    __typename
+                }
+                displayName
+                id
+                __typename
+            }
+        }
+
+        fragment FollowingPageEmpty_Query on Query {
+            shelves(itemsPerRow: $itemsPerRow, first: $limit, platform: $platform, requestID: $requestID) {
+                edges {
+                    node {
+                        id
+                        __typename
+                        title {
+                            fallbackLocalizedTitle
+                            localizedTitleTokens {
+                                node {
+                                    __typename
+                                    ... on Game {
+                                        __typename
+                                        displayName
+                                        name
+                                        id
+                                        __typename
+                                    }
+                                    ... on TextToken {
+                                        __typename
+                                        text
+                                        location
+                                    }
+                                    ... on BrowsableCollection {
+                                        id
+                                        __typename
+                                    }
+                                    ... on Tag {
+                                        id
+                                        __typename
+                                    }
+                                    ... on User {
+                                        id
+                                        __typename
+                                    }
+                                }
+                            }
+                        }
+                        trackingInfo {
+                            rowName
+                        }
+                        content {
+                            edges {
+                                trackingID
+                                node {
+                                    __typename
+                                    __isShelfContent: __typename
+                                    ... on Stream {
+                                        id
+                                        __typename
+                                        previewImageURL
+                                        broadcaster {
+                                            displayName
+                                            broadcastSettings {
+                                                title
+                                                id
+                                                __typename
+                                            }
+                                            id
+                                            __typename
+                                        }
+                                        game {
+                                            displayName
+                                            boxArtURL
+                                            id
+                                            __typename
+                                        }
+                                        ...FocusableStreamCard_stream
+                                    }
+                                    ... on Game {
+                                        ...FocusableCategoryCard_category
+                                        id
+                                        __typename
+                                        streams(first: 1) {
+                                            edges {
+                                                node {
+                                                    id
+                                                    __typename
+                                                    previewImageURL
+                                                    broadcaster {
+                                                        displayName
+                                                        broadcastSettings {
+                                                            title
+                                                            id
+                                                            __typename
+                                                        }
+                                                        id
+                                                        __typename
+                                                    }
+                                                    game {
+                                                        displayName
+                                                        boxArtURL
+                                                        id
+                                                        __typename
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    ... on Clip {
+                                        id
+                                        __typename
+                                    }
+                                    ... on Tag {
+                                        id
+                                        __typename
+                                    }
+                                    ... on Video {
+                                        id
+                                        __typename
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        fragment LiveStreamInfiniteShelf_followedLiveUsers on User {
+            followedLiveUsers(first: $first, after: $liveUserCursor) {
+                edges {
+                    cursor
+                    node {
+                        id
+                        __typename
+                        displayName
+                        stream {
+                            previewImageURL
+                            game {
+                                boxArtURL
+                                id
+                                __typename
+                            }
+                            ...FollowingLiveStreamBannerContent_stream
+                            ...FocusableStreamCard_stream
+                            id
+                            __typename
+                        }
+                    }
+                }
+            }
+        }
+
+        fragment OfflineBannerContent_user on User {
+            displayName
+            lastBroadcast {
+                startedAt
+                game {
+                    displayName
+                    id
+                    __typename
+                }
+                id
+                __typename
+            }
+            stream {
+                id
+                __typename
+            }
+        }
+
+        fragment OfflineInfiniteShelf_followedUsers on User {
+            follows(first: $first, after: $offlineUserCursor) {
+                edges {
+                    cursor
+                    node {
+                        id
+                        __typename
+                        bannerImageURL
+                        displayName
+                        lastBroadcast {
+                            game {
+                                boxArtURL
+                                id
+                                __typename
+                            }
+                            id
+                            __typename
+                        }
+                        stream {
+                            id
+                            __typename
+                        }
+                        ...OfflineBannerContent_user
+                        ...FocusableOfflineChannelCard_channel
+                    }
+                }
+            }
+        }`
         variables: {
             "first": 100
             ' "liveUserCursor": ""
@@ -433,7 +1400,172 @@ function getSearchQuery()
         noQuery = true
     end if
     rsp = TwitchGraphQLRequest({
-        query: "query Search_Query(" + chr(10) + "  $userQuery: String!" + chr(10) + "  $platform: String!" + chr(10) + "  $noQuery: Boolean!" + chr(10) + ") {" + chr(10) + "  currentUser {" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "    login" + chr(10) + "    roles {" + chr(10) + "      isStaff" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "  searchFor(userQuery: $userQuery, platform: $platform) @skip(if: $noQuery) {" + chr(10) + "    ...SearchResults_results" + chr(10) + "  }" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment FocusableCategoryCard_category on Game {" + chr(10) + "  name" + chr(10) + "  id" + chr(10) + "  __typename" + chr(10) + "  displayName" + chr(10) + "  viewersCount" + chr(10) + "  boxArtURL" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment FocusableOfflineChannelCard_channel on User {" + chr(10) + "  displayName" + chr(10) + "  followers {" + chr(10) + "    totalCount" + chr(10) + "  }" + chr(10) + "  lastBroadcast {" + chr(10) + "    startedAt" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "  login" + chr(10) + "  profileImageURL(width: 300)" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment FocusableStreamCard_stream on Stream {" + chr(10) + "  broadcaster {" + chr(10) + "    displayName" + chr(10) + "    login" + chr(10) + "    hosting {" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "    }" + chr(10) + "    broadcastSettings {" + chr(10) + "      title" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "    }" + chr(10) + "    profileImageURL(width: 50)" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "  game {" + chr(10) + "    displayName" + chr(10) + "    boxArtURL" + chr(10) + "    name" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "  id" + chr(10) + "  __typename" + chr(10) + "  previewImageURL" + chr(10) + "  type" + chr(10) + "  viewersCount" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment FocusableVodCard_video on Video {" + chr(10) + "  createdAt" + chr(10) + "  lengthSeconds" + chr(10) + "  owner {" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "    login" + chr(10) + "    displayName" + chr(10) + "    }" + chr(10) + "  game {" + chr(10) + "    boxArtURL" + chr(10) + "    name" + chr(10) + " displayName" + chr(10) + " id" + chr(10) + " __typename" + chr(10) + " }" + chr(10) + " id" + chr(10) + " __typename" + chr(10) + " previewThumbnailURL" + chr(10) + " self { " + chr(10) + " viewingHistory { " + chr(10) + " position" + chr(10) + " }" + chr(10) + " }" + chr(10) + " title" + chr(10) + " viewCount" + chr(10) + " }" + chr(10) + "" + chr(10) + "fragment SearchResults_results on SearchFor { " + chr(10) + " channels { " + chr(10) + " items { " + chr(10) + " id" + chr(10) + " __typename" + chr(10) + " bannerImageURL" + chr(10) + " ...FocusableOfflineChannelCard_channel" + chr(10) + " stream { " + chr(10) + " id" + chr(10) + " __typename" + chr(10) + " previewImageURL" + chr(10) + " ...FocusableStreamCard_stream" + chr(10) + " game { " + chr(10) + " id" + chr(10) + " __typename" + chr(10) + " }" + chr(10) + " }" + chr(10) + " }" + chr(10) + " }" + chr(10) + " relatedLiveChannels { " + chr(10) + " items { " + chr(10) + " id" + chr(10) + " __typename" + chr(10) + " bannerImageURL" + chr(10) + " ...FocusableOfflineChannelCard_channel" + chr(10) + " stream { " + chr(10) + " id" + chr(10) + " __typename" + chr(10) + " previewImageURL" + chr(10) + " ...FocusableStreamCard_stream" + chr(10) + " game { " + chr(10) + " id" + chr(10) + " __typename" + chr(10) + " }" + chr(10) + " }" + chr(10) + " }" + chr(10) + " }" + chr(10) + " games { " + chr(10) + " items { " + chr(10) + " id" + chr(10) + " __typename" + chr(10) + " ...FocusableCategoryCard_category" + chr(10) + " streams(first: 1) { " + chr(10) + " edges { " + chr(10) + " node { " + chr(10) + " previewImageURL" + chr(10) + " id" + chr(10) + " __typename" + chr(10) + " }" + chr(10) + " }" + chr(10) + " }" + chr(10) + " }" + chr(10) + " }" + chr(10) + " videos { " + chr(10) + " items { " + chr(10) + " ...FocusableVodCard_video" + chr(10) + " id" + chr(10) + " __typename" + chr(10) + " game { " + chr(10) + " id" + chr(10) + " __typename" + chr(10) + " }" + chr(10) + " previewThumbnailURL" + chr(10) + " }" + chr(10) + " }" + chr(10) + " }"
+        query: `query Search_Query(
+            $userQuery: String!
+            $platform: String!
+            $noQuery: Boolean!
+        ) {
+            currentUser {
+                id
+                __typename
+                login
+                roles {
+                    isStaff
+                }
+            }
+            searchFor(userQuery: $userQuery, platform: $platform) @skip(if: $noQuery) {
+                ...SearchResults_results
+            }
+        }
+
+        fragment FocusableCategoryCard_category on Game {
+            name
+            id
+            __typename
+            displayName
+            viewersCount
+            boxArtURL
+        }
+
+        fragment FocusableOfflineChannelCard_channel on User {
+            displayName
+            followers {
+                totalCount
+            }
+            lastBroadcast {
+                startedAt
+                id
+                __typename
+            }
+            login
+            profileImageURL(width: 300)
+        }
+
+        fragment FocusableStreamCard_stream on Stream {
+            broadcaster {
+                displayName
+                login
+                hosting {
+                    id
+                    __typename
+                }
+                broadcastSettings {
+                    title
+                    id
+                    __typename
+                }
+                profileImageURL(width: 50)
+                id
+                __typename
+            }
+            game {
+                displayName
+                boxArtURL
+                name
+                id
+                __typename
+            }
+            id
+            __typename
+            previewImageURL
+            type
+            viewersCount
+        }
+
+        fragment FocusableVodCard_video on Video {
+            createdAt
+            lengthSeconds
+            owner {
+                id
+                __typename
+                login
+                displayName
+                }
+            game {
+                boxArtURL
+                name
+                displayName
+                id
+                __typename
+            }
+            id
+            __typename
+            previewThumbnailURL
+            self {
+                viewingHistory {
+                    position
+                }
+            }
+            title
+            viewCount
+        }
+
+        fragment SearchResults_results on SearchFor {
+            channels {
+                items {
+                    id
+                    __typename
+                    bannerImageURL
+                    ...FocusableOfflineChannelCard_channel
+                    stream {
+                            id
+                        __typename
+                        previewImageURL
+                        ...FocusableStreamCard_stream
+                        game {
+                            id
+                        __typename
+                        }
+                    }
+                }
+            }
+            relatedLiveChannels {
+                items {
+                    id
+                    __typename
+                    bannerImageURL
+                    ...FocusableOfflineChannelCard_channel
+                    stream {
+                        id
+                        __typename
+                        previewImageURL
+                        ...FocusableStreamCard_stream
+                        game {
+                            id
+                            __typename
+                        }
+                    }
+                }
+            }
+            games {
+                items {
+                    id
+                    __typename
+                    ...FocusableCategoryCard_category
+                    streams(first: 1) {
+                        edges {
+                            node {
+                                previewImageURL
+                                id
+                                __typename
+                            }
+                        }
+                    }
+                }
+            }
+            videos {
+                items {
+                    ...FocusableVodCard_video
+                    id
+                    __typename
+                    game {
+                        id
+                        __typename
+                    }
+                    previewThumbnailURL
+                }
+            }
+        }`
         variables: {
             "userQuery": m.top.request.query.toStr()
             "platform": "switch_web_tv"
@@ -452,7 +1584,66 @@ function getGameDirectoryQuery()
     ? "param: " m.top.request.params
     if m.top.request.params.gamealias = invalid return invalid
     rsp = TwitchGraphQLRequest({
-        query: "query GameDirectory_Query(" + chr(10) + "  $gameAlias: String!" + chr(10) + "  $channelsCount: Int!" + chr(10) + ") {" + chr(10) + "  currentUser {" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "    login" + chr(10) + "    roles {" + chr(10) + "      isStaff" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "  game(name: $gameAlias) {" + chr(10) + "    boxArtURL" + chr(10) + "    displayName" + chr(10) + "    name" + chr(10) + "    streams(first: $channelsCount) {" + chr(10) + "      edges {" + chr(10) + "        node {" + chr(10) + "          id" + chr(10) + "          __typename" + chr(10) + "          previewImageURL" + chr(10) + "          ...FocusableStreamCard_stream" + chr(10) + "        }" + chr(10) + "      }" + chr(10) + "    }" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment FocusableStreamCard_stream on Stream {" + chr(10) + "  broadcaster {" + chr(10) + "    displayName" + chr(10) + "    login" + chr(10) + "    hosting {" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "    }" + chr(10) + "    broadcastSettings {" + chr(10) + "      title" + chr(10) + "      id" + chr(10) + "      __typename" + chr(10) + "    }" + chr(10) + "    profileImageURL(width: 50)" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "  game {" + chr(10) + "    displayName" + chr(10) + "    name" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "  }" + chr(10) + "  id" + chr(10) + "  __typename" + chr(10) + "  previewImageURL" + chr(10) + "  type" + chr(10) + "  viewersCount" + chr(10) + "}",
+        query: `query GameDirectory_Query(
+            $gameAlias: String!
+            $channelsCount: Int!
+        ) {
+            currentUser {
+                id
+                __typename
+                login
+                roles {
+                    isStaff
+                }
+            }
+            game(name: $gameAlias) {
+                boxArtURL
+                displayName
+                name
+                streams(first: $channelsCount) {
+                    edges {
+                        node {
+                            id
+                            __typename
+                            previewImageURL
+                            ...FocusableStreamCard_stream
+                        }
+                    }
+                }
+                id
+                __typename
+            }
+        }
+
+        fragment FocusableStreamCard_stream on Stream {
+            broadcaster {
+                displayName
+                login
+                hosting {
+                    id
+                    __typename
+                }
+                broadcastSettings {
+                    title
+                    id
+                    __typename
+                }
+                profileImageURL(width: 50)
+                id
+                __typename
+            }
+            game {
+                displayName
+                name
+                id
+                __typename
+            }
+            id
+            __typename
+            previewImageURL
+            type
+            viewersCount
+        }`
         variables: {
             "gameAlias": m.top.request.params.gamealias,
             "channelsCount": 40
@@ -468,7 +1659,36 @@ end function
 
 function getCategoriesQuery()
     rsp = TwitchGraphQLRequest({
-        query: "query GamesDirectory_Query(" + chr(10) + "  $first: Int!" + chr(10) + ") {" + chr(10) + "  currentUser {" + chr(10) + "    id" + chr(10) + "    __typename" + chr(10) + "    login" + chr(10) + "    roles {" + chr(10) + "      isStaff" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "  games(first: $first) {" + chr(10) + "    edges {" + chr(10) + "      node {" + chr(10) + "        ...FocusableCategoryCard_category" + chr(10) + "        id" + chr(10) + "        __typename" + chr(10) + "      }" + chr(10) + "    }" + chr(10) + "  }" + chr(10) + "}" + chr(10) + "" + chr(10) + "fragment FocusableCategoryCard_category on Game {" + chr(10) + "  name" + chr(10) + "  id" + chr(10) + "  __typename" + chr(10) + "  displayName" + chr(10) + "  viewersCount" + chr(10) + "  boxArtURL" + chr(10) + "}",
+        query: `query GamesDirectory_Query(
+            $first: Int!
+        ) {
+            currentUser {
+                id
+                __typename
+                login
+                roles {
+                    isStaff
+                }
+            }
+            games(first: $first) {
+                edges {
+                    node {
+                        ...FocusableCategoryCard_category
+                        id
+                        __typename
+                    }
+                }
+            }
+        }
+
+        fragment FocusableCategoryCard_category on Game {
+            name
+            id
+            __typename
+            displayName
+            viewersCount
+            boxArtURL
+        }`
         variables: {
             "first": 80
         }
