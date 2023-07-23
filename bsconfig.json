@@ -5,8 +5,10 @@
     "password": "1111",
     "sourceMap": false,
     "allowBrighterScriptInBrightScript": true,
-    "deploy": true,
+    "deploy": false,
+    "retainStagingDir": true,
     "createPackage": true,
+    "stagingDir": "./out/.debugStaging",
     "files": [
         "source/**/*",
         "components/**/*",

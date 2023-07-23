@@ -7,52 +7,27 @@
         {
             "type": "brightscript",
             "request": "launch",
-            "name": "BrightScript Debug: Launch",
+            "rootDir": "${workspaceFolder}/out/.debugStaging",
+            "name": "BrightScript Debug: Launch (Watch)",
             "stopOnEntry": false,
-            "host": "10.0.0.43",
-            "password": "1111",
-            "rootDir": "${workspaceFolder}/",
+            //kick off the bsc watcher before launching
+            "preLaunchTask": "watch",
+            "enableDebuggerAutoRecovery": false,
+            "stopDebuggerOnAppExit": false
+        },
+        {
+            "type": "brightscript",
+            "request": "launch",
+            "name": "BrightScript Debug: Launch",
+            "rootDir": "${workspaceFolder}/out/.debugStaging",
+            "stopOnEntry": false,
             "injectRdbOnDeviceComponent": true,
             "enableDebuggerAutoRecovery": false,
             "stopDebuggerOnAppExit": false,
             "enableDebugProtocol": true,
             "rendezvousTracking": false,
-            "files": [
-                "source/**/*",
-                "components/**/*",
-                "images/**/*",
-                "fonts/**/*",
-                "modules/**/*",
-                "locale/**/*",
-                "settings/**/*",
-                "manifest",
-                "env"
-            ]
-        },
-            {
-            "type": "brightscript",
-            "request": "launch",
-            "name": "BrightScript Package: Run",
-            "stopOnEntry": false,
-            "host": "10.0.0.46",
-            "password": "1111",
-            "rootDir": "${workspaceFolder}/",
-            "injectRdbOnDeviceComponent": false,
-            "enableDebuggerAutoRecovery": false,
-            "stopDebuggerOnAppExit": false,
-            "enableDebugProtocol": false,
-            "rendezvousTracking": false,
-            "files": [
-                "source/**/*",
-                "components/**/*",
-                "images/**/*",
-                "fonts/**/*",
-                "modules/**/*",
-                "locale/**/*",
-                "settings/**/*",
-                "manifest",
-                "env"
-            ]
+            //run the BrighterScript build before each launch
+            "preLaunchTask": "build"
         }
     ]
 }

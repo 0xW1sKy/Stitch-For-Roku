@@ -1,6 +1,13 @@
 {
     "name": "@0xw1sky/stitch-for-roku",
+    "scripts": {
+        "build": "bsc --createPackage=false",
+        "watch": "npm run build -- --watch",
+        "package": "bsc --create-package"
+    },
     "devDependencies": {
+        "@rokucommunity/bslint": "^0.8.8",
+        "brighterscript-formatter": "^1.6.30",
         "ghooks": "^2.0.4",
         "ropm": "^0.10.12"
     },

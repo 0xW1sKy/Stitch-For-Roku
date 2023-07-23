@@ -10,7 +10,7 @@ function TwitchGraphQLRequest($data, $access_token = $null, $device_code = $null
         "Accept-Language" = "en-US,en"
         "content-type"    = "application/json"
     }
-    $req = Invoke-RestMethod -Uri "https://gql.twitch.tv/gql" -Method POST -Body $data -Headers $headers
+    $req = Invoke-RestMethod -Uri "https://gql.twitch.tv/gql" -Method POST -Body $data.replace("`n", "\n") -Headers $headers
 
     return $req
 }
@@ -79,7 +79,156 @@ Write-Host "Authenticate to https://www.twitch.tv/activate using code $user_code
 $token = get-OAuthToken -device_code $device_code
 $access_token = $token.access_token
 
-$body = "{`"query`":`"query Homepage_Query(\n  `$itemsPerRow: Int!\n  `$limit: Int!\n  `$platform: String!\n  `$requestID: String!\n) {\n  currentUser {\n    id\n    __typename\n    login\n    roles {\n      isStaff\n    }\n  }\n  shelves(itemsPerRow: `$itemsPerRow, first: `$limit, platform: `$platform, requestID: `$requestID) {\n    edges {\n      node {\n        id\n        __typename\n        title {\n          fallbackLocalizedTitle\n          localizedTitleTokens {\n            node {\n              __typename\n              ... on Game {\n                __typename\n                displayName\n                name\n              }\n              ... on TextToken {\n                __typename\n                text\n                location\n              }\n            }\n          }\n        }\n        trackingInfo {\n          reasonTarget\n          reasonTargetType\n          reasonType\n          rowName\n        }\n        content {\n          edges {\n            trackingID\n            node {\n              __typename\n              __isShelfContent: __typename\n              ... on Stream {\n                id\n                __typename\n                previewImageURL\n                broadcaster {\n                  displayName\n                  broadcastSettings {\n                    title\n                    id\n                    __typename\n                  }\n                  id\n                  __typename\n                }\n                game {\n                  displayName\n                  boxArtURL\n                  id\n                  __typename\n                }\n                ...FocusableStreamCard_stream\n              }\n              ... on Game {\n                ...FocusableCategoryCard_category\n                id\n                __typename\n                streams(first: 1) {\n                  edges {\n                    node {\n                      id\n                      __typename\n                      previewImageURL\n                      broadcaster {\n                        displayName\n                        broadcastSettings {\n                          title\n                          id\n                          __typename\n                        }\n                        id\n                        __typename\n                      }\n                      game {\n                        displayName\n                        boxArtURL\n                        id\n                        __typename\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment FocusableCategoryCard_category on Game {\n  name\n  id\n  __typename\n  displayName\n  viewersCount\n  boxArtURL\n}\n\nfragment FocusableStreamCard_stream on Stream {\n  broadcaster {\n    displayName\n    login\n    hosting {\n      id\n      __typename\n    }\n    broadcastSettings {\n      title\n      id\n      __typename\n    }\n    profileImageURL(width: 50)\n    id\n    __typename\n  }\n  game {\n    displayName\n    name\n    id\n    __typename\n  }\n  id\n  __typename\n  previewImageURL\n  type\n  viewersCount\n}\n`",`"variables`":{`"itemsPerRow`":20,`"limit`":8,`"platform`":`"switch_web_tv`",`"requestID`":`"lwxcwatjfMfwXYPz`"}}"
+$body = @'
+{"query":"query Homepage_Query(
+  $itemsPerRow: Int!
+  $limit: Int!
+  $platform: String!
+  $requestID: String!
+) {
+  currentUser {
+    id
+    __typename
+    login
+    roles {
+      isStaff
+    }
+  }
+  shelves(itemsPerRow: $itemsPerRow, first: $limit, platform: $platform, requestID: $requestID) {
+    edges {
+      node {
+        id
+        __typename
+        title {
+          fallbackLocalizedTitle
+          localizedTitleTokens {
+            node {
+              __typename
+              ... on Game {
+                __typename
+                displayName
+                name
+              }
+              ... on TextToken {
+                __typename
+                text
+                location
+              }
+            }
+          }
+        }
+        trackingInfo {
+          reasonTarget
+          reasonTargetType
+          reasonType
+          rowName
+        }
+        content {
+          edges {
+            trackingID
+            node {
+              __typename
+              __isShelfContent: __typename
+              ... on Stream {
+                id
+                __typename
+                previewImageURL
+                broadcaster {
+                  displayName
+                  broadcastSettings {
+                    title
+                    id
+                    __typename
+                  }
+                  id
+                  __typename
+                }
+                game {
+                  displayName
+                  boxArtURL
+                  id
+                  __typename
+                }
+                ...FocusableStreamCard_stream
+              }
+              ... on Game {
+                ...FocusableCategoryCard_category
+                id
+                __typename
+                streams(first: 1) {
+                  edges {
+                    node {
+                      id
+                      __typename
+                      previewImageURL
+                      broadcaster {
+                        displayName
+                        broadcastSettings {
+                          title
+                          id
+                          __typename
+                        }
+                        id
+                        __typename
+                      }
+                      game {
+                        displayName
+                        boxArtURL
+                        id
+                        __typename
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+fragment FocusableCategoryCard_category on Game {
+  name
+  id
+  __typename
+  displayName
+  viewersCount
+  boxArtURL
+}
+
+fragment FocusableStreamCard_stream on Stream {
+  broadcaster {
+    displayName
+    login
+    hosting {
+      id
+      __typename
+    }
+    broadcastSettings {
+      title
+      id
+      __typename
+    }
+    profileImageURL(width: 50)
+    id
+    __typename
+  }
+  game {
+    displayName
+    name
+    id
+    __typename
+  }
+  id
+  __typename
+  previewImageURL
+  type
+  viewersCount
+}
+","variables":{"itemsPerRow":20,"limit":8,"platform":"switch_web_tv","requestID":"lwxcwatjfMfwXYPz"}}
+'@
 $bodytest = TwitchGraphQLRequest -data $body -access_token $access_token -device_code $device_code
 
 
@@ -113,3 +262,71 @@ $searchTerm = "Vaudeville"
 $searchQuery2 = "{`"query`":`"query Search_Query(\n  `$userQuery: String!\n  `$platform: String!\n  `$noQuery: Boolean!\n) {\n  currentUser {\n    id\n    __typename\n    login\n    roles {\n      isStaff\n    }\n  }\n  searchFor(userQuery: `$userQuery, platform: `$platform) @skip(if: `$noQuery) {\n    ...SearchResults_results\n  }\n}\n\nfragment FocusableCategoryCard_category on Game {\n  name\n  id\n  __typename\n  displayName\n  viewersCount\n  boxArtURL\n}\n\nfragment FocusableOfflineChannelCard_channel on User {\n  displayName\n  followers {\n    totalCount\n  }\n  lastBroadcast {\n    startedAt\n    id\n    __typename\n  }\n  login\n  profileImageURL(width: 300)\n}\n\nfragment FocusableStreamCard_stream on Stream {\n  broadcaster {\n    displayName\n    login\n    hosting {\n      id\n      __typename\n    }\n    broadcastSettings {\n      title\n      id\n      __typename\n    }\n    profileImageURL(width: 50)\n    id\n    __typename\n  }\n  game {\n    displayName\n    boxArtURL\n    name\n    id\n    __typename\n  }\n  id\n  __typename\n  previewImageURL\n  type\n  viewersCount\n}\n\nfragment FocusableVodCard_video on Video {\n  createdAt\n  lengthSeconds\n  game {\n    boxArtURL\n    displayName\n    id\n    __typename\n  }\n  id\n  __typename\n  previewThumbnailURL\n  self {\n    viewingHistory {\n      position\n    }\n  }\n  title\n  viewCount\n}\n\nfragment SearchResults_results on SearchFor {\n  channels {\n    items {\n      id\n      __typename\n      bannerImageURL\n      ...FocusableOfflineChannelCard_channel\n      stream {\n        id\n        __typename\n        previewImageURL\n        ...FocusableStreamCard_stream\n        game {\n          id\n          __typename\n        }\n      }\n    }\n  }\n  relatedLiveChannels {\n    items {\n      id\n      __typename\n      bannerImageURL\n      ...FocusableOfflineChannelCard_channel\n      stream {\n        id\n        __typename\n        previewImageURL\n        ...FocusableStreamCard_stream\n        game {\n          id\n          __typename\n        }\n      }\n    }\n  }\n  games {\n    items {\n      id\n      __typename\n      ...FocusableCategoryCard_category\n      streams(first: 1) {\n        edges {\n          node {\n            previewImageURL\n            id\n            __typename\n          }\n        }\n      }\n    }\n  }\n  videos {\n    items {\n      ...FocusableVodCard_video\n      id\n      __typename\n      game {\n        id\n        __typename\n      }\n      previewThumbnailURL\n    }\n  }\n}\n`",`"variables`":{`"userQuery`":`"$searchTerm`",`"platform`":`"switch_web_tv`",`"noQuery`":false}}"
 $searchTest = TwitchGraphQLRequest -data $searchQuery2 -access_token $access_token -device_code $device_code
 
+
+
+$userViewedLiveVideoBody = @'
+{
+    "operationName": "updateUserViewedVideo",
+    "variables": {
+        "input": {
+            "userID": "116527123",
+            "position": 11201,
+            "videoID": "48937052557",
+            "videoType": "LIVE"
+        }
+    },
+    "extensions": {
+        "persistedQuery": {
+            "version": 1,
+            "sha256Hash": "bb58b1bd08a4ca0c61f2b8d323381a5f4cd39d763da8698f680ef1dfaea89ca1"
+        }
+    }
+}
+'@
+
+
+$userViewedVideoQuery = @'
+{
+"operationName": "queryUserViewedVideo",
+   "variables": {},
+    "extensions": {
+        "persistedQuery": {
+            "version": 1,
+            "sha256Hash": "e249447c070b095eb599cceec239bbca567e30080795789f85bc25db3f7a27ad"
+        }
+    }
+}
+'@
+
+$videoComments = @'
+{
+    "operationName": "VideoCommentsByOffsetOrCursor",
+    "variables": {
+        "videoID": "1879649259",
+        "contentOffsetSeconds": 0
+    },
+    "extensions": {
+        "persistedQuery": {
+            "version": 1,
+            "sha256Hash": "b70a3591ff0f4e0313d126c6a1502d79a1c02baebb288227c582044aa76adf6a"
+        }
+    }
+}
+"@
+
+
+$seekBarPreview = @"
+{
+    "operationName": "VideoPlayer_VODSeekbarPreviewVideo",
+    "variables": {
+        "includePrivate": false,
+        "videoID": "1879649259"
+    },
+    "extensions": {
+        "persistedQuery": {
+            "version": 1,
+            "sha256Hash": "07e99e4d56c5a7c67117a154777b0baf85a5ffefa393b213f4bc712ccaf85dd6"
+        }
+    }
+}
+'@
