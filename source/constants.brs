@@ -1,11 +1,10 @@
 ' Set global constants
 sub setConstants()
-    globals = m.screen.getGlobalNode()
     deviceInfo = CreateObject("roDeviceInfo")
     uiResolutionWidth = deviceInfo.GetUIResolution().width
     scaleFactor = uiResolutionWidth / 1280
     ' Set Global Constants
-    globals.addFields({
+    m.global.addFields({
         constants: {
             maskScaleFactor: scaleFactor
             defaultIcons: {

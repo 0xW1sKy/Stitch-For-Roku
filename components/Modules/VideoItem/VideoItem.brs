@@ -114,7 +114,7 @@ sub UserSettings()
     m.itemSubtitle.text = m.top.itemContent.followerDisplay
     m.timestampLabel.visible = false
     m.timestampRect.visible = false
-    m.itemlabel.text = m.top.m.top.itemContent.contentTitle
+    m.itemlabel.text = m.top.itemContent.contentTitle
 end sub
 
 

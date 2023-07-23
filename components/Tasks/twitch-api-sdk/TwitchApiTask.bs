@@ -45,105 +45,103 @@ function TwitchGraphQLRequest(data)
 end function
 
 function getHomePageQuery() as object
-    rsp = TwitchGraphQLRequest(`{
-            "query":"query Homepage_Query(
-                $itemsPerRow: Int!
-                $limit: Int!
-                $platform: String!
-                $requestID: String!
-                ) {
-                currentUser {
+    rsp = TwitchGraphQLRequest({
+        query: `query Homepage_Query(
+            $itemsPerRow: Int!
+            $limit: Int!
+            $platform: String!
+            $requestID: String!
+            ) {
+            currentUser {
+                id
+                __typename
+                login
+                roles {
+                isStaff
+                }
+            }
+            shelves(itemsPerRow: $itemsPerRow, first: $limit, platform: $platform, requestID: $requestID) {
+                edges {
+                node {
                     id
                     __typename
-                    login
-                    roles {
-                    isStaff
-                    }
-                }
-                shelves(itemsPerRow: $itemsPerRow, first: $limit, platform: $platform, requestID: $requestID) {
-                    edges {
-                    node {
-                        id
+                    title {
+                    fallbackLocalizedTitle
+                    localizedTitleTokens {
+                        node {
                         __typename
-                        title {
-                        fallbackLocalizedTitle
-                        localizedTitleTokens {
-                            node {
+                        ... on Game {
                             __typename
-                            ... on Game {
-                                __typename
-                                displayName
-                                name
-                            }
-                            ... on TextToken {
-                                __typename
-                                text
-                                location
-                            }
-                            }
+                            displayName
+                            name
                         }
-                        }
-                        trackingInfo {
-                        reasonTarget
-                        reasonTargetType
-                        reasonType
-                        rowName
-                        }
-                        content {
-                        edges {
-                            trackingID
-                            node {
+                        ... on TextToken {
                             __typename
-                            __isShelfContent: __typename
-                            ... on Stream {
+                            text
+                            location
+                        }
+                        }
+                    }
+                    }
+                    trackingInfo {
+                    reasonTarget
+                    reasonTargetType
+                    reasonType
+                    rowName
+                    }
+                    content {
+                    edges {
+                        trackingID
+                        node {
+                        __typename
+                        __isShelfContent: __typename
+                        ... on Stream {
+                            id
+                            __typename
+                            previewImageURL
+                            broadcaster {
+                            displayName
+                            broadcastSettings {
+                                title
+                                id
+                                __typename
+                            }
+                            id
+                            __typename
+                            }
+                            game {
+                            displayName
+                            boxArtURL
+                            id
+                            __typename
+                            }
+                            ...FocusableStreamCard_stream
+                        }
+                        ... on Game {
+                            ...FocusableCategoryCard_category
+                            id
+                            __typename
+                            streams(first: 1) {
+                            edges {
+                                node {
                                 id
                                 __typename
                                 previewImageURL
                                 broadcaster {
-                                displayName
-                                broadcastSettings {
+                                    displayName
+                                    broadcastSettings {
                                     title
                                     id
                                     __typename
-                                }
-                                id
-                                __typename
-                                }
-                                game {
-                                displayName
-                                boxArtURL
-                                id
-                                __typename
-                                }
-                                ...FocusableStreamCard_stream
-                            }
-                            ... on Game {
-                                ...FocusableCategoryCard_category
-                                id
-                                __typename
-                                streams(first: 1) {
-                                edges {
-                                    node {
+                                    }
                                     id
                                     __typename
-                                    previewImageURL
-                                    broadcaster {
-                                        displayName
-                                        broadcastSettings {
-                                        title
-                                        id
-                                        __typename
-                                        }
-                                        id
-                                        __typename
-                                    }
-                                    game {
-                                        displayName
-                                        boxArtURL
-                                        id
-                                        __typename
-                                    }
-                                    }
+                                }
+                                game {
+                                    displayName
+                                    boxArtURL
+                                    id
+                                    __typename
                                 }
                                 }
                             }
@@ -154,52 +152,54 @@ function getHomePageQuery() as object
                     }
                 }
                 }
+            }
+            }
 
-                fragment FocusableCategoryCard_category on Game {
+            fragment FocusableCategoryCard_category on Game {
+            name
+            id
+            __typename
+            displayName
+            viewersCount
+            boxArtURL
+            }
+
+            fragment FocusableStreamCard_stream on Stream {
+            broadcaster {
+                displayName
+                login
+                hosting {
+                id
+                __typename
+                }
+                broadcastSettings {
+                title
+                id
+                __typename
+                }
+                profileImageURL(width: 50)
+                id
+                __typename
+            }
+            game {
+                displayName
                 name
                 id
                 __typename
-                displayName
-                viewersCount
-                boxArtURL
-                }
-
-                fragment FocusableStreamCard_stream on Stream {
-                broadcaster {
-                    displayName
-                    login
-                    hosting {
-                    id
-                    __typename
-                    }
-                    broadcastSettings {
-                    title
-                    id
-                    __typename
-                    }
-                    profileImageURL(width: 50)
-                    id
-                    __typename
-                }
-                game {
-                    displayName
-                    name
-                    id
-                    __typename
-                }
-                id
-                __typename
-                previewImageURL
-                type
-                viewersCount
-            }",
-            "variables":{
-                "itemsPerRow":20,
-                "limit":8,
-                "platform":"switch_web_tv",
-                "requestID":"${getRandomUUID()}"
             }
-        }`)
+            id
+            __typename
+            previewImageURL
+            type
+            viewersCount
+        }`
+        variables: {
+            "itemsPerRow": 20,
+            "limit": 8,
+            "platform": "switch_web_tv",
+            "requestID": getRandomUUID()
+        }
+    })
     if rsp <> invalid
         m.top.response = rsp
     else
@@ -210,7 +210,66 @@ end function
 
 function getCategoryQuery() as object
     rsp = TwitchGraphQLRequest({
-        query: "query GameDirectory_Query(" + chr(34) + "  $gameAlias: String!" + chr(34) + "  $channelsCount: Int!" + chr(34) + ") {" + chr(34) + "  currentUser {" + chr(34) + "    id" + chr(34) + "    __typename" + chr(34) + "    login" + chr(34) + "    roles {" + chr(34) + "      isStaff" + chr(34) + "    }" + chr(34) + "  }" + chr(34) + "  game(name: $gameAlias) {" + chr(34) + "    boxArtURL" + chr(34) + "    displayName" + chr(34) + "    name" + chr(34) + "    streams(first: $channelsCount) {" + chr(34) + "      edges {" + chr(34) + "        node {" + chr(34) + "          id" + chr(34) + "          __typename" + chr(34) + "          previewImageURL" + chr(34) + "          ...FocusableStreamCard_stream" + chr(34) + "        }" + chr(34) + "      }" + chr(34) + "    }" + chr(34) + "    id" + chr(34) + "    __typename" + chr(34) + "  }" + chr(34) + "}" + chr(34) + "" + chr(34) + "fragment FocusableStreamCard_stream on Stream {" + chr(34) + "  broadcaster {" + chr(34) + "    displayName" + chr(34) + "    login" + chr(34) + "    hosting {" + chr(34) + "      id" + chr(34) + "      __typename" + chr(34) + "    }" + chr(34) + "    broadcastSettings {" + chr(34) + "      title" + chr(34) + "      id" + chr(34) + "      __typename" + chr(34) + "    }" + chr(34) + "    profileImageURL(width: 50)" + chr(34) + "    id" + chr(34) + "    __typename" + chr(34) + "  }" + chr(34) + "  game {" + chr(34) + "    displayName" + chr(34) + "    name" + chr(34) + "    id" + chr(34) + "    __typename" + chr(34) + "  }" + chr(34) + "  id" + chr(34) + "  __typename" + chr(34) + "  previewImageURL" + chr(34) + "  type" + chr(34) + "  viewersCount" + chr(34) + "}" + chr(34) + ""
+        query: `query GameDirectory_Query(
+            $gameAlias: String!
+            $channelsCount: Int!
+            ) {
+            currentUser {
+                id
+                __typename
+                login
+                roles {
+                isStaff
+                }
+            }
+            game(name: $gameAlias) {
+                boxArtURL
+                displayName
+                name
+                streams(first: $channelsCount) {
+                edges {
+                    node {
+                    id
+                    __typename
+                    previewImageURL
+                    ...FocusableStreamCard_stream
+                    }
+                }
+                }
+                id
+                __typename
+            }
+            }
+
+            fragment FocusableStreamCard_stream on Stream {
+            broadcaster {
+                displayName
+                login
+                hosting {
+                id
+                __typename
+                }
+                broadcastSettings {
+                title
+                id
+                __typename
+                }
+                profileImageURL(width: 50)
+                id
+                __typename
+            }
+            game {
+                displayName
+                name
+                id
+                __typename
+            }
+            id
+            __typename
+            previewImageURL
+            type
+            viewersCount
+            }`
         variables: {
             "channelsCount": 40
             "gameAlias": m.top.request.params.id

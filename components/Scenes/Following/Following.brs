@@ -127,7 +127,6 @@ sub handleRecommendedSections()
                 rowItem.gameName = stream.game.name
                 liveFollows.push(rowItem)
             end for
-            liveFollows.sortBy("streamerLogin")
             appended = false
             for i = 0 to (liveFollows.count() - 1) step 1
                 if first
