@@ -334,6 +334,7 @@ end function
 
 
 function onKeyEvent(key, press) as boolean
+    ? "CustomVideoKeyEvent"; key press
     handled = false
     if press
         m.fadeAwayTimer.control = "stop"
@@ -508,6 +509,8 @@ function onKeyEvent(key, press) as boolean
                 m.top.thumbnailInfo = invalid
             end if
         else if key = "OK"
+            ? "state"; m.currentProgressBarState
+            handled = true
             if m.currentProgressBarState = 1
                 if m.top.state = "paused"
                     m.top.control = "resume"
