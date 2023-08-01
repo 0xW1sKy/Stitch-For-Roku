@@ -19,10 +19,9 @@ function handleItemSelected()
 end function
 
 function onResponse()
-    content = CreateObject("roSGNode", "TwitchContentNode")
-    content.setFields(m.PlayVideo.response[0])
+    ' content.ignoreStreamErrors = true
     ? "break"
-    m.top.content = content
+    m.top.content = m.PlayVideo.response
     playContent()
 end function
 
@@ -58,13 +57,6 @@ sub initChat()
     end if
 end sub
 
-function getTopContent()
-    topContent = m.top.content.getfields()
-    content = CreateObject("roSGNode", "TwitchContentNode")
-    content.setFields(topContent)
-    return content
-end function
-
 sub playContent()
     ' if resolution <> invalid
     '     if resolution.ToInt() > get_user_setting("VideoQualitySetting").ToInt()
@@ -83,6 +75,9 @@ sub playContent()
     end if
     m.video = m.top.CreateChild("CustomVideo")
     httpAgent = CreateObject("roHttpAgent")
+    httpAgent.setCertificatesFile("common:/certs/ca-bundle.crt")
+    httpAgent.InitClientCertificates()
+    httpAgent.enableCookies()
     httpAgent.addheader("Accept", "*/*")
     httpAgent.addheader("Origin", "https://switch.tv.twitch.tv")
     httpAgent.addheader("Referer", "https://switch.tv.twitch.tv/")
@@ -99,6 +94,15 @@ sub playContent()
     content = m.top.content
     if content <> invalid then
         m.video.content = content
+        if content.streamerProfileImageUrl <> invalid
+            m.video.channelAvatar = content.streamerProfileImageUrl
+        end if
+        if content.streamerDisplayName <> invalid
+            m.video.channelUsername = content.streamerDisplayName
+        end if
+        if content.contentTitle <> invalid
+            m.video.videoTitle = content.contentTitle
+        end if
         m.video.visible = false
         m.PlayerTask = CreateObject("roSGNode", "PlayerTask")
         m.PlayerTask.observeField("state", "taskStateChanged")
@@ -138,38 +142,6 @@ sub init()
     m.chatWindow.observeField("visible", "onChatVisibilityChange")
 end sub
 
-sub onQualitySelectButtonPressed()
-    if m.PlayerTask.qualityChangeRequestFlag = true
-        m.PlayerTask.qualityChangeRequestFlag = false
-        exitPlayer()
-        content = CreateObject("roSGNode", "TwitchContentNode")
-        content.setFields(m.PlayVideo.response[m.video.qualityChangeRequest])
-        if m.PlayVideo.response[m.video.qualityChangeRequest].stream <> invalid
-            content.setFields(m.PlayVideo.response[m.video.qualityChangeRequest].stream)
-        end if
-        m.top.content = content
-        playContent()
-    end if
-    ' ' m.video.ClearContent()
-    ' m.video.video_id = m.top.contentRequested.contentId
-    ' m.video.streamUrls = m.video.streamUrls
-    ' m.video.streamQualities = m.video.streamQualities
-    ' m.video.streamContentIds = m.video.streamContentIds
-    ' m.video.streamBitrates = m.video.streamBitrates
-    ' m.video.streamStickyHttpRedirects = m.video.streamStickyHttpRedirects
-    ' m.video.channelUsername = m.top.contentRequested.streamerDisplayName
-    ' m.video.channelAvatar = m.top.contentRequested.streamerProfileImageUrl
-    ' m.video.videoTitle = m.top.contentRequested.contentTitle
-    ' m.video.content = vidContent
-    ' ' m.video.visible = true
-    ' ' m.video.setFocus(true)
-    ' ' m.video.enableCookies()
-    ' checkBookmarks()
-    ' m.video.control = "play"
-    ' m.video.qualityChangeRequestFlag = false
-    ' ' m.video.visible = true
-    ? "break"
-end sub
 
 sub onToggleChat()
     ? "Main Scene > onToggleChat"

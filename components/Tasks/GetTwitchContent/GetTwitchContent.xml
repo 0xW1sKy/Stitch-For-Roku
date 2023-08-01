@@ -5,7 +5,7 @@
     <interface>
         <!-- Field to issue a request to the handler -->
         <field id="contentRequested" type="assocarray" />
-        <field id="response" type="array" />
+        <field id="response" type="node" />
     </interface>
     <script type="text/brightscript" uri="GetTwitchContent.bs" />
     <script type="text/brightscript" uri="pkg:/components/Tasks/twitch-api-sdk/TwitchApiTask.bs" />

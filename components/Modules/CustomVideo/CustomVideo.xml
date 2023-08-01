@@ -10,18 +10,13 @@
         <field id="chatIsVisible" type="bool" />
         <field id="streamLayoutMode" type="Integer" value="-1" />
         <field id="busySpinner" type="bool" />
-        <field id="channelAvatar" type="string" alwaysNotify="true" />
-        <field id="channelUsername" type="string" />
-        <field id="videoTitle" type="string" />
+        <field id="channelAvatar" type="string" alias="avatar.uri" />
+        <field id="channelUsername" type="string" alias="channelUsername.text" />
+        <field id="videoTitle" type="string" alias="videoTitle.text" />
         <field id="QualityChangeRequestFlag" type="bool" value="false" />
         <field id="QualityChangeRequest" type="Integer" />
         <field id="streamDurationSeconds" type="Integer" value="0" />
         <field id="currentProgressBarState" type="Integer" value="1" />
-        <field id="streamurls" type="array" />
-        <field id="streamqualities" type="array" />
-        <field id="streamcontentids" type="array" />
-        <field id="streambitrates" type="array" />
-        <field id="streamstickyhttpredirects" type="array" />
         <field id="video_id" type="string" />
     </interface>
     <script type="text/brightscript" uri="CustomVideo.brs" />
@@ -258,7 +253,8 @@
                 uri="pkg:/images/icons/sliders.png"
                 width="25"
                 height="21"
-                translation="[60,51]" />
+                translation="[60,51]"
+                visible="false" />
             <Poster
                 id="timeTravelButton"
                 uri="pkg:/images/TimeTravel.png"
@@ -287,8 +283,8 @@
                 translation="[82,-572]"
                 text="Streamer Username"
                 color="0xFFFFFFFF"
-                fontSize="12"
-                fontUri="pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf" />
+                fontSize="14"
+                fontUri="pkg:/fonts/KlokanTechNotoSansCJK-Bold.otf" />
 
             <Group id="thumbnails" clippingRect="[0,0,220,124]" translation="[0,-150]">
                 <Poster

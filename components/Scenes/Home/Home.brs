@@ -52,7 +52,11 @@ function buildContentNodeFromShelves(shelves)
                     rowItem.contentId = stream.node.Id
                     rowItem.contentType = "LIVE"
                     rowItem.previewImageURL = Substitute("https://static-cdn.jtvnw.net/previews-ttv/live_user_{0}-{1}x{2}.jpg", stream.node.broadcaster.login, "320", "180")
-                    rowItem.contentTitle = stream.node.broadcaster.broadcastSettings.title
+                    if stream.node.broadcaster.broadcastSettings?.title <> invalid
+                        rowItem.contentTitle = stream.node.broadcaster.broadcastSettings.title
+                    else
+                        rowItem.contentTitle = stream.node.broadcaster.displayName
+                    end if
                     rowItem.viewersCount = stream.node.viewersCount
                     rowItem.streamerDisplayName = stream.node.broadcaster.displayName
                     rowItem.streamerLogin = stream.node.broadcaster.login

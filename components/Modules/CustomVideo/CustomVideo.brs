@@ -45,9 +45,9 @@ function init()
 
     m.top.observeField("position", "watcher")
     m.top.observeField("state", "onvideoStateChange")
-    m.top.observeField("channelAvatar", "onChannelInfoChange")
-    m.top.observeField("videoTitle", "onChannelInfoChange")
-    m.top.observeField("channelUsername", "onChannelInfoChange")
+    ' m.top.observeField("channelAvatar", "onChannelInfoChange")
+    ' m.top.observeField("videoTitle", "onChannelInfoChange")
+    ' m.top.observeField("channelUsername", "onChannelInfoChange")
     m.top.observeField("chatIsVisible", "onChatVisibilityChange")
     m.uiResolution = createObject("roDeviceInfo").GetUIResolution()
     m.uiResolutionWidth = m.uiResolution.width
@@ -74,6 +74,7 @@ function init()
     m.buttonHeld = invalid
     m.scrollInterval = 10
     m.top.streamLayoutMode = 0
+
 end function
 
 
@@ -108,8 +109,8 @@ sub onQualityButtonSelect()
     m.QualityDialog.setFocus(false)
     resetProgressBar()
     m.progressBar.getParent().setFocus(true)
-    m.top.qualityChangeRequest = m.QualityDialog.buttonSelected
-    m.top.qualityChangeRequestFlag = true
+    ' m.top.qualityChangeRequest = m.QualityDialog.buttonSelected
+    ' m.top.qualityChangeRequestFlag = true
 end sub
 
 sub onQualitySelectButtonPressed()
@@ -328,11 +329,7 @@ function getTimeTravelTime()
     return hour0 + hour1 + minute0 + minute1 + second0 + second1
 end function
 
-sub onChannelInfoChange()
-    m.videoTitle.text = m.top.videoTitle
-    m.channelUsername.text = m.top.channelUsername
-    m.avatar.uri = m.top.channelAvatar
-end sub
+
 
 function onKeyEvent(key, press) as boolean
     handled = false
@@ -454,13 +451,13 @@ function onKeyEvent(key, press) as boolean
                 h = m.timeTravelButton.height
                 m.glow.translation = [m.timeTravelButton.translation[0] - 30 + w / 2, m.timeTravelButton.translation[1] - 30 + h / 2]
                 m.timeTravelButton.blendColor = "0xBD00FFFF"
-            else if m.currentProgressBarState = 3
-                m.currentProgressBarState = 8
-                m.timeTravelButton.blendColor = "0xFFFFFFFF"
-                w = m.qualitySelectButton.width
-                h = m.qualitySelectButton.height
-                m.glow.translation = [m.qualitySelectButton.translation[0] - 30 + w / 2, m.qualitySelectButton.translation[1] - 30 + h / 2]
-                m.qualitySelectButton.blendColor = "0xBD00FFFF"
+                ' else if m.currentProgressBarState = 3
+                '     m.currentProgressBarState = 8
+                '     m.timeTravelButton.blendColor = "0xFFFFFFFF"
+                '     w = m.qualitySelectButton.width
+                '     h = m.qualitySelectButton.height
+                '     m.glow.translation = [m.qualitySelectButton.translation[0] - 30 + w / 2, m.qualitySelectButton.translation[1] - 30 + h / 2]
+                '     m.qualitySelectButton.blendColor = "0xBD00FFFF"
             else if m.currentProgressBarState = 6
                 if m.focusedTimeSlot <> -1 and m.focusedTimeSlot - 1 >= 0
                     m.timeTravelTimeSlot[m.focusedTimeSlot].uri = "pkg:/images/unfocusedTimeSlot.png"

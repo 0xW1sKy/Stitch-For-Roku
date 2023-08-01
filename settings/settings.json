@@ -7,60 +7,6 @@
         "default": "true"
     },
     {
-        "title": "Video Quality",
-        "description": "",
-        "settingName": "VideoQualitySetting",
-        "type": "radio",
-        "default": "1080",
-        "options": [
-            {
-                "title":"Maximum",
-                "id":"100000"
-            },
-            {
-                "title": "1080p",
-                "id": "1080"
-            },
-            {
-                "title": "720p",
-                "id": "720"
-            },
-            {
-                "title": "480p",
-                "id": "480"
-            },
-            {
-                "title": "360p",
-                "id": "360"
-            },
-            {
-                "title": "160p",
-                "id": "160"
-            }
-        ]
-    },
-    {
-        "title": "Video Framerate",
-        "description": "",
-        "settingName": "VideoFramerateSetting",
-        "type": "radio",
-        "default": "30",
-        "options": [
-            {
-                "title":"Maximum",
-                "id":"10000"
-            },
-            {
-                "title": "60 fps",
-                "id": "60"
-            },
-            {
-                "title": "30 fps",
-                "id": "30"
-            }
-        ]
-    },
-    {
         "title": "Enable Following Bar",
         "description": "Enables or Disables streams from appearing in the following bar.",
         "settingName": "FollowBarOption",

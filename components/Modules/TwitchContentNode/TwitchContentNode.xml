@@ -22,7 +22,6 @@
         <field id="gameId" type="string" />
         <field id="gameName" type="string" />
         <field id="clipSlug" type="string" />
-        <field id="url" type="string" />
         <field id="datePublished" type="string" onChange="updateRelativePublishDate" />
         <field id="relativePublishDate" type="string" />
     </interface>

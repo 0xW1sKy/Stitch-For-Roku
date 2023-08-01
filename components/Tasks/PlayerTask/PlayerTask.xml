@@ -7,7 +7,7 @@
 
     <interface>
         <field id="video" type="node" />
-        <field id="QualityChangeRequestFlag" type="boolean" value="false" />
+        <!-- <field id="QualityChangeRequestFlag" type="boolean" value="false" /> -->
     </interface>
 
 </component>

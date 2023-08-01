@@ -80,10 +80,10 @@ sub playContentWithAds()
                 curPos = msg.GetData()
                 ' check for mid-roll ads
                 ' adPods = RAF.getAds(msg)
-                if video.qualityChangeRequestflag = true
-                    m.top.qualityChangeRequestflag = true
-                    video.qualityChangeRequestflag = false
-                end if
+                ' if video.qualityChangeRequestflag = true
+                '     m.top.qualityChangeRequestflag = true
+                '     video.qualityChangeRequestflag = false
+                ' end if
                 if adPods <> invalid and adPods.count() > 0
                     print "PlayerTask: mid-roll ads, stopping video"
                     'ask the video to stop - the rest is handled in the state=stopped event below
@@ -95,6 +95,7 @@ sub playContentWithAds()
                 if curState = "error"
                     ? "[Video Playback Error String]: " video.errorStr
                     ? "[Video Playback Error Info]: " video.errorInfo
+                    ? "[Video Playback Error Segment]: "; video.streamingSegment
                 end if
                 if curState = "stopped" then
                     if adPods = invalid or adPods.count() = 0 then
