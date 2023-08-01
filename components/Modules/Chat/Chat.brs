@@ -90,26 +90,8 @@ sub onNewComment()
     end for
 
     if display_name = "" or message = ""
-        if m.userstate_change
-            clientInfo = {}
-            clientInfo.display_name = display_name
-            clientInfo.color = color
-            clientInfo.badges = badges
-            clientInfo.emote_set = emote_set
-            m.top.clientInfo = clientInfo
-            m.userstate_change = false
-        end if
-        if m.chat.clientComment <> ""
-            message = m.chat.clientComment
-            display_name = m.top.clientInfo.display_name
-            color = m.top.clientInfo.color
-            badges = m.top.clientInfo.badges
-            emote_set = m.top.clientInfo.emote_set
-            m.chat.clientComment = ""
-        else
-            m.chat.readyForNextComment = true
-            return
-        end if
+        m.chat.readyForNextComment = true
+        return
     end if
 
     group = createObject("roSGNode", "Group")

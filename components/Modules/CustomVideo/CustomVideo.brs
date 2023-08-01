@@ -103,18 +103,19 @@ function resetProgressBar()
 end function
 
 sub onQualityButtonSelect()
+    ? "QualityButtonSelect"
     m.QualityDialog.visible = false
     m.QualityDialog.setFocus(false)
     resetProgressBar()
     m.progressBar.getParent().setFocus(true)
+    m.top.qualityChangeRequest = m.QualityDialog.buttonSelected
     m.top.qualityChangeRequestFlag = true
-    m.top.qualityChangeRequest = m.top.STREAMURLS[m.QualityDialog.buttonSelected]
 end sub
 
 sub onQualitySelectButtonPressed()
-    if m.top.STREAMCONTENTIDS <> invalid and m.top.STREAMCONTENTIDS.count() > 1
+    if m.top.content.STREAMCONTENTIDS <> invalid and m.top.content.STREAMCONTENTIDS.count() > 1
         m.QualityDialog.title = "Please Choose Your Video Quality"
-        m.QualityDialog.buttons = m.top.STREAMCONTENTIDS
+        m.QualityDialog.buttons = m.top.content.STREAMCONTENTIDS
         m.QualityDialog.observeFieldScoped("buttonSelected", "onQualityButtonSelect")
         m.QualityDialog.visible = true
         m.lastFocusedchild = m.top.focusedChild

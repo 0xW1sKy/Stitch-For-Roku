@@ -3,29 +3,30 @@ sub init()
 end sub
 
 sub updateFollowBar()
-    access_token = ""
-    device_code = ""
-    di = CreateObject("roDeviceInfo")
-    ' doubled up here in stead of defaulting to "" because access_token is dependent on device_code
-    if get_user_setting("device_code") <> invalid
-        device_code = get_user_setting("device_code")
-        if get_user_setting("access_token") <> invalid
-            access_token = "OAuth " + get_user_setting("access_token")
+    try
+        access_token = ""
+        device_code = ""
+        di = CreateObject("roDeviceInfo")
+        ' doubled up here in stead of defaulting to "" because access_token is dependent on device_code
+        if get_user_setting("device_code") <> invalid
+            device_code = get_user_setting("device_code")
+            if get_user_setting("access_token") <> invalid
+                access_token = "OAuth " + get_user_setting("access_token")
+            end if
         end if
-    end if
-    req = HttpRequest({
-        url: "https://gql.twitch.tv/gql"
-        headers: {
-            "Accept": "*/*"
-            "Authorization": access_token
-            "Client-Id": "ue6666qo983tsx6so1t0vnawi233wa"
-            "Device-ID": device_code
-            "Origin": "https://switch.tv.twitch.tv"
-            "Referer": "https://switch.tv.twitch.tv/"
-        }
-        method: "POST"
-        data: {
-            query: `query FollowingPage_Query(
+        req = HttpRequest({
+            url: "https://gql.twitch.tv/gql"
+            headers: {
+                "Accept": "*/*"
+                "Authorization": access_token
+                "Client-Id": "ue6666qo983tsx6so1t0vnawi233wa"
+                "Device-ID": device_code
+                "Origin": "https://switch.tv.twitch.tv"
+                "Referer": "https://switch.tv.twitch.tv/"
+            }
+            method: "POST"
+            data: {
+                query: `query FollowingPage_Query(
                 $first: Int!
                 $liveUserCursor: Cursor
                 $offlineUserCursor: Cursor
@@ -364,49 +365,52 @@ sub updateFollowBar()
                     }
                 }
             }`
-            variables: {
-                "first": 100
-                ' "liveUserCursor": ""
-                ' "offlineUserCursor": ""
-                "followedGameType": "ALL"
-                "categoryFirst": 100
-                "itemsPerRow": 25
-                "limit": 8
-                "platform": "switch_web_tv"
-                "requestID": di.GetRandomUUID()
+                variables: {
+                    "first": 100
+                    ' "liveUserCursor": ""
+                    ' "offlineUserCursor": ""
+                    "followedGameType": "ALL"
+                    "categoryFirst": 100
+                    "itemsPerRow": 25
+                    "limit": 8
+                    "platform": "switch_web_tv"
+                    "requestID": di.GetRandomUUID()
+                }
             }
-        }
-    })
-    rsp = ParseJSON(req.send())
-    contentCollection = []
-    if rsp?.data?.shelves <> invalid
-        for each stream in rsp.data.shelves.edges[0].node.content.edges
-            streamnode = stream.node
-            ' type_name = stream.node.__typename
-            try
-                if stream.node.type <> invalid and stream.node.type = "live"
-                    rowItem = createObject("RoSGNode", "TwitchContentNode")
-                    rowItem.contentId = stream.node.Id
-                    rowItem.contentType = "LIVE"
-                    rowItem.previewImageURL = Substitute("https://static-cdn.jtvnw.net/previews-ttv/live_user_{0}-{1}x{2}.jpg", stream.node.broadcaster.login, "320", "180")
-                    rowItem.contentTitle = stream.node.broadcaster.broadcastSettings.title
-                    rowItem.viewersCount = stream.node.viewersCount
-                    rowItem.streamerDisplayName = stream.node.broadcaster.displayName
-                    rowItem.streamerLogin = stream.node.broadcaster.login
-                    rowItem.streamerId = stream.node.broadcaster.id
-                    rowItem.streamerProfileImageUrl = stream.node.broadcaster.profileImageURL
-                    rowItem.gameDisplayName = stream.node.game.displayName
-                    rowItem.gameBoxArtUrl = Left(stream.node.game.boxArtUrl, Len(stream.node.game.boxArtUrl) - 20) + "188x250.jpg"
-                    rowItem.gameId = stream.node.game.Id
-                    rowItem.gameName = stream.node.game.name
-                    contentCollection.push(rowItem)
-                end if
-            catch e
-                ? "Error: "; e
-            end try
-        end for
-    end if
-    if contentCollection.count() > 0
-        m.top.result = contentCollection
-    end if
+        })
+        rsp = ParseJSON(req.send())
+        contentCollection = []
+        if rsp?.data?.shelves <> invalid
+            for each stream in rsp.data.shelves.edges[0].node.content.edges
+                streamnode = stream.node
+                ' type_name = stream.node.__typename
+                try
+                    if stream.node.type <> invalid and stream.node.type = "live"
+                        rowItem = createObject("RoSGNode", "TwitchContentNode")
+                        rowItem.contentId = stream.node.Id
+                        rowItem.contentType = "LIVE"
+                        rowItem.previewImageURL = Substitute("https://static-cdn.jtvnw.net/previews-ttv/live_user_{0}-{1}x{2}.jpg", stream.node.broadcaster.login, "320", "180")
+                        rowItem.contentTitle = stream.node.broadcaster.broadcastSettings.title
+                        rowItem.viewersCount = stream.node.viewersCount
+                        rowItem.streamerDisplayName = stream.node.broadcaster.displayName
+                        rowItem.streamerLogin = stream.node.broadcaster.login
+                        rowItem.streamerId = stream.node.broadcaster.id
+                        rowItem.streamerProfileImageUrl = stream.node.broadcaster.profileImageURL
+                        rowItem.gameDisplayName = stream.node.game.displayName
+                        rowItem.gameBoxArtUrl = Left(stream.node.game.boxArtUrl, Len(stream.node.game.boxArtUrl) - 20) + "188x250.jpg"
+                        rowItem.gameId = stream.node.game.Id
+                        rowItem.gameName = stream.node.game.name
+                        contentCollection.push(rowItem)
+                    end if
+                catch e
+                    ? "Error: "; e
+                end try
+            end for
+        end if
+        if contentCollection.count() > 0
+            m.top.result = contentCollection
+        end if
+    catch e
+        ? "whoops: "; e
+    end try
 end sub

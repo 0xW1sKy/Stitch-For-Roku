@@ -14,7 +14,7 @@
         <field id="channelUsername" type="string" />
         <field id="videoTitle" type="string" />
         <field id="QualityChangeRequestFlag" type="bool" value="false" />
-        <field id="QualityChangeRequest" type="string" />
+        <field id="QualityChangeRequest" type="Integer" />
         <field id="streamDurationSeconds" type="Integer" value="0" />
         <field id="currentProgressBarState" type="Integer" value="1" />
         <field id="streamurls" type="array" />

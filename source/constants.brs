@@ -5,7 +5,16 @@ sub setConstants()
     scaleFactor = uiResolutionWidth / 1280
     ' Set Global Constants
     m.global.addFields({
+        emoteCache: {}
+        globalTTVEmotes: {}
+        channelTTVEmotes: {}
+        channelTTVFrankerEmotes: {}
+        global7TVEmotes: {}
+        channel7TVEmotes: {}
+        twitchBadges: {}
         constants: {
+            screenWidth: deviceInfo.GetUIResolution().width
+            screenHeight: deviceInfo.GetUIResolution().height
             maskScaleFactor: scaleFactor
             defaultIcons: {
                 search: "pkg:/images/iconSearch.png"

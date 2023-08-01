@@ -98,14 +98,17 @@ end function
 
 sub handleRecommendedSections()
     ? "handleRecommendedSections: "; TimeStamp()
+    contentCollection = []
     if m.GetContentTask.response.data <> invalid and m.GetContentTask.response.data.shelves <> invalid
         contentCollection = buildContentNodeFromShelves(m.GetContentTask.response.data.shelves.edges)
     else
         for each error in m.GetContentTask.response.errors
-            ' ? "RESP: "; error.message
+            ? "RESP: "; error.message
         end for
     end if
-    updateRowList(contentCollection)
+    if contentCollection.count() > 0
+        updateRowList(contentCollection)
+    end if
 end sub
 
 ' function createRowList()
@@ -128,16 +131,18 @@ end sub
 function updateRowList(jsonContent)
     ? "updateRowList: "; TimeStamp()
     contentCollection = createObject("roSGNode", "ContentNode")
-    for each jsonRow in jsonContent
-        row = createObject("roSGNode", "ContentNode")
-        row.title = jsonRow.title
-        for each jsonItem in jsonRow.children
-            twitchContentNode = createObject("roSGNode", "TwitchContentNode")
-            setTwitchContentFields(twitchContentNode, jsonItem)
-            row.appendChild(twitchContentNode)
+    if jsonContent <> invalid
+        for each jsonRow in jsonContent
+            row = createObject("roSGNode", "ContentNode")
+            row.title = jsonRow.title
+            for each jsonItem in jsonRow.children
+                twitchContentNode = createObject("roSGNode", "TwitchContentNode")
+                setTwitchContentFields(twitchContentNode, jsonItem)
+                row.appendChild(twitchContentNode)
+            end for
+            contentCollection.appendChild(row)
         end for
-        contentCollection.appendChild(row)
-    end for
+    end if
     rowItemSize = []
     showRowLabel = []
     rowHeights = []

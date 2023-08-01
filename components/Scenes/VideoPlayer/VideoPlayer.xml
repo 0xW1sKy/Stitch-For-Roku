@@ -2,19 +2,22 @@
 <component name="VideoPlayer" extends="SceneManagerGroup" initialFocus="videoWindow">
     <interface>
         <field id="contentRequested" type="Node" onChange="handleContent" />
+        <field id="contentStore" type="assocarray" />
+
+        <field id="content" type="node" />
+
+        <!-- state - Same as Task states. -->
+        <field id="state" type="string" alwaysNotify="true" />
+
+        <!-- control - "play" starts content playback -->
+        <field id="control" type="string" alwaysNotify="true" onChange="controlChanged" />
+        <field id="streams" type="assocarray" />
+        <field id="ChatStarted" type="bool" value="false" />
     </interface>
     <script type="text/brightscript" uri="VideoPlayer.brs" />
     <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
     <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
     <children>
-        <CustomVideo
-            id="videoWindow"
-            enableUI="false"
-            enableTrickPlay="false"
-            visible="false"
-            translation="[0,0]"
-            width="0"
-            height="0" />
         <Chat
             id="chat"
             visible="false" />
