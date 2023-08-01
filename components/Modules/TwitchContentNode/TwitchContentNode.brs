@@ -27,15 +27,15 @@ end sub
 sub updateType()
     if m.top.contentType = "LIVE"
         m.top.live = true
-        ' m.top.streamFormat = "hls"
+        m.top.streamFormat = "hls"
     end if
     if m.top.contentType = "VOD"
         m.top.live = false
-        ' m.top.streamFormat = "hls"
+        m.top.streamFormat = "hls"
     end if
     if m.top.contentType = "CLIP"
         m.top.live = false
-        ' m.top.streamFormat = "mp4"
+        m.top.streamFormat = "mp4"
     end if
     if m.top.contentType = "GAME"
     end if

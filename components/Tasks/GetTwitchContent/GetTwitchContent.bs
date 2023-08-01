@@ -158,12 +158,9 @@ sub main()
     content.StreamBitrates = stream_bitrates
     ' content.StreamUrls = [stream_urls]
     content.streams = streams
-    ' smoothContentItem.StreamUrls = stream_urls
+    content.StreamUrls = stream_urls
     content.StreamQualities = stream_qualities
     content.StreamContentIDs = stream_content_ids
     content.StreamStickyHttpRedirects = stream_sticky
-    ' smoothContentItem.ignoreStreamErrors = true
-    ' smoothContentItem.ForwardQueryStringParams = false
-    content.StreamFormat = "HLS"
     m.top.response = content
 end sub
