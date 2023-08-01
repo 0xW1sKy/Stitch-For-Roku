@@ -1,5 +1,7 @@
 function init()
     ' bump
+    m.top.enableUI = "false"
+    m.top.enableTrickPlay = "false"
     m.progressBar = m.top.findNode("progressBar")
     m.progressBar.visible = false
     m.progressBarBase = m.top.findNode("progressBarBase")
