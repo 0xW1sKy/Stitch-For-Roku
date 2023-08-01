@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2016 Roku Corp.  All Rights Reserved. -->
+
+<component name="GetTwitchContent" extends="Task">
+    <interface>
+        <!-- Field to issue a request to the handler -->
+        <field id="contentRequested" type="assocarray" />
+        <field id="response" type="array" />
+    </interface>
+    <script type="text/brightscript" uri="GetTwitchContent.bs" />
+    <script type="text/brightscript" uri="pkg:/components/Tasks/twitch-api-sdk/TwitchApiTask.bs" />
+    <script type="text/brightscript" uri="pkg:/source/utils/http.brs" />
+    <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
+    <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
+</component>

@@ -1,0 +1,186 @@
+
+sub main()
+    if m.top.contentRequested.contentType = "VOD"
+        rsp = TwitchGraphQLRequest({
+            query: `query VodPlayerWrapper_Query(
+            $videoId: ID!
+            $platform: String!
+            $playerType: String!
+            $skipPlayToken: Boolean!
+            ) {
+            ...VodPlayerWrapper_token
+            }
+            fragment VodPlayerWrapper_token on Query {
+            video(id: $videoId) @skip(if: $skipPlayToken) {
+                playbackAccessToken(params: {platform: $platform, playerType: $playerType}) {
+                    signature
+                   value
+                }
+                id
+                __typename
+            }
+        }`
+            variables: {
+                "videoId": m.top.contentRequested.contentId
+                "platform": "switch_web_tv"
+                "playerType": "pulsar"
+                "skipPlayToken": false
+            }
+        })
+
+    end if
+    if m.top.contentRequested.contentType = "LIVE"
+        rsp = TwitchGraphQLRequest({
+            query: `query StreamPlayer_Query(
+            $login: String!
+            $playerType: String!
+            $platform: String!
+            $skipPlayToken: Boolean!
+            ) {
+            ...StreamPlayer_token
+            }
+
+            fragment StreamPlayer_token on Query {
+            user(login: $login) {
+                login
+                stream @skip(if: $skipPlayToken) {
+                    playbackAccessToken(params: {platform: $platform, playerType: $playerType}) {
+                        signature
+                        value
+                    }
+                    id
+                    __typename
+                }
+                id
+                __typename
+            }
+        }`
+            variables: {
+                "login": m.top.contentRequested.streamerLogin
+                "platform": "switch_web_tv"
+                "playerType": "pulsar"
+                "skipPlayToken": false
+            }
+        })
+    end if
+
+
+    if m.top.contentRequested.contentType = "VOD"
+        usherUrl = "https://usher.ttvnw.net/vod/" + rsp.data.video.id + ".m3u8?playlist_include_framerate=true&allow_source=true&player_type=pulsar&player_backend=mediaplayer&nauth=" + rsp.data.video.playbackAccessToken.value.EncodeUri() + "&nauthsig=" + rsp.data.video.playbackAccessToken.signature
+    else if m.top.contentRequested.contentType = "LIVE"
+        usherUrl = "https://usher.ttvnw.net/api/channel/hls/" + rsp.data.user.login + ".m3u8?playlist_include_framerate=true&allow_source=true&player_type=pulsar&player_backend=mediaplayer&lr=true&token=" + rsp.data.user.stream.playbackaccesstoken.value.EncodeUri() + "&sig=" + rsp.data.user.stream.playbackaccesstoken.signature
+    end if
+    req = HttpRequest({
+        url: usherUrl
+        headers: {
+            "Accept": "*/*"
+            "Origin": "https://switch.tv.twitch.tv"
+            "Referer": "https://switch.tv.twitch.tv/"
+        }
+        method: "GET"
+    })
+    while true
+        usher_rsp = req.send().getString()
+        if usher_rsp <> invalid
+            exit while
+        end if
+        sleep(10)
+    end while
+
+
+    list = usher_rsp.Split(chr(10))
+    first_stream_link = ""
+    last_stream_link = ""
+    link = ""
+    cnt = 0
+    ' streamitems_all = []
+    stream_objects = []
+    for line = 2 to list.Count() - 1
+        stream_info = list[line + 1].Split(",")
+        streamobject = {}
+        for info = 0 to stream_info.Count() - 1
+            info_parsed = stream_info[info].Split("=")
+            streamobject[info_parsed[0].replace("#EXT-X-STREAM-INF:", "")] = toString(info_parsed[1], true).replace(chr(34), "")
+        end for
+        streamobject["URL"] = list[line + 2]
+        stream_objects.push(streamobject)
+        line += 2
+    end for
+    stream_bitrates = []
+    stream_urls = []
+    stream_qualities = []
+    stream_content_ids = []
+    stream_sticky = []
+    stream_formats = []
+    streams = []
+    for each stream_item in stream_objects
+        if stream_item["VIDEO"] = "chunked"
+            res = stream_item["RESOLUTION"].split("x")[1]
+            if stream_item["FRAME-RATE"] <> invalid
+                fps = stream_item["FRAME-RATE"].split(".")[0]
+            end if
+            value = res + "p"
+            if fps <> invalid
+                value = value + fps
+            end if
+        else
+            value = stream_item["VIDEO"]
+        end if
+        if Int(Val(stream_item["RESOLUTION"].split("x")[1])) >= 720
+            stream_qualities.push(true)
+            stream_quality = true
+        else
+            stream_qualities.push(false)
+            stream_quality = false
+        end if
+        resolution = value.split("p")[0]
+        fps = value.split("p")[1]
+        stream_bitrates.push(Int(Val(stream_item["BANDWIDTH"])) / 1000)
+        stream_sticky.push(false)
+        stream_content_ids.push(value)
+        stream_urls.push(stream_item["URL"])
+        stream_formats.push("hls")
+        stream = {
+            url: stream_item["URL"]
+            stickyredirects: false
+            quality: stream_quality
+            contentid: value
+            bitrate: Int(Val(stream_item["BANDWIDTH"])) / 1000
+        }
+        streams.push(stream)
+    end for
+
+    responseObj = []
+    ? "stream urls: "; stream_urls
+    smoothContentItem = m.top.contentRequested
+    smoothContentItem.StreamBitrates = stream_bitrates
+    smoothContentItem.url = usherUrl
+    ' smoothContentItem.streams = streams
+    smoothContentItem.StreamUrls = stream_urls
+    smoothContentItem.StreamQualities = stream_qualities
+    smoothContentItem.StreamContentIDs = stream_content_ids
+    smoothContentItem.StreamStickyHttpRedirects = stream_sticky
+    smoothContentItem.StreamFormat = "HLS"
+    ? "break"
+
+
+    responseObj.push(smoothContentItem)
+    for each stream in streams
+        ' ContentItem = m.top.contentRequested
+        ' ContentItem.StreamBitrates = stream.bitrate
+        ' ContentItem.StreamUrls = stream_urls
+        ' ContentItem.StreamQualities = stream_qualities
+        ' ContentItem.StreamContentIDs = stream_content_ids
+        ' ContentItem.StreamStickyHttpRedirects = stream_sticky
+        ' ContentItem.StreamFormat = "ISM"
+
+        streamID = stream.contentId
+        contentItem = m.top.contentRequested
+        contentItem.stream = stream
+        contentItem.streamContentIDs = stream_content_ids
+        ' contentItem.url = stream.url
+        contentItem.streamFormat = "hls"
+        responseObj.push(contentItem)
+    end for
+    m.top.response = responseObj
+end sub
