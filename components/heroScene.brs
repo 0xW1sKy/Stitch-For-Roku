@@ -27,7 +27,8 @@ sub init()
 end sub
 
 function VersionJobs()
-    if m.global.appinfo.version.major = 2 and m.global.appinfo.version.minor = 3
+    if m.global.appinfo.version.major.toInt() = 2 and m.global.appinfo.version.minor.toInt() = 3
+        ' Clean Up Job for switching default profile name to "$default$" as "default" is technically a possible twitch user.
         if get_setting("active_user") <> invalid and get_setting("active_user") = "default"
             set_setting("active_user", "$default$")
         end if

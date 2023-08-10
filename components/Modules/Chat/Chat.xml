@@ -10,6 +10,7 @@
         <field id="doneFocus" type="Boolean" value="false" />
         <field id="clientInfo" type="assocarray" />
         <field id="clientMessage" type="string" value="" />
+        <field id="width" type="integer" value="275" alias="chatPanel.width" onchange="updatePanelTranslation" />
     </interface>
 
     <script type="text/brightscript" uri="Chat.brs" />
@@ -18,17 +19,16 @@
         <Rectangle
             visible="true"
             color="0x000000FF"
-            width="270"
+            width="1280"
             height="720"
-            opacity="0.85"
-            translation="[1025,0]" />
+            opacity="1"
+            translation="[0,0]" />
         <Rectangle
             id="chatPanel"
             visible="true"
             color="0x00000000"
-            width="250"
             height="720"
-            opacity="0.8"
+            opacity="1"
             translation="[1030,0]" />
         <SimpleLabel
             translation="[1050,700]"
@@ -36,35 +36,6 @@
             color="0xEFEFF1FF"
             fontSize="12"
             fontUri="pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf" />
-
-        <Rectangle
-            visible="false"
-            color="0x18181BFF"
-            width="896"
-            height="216"
-            translation="[0,504]" />
-
-        <Keyboard
-            id="keyboard"
-            visible="false"
-            translation="[50,350]">
-        </Keyboard>
-
-        <Rectangle
-            id="chatButton"
-            visible="false"
-            color="0x18181BFF"
-            width="100"
-            height="30"
-            translation="[450,650]">
-            <SimpleLabel
-                translation="[20,0]"
-                text="Chat"
-                color="0xEFEFF1FF"
-                fontSize="24"
-                fontUri="pkg:/fonts/KlokanTechNotoSansCJK-Bold.otf" />
-        </Rectangle>
-
     </children>
 
 </component>

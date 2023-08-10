@@ -128,21 +128,12 @@ sub onQualitySelectButtonPressed()
 end sub
 
 sub onChatVisibilityChange()
-    if m.top.chatIsVisible
-        m.progressBarBase.width = 950
-        m.glow.translation = [534, 32]
-        m.timeTravelButton.translation = [390, 51]
-        m.controlButton.translation = [476, 53]
-        m.messagesButton.translation = [552, 52]
-        m.timeDuration.translation = [950, 61]
-    else
-        m.progressBarBase.width = 1200
-        m.glow.translation = [692, 32]
-        m.timeTravelButton.translation = [548, 51]
-        m.controlButton.translation = [634, 53]
-        m.messagesButton.translation = [710, 52]
-        m.timeDuration.translation = [1198, 61]
-    end if
+    m.progressBarBase.width = 1200
+    m.glow.translation = [692, 32]
+    m.timeTravelButton.translation = [548, 51]
+    m.controlButton.translation = [634, 53]
+    m.messagesButton.translation = [710, 52]
+    m.timeDuration.translation = [1198, 61]
 end sub
 
 sub onVideoStateChange()

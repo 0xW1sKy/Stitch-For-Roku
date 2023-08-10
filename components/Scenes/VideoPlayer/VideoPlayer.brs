@@ -150,9 +150,9 @@ end sub
 
 sub onChatVisibilityChange()
     if m.chatWindow.visible
-        m.video.width = 1025
+        m.chatWindow.width = 320
+        m.video.width = 960
         m.video.height = 720
-        m.chatWindow.getchild(0).opacity = "1"
     else
         m.video.width = 0
         m.video.height = 0
