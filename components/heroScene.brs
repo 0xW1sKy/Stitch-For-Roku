@@ -139,10 +139,6 @@ end sub
 function onKeyEvent(key, press) as boolean
     if press
         ? "Hero Scene Key Event: "; key
-        if key = "options"
-            ? "BREAK"
-            return true
-        end if
         if key = "replay"
             ? "----------- Currently Focused Child ----------" + chr(34); m.top.focusedChild
             ? "----------- Last Focused Child ----------" + chr(34); lastFocusedChild(m.top.focusedChild)
