@@ -31,17 +31,17 @@ end sub
 
 ' "StitchForRoku" registry accessors for the default global settings
 function get_setting(key, default = invalid)
-    value = registry_read(key, "StitchForRoku")
+    value = registry_read(key, m.global.appid)
     if value = invalid then return default
     return value
 end function
 
 sub set_setting(key, value)
-    registry_write(key, value, "StitchForRoku")
+    registry_write(key, value, m.global.appid)
 end sub
 
 sub unset_setting(key)
-    registry_delete(key, "StitchForRoku")
+    registry_delete(key, m.global.appid)
 end sub
 
 

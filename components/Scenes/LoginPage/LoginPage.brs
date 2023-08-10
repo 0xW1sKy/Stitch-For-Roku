@@ -72,15 +72,15 @@ end sub
 sub onButtonSelected()
     ? "buttonSelected: "; m.buttonGroup.buttonSelected
     if m.buttonGroup.buttonSelected = 0
-        active_user = get_setting("active_user", "default")
-        if active_user <> "default"
-            ? "default Registry keys: "; getRegistryKeys("default")
+        active_user = get_setting("active_user", "$default$")
+        if active_user <> "$default$"
+            ? "default Registry keys: "; getRegistryKeys("$default$")
             NukeRegistry(active_user)
-            set_setting("active_user", "default")
+            set_setting("active_user", "$default$")
             RunContentTask()
             m.top.finished = true
         else
-            for each key in getRegistryKeys("default")
+            for each key in getRegistryKeys("$default$")
                 if key <> "temp_device_code"
                     unset_user_setting(key)
                 end if
@@ -99,8 +99,8 @@ sub onGetFocus()
 end sub
 
 sub RunContentTask()
-    ? "active User: "; get_setting("active_user", "default")
-    if get_setting("active_user", "default") <> "default"
+    ? "active User: "; get_setting("active_user", "$default$")
+    if get_setting("active_user", "$default$") <> "$default$"
         m.buttonGroup.observeField("buttonSelected", "onButtonSelected")
         m.buttonGroup.buttons = [tr("Log Out")]
         m.code.visible = false

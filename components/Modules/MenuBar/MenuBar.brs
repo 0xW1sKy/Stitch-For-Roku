@@ -106,7 +106,7 @@ end sub
 
 sub handleUserLogin()
     if m.top.updateUserIcon
-        if get_setting("active_user", "default") <> "default"
+        if get_setting("active_user", "$default$") <> "$default$"
             ? "[MenuBar] - handleUserLogin()"
             m.loginIconTask = CreateObject("roSGNode", "TwitchApiTask") ' create task for feed retrieving
             m.loginIconTask.observeField("response", "handleUserLoginResponse")

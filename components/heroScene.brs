@@ -1,4 +1,5 @@
 sub init()
+    VersionJobs()
     m.top.backgroundUri = ""
     m.top.backgroundColor = m.global.constants.colors.hinted.grey1
     m.activeNode = invalid
@@ -9,7 +10,7 @@ sub init()
     m.menu.observeField("buttonSelected", "onMenuSelection")
     m.menu.setFocus(true)
     if get_setting("active_user") = invalid
-        set_setting("active_user", "default")
+        set_setting("active_user", "$default$")
     end if
     if get_user_setting("device_code") = invalid
         m.getDeviceCodeTask = CreateObject("roSGNode", "TwitchApiTask")
@@ -24,6 +25,14 @@ sub init()
     end if
     m.footprints = []
 end sub
+
+function VersionJobs()
+    if m.global.appinfo.version.major = 2 and m.global.appinfo.version.minor = 3
+        if get_setting("active_user") <> invalid and get_setting("active_user") = "default"
+            set_setting("active_user", "$default$")
+        end if
+    end if
+end function
 
 function refreshFollowBar()
     m.followedStreamBar.refreshFollowBar = true

@@ -281,7 +281,6 @@ function saveVideoBookmark() as void
             if m.bookmarkTask <> invalid
                 m.bookmarkTask = invalid
             end if
-            ? "Save Video Bookmark to TwitchCloud"
             m.bookmarkTask = createObject("roSGNode", "TwitchApiTask")
             m.bookmarkTask.functionname = "updateUserViewedVideo"
             m.bookmarkTask.request = {

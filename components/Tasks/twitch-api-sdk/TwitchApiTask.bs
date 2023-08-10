@@ -1872,49 +1872,53 @@ function getBrowsePageQuery()
 end function
 
 function getTwitchBookmarks()
-    rsp = TwitchGraphQLRequest({
-        "operationName": "queryUserViewedVideo",
-        "variables": {},
-        "extensions": {
-            "persistedQuery": {
-                "version": 1,
-                "sha256Hash": "e249447c070b095eb599cceec239bbca567e30080795789f85bc25db3f7a27ad"
+    if get_setting("active_user", "$default$") <> "$default$"
+        rsp = TwitchGraphQLRequest({
+            "operationName": "queryUserViewedVideo",
+            "variables": {},
+            "extensions": {
+                "persistedQuery": {
+                    "version": 1,
+                    "sha256Hash": "e249447c070b095eb599cceec239bbca567e30080795789f85bc25db3f7a27ad"
+                }
             }
-        }
-    })
-    if rsp?.data?.currentUser?.viewedVideos?.edges <> invalid
-        videoBookmarks = {}
-        for each edge in rsp.data.currentUser.viewedVideos.edges
-            videoId = edge.node.id
-            positionSecs = edge.history.position
-            videoBookmarks[videoId] = Int(positionSecs).toStr()
-        end for
-        try
-            set_user_setting("VideoBookmarks", FormatJson(videoBookmarks, 256))
-        catch e
-            ?"Error Saving Bookmarks "; e
-        end try
+        })
+        if rsp?.data?.currentUser?.viewedVideos?.edges <> invalid
+            videoBookmarks = {}
+            for each edge in rsp.data.currentUser.viewedVideos.edges
+                videoId = edge.node.id
+                positionSecs = edge.history.position
+                videoBookmarks[videoId] = Int(positionSecs).toStr()
+            end for
+            try
+                set_user_setting("VideoBookmarks", FormatJson(videoBookmarks, 256))
+            catch e
+                ?"Error Saving Bookmarks "; e
+            end try
+        end if
     end if
     m.top.control = "STOP"
 end function
 
 function updateUserViewedVideo()
-    rsp = TwitchGraphQLRequest({
-        "operationName": "updateUserViewedVideo",
-        "variables": {
-            "input": {
-                "userID": m.top.request.userId,
-                "position": m.top.request.position,
-                "videoID": m.top.request.videoId,
-                "videoType": m.top.request.videoType 'LIVE or VOD
+    if get_setting("active_user", "$default$") <> "$default$"
+        rsp = TwitchGraphQLRequest({
+            "operationName": "updateUserViewedVideo",
+            "variables": {
+                "input": {
+                    "userID": m.top.request.userId,
+                    "position": m.top.request.position,
+                    "videoID": m.top.request.videoId,
+                    "videoType": m.top.request.videoType 'LIVE or VOD
+                }
+            },
+            "extensions": {
+                "persistedQuery": {
+                    "version": 1,
+                    "sha256Hash": "bb58b1bd08a4ca0c61f2b8d323381a5f4cd39d763da8698f680ef1dfaea89ca1"
+                }
             }
-        },
-        "extensions": {
-            "persistedQuery": {
-                "version": 1,
-                "sha256Hash": "bb58b1bd08a4ca0c61f2b8d323381a5f4cd39d763da8698f680ef1dfaea89ca1"
-            }
-        }
-    })
+        })
+    end if
     m.top.control = "STOP"
 end function

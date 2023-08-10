@@ -1,6 +1,7 @@
 ' Set global constants
 sub setConstants()
     deviceInfo = CreateObject("roDeviceInfo")
+    appInfo = CreateObject("roAppInfo")
     uiResolutionWidth = deviceInfo.GetUIResolution().width
     scaleFactor = uiResolutionWidth / 1280
     maxResolution = invalid
@@ -15,6 +16,19 @@ sub setConstants()
     end for
     ' Set Global Constants
     m.global.addFields({
+        appID: "StitchForRoku"
+        appInfo: {
+            ID: appInfo.GetID()
+            IsDev: appInfo.IsDev()
+            DevID: appInfo.GetDevId()
+            Title: appInfo.GetTitle()
+            Version: {
+                Version: appInfo.GetVersion()
+                major: appInfo.GetValue("major_version")
+                minor: appInfo.GetValue("minor_version")
+                build: appInfo.GetValue("build_version")
+            }
+        }
         supportedGraphicsResolution: maxResolution
         emoteCache: {}
         globalTTVEmotes: {}
