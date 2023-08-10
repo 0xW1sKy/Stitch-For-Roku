@@ -20,7 +20,6 @@ end function
 
 function onResponse()
     ' content.ignoreStreamErrors = true
-    ? "break"
     m.top.content = m.PlayVideo.response
     playContent()
 end function
@@ -58,18 +57,6 @@ sub initChat()
 end sub
 
 sub playContent()
-    ' if resolution <> invalid
-    '     if resolution.ToInt() > get_user_setting("VideoQualitySetting").ToInt()
-    '         ? "Res Skip: "; value
-    '         continue for
-    '     end if
-    ' end if
-    ' if fps <> invalid
-    '     if fps.ToInt() > get_user_setting("VideoFramerateSetting").ToInt()
-    '         ? "Fps Skip: "; value
-    '         continue for
-    '     end if
-    ' end if
     if m.video <> invalid
         m.top.removeChild(m.video)
     end if
@@ -85,6 +72,8 @@ sub playContent()
     m.video.notificationInterval = 1
     m.video.observeField("toggleChat", "onToggleChat")
     videoBookmarks = get_user_setting("VideoBookmarks", "")
+    m.video.video_type = m.top.contentRequested.contentType
+    m.video.video_id = m.top.contentRequested.contentId
     if videoBookmarks <> ""
         m.video.videoBookmarks = ParseJSON(videoBookmarks)
     else
@@ -104,6 +93,13 @@ sub playContent()
             m.video.videoTitle = content.contentTitle
         end if
         m.video.visible = false
+        if m.video.video_id <> invalid
+            ? "video id is valid: "; m.video.video_id
+            if m.video.videoBookmarks.DoesExist(m.video.video_id)
+                ? "Jump To Position From Bookmarks > " m.video.videoBookmarks[m.video.video_id]
+                m.video.seek = Val(m.video.videoBookmarks[m.video.video_id])
+            end if
+        end if
         m.PlayerTask = CreateObject("roSGNode", "PlayerTask")
         m.PlayerTask.observeField("state", "taskStateChanged")
         m.PlayerTask.observeField("QualityChangeRequestFlag", "onQualitySelectButtonPressed")
@@ -288,57 +284,59 @@ end sub
 '     })
 ' end function
 
-function playClip()
-    vidContent = createObject("roSGNode", "ContentNode")
-    vidContent.title = m.top.contentRequested.contentTitle
-    vidContent.url = Left(m.top.contentRequested.previewImageUrl, Len(m.top.contentRequested.previewImageUrl) - 20) + ".mp4"
-    vidContent.streamFormat = "mp4"
-    m.video.video_id = m.top.contentRequested.contentId
-    m.video.streamUrls = [vidContent.url]
-    m.video.streamQualities = ["HD"]
-    m.video.streamContentIds = ["Original"]
-    m.video.channelUsername = m.top.contentRequested.streamerDisplayName
-    m.video.channelAvatar = m.top.contentRequested.streamerProfileImageUrl
-    m.video.videoTitle = m.top.contentRequested.contentTitle
-    m.video.content = vidContent
-    m.video.visible = true
-    m.video.setFocus(true)
-    m.video.enableCookies()
-    m.chatWindow.visible = false
-    checkBookmarks()
-    m.video.control = "play"
-end function
+' function playClip()
+'     vidContent = createObject("roSGNode", "ContentNode")
+'     vidContent.title = m.top.contentRequested.contentTitle
+'     vidContent.url = Left(m.top.contentRequested.previewImageUrl, Len(m.top.contentRequested.previewImageUrl) - 20) + ".mp4"
+'     vidContent.streamFormat = "mp4"
+'     m.video.video_id = m.top.contentRequested.contentId
+'     m.video.streamUrls = [vidContent.url]
+'     m.video.streamQualities = ["HD"]
+'     m.video.streamContentIds = ["Original"]
+'     m.video.channelUsername = m.top.contentRequested.streamerDisplayName
+'     m.video.channelAvatar = m.top.contentRequested.streamerProfileImageUrl
+'     m.video.videoTitle = m.top.contentRequested.contentTitle
+'     m.video.content = vidContent
+'     m.video.visible = true
+'     m.video.setFocus(true)
+'     m.video.enableCookies()
+'     m.chatWindow.visible = false
+'     checkBookmarks()
+'     m.video.control = "play"
+' end function
 
-function playVideo(data)
-    vidContent = createObject("roSGNode", "ContentNode")
-    vidContent.title = m.top.contentRequested.contentTitle
-    vidContent.url = data.streamUrls[0]
-    vidContent.streamFormat = "hls"
-    m.video.video_id = m.top.contentRequested.contentId
-    m.video.streamUrls = data.streamUrls
-    m.video.streamQualities = data.streamQualities
-    m.video.streamContentIds = data.streamContentIds
-    m.video.streamBitrates = data.streamBitrates
-    m.video.streamStickyHttpRedirects = data.streamStickyHttpRedirects
-    m.video.channelUsername = m.top.contentRequested.streamerDisplayName
-    m.video.channelAvatar = m.top.contentRequested.streamerProfileImageUrl
-    m.video.videoTitle = m.top.contentRequested.contentTitle
-    m.video.content = vidContent
-    m.video.visible = true
-    m.video.setFocus(true)
-    m.video.enableCookies()
-    checkBookmarks()
-    m.video.control = "play"
-    ' I'm too tired to do this better, but channel_id needs to be set before channel
-    m.chatWindow.channel_id = m.top.contentRequested.streamerId
-    m.chatWindow.channel = m.top.contentRequested.streamerLogin
-    if get_user_setting("ChatOption", "true") = "true"
-        m.chatWindow.visible = true
-        m.video.chatIsVisible = m.chatWindow.visible
-    else
-        m.chatWindow.visible = false
-    end if
-end function
+' function playVideo(data)
+'     vidContent = createObject("roSGNode", "ContentNode")
+'     vidContent.title = m.top.contentRequested.contentTitle
+'     vidContent.url = data.streamUrls[0]
+'     vidContent.streamFormat = "hls"
+'     ? "break"
+'     m.video.video_id = m.top.contentRequested.contentId
+'     m.video.video_type = "VOD"
+'     m.video.streamUrls = data.streamUrls
+'     m.video.streamQualities = data.streamQualities
+'     m.video.streamContentIds = data.streamContentIds
+'     m.video.streamBitrates = data.streamBitrates
+'     m.video.streamStickyHttpRedirects = data.streamStickyHttpRedirects
+'     m.video.channelUsername = m.top.contentRequested.streamerDisplayName
+'     m.video.channelAvatar = m.top.contentRequested.streamerProfileImageUrl
+'     m.video.videoTitle = m.top.contentRequested.contentTitle
+'     m.video.content = vidContent
+'     m.video.visible = true
+'     m.video.setFocus(true)
+'     m.video.enableCookies()
+'     checkBookmarks()
+'     m.video.control = "play"
+'     ' I'm too tired to do this better, but channel_id needs to be set before channel
+'     m.chatWindow.channel_id = m.top.contentRequested.streamerId
+'     m.chatWindow.channel = m.top.contentRequested.streamerLogin
+'     if get_user_setting("ChatOption", "true") = "true"
+'         m.chatWindow.visible = true
+'         m.video.chatIsVisible = m.chatWindow.visible
+'     else
+'         m.chatWindow.visible = false
+'     end if
+' end function
 
 function checkBookmarks()
     ' ? "Check the bookmark"

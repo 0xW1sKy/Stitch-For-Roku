@@ -21,6 +21,10 @@
         <Chat
             id="chat"
             visible="false" />
+        <TwitchApiTask
+            functionName="getTwitchBookmarks"
+            control="run"
+        />
     </children>
 
 </component>
