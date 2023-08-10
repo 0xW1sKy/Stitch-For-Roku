@@ -1,73 +1,73 @@
 
 function TwitchGraphQLRequest($data, $access_token = $null, $device_code = $null) {
-    $headers = @{
-        "Accept"          = "*/*"
-        "Authorization"   = "OAuth $access_token"
-        "Client-Id"       = "ue6666qo983tsx6so1t0vnawi233wa"
-        "Device-ID"       = $device_code
-        "Origin"          = "https://switch.tv.twitch.tv"
-        "Referer"         = "https://switch.tv.twitch.tv/"
-        "Accept-Language" = "en-US,en"
-        "content-type"    = "application/json"
-    }
-    $req = Invoke-RestMethod -Uri "https://gql.twitch.tv/gql" -Method POST -Body $data.replace("`n", "\n") -Headers $headers
+  $headers = @{
+    "Accept"          = "*/*"
+    "Authorization"   = "OAuth $access_token"
+    "Client-Id"       = "ue6666qo983tsx6so1t0vnawi233wa"
+    "Device-ID"       = $device_code
+    "Origin"          = "https://switch.tv.twitch.tv"
+    "Referer"         = "https://switch.tv.twitch.tv/"
+    "Accept-Language" = "en-US,en"
+    "content-type"    = "application/json"
+  }
+  $req = Invoke-RestMethod -Uri "https://gql.twitch.tv/gql" -Method POST -Body $data.replace("`n", "\n") -Headers $headers
 
-    return $req
+  return $req
 }
 
 function get-OAuthToken($device_code) {
-    $url = "https://id.twitch.tv/oauth2/token" + "?client_id=ue6666qo983tsx6so1t0vnawi233wa&device_code=" + $device_code + "&grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Adevice_code"
-    $headers = @{
-        "content-type" = "application/x-www-form-urlencoded"
-        "origin"       = "https://switch.tv.twitch.tv"
-        "referer"      = "https://switch.tv.twitch.tv/"
-        "accept"       = "application/json"
+  $url = "https://id.twitch.tv/oauth2/token" + "?client_id=ue6666qo983tsx6so1t0vnawi233wa&device_code=" + $device_code + "&grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Adevice_code"
+  $headers = @{
+    "content-type" = "application/x-www-form-urlencoded"
+    "origin"       = "https://switch.tv.twitch.tv"
+    "referer"      = "https://switch.tv.twitch.tv/"
+    "accept"       = "application/json"
+  }
+  $method = "POST"
+  while ($true) {
+    $req = Invoke-RestMethod -Uri $url -Headers $headers -Method $method -SkipHttpErrorCheck
+    if ($req.access_token) {
+      break
     }
-    $method = "POST"
-    while ($true) {
-        $req = Invoke-RestMethod -Uri $url -Headers $headers -Method $method -SkipHttpErrorCheck
-        if ($req.access_token) {
-            break
-        }
-        else {
-            Start-Sleep 5
-        }
+    else {
+      Start-Sleep 5
     }
-    return $req
+  }
+  return $req
 }
 
 function get-rendezvouztoken {
-    $url = "https://id.twitch.tv/oauth2/device?scopes=channel_read%20chat%3Aread%20user_blocks_edit%20user_blocks_read%20user_follows_edit%20user_read&client_id=ue6666qo983tsx6so1t0vnawi233wa"
-    $headers = @{
-        "content-type" = "application/x-www-form-urlencoded"
-        "origin"       = "https://switch.tv.twitch.tv"
-        "referer"      = "https://switch.tv.twitch.tv/"
-    }
-    $method = "POST"
-    $req = Invoke-RestMethod -Uri $url -Headers $headers -Method $method
-    return $req
+  $url = "https://id.twitch.tv/oauth2/device?scopes=channel_read%20chat%3Aread%20user_blocks_edit%20user_blocks_read%20user_follows_edit%20user_read&client_id=ue6666qo983tsx6so1t0vnawi233wa"
+  $headers = @{
+    "content-type" = "application/x-www-form-urlencoded"
+    "origin"       = "https://switch.tv.twitch.tv"
+    "referer"      = "https://switch.tv.twitch.tv/"
+  }
+  $method = "POST"
+  $req = Invoke-RestMethod -Uri $url -Headers $headers -Method $method
+  return $req
 }
 
 
 
 function TwitchHelixApiRequest($access_token = $null, $device_code = $null, $data = $null, $endpoint, $twitchargs, $method) {
 
-    $url = "https://api.twitch.tv/helix/" + $endpoint + "?" + $twitchargs
-    $headers = @{
-        "Accept"        = "*/*"
-        "Authorization" = "Bearer $access_token"
-        "Client-Id"     = "ue6666qo983tsx6so1t0vnawi233wa"
-        "Device-ID"     = $device_code
-        "Origin"        = "https://switch.tv.twitch.tv"
-        "Referer"       = "https://switch.tv.twitch.tv/"
-    }
-    if ($null -eq $data) {
-        $rsp = Invoke-RestMethod -Uri $url -Headers $headers -Method $method
-    }
-    else {
-        $rsp = Invoke-RestMethod -Uri $url -Headers $headers -Method $method -Body $data
-    }
-    return $rsp
+  $url = "https://api.twitch.tv/helix/" + $endpoint + "?" + $twitchargs
+  $headers = @{
+    "Accept"        = "*/*"
+    "Authorization" = "Bearer $access_token"
+    "Client-Id"     = "ue6666qo983tsx6so1t0vnawi233wa"
+    "Device-ID"     = $device_code
+    "Origin"        = "https://switch.tv.twitch.tv"
+    "Referer"       = "https://switch.tv.twitch.tv/"
+  }
+  if ($null -eq $data) {
+    $rsp = Invoke-RestMethod -Uri $url -Headers $headers -Method $method
+  }
+  else {
+    $rsp = Invoke-RestMethod -Uri $url -Headers $headers -Method $method -Body $data
+  }
+  return $rsp
 }
 
 
@@ -298,6 +298,11 @@ $userViewedVideoQuery = @'
 }
 '@
 
+foreach ( $edge in $userViewedVideoQueryresponse.data.currentUser.viewedVideos.edges) {
+  $videoIdSecs = $edge.node.id
+  $positionSecs = $edge.history.position
+}
+
 $videoComments = @'
 {
     "operationName": "VideoCommentsByOffsetOrCursor",
@@ -312,7 +317,7 @@ $videoComments = @'
         }
     }
 }
-"@
+'@
 
 
 $seekBarPreview = @"
@@ -329,4 +334,4 @@ $seekBarPreview = @"
         }
     }
 }
-'@
+"@
