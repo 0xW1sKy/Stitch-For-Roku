@@ -14,32 +14,8 @@ function main()
         '? "connect "
         tcpListen.Connect()
         tcpListen.SendStr("CAP REQ :twitch.tv/tags twitch.tv/commands" + Chr(13) + Chr(10))
-        user_auth_token = get_user_setting("access_token")
-        m.loggedinUserName = get_user_setting("login")
-        if m.loggedInUsername <> "" and user_auth_token <> invalid and user_auth_token <> ""
-            '? "PASS "
-            tcpListen.SendStr("PASS oauth:" + user_auth_token + Chr(13) + Chr(10))
-            '? "USER "
-            tcpListen.SendStr("USER " + m.loggedinUsername + " 8 * :" + m.loggedinUsername + Chr(13) + Chr(10))
-            '? "NICK "
-            tcpListen.SendStr("NICK " + m.loggedinUsername + Chr(13) + Chr(10))
-            '? "first eOK "
-            tcpListen.eOK()
-            '? "first IsReadable "
-            tcpListen.IsReadable()
-            '? "first IsWritable "
-            tcpListen.IsWritable()
-            '? "first IsException "
-            tcpListen.IsException()
-            '? "first eSuccess "
-            tcpListen.eSuccess()
-            '? "PASS oauth:" + user_auth_token
-            '? "USER " + m.loggedinUsername + " 8 * :" + m.loggedinUsername
-            '? "NICK " + m.loggedinUsername
-        else
-            tcpListen.SendStr("PASS SCHMOOPIIE" + Chr(13) + Chr(10))
-            tcpListen.SendStr("NICK justinfan32006" + Chr(13) + Chr(10))
-        end if
+        tcpListen.SendStr("PASS SCHMOOPIIE" + Chr(13) + Chr(10))
+        tcpListen.SendStr("NICK justinfan32006" + Chr(13) + Chr(10))
         ? "[ChatJob] - JOIN - "; m.top.channel
         tcpListen.SendStr("JOIN #" + m.top.channel + Chr(13) + Chr(10))
         queue = createObject("roArray", 300, true)
@@ -83,15 +59,8 @@ function main()
                 'tcpListen.notifyReadable(true)
                 tcpListen.Connect()
                 tcpListen.SendStr("CAP REQ :twitch.tv/tags twitch.tv/commands" + Chr(13) + Chr(10))
-                user_auth_token = get_user_setting("access_token")
-                if m.loggedinUsername <> "" and user_auth_token <> invalid and user_auth_token <> ""
-                    tcpListen.SendStr("PASS oauth:" + user_auth_token + Chr(13) + Chr(10))
-                    tcpListen.SendStr("USER " + m.loggedinUsername + " 8 * :" + m.loggedinUsername + Chr(13) + Chr(10))
-                    tcpListen.SendStr("NICK " + m.loggedinUsername + Chr(13) + Chr(10))
-                else
-                    tcpListen.SendStr("PASS SCHMOOPIIE" + Chr(13) + Chr(10))
-                    tcpListen.SendStr("NICK justinfan32006" + Chr(13) + Chr(10))
-                end if
+                tcpListen.SendStr("PASS SCHMOOPIIE" + Chr(13) + Chr(10))
+                tcpListen.SendStr("NICK justinfan32006" + Chr(13) + Chr(10))
                 tcpListen.SendStr("JOIN #" + m.top.channel + Chr(13) + Chr(10))
             end if
             if not received = ""
