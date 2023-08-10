@@ -12,6 +12,7 @@ sub init()
     m.avatar = m.top.findNode("avatar")
     m.videoPlayer = m.top.findNode("videoPlayer")
     m.plyrTask = invalid
+    ' m.button = m.top.findnode("exampleButton")
 end sub
 
 sub updatePage()
@@ -179,7 +180,7 @@ function handleItemSelected()
     m.top.contentSelected = selectedItem
 end function
 
-sub onGetFocus()
+sub FocusRowlist()
     if m.rowlist.focusedChild = invalid
         m.rowlist.setFocus(true)
     else if m.rowlist.focusedchild.id = "exampleRowList"
@@ -187,9 +188,25 @@ sub onGetFocus()
     end if
 end sub
 
+sub onGetFocus()
+    if m.top?.focusedChild?.id <> invalid and m.top.focusedChild.id = "exampleButton"
+        ?"do nothing"
+    else
+        FocusRowlist()
+    end if
+end sub
+
 function onKeyEvent(key as string, press as boolean) as boolean
     if press
-        ? "Home Scene Key Event: "; key
+        ? "Channel Page Key Event: "; key
+        ' if key = "up"
+        '     m.button.setFocus(true)
+        '     return true
+        ' end if
+        ' if key = "down"
+        '     m.rowlist.setFocus(true)
+        '     return true
+        ' end if
         if key = "back"
             m.top.backPressed = true
             return true

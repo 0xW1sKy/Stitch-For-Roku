@@ -40,6 +40,18 @@
                     fontUri="pkg:/fonts/KlokanTechNotoSansCJK-Bold.otf"
                     translation="[20,0]" />
             </Group>
+            <!-- <Button
+                id="exampleButton"
+                text=""
+                textColor=""
+                focusedTextColor=""
+                iconUri="pkg:/images/icons/heart-o.png"
+                focusedIconUri="pkg:/images/icons/heart-o.png"
+                showFocusFootprint="true"
+                height="24"
+                focusable="true"
+                maxWidth="24"
+                translation="[300,160]" /> -->
             <RowList
                 id="exampleRowList"
                 rowLabelOffset="[[0,5]]"
