@@ -18,6 +18,7 @@
         <field id="streamDurationSeconds" type="Integer" value="0" />
         <field id="currentProgressBarState" type="Integer" value="1" />
         <field id="video_id" type="string" />
+        <field id="video_type" type="string" />
     </interface>
     <script type="text/brightscript" uri="CustomVideo.brs" />
     <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />

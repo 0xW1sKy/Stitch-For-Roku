@@ -76,6 +76,7 @@ function init()
     m.buttonHeld = invalid
     m.scrollInterval = 10
     m.top.streamLayoutMode = 0
+    ? "Check the bookmark"
 
 end function
 
@@ -89,7 +90,7 @@ function watcher()
         m.progressDot.translation = [m.progressBarBase.width * (m.currentPositionSeconds / m.top.duration) + 33, 77]
     end if
 
-    checker = m.top.position mod 60
+    checker = m.top.position mod 20
     if checker = 0
         saveVideoBookmark()
     end if
@@ -275,49 +276,67 @@ sub showThumbnail()
 end sub
 
 function saveVideoBookmark() as void
-    if m.top.duration >= 900
-        videoBookmarks = "{"
-
-        tempBookmarks = m.top.videoBookmarks
-        if m.top.video_id <> invalid
-            bookmarkAlreadyExists = tempBookmarks.DoesExist(m.top.video_id)
-            tempBookmarks[m.top.video_id] = Int(m.top.position).ToStr()
+    if m.top.video_type = "LIVE" or m.top.video_type = "VOD"
+        if get_user_setting("id", invalid) <> invalid
+            if m.bookmarkTask <> invalid
+                m.bookmarkTask = invalid
+            end if
+            ? "Save Video Bookmark to TwitchCloud"
+            m.bookmarkTask = createObject("roSGNode", "TwitchApiTask")
+            m.bookmarkTask.functionname = "updateUserViewedVideo"
+            m.bookmarkTask.request = {
+                "userId": get_user_setting("id")
+                "position": Int(m.top.position)
+                "videoId": m.top.video_id
+                "videoType": m.top.video_type 'LIVE or VOD
+            }
+            m.bookmarkTask.control = "run"
         else
-            bookmarkAlreadyExists = false
-        end if
+            if m.top.duration >= 900
+                videoBookmarks = "{"
 
-        if tempBookmarks.Count() < 100
-            first = true
-            for each item in tempBookmarks.Items()
-                if not first
-                    videoBookmarks += ","
+                tempBookmarks = m.top.videoBookmarks
+                if m.top.video_id <> invalid
+                    bookmarkAlreadyExists = tempBookmarks.DoesExist(m.top.video_id)
+                    tempBookmarks[m.top.video_id] = Int(m.top.position).ToStr()
+                else
+                    bookmarkAlreadyExists = false
                 end if
-                videoBookmarks += chr(34) + item.key + chr(34) + " : " + chr(34) + item.value + chr(34)
-                first = false
-            end for
-        else
-            skip = true
-            first = true
-            for each item in tempBookmarks.Items()
-                if not skip
-                    if not first
-                        videoBookmarks += ","
-                    end if
-                    videoBookmarks += chr(34) + item.key + chr(34) + " : " + chr(34) + item.value + chr(34)
-                    first = false
+
+                if tempBookmarks.Count() < 100
+                    first = true
+                    for each item in tempBookmarks.Items()
+                        if not first
+                            videoBookmarks += ","
+                        end if
+                        videoBookmarks += chr(34) + item.key + chr(34) + " : " + chr(34) + item.value + chr(34)
+                        first = false
+                    end for
+                else
+                    skip = true
+                    first = true
+                    for each item in tempBookmarks.Items()
+                        if not skip
+                            if not first
+                                videoBookmarks += ","
+                            end if
+                            videoBookmarks += chr(34) + item.key + chr(34) + " : " + chr(34) + item.value + chr(34)
+                            first = false
+                        end if
+                        skip = false
+                    end for
                 end if
-                skip = false
-            end for
-        end if
 
-        if m.top.thumbnailInfo <> invalid and bookmarkAlreadyExists = false
-            videoBookmarks += "," + chr(34) + m.top.video_id.ToStr() + chr(34) + " : " + chr(34) + Int(m.top.position).ToStr() + chr(34) + "}"
-        else
-            videoBookmarks += "}"
-        end if
+                if m.top.thumbnailInfo <> invalid and bookmarkAlreadyExists = false
+                    videoBookmarks += "," + chr(34) + m.top.video_id.ToStr() + chr(34) + " : " + chr(34) + Int(m.top.position).ToStr() + chr(34) + "}"
+                else
+                    videoBookmarks += "}"
+                end if
 
-        m.top.videoBookmarks = tempBookmarks
-        set_user_setting("VideoBookmarks", videoBookmarks)
+                m.top.videoBookmarks = tempBookmarks
+                set_user_setting("VideoBookmarks", videoBookmarks)
+            end if
+        end if
     end if
 end function
 
