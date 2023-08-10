@@ -115,8 +115,8 @@ sub main()
     stream_formats = []
     streams = []
     for each stream_item in stream_objects
+        res = stream_item["RESOLUTION"].split("x")[1]
         if stream_item["VIDEO"] = "chunked"
-            res = stream_item["RESOLUTION"].split("x")[1]
             if stream_item["FRAME-RATE"] <> invalid
                 fps = stream_item["FRAME-RATE"].split(".")[0]
             end if
@@ -127,7 +127,13 @@ sub main()
         else
             value = stream_item["VIDEO"]
         end if
-        if Int(Val(stream_item["RESOLUTION"].split("x")[1])) >= 720
+        if m.global?.supportedgraphicsresolution <> invalid
+            if res.ToInt() > m.global.supportedgraphicsresolution
+                ? "Res Skip: "; res
+                continue for
+            end if
+        end if
+        if res.ToInt() >= 720
             stream_qualities.push(true)
             stream_quality = true
         else
