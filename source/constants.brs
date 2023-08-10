@@ -3,8 +3,19 @@ sub setConstants()
     deviceInfo = CreateObject("roDeviceInfo")
     uiResolutionWidth = deviceInfo.GetUIResolution().width
     scaleFactor = uiResolutionWidth / 1280
+    maxResolution = invalid
+    for each res in deviceInfo.GetSupportedGraphicsResolutions()
+        if maxResolution <> invalid
+            if res.height > maxResolution
+                maxResolution = res.height
+            end if
+        else
+            maxResolution = res.height
+        end if
+    end for
     ' Set Global Constants
     m.global.addFields({
+        supportedGraphicsResolution: maxResolution
         emoteCache: {}
         globalTTVEmotes: {}
         channelTTVEmotes: {}
