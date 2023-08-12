@@ -20,7 +20,8 @@
     <children>
         <Chat
             id="chat"
-            visible="false" />
+            visible="false"
+            translation="[960,0]" />
         <TwitchApiTask
             functionName="getTwitchBookmarks"
             control="run"

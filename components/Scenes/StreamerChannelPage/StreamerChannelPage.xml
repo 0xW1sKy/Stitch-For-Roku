@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component name="StreamerChannelPage" extends="SceneManagerGroup">
+    <interface>
+        <field id="contentRequested" type="node" onChange="updatePage" />
+        <field id="backgroundColor" type="string" alias="background.color, background2.color" />
+        <field id="selectedItem" type="node" />
+        <field id="chatStarted" type="bool" value="false" />
+    </interface>
+    <script type="text/brightscript" uri="StreamerChannelPage.brs" />
+    <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
+    <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
+    <children>
+        <rectangle id="background" width="1280" height="720" />
+        <Group id="banner" translation="[0, 0]"></Group>
+        <rectangle id="background2" width="1280" height="720" translation="[0, 214]" />
+        <Chat
+            id="chat"
+            translation="[30,320]"
+            width="1220"
+            height="400"
+            visible="false"
+            forceLive="true" />
+        <Group id="container" translation="[ 20, 10 ]">
+            <Group id="profile" translation="[0,140]">
+                <CirclePoster id="avatar" width="150" height="150" />
+                <!-- <MaskGroup id="profileImageMask" maskuri="pkg:/images/profile-mask-150.png"
+                    maskSize="[226,226]" maskOffset="[0,0]">
+                    <Poster id="avatar" width="150" height="150" />
+                </MaskGroup> -->
+                <SimpleLabel
+                    id="username"
+                    fontSize="24"
+                    fontUri="pkg:/fonts/KlokanTechNotoSansCJK-Bold.otf"
+                    translation="[160,60]" />
+                <SimpleLabel
+                    id="followers"
+                    fontSize="16"
+                    fontUri="pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf"
+                    translation="[160,85]" />
+
+            </Group>
+            <Group id="about" translation="[450,25]">
+                <InfoPane
+                    visible="false"
+                    id="description"
+                    width="600"
+                    fontSize="24"
+                    fontUri="pkg:/fonts/KlokanTechNotoSansCJK-Bold.otf"
+                    translation="[20,0]" />
+            </Group>
+            <!-- <Button
+                id="exampleButton"
+                text=""
+                textColor=""
+                focusedTextColor=""
+                iconUri="pkg:/images/icons/heart-o.png"
+                focusedIconUri="pkg:/images/icons/heart-o.png"
+                showFocusFootprint="true"
+                height="24"
+                focusable="true"
+                maxWidth="24"
+                translation="[300,160]" /> -->
+        </Group>
+    </children>
+
+</component>

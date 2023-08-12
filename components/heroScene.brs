@@ -55,7 +55,7 @@ function buildNode(name)
         newNode.translation = "[0, 0]"
         newNode.observeField("backPressed", "onBackPressed")
         newNode.observeField("contentSelected", "onContentSelected")
-        if name <> "GamePage" and name <> "ChannelPage" and name <> "VideoPlayer"
+        if name <> "GamePage" and name <> "ChannelPage" and name <> "VideoPlayer" and name <> "StreamerChannelPage"
             m.top.insertChild(newNode, 1)
         else
             m.top.appendChild(newNode)
@@ -84,18 +84,29 @@ end sub
 
 function onMenuSelection()
     ' refreshFollowBar()
-    if m.menu.focusedChild <> invalid
-        if m.activeNode <> invalid
-            if m.activeNode.id.toStr() <> m.menu.focusedChild.focusedChild.id.toStr()
-                m.top.removeChild(m.activeNode)
-                m.activeNode = invalid
+    ' If user is already logged in, show them their user page
+    if m.menu.focusedChild.focusedChild.id.toStr() = "LoginPage" and get_setting("active_user", "$default$") <> "$default$"
+        content = createObject("roSGNode", "TwitchContentNode")
+        content.streamerDisplayName = get_user_setting("display_name")
+        content.streamerLogin = get_user_setting("login")
+        content.streamerId = get_user_setting("id")
+        content.streamerProfileImageUrl = get_user_setting("profile_image_url")
+        content.contentType = "STREAMER"
+        m.activeNode.contentSelected = content
+    else
+        if m.menu.focusedChild <> invalid
+            if m.activeNode <> invalid
+                if m.activeNode.id.toStr() <> m.menu.focusedChild.focusedChild.id.toStr()
+                    m.top.removeChild(m.activeNode)
+                    m.activeNode = invalid
+                end if
             end if
         end if
+        if m.activeNode = invalid
+            m.activeNode = buildNode(m.menu.focusedChild.focusedChild.id)
+        end if
+        m.activeNode.setfocus(true)
     end if
-    if m.activeNode = invalid
-        m.activeNode = buildNode(m.menu.focusedChild.focusedChild.id)
-    end if
-    m.activeNode.setfocus(true)
 end function
 
 sub onFollowSelected()
@@ -112,7 +123,9 @@ sub onFollowSelected()
 end sub
 
 sub onContentSelected()
-    if m.activeNode.contentSelected.contentType = "GAME"
+    if m.activeNode.contentSelected.contentType = "STREAMER"
+        id = "StreamerChannelPage"
+    else if m.activeNode.contentSelected.contentType = "GAME"
         id = "GamePage"
     else if m.activeNode.contentSelected.contentType = "LIVE" or m.activeNode.contentSelected.contentType = "VOD" or m.activeNode.contentSelected.contentType = "USER"
         id = "ChannelPage"
@@ -135,6 +148,7 @@ sub onContentSelected()
 end sub
 
 sub onBackPressed()
+    ? "backpress detected from: "; m.activeNode.id
     if m.activeNode.backPressed <> invalid and m.activeNode.backPressed
         if m.footprints.Count() > 0
             m.top.removeChild(m.activeNode)
