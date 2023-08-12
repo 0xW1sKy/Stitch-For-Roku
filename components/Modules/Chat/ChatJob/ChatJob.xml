@@ -9,6 +9,7 @@
         <field id="nextComment" type="string" />
         <field id="clientComment" type="string" />
         <field id="sendMessage" type="string" />
+        <field id="forceLive" type="bool" value="false" />
     </interface>
 
     <script type="text/brightscript" uri="ChatJob.brs" />

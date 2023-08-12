@@ -9,7 +9,7 @@ sub init()
 end sub
 
 function updatePanelTranslation()
-    m.chatPanel.translation = [(m.top.width * 3), 0]
+    ' m.chatPanel.translation = [(m.top.width * 3), 0]
     setChatPanelSize()
     setSizingParameters()
 end function
@@ -58,6 +58,7 @@ sub onEnterChannel()
     ' ? "Chat >> onEnterChannel > " m.top.channel
     if get_user_setting("ChatWebOption", "true") = "true"
         m.chat = CreateObject("roSGNode", "ChatJob")
+        m.chat.forceLive = m.top.forceLive
         m.chat.observeField("nextComment", "onNewComment")
         m.chat.observeField("clientComment", "onNewComment")
         m.chat.channel = m.top.channel
@@ -184,15 +185,18 @@ function buildMessage(message, x_translation, emote_set, username_translation)
 
         block = wordOrImage(word, isUrl)
         block_width = block.localBoundingRect().width
-        if line_available_space - block_width < block_width
-            current_line++
-            line_available_space = m.right_bound - m.left_bound
-        end if
+        '* '  "Useful for Debug"
+        ' ? "left_bound: " m.left_bound
+        ' ? "right_bound: " m.right_bound
+        ' ? "x_translation: " x_translation
+        ' ? "Block Width: " block_width
+        ' ? "line_available_space: " line_available_space
         if block_width > m.right_bound
+            ? "break it up!"
             block = createObject("roSGNode", "Group")
             charTranslation = 0
             charLine = 0
-            charLineAvailableSpace = m.right_bound
+            charLineAvailableSpace = m.right_bound - x_translation
             for each char in word.split("")
                 charNode = createObject("roSGNode", "SimpleLabel")
                 charNode.fontSize = m.font_size
@@ -206,12 +210,18 @@ function buildMessage(message, x_translation, emote_set, username_translation)
                 if (charLineAvailableSpace - charWidth) < 0
                     charLine++
                     charLineAvailableSpace = m.right_bound - m.left_bound
+                    charTranslation = 0 - x_translation
                 end if
-                charNode.translation = [(m.right_bound - charTranslation), (charLine * (m.badge_size + m.line_gap))]
+                charNode.translation = [(charTranslation), (charLine * (m.badge_size + m.line_gap))]
                 charLineAvailableSpace -= charWidth
                 charTranslation += charWidth
+                block.appendChild(charNode)
             end for
             block_width = block.localBoundingRect().width
+        else if line_available_space - block_width <= 0
+            ? "triggered line switch"
+            current_line++
+            line_available_space = m.right_bound - m.left_bound
         end if
         block.translation = [(m.right_bound - line_available_space), (current_line * (m.badge_size + m.line_gap))]
         if block_width = 0

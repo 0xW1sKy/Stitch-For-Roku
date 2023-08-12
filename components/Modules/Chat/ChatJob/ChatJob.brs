@@ -19,8 +19,6 @@ function main()
         ? "[ChatJob] - JOIN - "; m.top.channel
         tcpListen.SendStr("JOIN #" + m.top.channel + Chr(13) + Chr(10))
         queue = createObject("roArray", 300, true)
-        first = 0
-        last = 0
         waitingComment = ""
         waitingCommentAge = 0
         sendWaitingMessage = true
@@ -69,14 +67,8 @@ function main()
                     tcpListen.SendStr("PONG :tmi.twitch.tv" + Chr(13) + Chr(10))
                     '? "send PONG Status " tcpListen.Status()
                 else
-                    'queue[last] = received
                     queue.unshift(received)
                     ' ? "Message queue: " queue.count()
-                    if last + 1 < 100
-                        last += 1
-                    else
-                        last = 0
-                    end if
                 end if
             end if
             ' if sendWaitingMessage and m.top.readyForNextComment
@@ -113,14 +105,11 @@ function main()
                     '     ? "Message " comment " was sent " waitingCommentAge " secs ago"
                     '     ? "Queue size: " queue.count()
                     ' end if
-                    if commentAge > 30 ' measured in seconds
+                    if m.top.forceLive
+                        sendWaitingMessage = false
                         m.top.nextComment = queue.pop()
-                        'queue[first] = invalid
-                        if first + 1 < 100
-                            first += 1
-                        else
-                            first = 0
-                        end if
+                    else if commentAge > 30 ' measured in seconds
+                        m.top.nextComment = queue.pop()
                     end if
                     if sendWaitingMessage <> invalid
                         if sendWaitingMessage = true

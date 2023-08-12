@@ -10,13 +10,17 @@
         <field id="doneFocus" type="Boolean" value="false" />
         <field id="clientInfo" type="assocarray" />
         <field id="clientMessage" type="string" value="" />
-        <field id="width" type="integer" value="275" alias="chatPanel.width" onchange="updatePanelTranslation" />
+        <field id="width" type="integer" value="275" alias="chatPanel.width, chatBackground.width" onchange="updatePanelTranslation" />
+        <field id="height" type="integer" value="720" alias="chatPanel.height, chatBackground.height" onChange="updatePanelTranslation" />
+        <field id="forceLive" type="bool" value="false" />
+        <field id="translation" type="vector2d" alias="chatPanel.translation" />
     </interface>
 
     <script type="text/brightscript" uri="Chat.brs" />
     <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
     <children>
         <Rectangle
+            id="chatBackground"
             visible="true"
             color="0x000000FF"
             width="1280"
@@ -27,15 +31,16 @@
             id="chatPanel"
             visible="true"
             color="0x00000000"
+            width="1280"
             height="720"
             opacity="1"
-            translation="[1030,0]" />
-        <SimpleLabel
-            translation="[1050,700]"
+            translation="[0,0]" />
+        <!-- <SimpleLabel
+            translation="[0,0]"
             text=""
             color="0xEFEFF1FF"
             fontSize="12"
-            fontUri="pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf" />
+            fontUri="pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf" /> -->
     </children>
 
 </component>
