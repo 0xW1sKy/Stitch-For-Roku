@@ -210,7 +210,7 @@ function buildMessage(message, x_translation, emote_set, username_translation)
                 if (charLineAvailableSpace - charWidth) < 0
                     charLine++
                     charLineAvailableSpace = m.right_bound - m.left_bound
-                    charTranslation = 0 - x_translation
+                    charTranslation = 0 - x_translation + m.left_bound
                 end if
                 charNode.translation = [(charTranslation), (charLine * (m.badge_size + m.line_gap))]
                 charLineAvailableSpace -= charWidth
