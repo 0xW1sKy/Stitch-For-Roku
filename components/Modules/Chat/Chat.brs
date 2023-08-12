@@ -163,7 +163,7 @@ function wordOrImage(word, isUrl = false)
         message_text.fontSize = m.font_size
         message_text.fontUri = "pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf"
         message_text.visible = true
-        message_text.text = word + " "
+        message_text.text = word + chr(20)
         if isUrl
             message_text.color = m.global.constants.colors.twitch.purple9
         end if
@@ -179,6 +179,10 @@ function buildMessage(message, x_translation, emote_set, username_translation)
     line_available_space = m.right_bound - x_translation
     current_line = 0
     for each word in words
+        if asc(word.right(1)) = 917504
+            word = word.mid(0, (word.len() - 1))
+            ? "Found invalid character"
+        end if
         ' Make room for emotes just in case
         urlRegex = createObject("roRegex", "https?:\/\/[a-zA-Z0-9\.]+", "i")
         isUrl = urlRegex.IsMatch(word)
