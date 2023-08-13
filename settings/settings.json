@@ -19,5 +19,71 @@
         "settingName": "ChatWebOption",
         "type": "bool",
         "default": "true"
+    },
+    {
+        "title": "Chat Font Size",
+        "description": "Base font size for chat while watching a stream. Emotes/Badges/Etc scale based on this value.",
+        "settingName": "ChatFontSize",
+        "type": "radio",
+        "default": "14",
+        "options": [
+            {
+                "title": "10",
+                "id": "10"
+            },
+            {
+                "title": "12",
+                "id": "12"
+            },
+            {
+                "title": "14",
+                "id": "14"
+            },
+            {
+                "title": "16",
+                "id": "16"
+            },
+            {
+                "title": "18",
+                "id": "18"
+            },
+            {
+                "title": "20",
+                "id": "20"
+            }
+        ]
+    },
+        {
+        "title": "FS Chat Font Size",
+        "description": "Base font size for chat on Your Profile Page when in fullscreen. Emotes/Badges/Etc scale based on this value.",
+        "settingName": "FullScreenChatFontSize",
+        "type": "radio",
+        "default": "14",
+        "options": [
+            {
+                "title": "10",
+                "id": "10"
+            },
+            {
+                "title": "12",
+                "id": "12"
+            },
+            {
+                "title": "14",
+                "id": "14"
+            },
+            {
+                "title": "16",
+                "id": "16"
+            },
+            {
+                "title": "18",
+                "id": "18"
+            },
+            {
+                "title": "20",
+                "id": "20"
+            }
+        ]
     }
 ]

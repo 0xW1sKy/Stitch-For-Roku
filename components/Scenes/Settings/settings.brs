@@ -36,6 +36,7 @@ end sub
 sub onGetfocus()
     if m.settingDetail.focusedChild = invalid
         if not m.radioSetting.hasFocus()
+            m.settingDesc.visible = true
             m.settingsMenu.setFocus(true)
         end if
     end if
@@ -71,6 +72,7 @@ sub LoadMenu(configSection)
     for each level in m.userLocation
         if level.title <> invalid then m.path.text += " / " + tr(level.title)
     end for
+
 end sub
 
 
@@ -83,6 +85,7 @@ sub settingFocused()
     ' Hide Settings
     m.boolSetting.visible = false
     m.radioSetting.visible = false
+
 
     if selectedSetting.type = invalid
         return
@@ -113,8 +116,6 @@ sub settingFocused()
         end for
 
         m.radioSetting.content = radioContent
-
-        m.radioSetting.visible = true
     else
         print "Unknown setting type " + selectedSetting.type
     end if
@@ -130,6 +131,8 @@ sub settingSelected()
             m.boolSetting.setFocus(true)
         end if
         if selectedItem.type = "radio"
+            m.settingDesc.visible = false
+            m.radioSetting.visible = true
             m.radioSetting.setFocus(true)
         end if
     else if selectedItem.children <> invalid and selectedItem.children.Count() > 0 ' Show sub menu

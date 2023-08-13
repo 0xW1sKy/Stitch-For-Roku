@@ -68,26 +68,6 @@ sub handleRendezvouzToken()
         m.OauthTask.control = "run"
     end if
 end sub
-' m.top.finished = true
-sub onButtonSelected()
-    ? "buttonSelected: "; m.buttonGroup.buttonSelected
-    if m.buttonGroup.buttonSelected = 0
-        active_user = get_setting("active_user", "$default$")
-        if active_user <> "$default$"
-            ? "default Registry keys: "; getRegistryKeys("$default$")
-            NukeRegistry(active_user)
-            set_setting("active_user", "$default$")
-            RunContentTask()
-            m.top.finished = true
-        else
-            for each key in getRegistryKeys("$default$")
-                if key <> "temp_device_code"
-                    unset_user_setting(key)
-                end if
-            end for
-        end if
-    end if
-end sub
 
 sub onGetFocus()
     ? "got focus"
@@ -101,13 +81,16 @@ end sub
 sub RunContentTask()
     ? "active User: "; get_setting("active_user", "$default$")
     if get_setting("active_user", "$default$") <> "$default$"
-        m.buttonGroup.observeField("buttonSelected", "onButtonSelected")
-        m.buttonGroup.buttons = [tr("Log Out")]
         m.code.visible = false
         m.loginText.visible = false
         m.bottomText.visible = false
-        m.buttonGroup.visible = true
-        m.buttonGroup.setFocus(true)
+        content = createObject("roSGNode", "TwitchContentNode")
+        content.streamerDisplayName = get_user_setting("display_name")
+        content.streamerLogin = get_user_setting("login")
+        content.streamerId = get_user_setting("id")
+        content.streamerProfileImageUrl = get_user_setting("profile_image_url")
+        content.contentType = "STREAMER"
+        m.top.contentSelected = content
     else
         ? "[LoginPage] - RunContentTask"
         m.code.visible = true

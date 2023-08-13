@@ -60,7 +60,7 @@ function buildNode(name)
         else
             m.top.appendChild(newNode)
         end if
-        if name = "LoginPage"
+        if name = "LoginPage" or name = "StreamerChannelPage"
             newNode.observeField("finished", "onLoginFinished")
         end if
         return newNode
@@ -80,12 +80,19 @@ sub onLoginFinished()
     else
         m.followedStreamBar.callFunc("refreshFollowBar")
     end if
+    ' if get_setting("active_user", "$default$") <> "$default$"
+    '     if m.activeNode.id.toStr() = "LoginPage" or "StreamerChannelPage"
+    '         m.top.removeChild(m.activeNode)
+    '         m.activeNode = invalid
+    '         onMenuSelection()
+    '     end if
+    ' end if
 end sub
 
 function onMenuSelection()
     ' refreshFollowBar()
     ' If user is already logged in, show them their user page
-    if m.menu.focusedChild.focusedChild.id.toStr() = "LoginPage" and get_setting("active_user", "$default$") <> "$default$"
+    if m.menu.buttonSelected = 5 and get_setting("active_user", "$default$") <> "$default$"
         content = createObject("roSGNode", "TwitchContentNode")
         content.streamerDisplayName = get_user_setting("display_name")
         content.streamerLogin = get_user_setting("login")
@@ -154,6 +161,9 @@ sub onBackPressed()
             m.top.removeChild(m.activeNode)
             m.activeNode = m.footprints.pop()
             m.activeNode.setFocus(false)
+            if m.menu.buttonFocused = 5
+                m.menu.setFocus(true)
+            end if
         else
             m.menu.setFocus(true)
         end if

@@ -33,7 +33,7 @@ function setSizingParameters()
 end function
 
 function setChatPanelSize()
-    m.font_size = 14
+    m.font_size = m.top.fontSize
     ' m.chatPanel.width = m.global.constants.screenWidth
     ' m.chatPanel.height = m.global.constants.screenHeight
     m.translation = m.chatPanel.height - m.font_size

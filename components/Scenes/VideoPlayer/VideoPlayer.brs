@@ -136,6 +136,7 @@ end function
 sub init()
     ' m.video.observeField("back", "onvideoBack")
     m.chatWindow = m.top.findNode("chat")
+    m.chatWindow.fontSize = get_user_setting("ChatFontSize")
     m.chatWindow.observeField("visible", "onChatVisibilityChange")
 end sub
 

@@ -3,6 +3,7 @@
 <component name="Chat" extends="Group">
 
     <interface>
+        <field id="backgroundColor" type="string" value="0x000000FF" alias="chatBackground.color, chatPanel.color" />
         <field id="channel" type="string" onChange="onEnterChannel" alwaysNotify="true" />
         <field id="channel_id" type="string" />
         <field id="focusable" type="Boolean" value="true" />
@@ -14,6 +15,7 @@
         <field id="height" type="integer" value="720" alias="chatPanel.height, chatBackground.height" onChange="updatePanelTranslation" />
         <field id="forceLive" type="bool" value="false" />
         <field id="translation" type="vector2d" alias="chatPanel.translation" />
+        <field id="fontSize" type="integer" value="14" onChange="updatePanelTranslation" />
         <function name="stopJobs" />
     </interface>
 
@@ -25,7 +27,6 @@
             <Rectangle
                 id="chatBackground"
                 visible="true"
-                color="0x000000FF"
                 width="1280"
                 height="720"
                 opacity="1"
@@ -33,7 +34,6 @@
             <Rectangle
                 id="chatPanel"
                 visible="true"
-                color="0x00000000"
                 width="1280"
                 height="720"
                 opacity="1"

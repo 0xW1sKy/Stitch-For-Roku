@@ -1,0 +1,40 @@
+<component name="ChannelMenu" extends="Group" initialFocus="MenuOptions">
+    <children>
+        <Rectangle
+            visible="true"
+            id="headerRect"
+            color="0x26262cFF"
+            width="1280"
+            height="80"
+            translation="[0,0]" />
+        <Rectangle
+            visible="true"
+            id="headerRectShadow"
+            color="0x26262cFF"
+            width="1280"
+            height="2"
+            translation="[0,78]" />
+        <ButtonGroupHoriz id="MenuOptions" layoutDirection="horiz"
+            horizAlignment="left">
+        </ButtonGroupHoriz>
+    </children>
+    <interface>
+        <field id="buttonFocused" alias="MenuOptions.buttonFocused" />
+        <field id="buttonSelected" alias="MenuOptions.buttonSelected" />
+        <field id="menuOptionsText" type="stringarray"
+            value="[]" onChange="updateMenuOptions" />
+        <field id="menuTextColor" type="color" value="0xEFEFF1FF" />
+        <field id="menuFocusColor" type="color" value="0x9146FFCC" />
+        <field id="menuOptionsSpacing" type="int" value="0" />
+        <field id="menuOptionsHeight" type="int" value="80" />
+        <field id="menuOptionsTranslation" type="vector2d" value="[15,0]"
+            alias="MenuOptions.translation" />
+        <field id="menuFontSize" type="int" value="20" />
+        <field id="menuFontUri" type="uri" value="pkg:/fonts/KlokanTechNotoSansCJK-Bold.otf" />
+        <field id="IsFollowing" type="bool" value="false" />
+        <field id="updateUserIcon" type="bool" value="false" onChange="handleUserLogin" />
+    </interface>
+    <script type="text/brightscript" uri="ChannelMenu.brs" />
+    <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
+    <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
+</component>

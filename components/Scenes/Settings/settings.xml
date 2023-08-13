@@ -41,7 +41,7 @@
                     </ContentNode>
                 </RadioButtonList>
             </LayoutGroup>
-            <RadioButtonList id="radioSetting" translation="[600, 200]"
+            <RadioButtonList id="radioSetting" translation="[570, 220]" visible="false"
                 inheritParentTransform="false" vertFocusAnimationStyle="floatingFocus" />
         </Group>
     </children>

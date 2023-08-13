@@ -5,6 +5,8 @@
         <field id="backgroundColor" type="string" alias="background.color, background2.color" />
         <field id="selectedItem" type="node" />
         <field id="chatStarted" type="bool" value="false" />
+        <field id="fullScreenChat" type="bool" value="false" onChange="fullScreenChat" />
+        <field id="finished" type="bool" />
     </interface>
     <script type="text/brightscript" uri="StreamerChannelPage.brs" />
     <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
@@ -32,6 +34,7 @@
                     translation="[160,85]" />
 
             </Group>
+            <ChannelMenu id="channelMenu" translation="[700,180]"></ChannelMenu>
             <!-- <Group id="about" translation="[450,25]">
                 <InfoPane
                     visible="false"
@@ -54,9 +57,17 @@
                 maxWidth="24"
                 translation="[300,160]" /> -->
         </Group>
+        <Poster
+            uri="pkg:/images/focusindicator.9.png"
+            visible="true"
+            translation="[28,326]"
+            width="1224"
+            height="386"
+        />
         <Chat
             id="chat"
             translation="[30,330]"
+            backgroundColor="0x000000ff"
             width="1220"
             height="380"
             visible="false"

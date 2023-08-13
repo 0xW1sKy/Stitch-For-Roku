@@ -9,6 +9,24 @@ sub init()
     m.liveDuration = m.top.findNode("liveDuration")
     m.avatar = m.top.findNode("avatar")
     m.chatWindow = m.top.findNode("chat")
+    m.menu = m.top.findNode("channelMenu")
+    m.menu.menuOptionsText = ["Full Screen Chat", "Logout"]
+    m.menu.observeField("buttonSelected", "onButtonSelected")
+    m.menu.setFocus(true)
+end sub
+
+sub fullScreenChat()
+    if m.top.fullscreenchat
+        m.chatWindow.translation = "[0,0]"
+        m.chatWindow.height = 720
+        m.chatWindow.width = 1280
+        m.chatWindow.fontSize = get_user_setting("FullScreenChatFontSize")
+    else
+        m.chatWindow.translation = "[30,330]"
+        m.chatWindow.width = "1220"
+        m.chatWindow.height = "380"
+        m.chatWindow.fontSize = get_user_setting("ChatFontSize")
+    end if
 end sub
 
 sub updatePage()
@@ -95,11 +113,6 @@ function handleItemSelected()
     m.top.contentSelected = selectedItem
 end function
 
-sub onGetFocus()
-    if m.top?.focusedChild?.id <> invalid and m.top.focusedChild.id = "exampleButton"
-        ?"do nothing"
-    end if
-end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
     if press
@@ -110,8 +123,18 @@ function onKeyEvent(key as string, press as boolean) as boolean
         if key = "down"
             return true
         end if
+        if key = "right"
+            return true
+        end if
+        if key = "left"
+            return true
+        end if
         if key = "back"
-            m.top.backPressed = true
+            if m.top.fullscreenchat
+                m.top.fullscreenchat = false
+            else
+                m.top.backPressed = true
+            end if
             return true
         end if
         if key = "OK"
@@ -120,3 +143,27 @@ function onKeyEvent(key as string, press as boolean) as boolean
     end if
 end function
 
+sub onButtonSelected()
+    selectedButton = LCase(m.menu.menuOptionsText[m.menu.buttonSelected])
+    ? "selected button: "; selectedButton
+    if selectedButton = "logout"
+        active_user = get_setting("active_user", "$default$")
+        if active_user <> "$default$"
+            ? "default Registry keys: "; getRegistryKeys("$default$")
+            NukeRegistry(active_user)
+            set_setting("active_user", "$default$")
+            ? "active User: "; get_setting("active_user", "$default$")
+        else
+            for each key in getRegistryKeys("$default$")
+                if key <> "temp_device_code"
+                    unset_user_setting(key)
+                end if
+            end for
+        end if
+        m.top.finished = true
+        m.top.backPressed = true
+    end if
+    if selectedButton = "full screen chat"
+        m.top.fullscreenchat = not m.top.fullscreenchat
+    end if
+end sub
