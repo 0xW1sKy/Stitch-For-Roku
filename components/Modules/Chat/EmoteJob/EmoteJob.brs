@@ -223,7 +223,7 @@ function main()
     getChannelTTVFrankerEmotes(channel_id)
     getGlobal7tvEmotes()
     getChannel7tvEmotes(channel_id)
+    getChannelTwitchEmotes(channel_id)
     getTwitchBadges()
     getGlobalTwitchEmotes()
-    getChannelTwitchEmotes(channel_id)
 end function
