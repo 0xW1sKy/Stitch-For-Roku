@@ -56,9 +56,9 @@
         </Group>
         <Chat
             id="chat"
-            translation="[30,320]"
+            translation="[30,330]"
             width="1220"
-            height="400"
+            height="380"
             visible="false"
             forceLive="true" />
     </children>

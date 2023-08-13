@@ -1,6 +1,6 @@
 sub init()
     m.chatPanel = m.top.findNode("chatPanel")
-
+    m.maskgroup = m.top.findNode("maskGroup")
     setChatPanelSize()
     setSizingParameters()
     ' determines how far down the screen the first message will appear
@@ -12,6 +12,8 @@ function updatePanelTranslation()
     ' m.chatPanel.translation = [(m.top.width * 3), 0]
     setChatPanelSize()
     setSizingParameters()
+    m.maskGroup.maskSize = [(m.chatpanel.width * m.global.constants.maskScaleFactor), (m.chatPanel.height * m.global.constants.maskScaleFactor)]
+    m.maskGroup.maskOffset = [0, 0]
 end function
 
 function setSizingParameters()

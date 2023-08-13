@@ -20,22 +20,25 @@
     <script type="text/brightscript" uri="Chat.brs" />
     <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
     <children>
-        <Rectangle
-            id="chatBackground"
-            visible="true"
-            color="0x000000FF"
-            width="1280"
-            height="720"
-            opacity="1"
-            translation="[0,0]" />
-        <Rectangle
-            id="chatPanel"
-            visible="true"
-            color="0x00000000"
-            width="1280"
-            height="720"
-            opacity="1"
-            translation="[0,0]" />
+        <MaskGroup
+            id="MaskGroup" maskUri="pkg:/images/white-square-mask.png" visible="true">
+            <Rectangle
+                id="chatBackground"
+                visible="true"
+                color="0x000000FF"
+                width="1280"
+                height="720"
+                opacity="1"
+                translation="[0,0]" />
+            <Rectangle
+                id="chatPanel"
+                visible="true"
+                color="0x00000000"
+                width="1280"
+                height="720"
+                opacity="1"
+                translation="[0,0]" />
+        </MaskGroup>
         <!-- <SimpleLabel
             translation="[0,0]"
             text=""
