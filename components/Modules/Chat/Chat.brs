@@ -47,6 +47,15 @@ sub onInvisible()
     end if
 end sub
 
+sub stopJobs()
+    if m.chat <> invalid
+        m.chat.control = "stop"
+    end if
+    if m.EmoteJob <> invalid
+        m.EmoteJob.control = "stop"
+    end if
+end sub
+
 sub onVideoChange()
     if not m.top.control
         m.chat.control = "stop"
@@ -57,7 +66,7 @@ end sub
 sub onEnterChannel()
     ' ? "Chat >> onEnterChannel > " m.top.channel
     if get_user_setting("ChatWebOption", "true") = "true"
-        m.chat = CreateObject("roSGNode", "ChatJob")
+        m.chat = m.top.findnode("ChatJob")
         m.chat.forceLive = m.top.forceLive
         m.chat.observeField("nextComment", "onNewComment")
         m.chat.observeField("clientComment", "onNewComment")
@@ -65,7 +74,7 @@ sub onEnterChannel()
         m.chat.control = "stop"
         m.chat.control = "run"
     end if
-    m.EmoteJob = CreateObject("roSGNode", "EmoteJob")
+    m.EmoteJob = m.top.findnode("EmoteJob")
     m.EmoteJob.channel_id = m.top.channel_id
     m.EmoteJob.channel = m.top.channel
     m.EmoteJob.control = "run"

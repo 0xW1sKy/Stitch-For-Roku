@@ -124,6 +124,7 @@ function onKeyEvent(key, press) as boolean
         ? "Hero Scene Key Event: "; key
         if key = "back" then
             'handle Back button, by exiting play
+            m.chatWindow.callFunc("stopJobs")
             exitPlayer()
             m.top.backpressed = true
             return true

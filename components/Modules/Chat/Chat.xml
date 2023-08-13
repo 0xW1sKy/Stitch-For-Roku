@@ -14,6 +14,7 @@
         <field id="height" type="integer" value="720" alias="chatPanel.height, chatBackground.height" onChange="updatePanelTranslation" />
         <field id="forceLive" type="bool" value="false" />
         <field id="translation" type="vector2d" alias="chatPanel.translation" />
+        <function name="stopJobs" />
     </interface>
 
     <script type="text/brightscript" uri="Chat.brs" />
@@ -41,6 +42,13 @@
             color="0xEFEFF1FF"
             fontSize="12"
             fontUri="pkg:/fonts/KlokanTechNotoSansCJK-Regular.otf" /> -->
+        <ChatJob
+            id="ChatJob"
+            control="stop"
+        />
+        <EmoteJob
+            id="EmoteJob"
+        />
     </children>
 
 </component>
