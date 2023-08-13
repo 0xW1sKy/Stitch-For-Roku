@@ -217,13 +217,13 @@ end function
 function main()
     ? "[EmoteJob] - getAllEmotes"
     m.global.setField("emoteCache", {})
-    getTwitchBadges()
     channel_id = m.top.channel_id
+    getGlobalTTVEmotes()
     getChannelTTVEmotes(channel_id)
     getChannelTTVFrankerEmotes(channel_id)
-    getChannel7tvEmotes(channel_id)
-    getGlobalTTVEmotes()
     getGlobal7tvEmotes()
+    getChannel7tvEmotes(channel_id)
+    getTwitchBadges()
     getGlobalTwitchEmotes()
     getChannelTwitchEmotes(channel_id)
 end function
