@@ -60,9 +60,9 @@
         <Poster
             uri="pkg:/images/focusindicator.9.png"
             visible="true"
-            translation="[28,326]"
+            translation="[28,320]"
             width="1224"
-            height="386"
+            height="392"
         />
         <Chat
             id="chat"

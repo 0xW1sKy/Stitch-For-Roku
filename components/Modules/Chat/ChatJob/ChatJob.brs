@@ -60,18 +60,18 @@ function main()
                     commentAge = currentTimestamp - commentTimestamp
                     if m.top.forceLive
                         sendWaitingMessage = false
-                        m.top.nextComment = queue.pop()
+                        m.top.nextCommentObj = MessageParser(queue.pop())
                     else if commentAge > 30 ' measured in seconds
-                        m.top.nextComment = queue.pop()
+                        m.top.nextCommentObj = MessageParser(queue.pop())
                     end if
                     if sendWaitingMessage <> invalid
                         if sendWaitingMessage = true
                             if commentAge = 30
                                 sendWaitingMessage = false
-                                m.top.nextComment = "display-name=System;user-type= :test!test@test.tmi.twitch.tv PRIVMSG #test :ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream  " ' whitespace at end is removed by comment parser
+                                m.top.nextCommentObj = MessageParser("display-name=System;user-type= :test!test@test.tmi.twitch.tv PRIVMSG #test :ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream  ")
                             else
                                 if queue[0] <> invalid
-                                    m.top.nextComment = queue[0]
+                                    m.top.nextCommentObj = MessageParser(queue[0])
                                 end if
                             end if
                         end if

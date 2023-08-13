@@ -14,6 +14,9 @@ function updatePanelTranslation()
     setSizingParameters()
     m.maskGroup.maskSize = [(m.chatpanel.width * m.global.constants.maskScaleFactor), (m.chatPanel.height * m.global.constants.maskScaleFactor)]
     m.maskGroup.maskOffset = [0, 0]
+    for each chatmessage in m.chatPanel.getChildren(-1, 0)
+        m.chatPanel.removeChild(chatmessage)
+    end for
 end function
 
 function setSizingParameters()
@@ -71,8 +74,9 @@ sub onEnterChannel()
     if get_user_setting("ChatWebOption", "true") = "true"
         m.chat = m.top.findnode("ChatJob")
         m.chat.forceLive = m.top.forceLive
-        m.chat.observeField("nextComment", "onNewComment")
-        m.chat.observeField("clientComment", "onNewComment")
+        ' m.chat.observeField("nextComment", "onNewComment")
+        m.chat.observeField("nextCommentObj", "onNewCommentObj")
+        ' m.chat.observeField("clientComment", "onNewComment")
         m.chat.channel = m.top.channel
         m.chat.control = "stop"
         m.chat.control = "run"
@@ -248,98 +252,92 @@ function buildMessage(message, x_translation, emote_set, username_translation)
     return message_group
 end function
 
-sub onNewComment()
-    m.chat.readyForNextComment = false
-    comment = m.chat.nextComment.Split(";")
-    posteruri = invalid
-    display_name = ""
-    message = ""
-    color = ""
-    badges = []
-    emote_set = {}
-    for each section in comment
-        if Left(section, 9) = "user-type"
-            temp = extractMessage(section)
-            temp = Left(temp, Len(temp) - 3)
-            message = Right(temp, Len(temp) - 1)
-        else if Left(section, 12) = "display-name"
-            display_name = Right(section, Len(section) - 13)
-        else if Left(section, 5) = "color"
-            color = Right(section, Len(section) - 7)
-        else if Left(section, 6) = "badges"
-            badges = Right(section, Len(section) - 7).Split(",")
-        else if Left(section, 6) = "emotes"
-            emotes = Right(section, Len(section) - 7).Split("/")
-            for each emote in emotes
-                if emote <> ""
-                    temp = emote.Split(":")
-                    key = temp[0]
-                    value = {}
-                    value.starts = []
-                    for each interval in temp[1].Split(",")
-                        range = interval.Split("-")
-                        value.starts.Push(Val(range[0]))
-                        value.length = Val(range[1]) - Val(range[0]) + 1
-                    end for
-                    emote_set[key] = value
-                end if
+sub onNewCommentObj()
+    if m.chat.nextCommentObj <> invalid
+        m.chat.readyForNextComment = false
+        comment = m.chat.nextCommentObj
+        posteruri = invalid
+        display_name = comment.tags.display_name
+        message = comment.parameters.trim()
+        color = ""
+        if comment?.tags?.color <> invalid
+            color = comment.tags.color.replace("#", "")
+        end if
+        badges = []
+        if comment?.tags?.badges <> invalid
+            for each key in comment.tags.badges.keys()
+                badgeID = key + "/" + comment.tags.badges[key]
+                badges.push(badgeID)
             end for
         end if
-    end for
-    quoteRegex = createObject("roRegex", "[\x{2018}\x{2019}]", "")
-    message = quoteRegex.replace(message, "'")
-    ' This Section grabs missing emotes on the fly... not sure if there is a better way to optimize.
-    for each emoticon in emote_set.Items()
-        e_start = emoticon.value.starts[0]
-        emote_word = Mid(message, (e_start + 1), emoticon.value.length)
-        if not m.global.emoteCache.DoesExist(emote_word)
-            emoteCache = m.global.emoteCache
-            emoteCache[emote_word] = "https://static-cdn.jtvnw.net/emoticons/v2/" + key + "/static/light/1.0"
-            m.global.setField("emoteCache", emoteCache)
+        emote_set = {}
+        if comment?.tags?.emotes <> invalid
+            for each emote in comment.tags.emotes.Items()
+                value = { starts: [], length: 0 }
+                for each emote_instance in emote.value
+                    value.starts.push(Val(emote_instance.startposition))
+                    value.length = (Val(emote_instance.endposition) - Val(emote_instance.startposition)) + 1
+                end for
+                emote_set[emote.key] = value
+            end for
         end if
-    end for
-    if display_name = "" or message = ""
-        m.chat.readyForNextComment = true
-        return
-    end if
 
-    x_translation = m.left_bound
-
-    badge_group = buildBadges(badges)
-    badge_group.translation = [x_translation, 0]
-    x_translation += badge_group.localBoundingRect().width + 1
-
-    username = buildUsername(display_name, color)
-    username.translation = [x_translation, 0]
-    x_translation += username.localBoundingRect().width + 1
-
-    colon = buildColon()
-    colon.translation = [x_translation, 0]
-    x_translation += colon.localBoundingRect().width + 1
-
-    message_group = buildMessage(message, x_translation, emote_set, username.translation[0])
-    message_group.translation = [0, 0]
-    x_translation += message_group.localBoundingRect().width + 1
-
-    group = createObject("roSGNode", "Group")
-
-    group.appendChild(badge_group)
-    group.appendChild(username)
-    group.appendChild(colon)
-    group.appendChild(message_group)
-    group.translation = [m.left_bound, m.translation]
-    m.chatPanel.appendChild(group)
-    y_translation = group.localBoundingRect().height + m.line_gap
-    if m.translation + y_translation > m.chatPanel.height
-        for each chatmessage in m.chatPanel.getChildren(-1, 0)
-            if (chatmessage.translation[1] + chatmessage.localBoundingRect().height) < 0 ' Wait until it's off the screen to remove it.
-                m.chatPanel.removeChild(chatmessage)
-            else
-                chatmessage.translation = [chatmessage.translation[0], (chatmessage.translation[1] - y_translation)]
+        quoteRegex = createObject("roRegex", "[\x{2018}\x{2019}]", "")
+        message = quoteRegex.replace(message, "'")
+        ' This Section grabs missing emotes on the fly... not sure if there is a better way to optimize.
+        for each emoticon in emote_set.Items()
+            e_start = emoticon.value.starts[0]
+            emote_word = Mid(message, (e_start + 1), emoticon.value.length)
+            if not m.global.emoteCache.DoesExist(emote_word)
+                emoteCache = m.global.emoteCache
+                emoteCache[emote_word] = "https://static-cdn.jtvnw.net/emoticons/v2/" + emoticon.key + "/static/light/1.0"
+                m.global.setField("emoteCache", emoteCache)
             end if
         end for
-    else
-        m.translation += (y_translation)
+
+        if display_name = "" or message = ""
+            m.chat.readyForNextComment = true
+            return
+        end if
+
+        x_translation = m.left_bound
+
+        badge_group = buildBadges(badges)
+        badge_group.translation = [x_translation, 0]
+        x_translation += badge_group.localBoundingRect().width + 1
+
+        username = buildUsername(display_name, color)
+        username.translation = [x_translation, 0]
+        x_translation += username.localBoundingRect().width + 1
+
+        colon = buildColon()
+        colon.translation = [x_translation, 0]
+        x_translation += colon.localBoundingRect().width + 1
+
+        message_group = buildMessage(message, x_translation, emote_set, username.translation[0])
+        message_group.translation = [0, 0]
+        x_translation += message_group.localBoundingRect().width + 1
+
+        group = createObject("roSGNode", "Group")
+
+        group.appendChild(badge_group)
+        group.appendChild(username)
+        group.appendChild(colon)
+        group.appendChild(message_group)
+        group.translation = [m.left_bound, m.translation]
+        m.chatPanel.appendChild(group)
+        y_translation = group.localBoundingRect().height + m.line_gap
+        if m.translation + y_translation > m.chatPanel.height
+            for each chatmessage in m.chatPanel.getChildren(-1, 0)
+                if (chatmessage.translation[1] + chatmessage.localBoundingRect().height) < 0 ' Wait until it's off the screen to remove it.
+                    m.chatPanel.removeChild(chatmessage)
+                else
+                    chatmessage.translation = [chatmessage.translation[0], (chatmessage.translation[1] - y_translation)]
+                end if
+            end for
+        else
+            m.translation += (y_translation)
+        end if
+        m.chat.readyForNextComment = true
     end if
-    m.chat.readyForNextComment = true
 end sub
