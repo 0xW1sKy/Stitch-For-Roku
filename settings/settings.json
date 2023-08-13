@@ -85,5 +85,26 @@
                 "id": "20"
             }
         ]
+    },
+    {
+        "title": "7TV Emotes",
+        "description": "Enables or Disables 7TV Emotes",
+        "settingName": "7tvEmote",
+        "type": "bool",
+        "default": "true"
+    },
+    {
+        "title": "BetterTTV Emotes",
+        "description": "Enables or Disables BetterTTV Emotes",
+        "settingName": "BetterTTVEmote",
+        "type": "bool",
+        "default": "true"
+    },
+    {
+        "title": "FrankerFaceZ Emotes",
+        "description": "Enables or Disables 7TV Emotes",
+        "settingName": "FFZEmote",
+        "type": "bool",
+        "default": "true"
     }
 ]
