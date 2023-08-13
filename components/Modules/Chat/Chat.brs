@@ -290,7 +290,9 @@ sub onNewCommentObj()
             emote_word = Mid(message, (e_start + 1), emoticon.value.length)
             if not m.global.emoteCache.DoesExist(emote_word)
                 emoteCache = m.global.emoteCache
-                emoteCache[emote_word] = "https://static-cdn.jtvnw.net/emoticons/v2/" + emoticon.key + "/static/light/1.0"
+                if not emoteCache.DoesExist(emote_word)
+                    emoteCache[emote_word] = "https://static-cdn.jtvnw.net/emoticons/v2/" + emoticon.key + "/static/light/1.0"
+                end if
                 m.global.setField("emoteCache", emoteCache)
             end if
         end for
