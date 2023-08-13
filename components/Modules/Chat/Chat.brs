@@ -37,6 +37,7 @@ function setChatPanelSize()
     m.translation = m.chatPanel.height - m.font_size
     m.lower_bound = m.chatPanel.height - m.font_size
     m.right_bound = m.chatPanel.width - m.font_size
+    m.upper_bound = 0 - (m.chatPanel.height - m.font_size)
 end function
 
 sub onInvisible()
@@ -232,7 +233,6 @@ function buildMessage(message, x_translation, emote_set, username_translation)
             end for
             block_width = block.localBoundingRect().width
         else if line_available_space - block_width <= 0
-            ? "triggered line switch"
             current_line++
             line_available_space = m.right_bound - m.left_bound
         end if
@@ -330,7 +330,7 @@ sub onNewComment()
     y_translation = group.localBoundingRect().height + m.line_gap
     if m.translation + y_translation > m.chatPanel.height
         for each chatmessage in m.chatPanel.getChildren(-1, 0)
-            if chatmessage.translation[1] < (0 - m.lower_bound) ' Wait until it's off the screen to remove it.
+            if (chatmessage.translation[1] + chatmessage.localBoundingRect().height) < 0 ' Wait until it's off the screen to remove it.
                 m.chatPanel.removeChild(chatmessage)
             else
                 chatmessage.translation = [chatmessage.translation[0], (chatmessage.translation[1] - y_translation)]

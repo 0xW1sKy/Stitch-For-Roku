@@ -82,7 +82,7 @@ sub updateChannelInfo()
     ' followers         : @{totalCount=11870230}
     ' profileImageURL   : https://static-cdn.jtvnw.net/jtv_user_pictures/xqc-profile_image-9298dca608632101-70x70.jpeg
     ' profileViewCount  :
-    m.description.infoText = m.GetcontentTask.response.data.channel.description
+    ' m.description.infoText = m.GetcontentTask.response.data.channel.description
     m.followers.text = numberToText(m.GetcontentTask.response.data.channel.followers.totalCount) + " " + tr("followers")
     m.avatar.uri = m.GetcontentTask.response.data.channel.profileImageUrl
 end sub
