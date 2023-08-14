@@ -62,12 +62,12 @@ function main()
                     if m.top.forceLive = true
                         sendWaitingMessage = false
                         m.top.nextCommentObj = MessageParser(queue.pop())
-                    else if commentAge > 30 ' measured in seconds
+                    else if commentAge > 27 ' measured in seconds
                         m.top.nextCommentObj = MessageParser(queue.pop())
                     end if
                     if sendWaitingMessage <> invalid
                         if sendWaitingMessage = true
-                            if commentAge >= 30
+                            if commentAge >= 27
                                 sendWaitingMessage = false
                                 ' m.top.nextCommentObj = MessageParser("display-name=System;user-type= :test!test@test.tmi.twitch.tv PRIVMSG #test :ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream  ")
                             else
