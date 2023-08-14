@@ -225,10 +225,10 @@ function main()
         getGlobalTTVEmotes()
         getChannelTTVEmotes(channel_id)
     end if
-    if get_user_setting("FFZEmote")
+    if get_user_setting("FFZEmote", "true") = "true"
         getChannelTTVFrankerEmotes(channel_id)
     end if
-    if get_user_setting("7tvEmote")
+    if get_user_setting("7tvEmote", "true") = "true"
         getGlobal7tvEmotes()
         getChannel7tvEmotes(channel_id)
     end if

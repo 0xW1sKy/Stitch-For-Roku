@@ -102,7 +102,7 @@
     },
     {
         "title": "FrankerFaceZ Emotes",
-        "description": "Enables or Disables 7TV Emotes",
+        "description": "Enables or Disables FrankerFaceZ Emotes",
         "settingName": "FFZEmote",
         "type": "bool",
         "default": "true"

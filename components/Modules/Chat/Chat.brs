@@ -253,8 +253,8 @@ function buildMessage(message, x_translation, emote_set, username_translation)
 end function
 
 sub onNewCommentObj()
+    m.chat.readyForNextComment = false
     if m.chat.nextCommentObj <> invalid
-        m.chat.readyForNextComment = false
         comment = m.chat.nextCommentObj
         posteruri = invalid
         display_name = comment.tags.display_name
@@ -340,6 +340,6 @@ sub onNewCommentObj()
         else
             m.translation += (y_translation)
         end if
-        m.chat.readyForNextComment = true
     end if
+    m.chat.readyForNextComment = true
 end sub

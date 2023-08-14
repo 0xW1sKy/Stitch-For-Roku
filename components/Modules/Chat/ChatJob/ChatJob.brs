@@ -6,6 +6,7 @@ end function
 function main()
     ? "[ChatJob] - main"
     if m.top.channel <> ""
+        receivedNewMessage = false
         tcpListen = createObject("roStreamSocket")
         addr = createObject("roSocketAddress")
         addr.SetAddress("irc.chat.twitch.tv:6667")
@@ -47,18 +48,18 @@ function main()
                     tcpListen.SendStr("PONG :tmi.twitch.tv" + Chr(13) + Chr(10))
                 else
                     queue.unshift(received)
+                    receivedNewMessage = true
                 end if
             end if
             if m.top.readyForNextComment and queue.count() > 0
                 ' Check if delay is complete using irc timestamp
                 oldestComment = queue.peek()
                 _parsedMessage = MessageParser(oldestComment)
-                commentComponents = oldestComment.Split(";")
                 currentTimestamp = CreateObject("roDateTime").AsSeconds()
                 if _parsedMessage?.tags?.tmi_sent_ts <> invalid
-                    commentTimeStamp = Val(_parsedMessage.tags.tmi_sent_ts.left(12))
+                    commentTimeStamp = Val(_parsedMessage.tags.tmi_sent_ts.left(10), 10)
                     commentAge = currentTimestamp - commentTimestamp
-                    if m.top.forceLive
+                    if m.top.forceLive = true
                         sendWaitingMessage = false
                         m.top.nextCommentObj = MessageParser(queue.pop())
                     else if commentAge > 30 ' measured in seconds
@@ -66,12 +67,15 @@ function main()
                     end if
                     if sendWaitingMessage <> invalid
                         if sendWaitingMessage = true
-                            if commentAge = 30
+                            if commentAge >= 30
                                 sendWaitingMessage = false
-                                m.top.nextCommentObj = MessageParser("display-name=System;user-type= :test!test@test.tmi.twitch.tv PRIVMSG #test :ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream  ")
+                                ' m.top.nextCommentObj = MessageParser("display-name=System;user-type= :test!test@test.tmi.twitch.tv PRIVMSG #test :ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream || ReSyncing Chat To Stream  ")
                             else
                                 if queue[0] <> invalid
-                                    m.top.nextCommentObj = MessageParser(queue[0])
+                                    if receivedNewMessage
+                                        m.top.nextCommentObj = MessageParser(queue[0])
+                                        receivedNewMessage = false
+                                    end if
                                 end if
                             end if
                         end if
