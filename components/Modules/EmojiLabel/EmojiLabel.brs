@@ -113,6 +113,9 @@ function updateComponents()
         end if
         innerWidth = 0 - width
         m.top.width = width * 1.1
+        if m.top.maxWidth = 0
+            m.top.maxWidth = m.top.width
+        end if
         m.animation.duration = (m.top.width / m.top.maxWidth)
         m.timer.duration = (m.top.width / m.top.maxWidth)
         m.vector.keyValue = [[0, 0], [innerWidth, 0]]
