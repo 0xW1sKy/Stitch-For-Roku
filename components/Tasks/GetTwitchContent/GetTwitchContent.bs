@@ -104,6 +104,7 @@ sub main()
         last_stream_link = ""
         link = ""
         cnt = 0
+        fps = invalid
         ' streamitems_all = []
         stream_objects = []
         for line = 2 to list.Count() - 1
