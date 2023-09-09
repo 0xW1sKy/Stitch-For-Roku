@@ -75,6 +75,7 @@
         <Poster
             id="runtimeRect"
             uri="pkg:/images/live_rectangle.9.png"
+            visible="false"
             translation="[5,23]">
         </Poster>
         <Label
