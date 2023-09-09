@@ -146,6 +146,7 @@ function updateRowList(jsonContent)
             end for
             contentCollection.appendChild(row)
         end for
+        contentCollection.removeChildIndex(0)
     end if
     rowItemSize = []
     showRowLabel = []

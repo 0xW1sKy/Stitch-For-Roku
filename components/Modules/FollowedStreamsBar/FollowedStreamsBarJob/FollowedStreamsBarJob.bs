@@ -2,6 +2,11 @@ sub init()
     m.top.functionName = "updateFollowBar"
 end sub
 
+function getDeviceLocale()
+    di = CreateObject("roDeviceInfo")
+    return di.GetCurrentLocale().Replace("_", "-")
+end function
+
 sub updateFollowBar()
     try
         access_token = ""
@@ -14,16 +19,20 @@ sub updateFollowBar()
                 access_token = "OAuth " + get_user_setting("access_token")
             end if
         end if
+        reqHeaders = {
+            "Accept": "*/*"
+            "Client-Id": "ue6666qo983tsx6so1t0vnawi233wa"
+            "Device-ID": device_code
+            "Origin": "https://switch.tv.twitch.tv"
+            "Referer": "https://switch.tv.twitch.tv/"
+            "Accept-Language": getDeviceLocale()
+        }
+        if access_token <> invalid
+            reqHeaders["Authorization"] = access_token
+        end if
         req = HttpRequest({
             url: "https://gql.twitch.tv/gql"
-            headers: {
-                "Accept": "*/*"
-                "Authorization": access_token
-                "Client-Id": "ue6666qo983tsx6so1t0vnawi233wa"
-                "Device-ID": device_code
-                "Origin": "https://switch.tv.twitch.tv"
-                "Referer": "https://switch.tv.twitch.tv/"
-            }
+            headers: reqHeaders
             method: "POST"
             data: {
                 query: `query FollowingPage_Query(
@@ -380,26 +389,27 @@ sub updateFollowBar()
         })
         rsp = ParseJSON(req.send())
         contentCollection = []
-        if rsp?.data?.shelves <> invalid
-            for each stream in rsp.data.shelves.edges[0].node.content.edges
+        ? "pause"
+        if rsp?.data?.user?.followedLiveUsers <> invalid
+            for each stream in rsp.data.user.followedLiveUsers.edges
                 streamnode = stream.node
                 ' type_name = stream.node.__typename
                 try
-                    if stream.node.type <> invalid and stream.node.type = "live"
+                    if stream?.node?.stream?.type <> invalid and stream.node.stream.type = "live"
                         rowItem = createObject("RoSGNode", "TwitchContentNode")
-                        rowItem.contentId = stream.node.Id
+                        rowItem.contentId = stream.node.stream.Id
                         rowItem.contentType = "LIVE"
-                        rowItem.previewImageURL = Substitute("https://static-cdn.jtvnw.net/previews-ttv/live_user_{0}-{1}x{2}.jpg", stream.node.broadcaster.login, "320", "180")
-                        rowItem.contentTitle = stream.node.broadcaster.broadcastSettings.title
-                        rowItem.viewersCount = stream.node.viewersCount
-                        rowItem.streamerDisplayName = stream.node.broadcaster.displayName
-                        rowItem.streamerLogin = stream.node.broadcaster.login
-                        rowItem.streamerId = stream.node.broadcaster.id
-                        rowItem.streamerProfileImageUrl = stream.node.broadcaster.profileImageURL
-                        rowItem.gameDisplayName = stream.node.game.displayName
-                        rowItem.gameBoxArtUrl = Left(stream.node.game.boxArtUrl, Len(stream.node.game.boxArtUrl) - 20) + "188x250.jpg"
-                        rowItem.gameId = stream.node.game.Id
-                        rowItem.gameName = stream.node.game.name
+                        rowItem.previewImageURL = Substitute("https://static-cdn.jtvnw.net/previews-ttv/live_user_{0}-{1}x{2}.jpg", stream.node.stream.broadcaster.login, "320", "180")
+                        rowItem.contentTitle = stream.node.stream.broadcaster.broadcastSettings.title
+                        rowItem.viewersCount = stream.node.stream.viewersCount
+                        rowItem.streamerDisplayName = stream.node.displayName
+                        rowItem.streamerLogin = stream.node.stream.broadcaster.login
+                        rowItem.streamerId = stream.node.stream.broadcaster.id
+                        rowItem.streamerProfileImageUrl = stream.node.stream.broadcaster.profileImageURL
+                        rowItem.gameDisplayName = stream.node.stream.game.displayName
+                        rowItem.gameBoxArtUrl = Left(stream.node.stream.game.boxArtUrl, Len(stream.node.stream.game.boxArtUrl) - 20) + "188x250.jpg"
+                        rowItem.gameId = stream.node.stream.game.Id
+                        rowItem.gameName = stream.node.stream.game.name
                         contentCollection.push(rowItem)
                     end if
                 catch e
