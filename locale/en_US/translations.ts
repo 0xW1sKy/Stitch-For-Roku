@@ -74,7 +74,7 @@
         </message>
         <message>
             <source>Home</source>
-            <translation>Home</translation>
+            <translation>Discover</translation>
             <context>User's "home" page / fyp</context>
         </message>
         <message>

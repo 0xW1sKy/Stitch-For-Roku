@@ -106,5 +106,30 @@
         "settingName": "FFZEmote",
         "type": "bool",
         "default": "true"
+    },
+        {
+        "title": "Live Channel Sorting",
+        "description": "Determines how the LiveChannels page results are sorted.",
+        "settingName": "LiveChannelSorting",
+        "type": "radio",
+        "default": "VIEWER_COUNT",
+        "options": [
+            {
+                "title": "Recommended By Twitch",
+                "id": "RELEVANCE"
+            },
+            {
+                "title": "Viewers (High to Low)",
+                "id": "VIEWER_COUNT"
+            },
+            {
+                "title": "Viewers (Low to High)",
+                "id": "VIEWER_COUNT_ASC"
+            },
+            {
+                "title": "Recently Started",
+                "id": "RECENT"
+            }
+        ]
     }
 ]

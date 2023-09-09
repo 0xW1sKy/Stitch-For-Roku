@@ -1838,6 +1838,47 @@ function unfollowChannel() as object
 end function
 
 
+function getBrowsePagePopularQuery()
+    variables = {
+        "imageWidth": 300,
+        "limit": 30,
+        "platformType": "all",
+        "options": {
+            "includeRestricted": [
+                "SUB_ONLY_LIVE"
+            ],
+            "sort": get_user_setting("LiveChannelSorting", "VIEWER_COUNT"), '"RELEVANCE" | "VIEWER_COUNT" | "VIEWER_COUNT_ASC" | "RECENT"
+            "freeformTags": invalid,
+            "tags": [],
+            "recommendationsContext": {
+                "platform": "web"
+            },
+            "requestID": "JIRA-VXP-2397",
+            "broadcasterLanguages": []
+        },
+        "sortTypeIsRecency": false
+    }
+    if m.top.request.cursor <> invalid
+        variables["cursor"] = m.top.request.cursor
+    end if
+    rsp = TwitchGraphQLRequest({
+        "operationName": "BrowsePage_Popular",
+        "variables": variables,
+        "extensions": {
+            "persistedQuery": {
+                "version": 1,
+                "sha256Hash": "19cd6b171185fa3937c4fd6f80363a7a38a7dc269c43eb205732159bc932cb01"
+            }
+        }
+    })
+    if rsp <> invalid
+        m.top.response = rsp
+    else
+        m.top.response = { "response": invalid }
+    end if
+    m.top.control = "STOP"
+end function
+
 function getBrowsePageQuery()
     variables = {
         "limit": 100,
