@@ -51,7 +51,6 @@ end function
 
 
 sub handleRecommendedSections()
-    ? "pause"
     if m.GetContentTask?.response?.data?.streams <> invalid
         contentCollection = buildContentNodeFromShelves(m.GetContentTask.response.data.streams.edges)
         if m.GetContentTask.response.data.streams.pageInfo <> invalid

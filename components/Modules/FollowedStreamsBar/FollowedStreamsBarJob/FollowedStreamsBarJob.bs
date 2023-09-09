@@ -389,7 +389,6 @@ sub updateFollowBar()
         })
         rsp = ParseJSON(req.send())
         contentCollection = []
-        ? "pause"
         if rsp?.data?.user?.followedLiveUsers <> invalid
             for each stream in rsp.data.user.followedLiveUsers.edges
                 streamnode = stream.node

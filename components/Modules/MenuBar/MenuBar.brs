@@ -6,8 +6,19 @@ sub init()
     m.headerRect = m.top.findNode("headerRect")
     m.menuOptions = m.top.findNode("MenuOptions")
     m.top.observeField("focusedChild", "onGetfocus")
+    m.top.observeField("updateUserIcon", "handleUserLogin")
+    m.top.observeField("buttonSelected", "onMenuSelected")
+    m.top.observeField("buttonFocused", "onMenuFocused")
     m.top.menuTextColor = m.global.constants.colors.muted.ice
     m.top.menuFocusColor = m.global.constants.colors.twitch.purple10
+end sub
+
+sub onMenuSelected()
+    ? "button selected: "; m.top.buttonSelected
+end sub
+
+sub onMenuFocused()
+    ? "button focused: "; m.top.buttonFocused
 end sub
 
 sub onGetfocus()

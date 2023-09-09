@@ -16,7 +16,7 @@
             translation="[0,78]" />
         <Poster
             id="logo"
-            translation="[15,16]"
+            translation="[22,16]"
             uri="pkg:/images/logo.png"
             width="48px"
             height="56" />
@@ -40,7 +40,7 @@
         <field id="showSearchIcon" type="bool" value="true" />
         <field id="showSettingsIcon" type="bool" value="true" />
         <field id="showLoginIcon" type="bool" value="true" />
-        <field id="updateUserIcon" type="bool" value="false" onChange="handleUserLogin" />
+        <field id="updateUserIcon" type="bool" value="false" />
     </interface>
     <script type="text/brightscript" uri="MenuBar.brs" />
     <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />

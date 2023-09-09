@@ -1,4 +1,6 @@
 sub init()
+    m.backgroundBar = m.top.findNode("backgroundBar")
+    m.xTranslation = 15
     m.top.focusable = true
     m.children = []
     for child = 2 to m.top.getChildCount() - 1
@@ -57,7 +59,7 @@ sub onFollowedStreamsChange()
                 group.display_name = stream.streamerDisplayName
                 group.game = stream.gameDisplayName
                 group.content = stream
-                group.translation = "[8," + translation.ToStr() + "]"
+                group.translation = [m.xTranslation, translation]
                 m.top.appendChild(group)
                 translation += 60
             end for
@@ -98,7 +100,8 @@ sub onKeyEvent(key, press) as boolean
                 m.currentIndex -= 1
                 if m.currentIndex < m.min
                     for each stream in m.children
-                        stream.translation = "[5," + (stream.translation[1] + 60).ToStr() + "]"
+                        stream.translation = [m.xTranslation, (stream.translation[1] + 60)]
+                        ' stream.translation = "[9," + (stream.translation[1] + 60).ToStr() + "]"
                         if stream.translation[1] > 0
                             stream.visible = true
                         end if
@@ -117,7 +120,8 @@ sub onKeyEvent(key, press) as boolean
                 end if
                 if m.currentIndex > m.max
                     for each stream in m.children
-                        stream.translation = "[5," + (stream.translation[1] - 60).ToStr() + "]"
+                        stream.translation = [m.xTranslation, (stream.translation[1] - 60)]
+                        ' stream.translation = "[9," + (stream.translation[1] - 60).ToStr() + "]"
                         if stream.translation[1] <= 0
                             stream.visible = false
                         end if

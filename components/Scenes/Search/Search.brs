@@ -25,9 +25,9 @@ end sub
 
 sub handleRecommendedSections()
     if m.GetContentTask?.response?.data <> invalid
-        ?"data: "; m.GetContentTask.response.data
+        ' ?"data: "; m.GetContentTask.response.data
         if m.GetContentTask?.response?.data?.searchFor <> invalid
-            ? "searchFor: "m.GetContentTask.response.data.searchFor
+            ' ? "searchFor: "m.GetContentTask.response.data.searchFor
             contentCollection = buildContentNodeFromShelves(m.GetContentTask.response.data.searchFor)
         end if
     end if

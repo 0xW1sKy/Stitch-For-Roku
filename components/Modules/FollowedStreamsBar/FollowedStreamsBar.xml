@@ -15,9 +15,10 @@
     <children>
 
         <Rectangle
+            id="backgroundBar"
             visible="true"
             color="0x1f1f23FF"
-            width="70"
+            width="78"
             height="1000"
             translation="[0,5]" />
 
@@ -25,7 +26,7 @@
             uri="pkg:/images/icons/heart-o.png"
             width="24"
             height="24"
-            translation="[22, 22]">
+            translation="[30, 22]">
         </Poster>
     </children>
 
