@@ -9,6 +9,10 @@
             <translation>Live Channels</translation>
         </message>
         <message>
+            <source>LiveChannels</source>
+            <translation>Live Channels</translation>
+        </message>
+        <message>
             <source>Clips</source>
             <translation>Clips</translation>
         </message>

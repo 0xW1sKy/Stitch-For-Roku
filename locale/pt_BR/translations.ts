@@ -9,6 +9,10 @@
             <translation>Canais Ao Vivo</translation>
         </message>
         <message>
+            <source>LiveChannels</source>
+            <translation>Canais Ao Vivo</translation>
+        </message>
+        <message>
             <source>Clips</source>
             <translation>Cortes</translation>
         </message>

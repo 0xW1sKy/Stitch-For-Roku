@@ -9,6 +9,10 @@
             <translation>Canales en vivo</translation>
         </message>
         <message>
+            <source>LiveChannels</source>
+            <translation>Canales en vivo</translation>
+        </message>
+        <message>
             <source>Clips</source>
             <translation>Clips</translation>
         </message>
