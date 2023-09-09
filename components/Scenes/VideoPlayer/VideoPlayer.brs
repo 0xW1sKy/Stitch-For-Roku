@@ -111,8 +111,10 @@ end sub
 
 sub exitPlayer()
     print "Player: exitPlayer()"
-    m.video.control = "stop"
-    m.video.visible = false
+    if m.video <> invalid
+        m.video.control = "stop"
+        m.video.visible = false
+    end if
     m.PlayerTask = invalid
     'signal upwards that we are done
     m.top.state = "done"
@@ -286,26 +288,7 @@ end sub
 '     })
 ' end function
 
-' function playClip()
-'     vidContent = createObject("roSGNode", "ContentNode")
-'     vidContent.title = m.top.contentRequested.contentTitle
-'     vidContent.url = Left(m.top.contentRequested.previewImageUrl, Len(m.top.contentRequested.previewImageUrl) - 20) + ".mp4"
-'     vidContent.streamFormat = "mp4"
-'     m.video.video_id = m.top.contentRequested.contentId
-'     m.video.streamUrls = [vidContent.url]
-'     m.video.streamQualities = ["HD"]
-'     m.video.streamContentIds = ["Original"]
-'     m.video.channelUsername = m.top.contentRequested.streamerDisplayName
-'     m.video.channelAvatar = m.top.contentRequested.streamerProfileImageUrl
-'     m.video.videoTitle = m.top.contentRequested.contentTitle
-'     m.video.content = vidContent
-'     m.video.visible = true
-'     m.video.setFocus(true)
-'     m.video.enableCookies()
-'     m.chatWindow.visible = false
-'     checkBookmarks()
-'     m.video.control = "play"
-' end function
+
 
 ' function playVideo(data)
 '     vidContent = createObject("roSGNode", "ContentNode")
