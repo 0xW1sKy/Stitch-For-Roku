@@ -49,6 +49,7 @@ function buildContentNodeFromShelves(shelves)
             if stream.node <> invalid and stream.node["__typename"].ToStr() <> invalid
                 if stream.node["__typename"].ToStr() = "Stream"
                     rowItem = {}
+                    rowItem.createdAt = stream.node.createdAt
                     rowItem.contentId = stream.node.Id
                     rowItem.contentType = "LIVE"
                     rowItem.previewImageURL = Substitute("https://static-cdn.jtvnw.net/previews-ttv/live_user_{0}-{1}x{2}.jpg", stream.node.broadcaster.login, "320", "180")

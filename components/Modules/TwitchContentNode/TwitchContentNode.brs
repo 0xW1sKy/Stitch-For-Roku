@@ -24,6 +24,11 @@ sub updateRelativePublishDate()
     m.top.relativePublishDate = getRelativeTimePublished(m.top.datePublished)
 end sub
 
+sub updateCreatedAtSeconds()
+    ' secondsSincePublished = createObject("roDateTime")
+    ' m.top.streamerDisplayName = secondsSincePublished.FromISO8601String(m.top.createdAt)
+end sub
+
 sub updateType()
     if m.top.contentType = "LIVE"
         m.top.live = true

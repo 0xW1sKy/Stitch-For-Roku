@@ -1,4 +1,7 @@
 sub main()
+    if m.top.contentRequested.contentType = "LIVE"
+
+    end if
     if m.top.contentRequested.contentType = "CLIP"
         content = CreateObject("roSGNode", "TwitchContentNode")
         content.setFields(m.top.contentRequested)

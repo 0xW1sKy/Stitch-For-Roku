@@ -96,6 +96,7 @@ function getHomePageQuery() as object
                             id
                             __typename
                             previewImageURL
+                            createdAt
                             broadcaster {
                             displayName
                             broadcastSettings {
@@ -187,6 +188,7 @@ function getHomePageQuery() as object
             id
             __typename
             previewImageURL
+            createdAt
             type
             viewersCount
         }`
@@ -266,6 +268,7 @@ function getCategoryQuery() as object
             previewImageURL
             type
             viewersCount
+            createdAt
             }`
         variables: {
             "channelsCount": 40
@@ -379,6 +382,7 @@ function getChannelInterstitialQuery() as object
                     __typename
                 }
                 stream {
+                    createdAt
                     restrictionType
                     self {
                         canWatch
@@ -1109,6 +1113,7 @@ function getFollowingPageQuery() as object
                 __typename
             }
             id
+            createdAt
             __typename
             previewImageURL
             type
@@ -1212,6 +1217,7 @@ function getFollowingPageQuery() as object
                                                     id
                                                     __typename
                                                     previewImageURL
+                                                    createdAt
                                                     broadcaster {
                                                         displayName
                                                         broadcastSettings {
@@ -1261,6 +1267,7 @@ function getFollowingPageQuery() as object
                         __typename
                         displayName
                         stream {
+                            createdAt
                             previewImageURL
                             game {
                                 boxArtURL
@@ -1463,6 +1470,7 @@ function getSearchQuery()
                 __typename
             }
             id
+            createdAt
             __typename
             previewImageURL
             type
@@ -1636,6 +1644,7 @@ function getGameDirectoryQuery()
                 __typename
             }
             id
+            createdAt
             __typename
             previewImageURL
             type

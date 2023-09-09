@@ -98,6 +98,7 @@ function buildContentNodeFromShelves(shelves)
         end if
         if rowItem.contentType = "LIVE"
             rowItem.contentId = item.stream.Id
+            rowItem.createdAt = item.stream.createdAt
             rowItem.previewImageURL = Substitute("https://static-cdn.jtvnw.net/previews-ttv/live_user_{0}-{1}x{2}.jpg", item.stream.broadcaster.login, "320", "180")
             rowItem.contentTitle = item.stream.broadcaster.broadcastSettings.title
             rowItem.viewersCount = item.stream.viewersCount

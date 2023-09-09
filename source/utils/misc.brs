@@ -293,6 +293,9 @@ function setTwitchContentFields(twitchContentNode, fields)
     if fields.contentId <> invalid
         twitchContentNode.contentId = fields.contentId
     end if
+    if fields.createdAt <> invalid
+        twitchContentNode.createdAt = fields.createdAt
+    end if
     if fields.contentType <> invalid
         twitchContentNode.contentType = fields.contentType
     end if

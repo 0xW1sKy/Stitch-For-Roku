@@ -268,6 +268,13 @@ end sub
 
 function saveVideoBookmark() as void
     if m.top.video_type = "LIVE" or m.top.video_type = "VOD"
+        bookmarkPosition = Int(m.top.position)
+        if m.top?.content?.createdAt <> invalid
+            secondsSincePublished = createObject("roDateTime")
+            secondsSincePublished.FromISO8601String(m.top.content.createdAt.toStr())
+            currentTime = createObject("roDateTime").AsSeconds()
+            bookmarkPosition = currentTime - secondsSincePublished.AsSeconds()
+        end if
         if get_user_setting("id", invalid) <> invalid
             if m.bookmarkTask <> invalid
                 m.bookmarkTask = invalid
@@ -276,7 +283,7 @@ function saveVideoBookmark() as void
             m.bookmarkTask.functionname = "updateUserViewedVideo"
             m.bookmarkTask.request = {
                 "userId": get_user_setting("id")
-                "position": Int(m.top.position)
+                "position": bookmarkPosition
                 "videoId": m.top.video_id
                 "videoType": m.top.video_type 'LIVE or VOD
             }

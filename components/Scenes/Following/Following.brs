@@ -59,6 +59,7 @@ sub handleDefaultSections()
                         if stream.node["__typename"].toStr() <> invalid and stream.node["__typename"].toStr() = "Stream"
                             rowItem = {}
                             rowItem.contentId = stream.node.Id
+                            rowItem.createdAt = stream.node.createdAt
                             rowItem.contentType = "LIVE"
                             rowItem.previewImageURL = Substitute("https://static-cdn.jtvnw.net/previews-ttv/live_user_{0}-{1}x{2}.jpg", stream.node.broadcaster.login, "320", "180")
                             rowItem.contentTitle = stream.node.broadcaster.broadcastSettings.title
@@ -113,6 +114,7 @@ sub handleRecommendedSections()
                     stream = liveUser.node.stream
                     rowItem = {}
                     rowItem.contentId = stream.Id
+                    rowItem.createdAt = stream.createdAt
                     rowItem.contentType = "LIVE"
                     rowItem.previewImageURL = Substitute("https://static-cdn.jtvnw.net/previews-ttv/live_user_{0}-{1}x{2}.jpg", stream.broadcaster.login, "320", "180")
                     rowItem.contentTitle = stream.broadcaster.broadcastSettings.title

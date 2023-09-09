@@ -25,6 +25,7 @@ function buildContentNodeFromShelves(streams)
         stream = streams[i]
         rowItem = createObject("RoSGNode", "TwitchContentNode")
         rowItem.contentId = stream.node.Id
+        rowItem.createdAt = stream.node.createdAt
         rowItem.contentType = "LIVE"
         rowItem.viewersCount = stream.node.viewersCount
         rowItem.contentTitle = stream.node.title
