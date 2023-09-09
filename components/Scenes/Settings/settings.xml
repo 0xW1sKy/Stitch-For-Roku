@@ -1,6 +1,6 @@
 <component name="Settings" extends="SceneManagerGroup" initialFocus="settingsMenu">
     <children>
-        <Group translation="[0, 80]">
+        <Group translation="[10, 80]">
             <Rectangle width="1280" height="720" color="0x0e0e10FF"
             />
             <Label id="path" translation="[64,117]" font="font:SmallestBoldSystemFont" />

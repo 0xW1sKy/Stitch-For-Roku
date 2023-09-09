@@ -115,7 +115,7 @@
         "default": "VIEWER_COUNT",
         "options": [
             {
-                "title": "Recommended By Twitch",
+                "title": "Recommended",
                 "id": "RELEVANCE"
             },
             {

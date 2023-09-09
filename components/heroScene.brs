@@ -31,6 +31,14 @@ sub init()
     m.footprints = []
 end sub
 
+function focusedMenuItem()
+    focusedItem = ""
+    if m.menu?.focusedChild?.focusedChild?.id <> invalid
+        focusedItem = m.menu.focusedChild.focusedChild.id.toStr()
+    end if
+    return focusedItem
+end function
+
 function VersionJobs()
     if m.global.appinfo.version.major.toInt() = 2 and m.global.appinfo.version.minor.toInt() = 3
         ' Clean Up Job for switching default profile name to "$default$" as "default" is technically a possible twitch user.
@@ -97,7 +105,7 @@ end sub
 function onMenuSelection()
     ' refreshFollowBar()
     ' If user is already logged in, show them their user page
-    if m.menu.buttonSelected = 5 and get_setting("active_user", "$default$") <> "$default$"
+    if focusedMenuItem() = "LoginPage" and get_setting("active_user", "$default$") <> "$default$"
         content = createObject("roSGNode", "TwitchContentNode")
         content.streamerDisplayName = get_user_setting("display_name")
         content.streamerLogin = get_user_setting("login")
@@ -108,14 +116,14 @@ function onMenuSelection()
     else
         if m.menu.focusedChild <> invalid
             if m.activeNode <> invalid
-                if m.activeNode.id.toStr() <> m.menu.focusedChild.focusedChild.id.toStr()
+                if m.activeNode.id.toStr() <> focusedMenuItem()
                     m.top.removeChild(m.activeNode)
                     m.activeNode = invalid
                 end if
             end if
         end if
         if m.activeNode = invalid
-            m.activeNode = buildNode(m.menu.focusedChild.focusedChild.id)
+            m.activeNode = buildNode(focusedMenuItem())
         end if
         m.activeNode.setfocus(true)
     end if
@@ -166,7 +174,8 @@ sub onBackPressed()
             m.top.removeChild(m.activeNode)
             m.activeNode = m.footprints.pop()
             m.activeNode.setFocus(false)
-            if m.menu.buttonFocused = 5
+            if focusedMenuItem() = "LoginPage"
+                ' if m.menu.buttonFocused = 5
                 m.menu.setFocus(true)
             end if
         else
