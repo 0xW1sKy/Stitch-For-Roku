@@ -15,7 +15,7 @@ sub init()
     m.refreshTimer = createObject("roSGNode", "Timer")
     m.refreshTimer.observeField("fire", "refreshFollowBar")
     m.refreshTimer.repeat = true
-    m.refreshTimer.duration = "60"
+    m.refreshTimer.duration = "15"
     m.refreshTimer.control = "start"
 end sub
 

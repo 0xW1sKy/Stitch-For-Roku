@@ -2,13 +2,27 @@
 <component name="Search" extends="SceneManagerGroup" initialFocus="keyboard">
     <script type="text/brightscript" uri="Search.brs" />
     <script type="text/brightscript" uri="pkg:/source/utils/misc.brs" />
+    <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
     <children>
+        <ButtonGroup
+            id="recents"
+            translation="[100, 90]"
+            minWidth="300"
+            textFont="font:SmallestSystemFont"
+            focusedTextFont="font:SmallestSystemFont"
+            visible="true"
+            iconUri="pkg:/images/icons/clock-o.png"
+            focusedIconUri="pkg:/images/icons/clock-o.png"
+            focusFootprintBitmapUri="null"
+            focusBitmapUri="null"
+        />
         <DynamicMiniKeyboard
             id="keyboard"
-            translation="[80,130]" />
+            buttonheight="30"
+            translation="[100,120]" />
         <RowList
             id="exampleRowList"
-            translation = "[500, 120]"
+            translation="[500, 120]"
             rowLabelOffset="[[0,10]]"
             rowLabelFont="font:LargeBoldSystemFont"
             itemComponentName="VideoItem"

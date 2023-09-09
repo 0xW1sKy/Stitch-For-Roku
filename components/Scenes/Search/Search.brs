@@ -1,11 +1,62 @@
 sub init()
     m.top.observeField("focusedChild", "onGetfocus")
+    m.recents = m.top.findnode("recents")
+    ' m.recents.buttons = ["Ammo", "paymoneywubby", "three"]
+    m.recents.TextColor = m.global.constants.colors.muted.ice
+    m.recents.FocusedTextColor = m.global.constants.colors.twitch.purple10
+    m.recents.observeField("buttonSelected", "onRecentItemSelected")
     m.kb = m.top.findNode("keyboard")
     m.kb.textEditBox.hintText = tr("Enter Search Query")
     m.kb.textEditBox.voiceEnabled = true
     m.kb.observefield("text", "handleTextInput")
     m.rowlist = m.top.findNode("exampleRowList")
     m.rowlist.ObserveField("itemSelected", "handleItemSelected")
+    updateRecents()
+end sub
+
+function updateRecents(appendItem = invalid)
+    oldRecents = ParseJson(get_user_setting("recents", "[]"))
+    if oldRecents = invalid
+        oldRecents = []
+    end if
+    newRecents = []
+    if appendItem <> invalid
+        newRecents.Push(appendItem)
+    end if
+    for each item in oldRecents
+        i = newRecents.count()
+        if i < 3
+            if item <> appendItem
+                newRecents.Push(item)
+            end if
+        end if
+    end for
+    set_user_setting("recents", FormatJson(newRecents, 256))
+    m.recents.buttons = ParseJson(get_user_setting("recents", "[]"))
+    adjustPositionForRecents()
+end function
+
+sub onRecentItemSelected()
+    selectedText = m.recents.buttons[m.recents.buttonSelected].tostr()
+    ? "SelectedText: "; selectedText
+    m.kb.setfocus(true)
+    m.kb.text = selectedText
+end sub
+
+sub adjustPositionForRecents()
+    yTranslation = 120
+    if m.recents.buttons.count() > 0
+        m.recents.buttonHeight = (m.recents.textFont.size * 3)
+        ' bound = m.recents.boundingrect()
+        ' localbound = m.recents.localboundingrect()
+        ' yTranslation = m.recents.localboundingrect().height
+        for each button in m.recents.buttons
+            yTranslation += (m.recents.textFont.size * 2)
+        end for
+        ' ? "pause"
+
+        m.kb.translation = [m.kb.translation[0], yTranslation]
+    end if
 end sub
 
 sub handleTextInput()
@@ -169,6 +220,9 @@ end function
 
 
 sub handleItemSelected()
+    if m.kb.text <> ""
+        updateRecents(m.kb.text)
+    end if
     selectedRow = m.rowlist.content.getchild(m.rowlist.rowItemSelected[0])
     selectedItem = selectedRow.getChild(m.rowlist.rowItemSelected[1])
     m.top.contentSelected = selectedItem
@@ -195,7 +249,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
     if press
         ? "Search Key Press: "; key
         if key = "right"
-            if m.top.focusedChild.id = "keyboard"
+            if m.top.focusedChild.id = "keyboard" or m.top.focusedChild.id = "recents"
                 m.kb.setfocus(false)
                 m.rowlist.setfocus(true)
                 return true
@@ -208,12 +262,24 @@ function onKeyEvent(key as string, press as boolean) as boolean
                 return true
             end if
         end if
-        ? "Home Scene Key Event: "; key
         if key = "up" or key = "back"
+            if m.top?.focusedChild?.id <> invalid and m.top.focusedChild.id = "keyboard"
+                if m.recents.buttons.count() > 0
+                    m.recents.setfocus(true)
+                    ' m.kb.setfocus(false)
+                    return true
+                end if
+            end if
             m.rowlist.setfocus(false)
             m.kb.setfocus(false)
             m.top.backPressed = true
             return true
+        end if
+        if key = "down"
+            if m.top?.focusedChild?.id <> invalid and m.top.focusedChild.id = "recents"
+                m.kb.setfocus(true)
+                return true
+            end if
         end if
     end if
 end function
