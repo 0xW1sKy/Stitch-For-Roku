@@ -6,7 +6,12 @@ sub init()
     m.followedStreamBar = m.top.findNode("followedStreamsBar")
     m.followedStreamBar.observeField("contentSelected", "onFollowSelected")
     m.menu = m.top.findNode("MenuBar")
-    m.menu.menuOptionsText = ["Following", "Home", "Categories", "LiveChannels"]
+    m.menu.menuOptionsText = [
+        "Home",
+        "Categories",
+        "LiveChannels"
+        "Following",
+    ]
     m.menu.observeField("buttonSelected", "onMenuSelection")
     m.menu.setFocus(true)
     if get_setting("active_user") = invalid
