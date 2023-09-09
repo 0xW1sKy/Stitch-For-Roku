@@ -269,7 +269,7 @@ end sub
 function saveVideoBookmark() as void
     if m.top.video_type = "LIVE" or m.top.video_type = "VOD"
         bookmarkPosition = Int(m.top.position)
-        if m.top?.content?.createdAt <> invalid
+        if m.top.video_type = "LIVE" and m.top?.content?.createdAt <> invalid
             secondsSincePublished = createObject("roDateTime")
             secondsSincePublished.FromISO8601String(m.top.content.createdAt.toStr())
             currentTime = createObject("roDateTime").AsSeconds()
