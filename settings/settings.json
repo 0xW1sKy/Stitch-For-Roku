@@ -149,7 +149,7 @@
             },
             {
                 "title": "Followers (Low to High)",
-                "id": "followerCount_ASC"
+                "id": "ASC_followerCount"
             }
         ]
     }

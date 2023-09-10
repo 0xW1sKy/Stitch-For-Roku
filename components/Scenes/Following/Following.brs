@@ -193,14 +193,15 @@ sub handleRecommendedSections()
                 end for
                 ? "OfflineSection ContentEnd: "; TimeStamp()
                 sortMethod = get_user_setting("FollowPageSorting", "streamerLogin")
+                ? "Sort Method: "; sortMethod
                 if sortMethod = "streamerLogin"
                     streams.sortBy("streamerLogin", "i")
                 else if sortMethod = "followerCount"
                     streams.sortBy("followerCount", "r")
-                else if sortMethod = "followerCount_ASC"
+                else if sortMethod = "ASC_followerCount"
                     streams.sortBy("followerCount")
                 end if
-                streams.sortBy(get_user_setting("FollowPageSorting", "streamerLogin"))
+                ' streams.sortBy(get_user_setting("FollowPageSorting", "streamerLogin"))
                 appended = false
                 for i = 0 to (streams.count() - 1) step 1
                     if first
