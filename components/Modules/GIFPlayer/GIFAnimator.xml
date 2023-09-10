@@ -1,0 +1,8 @@
+<component name="GIFAnimator" extends="Node">
+    <interface>
+        <function name="start" />
+        <function name="finish" />
+    </interface>
+
+    <script type="text/brightscript" uri="GIFAnimator.brs" />
+</component>
