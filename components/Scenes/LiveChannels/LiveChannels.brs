@@ -22,30 +22,30 @@ function buildContentNodeFromShelves(streams)
             row = createObject("RoSGNode", "ContentNode")
         end if
         row.title = ""
-        stream = streams[i]
-        rowItem = createObject("RoSGNode", "TwitchContentNode")
-        rowItem.contentId = stream.node.Id
-        rowItem.createdAt = stream.node.createdAt
-        rowItem.contentType = "LIVE"
-        rowItem.viewersCount = stream.node.viewersCount
-        rowItem.contentTitle = stream.node.title
-        rowItem.gameDisplayName = stream.node.game.displayName
-        rowItem.gameBoxArtUrl = Left(stream.node.game.boxArtUrl, Len(stream.node.game.boxArtUrl) - 20) + "188x250.jpg"
-        rowItem.gameId = stream.node.game.Id
-        rowItem.gameName = stream.node.game.name
-        rowItem.previewImageURL = Substitute("https://static-cdn.jtvnw.net/previews-ttv/live_user_{0}-{1}x{2}.jpg", stream.node.broadcaster.login, "320", "180")
-        rowItem.streamerDisplayName = stream.node.broadcaster.displayName
-        rowItem.streamerLogin = stream.node.broadcaster.login
-        rowItem.streamerId = stream.node.broadcaster.id
-        rowItem.streamerProfileImageUrl = stream.node.broadcaster.profileImageURL
-        ' rowItem.Title = stream.node.displayName
-        ' rowItem.secondaryTitle = stream.node.viewersCount
-        ' rowItem.HDPosterUrl = Left(stream.node.avatarUrl, Len(stream.node.avatarUrl) - 11) + "188x250.jpg"
-        ' rowItem.ShortDescriptionLine1 = stream.node.viewersCount
-        row.appendChild(rowItem)
-        if row.getChildCount() = maxPerRow
-            contentCollection.appendChild(row)
-        end if
+        try
+            stream = streams[i]
+            rowItem = createObject("RoSGNode", "TwitchContentNode")
+            rowItem.contentId = stream.node.Id
+            rowItem.createdAt = stream.node.createdAt
+            rowItem.contentType = "LIVE"
+            rowItem.viewersCount = stream.node.viewersCount
+            rowItem.contentTitle = stream.node.title
+            rowItem.gameDisplayName = stream.node.game.displayName
+            rowItem.gameBoxArtUrl = Left(stream.node.game.boxArtUrl, Len(stream.node.game.boxArtUrl) - 20) + "188x250.jpg"
+            rowItem.gameId = stream.node.game.Id
+            rowItem.gameName = stream.node.game.name
+            rowItem.previewImageURL = Substitute("https://static-cdn.jtvnw.net/previews-ttv/live_user_{0}-{1}x{2}.jpg", stream.node.broadcaster.login, "320", "180")
+            rowItem.streamerDisplayName = stream.node.broadcaster.displayName
+            rowItem.streamerLogin = stream.node.broadcaster.login
+            rowItem.streamerId = stream.node.broadcaster.id
+            rowItem.streamerProfileImageUrl = stream.node.broadcaster.profileImageURL
+            row.appendChild(rowItem)
+            if row.getChildCount() = maxPerRow
+                contentCollection.appendChild(row)
+            end if
+        catch e
+            ? "An error occured fetching live channel"
+        end try
     end for
     return contentCollection
 end function
