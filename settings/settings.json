@@ -107,7 +107,7 @@
         "type": "bool",
         "default": "true"
     },
-        {
+    {
         "title": "Live Channel Sorting",
         "description": "Determines how the LiveChannels page results are sorted.",
         "settingName": "LiveChannelSorting",
@@ -129,6 +129,27 @@
             {
                 "title": "Recently Started",
                 "id": "RECENT"
+            }
+        ]
+    },
+    {
+        "title": "Offline Follow Sorting",
+        "description": "Determines how the offline channels on the following page are sorted.",
+        "settingName": "FollowPageSorting",
+        "type": "radio",
+        "default": "streamerLogin",
+        "options": [
+            {
+                "title": "Streamer Name",
+                "id": "streamerLogin"
+            },
+            {
+                "title": "Followers (High to Low)",
+                "id": "followerCount"
+            },
+            {
+                "title": "Followers (Low to High)",
+                "id": "followerCount_ASC"
             }
         ]
     }

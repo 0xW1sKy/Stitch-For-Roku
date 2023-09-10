@@ -111,23 +111,29 @@ sub handleRecommendedSections()
                 itemsPerRow = 3
                 liveFollows = []
                 for each liveUser in m.GetcontentTask.response.data.user.followedLiveUsers.edges
-                    stream = liveUser.node.stream
-                    rowItem = {}
-                    rowItem.contentId = stream.Id
-                    rowItem.createdAt = stream.createdAt
-                    rowItem.contentType = "LIVE"
-                    rowItem.previewImageURL = Substitute("https://static-cdn.jtvnw.net/previews-ttv/live_user_{0}-{1}x{2}.jpg", stream.broadcaster.login, "320", "180")
-                    rowItem.contentTitle = stream.broadcaster.broadcastSettings.title
-                    rowItem.viewersCount = stream.viewersCount
-                    rowItem.streamerDisplayName = stream.broadcaster.displayName
-                    rowItem.streamerLogin = stream.broadcaster.login
-                    rowItem.streamerId = stream.broadcaster.id
-                    rowItem.streamerProfileImageUrl = stream.broadcaster.profileImageURL
-                    rowItem.gameDisplayName = stream.game.displayName
-                    rowItem.gameBoxArtUrl = Left(stream.game.boxArtUrl, Len(stream.game.boxArtUrl) - 20) + "188x250.jpg"
-                    rowItem.gameId = stream.game.Id
-                    rowItem.gameName = stream.game.name
-                    liveFollows.push(rowItem)
+                    try
+                        stream = liveUser.node.stream
+                        rowItem = {}
+                        rowItem.contentId = stream.Id
+                        rowItem.createdAt = stream.createdAt
+                        rowItem.contentType = "LIVE"
+                        rowItem.previewImageURL = Substitute("https://static-cdn.jtvnw.net/previews-ttv/live_user_{0}-{1}x{2}.jpg", stream.broadcaster.login, "320", "180")
+                        rowItem.contentTitle = stream.broadcaster.broadcastSettings.title
+                        rowItem.viewersCount = stream.viewersCount
+                        rowItem.streamerDisplayName = stream.broadcaster.displayName
+                        rowItem.streamerLogin = stream.broadcaster.login
+                        rowItem.streamerId = stream.broadcaster.id
+                        rowItem.streamerProfileImageUrl = stream.broadcaster.profileImageURL
+                        if stream.game <> invalid
+                            rowItem.gameDisplayName = stream.game.displayName
+                            rowItem.gameBoxArtUrl = Left(stream.game.boxArtUrl, Len(stream.game.boxArtUrl) - 20) + "188x250.jpg"
+                            rowItem.gameId = stream.game.Id
+                            rowItem.gameName = stream.game.name
+                        end if
+                        liveFollows.push(rowItem)
+                    catch e
+                        ? "Issue occured adding liveuser to followed live users list"
+                    end try
                 end for
                 appended = false
                 for i = 0 to (liveFollows.count() - 1) step 1
@@ -151,6 +157,7 @@ sub handleRecommendedSections()
             end if
         end if
     catch e
+        ? "big whoopsie on following page"
     end try
     try
         ? "LiveStreamSection Complete: "; TimeStamp()
@@ -185,7 +192,15 @@ sub handleRecommendedSections()
                     end try
                 end for
                 ? "OfflineSection ContentEnd: "; TimeStamp()
-                streams.sortBy("streamerLogin")
+                sortMethod = get_user_setting("FollowPageSorting", "streamerLogin")
+                if sortMethod = "streamerLogin"
+                    streams.sortBy("streamerLogin", "i")
+                else if sortMethod = "followerCount"
+                    streams.sortBy("followerCount", "r")
+                else if sortMethod = "followerCount_ASC"
+                    streams.sortBy("followerCount")
+                end if
+                streams.sortBy(get_user_setting("FollowPageSorting", "streamerLogin"))
                 appended = false
                 for i = 0 to (streams.count() - 1) step 1
                     if first
