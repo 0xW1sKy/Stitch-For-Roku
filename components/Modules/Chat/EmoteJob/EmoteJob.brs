@@ -142,7 +142,7 @@ sub getChannel7tvEmotes(channel_id)
         if temp.emote_set <> invalid
             if temp.emote_set.emotes <> invalid
                 for each emote in temp.emote_set.emotes
-                    uri = "https://cdn.7tv.app/emote/" + emote.id + "/1x.webp"
+                    uri = "https://cdn.7tv.app/emote/" + emote.id + "/1x.gif"
                     emoteCache[emote.name] = uri
                 end for
             end if
@@ -159,7 +159,7 @@ sub getGlobal7tvEmotes()
     try
         temp = invokerest("https://7tv.io/v3/emote-sets/global")
         for each emote in temp.emotes
-            uri = "https://cdn.7tv.app/emote/" + emote.id + "/1x.webp"
+            uri = "https://cdn.7tv.app/emote/" + emote.id + "/1x.gif"
             emoteCache[emote.name] = uri
         end for
     catch e
@@ -174,7 +174,7 @@ function getGlobalTTVEmotes()
     try
         temp = invokerest("https://api.betterttv.net/3/cached/emotes/global")
         for each emote in temp
-            uri = "https://cdn.betterttv.net/emote/" + emote.id + "/1x"
+            uri = "https://cdn.betterttv.net/emote/" + emote.id + "/1x.gif"
             emoteCache[emote.code] = uri
         end for
     catch e
@@ -204,7 +204,7 @@ function getChannelTTVEmotes(channel_id)
         temp = invokerest("https://api.betterttv.net/3/cached/users/twitch/" + channel_id)
         if temp.sharedEmotes <> invalid
             for each emote in temp.sharedEmotes
-                uri = "https://cdn.betterttv.net/emote/" + emote.id + "/1x"
+                uri = "https://cdn.betterttv.net/emote/" + emote.id + "/1x.gif"
                 emoteCache[emote.code] = uri
             end for
         end if

@@ -9,6 +9,18 @@ sub Main(input as dynamic)
     ' the content details, or right data from feed for id
     if input <> invalid
         print "Received Input -- write code here to check it!"
+        ' if input.instant_on_run_mode <> invalid
+        '     print "Instant On Run Mode: "; input.instant_on_run_mode
+        ' end if
+        ' if input.lastExitOrTerminationReason <> invalid
+        '     print "Last Exit or Termination Reason: "; input.lastExitOrTerminationReason
+        ' end if
+        ' if input.source <> invalid
+        '     print "Source: "; input.source
+        ' end if
+        ' if input.splashTime <> invalid
+        '     print "Splash Time: "; input.splashTime
+        ' end if
         if input.reason <> invalid
             if input.reason = "ad" then
                 print "Channel launched from ad click"
