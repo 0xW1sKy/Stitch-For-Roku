@@ -4,7 +4,7 @@ Stitch is a Roku channel that aims to provide an actively maintained, reasonably
 
 Stich exists because Twitch does not presently have any official channel for Roku, despite [Roku being the most popular smart TV platform, with (as of early 2022), a 39% market share in North America and a 31% market share worldwide](https://seekingalpha.com/article/4547471-the-sleeping-giant-in-streaming-turning-roku-into-a-huge-2023-winner).
 
-If you work at Twitch, go make an official Twitch app so I don't have to. If you want this one you can have it. (See [Authorship and License](u#authorship-and-license).)
+If you work at Twitch, go make an official Twitch app so I don't have to. If you want this one you can have it. (See [Authorship and License](#authorship-and-license).)
 
 ## Installation
 
