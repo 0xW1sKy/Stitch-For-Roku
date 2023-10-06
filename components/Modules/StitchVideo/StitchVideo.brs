@@ -106,6 +106,10 @@ end sub
 sub onQualitySelectButtonPressed()
     if m.top.qualityOptions <> invalid
         m.QualityDialog.title = "Please Choose Your Video Quality"
+        if m.top.content.qualityId <> invalid
+            activeText = "Active: " + m.top.content.qualityId
+            m.QualityDialog.message = [activeText]
+        end if
         m.QualityDialog.buttons = m.top.qualityOptions
         m.QualityDialog.observeFieldScoped("buttonSelected", "onQualityButtonSelect")
         m.QualityDialog.visible = true

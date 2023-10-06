@@ -20,6 +20,7 @@
         <field id="video_id" type="string" />
         <field id="video_type" type="string" />
         <field id="qualityOptions" type="array" />
+        <field id="selectedQuality" type="string" value="" />
     </interface>
     <script type="text/brightscript" uri="StitchVideo.brs" />
     <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
