@@ -1,7 +1,4 @@
 sub main()
-    if m.top.contentRequested.contentType = "LIVE"
-
-    end if
     if m.top.contentRequested.contentType = "CLIP"
         content = CreateObject("roSGNode", "TwitchContentNode")
         content.setFields(m.top.contentRequested)
@@ -125,6 +122,7 @@ sub main()
         stream_sticky = []
         stream_formats = []
         streams = []
+        metadata = []
         for each stream_item in stream_objects
             res = stream_item["RESOLUTION"].split("x")[1]
             if stream_item["VIDEO"] = "chunked"
@@ -133,7 +131,7 @@ sub main()
                 end if
                 value = res + "p"
                 if fps <> invalid
-                    value = value + fps
+                    value = value + fps + " (Source)"
                 end if
             else
                 value = stream_item["VIDEO"]
@@ -166,19 +164,41 @@ sub main()
                 bitrate: Int(Val(stream_item["BANDWIDTH"])) / 1000
             }
             streams.push(stream)
+            metadata.push(
+            {
+                QualityID: value
+                Streams: [stream]
+                StreamUrls: [stream_item["URL"]]
+                StreamStickyHttpRedirects: [false]
+                StreamQualities: [stream_quality]
+                StreamContentIds: [value]
+                StreamBitrates: [Int(Val(stream_item["BANDWIDTH"])) / 1000]
+            }
+            )
         end for
 
+        metadata.unshift({
+            QualityID: "Automatic"
+            StreamBitrates: stream_bitrates
+            streams: streams
+            StreamUrls: stream_urls
+            StreamQualities: stream_qualities
+            StreamContentIDs: stream_content_ids
+            StreamStickyHttpRedirects: stream_sticky
+        })
+
         responseObj = []
-        ? "stream urls: "; stream_urls
         content = CreateObject("roSGNode", "TwitchContentNode")
         content.setFields(m.top.contentRequested)
-        content.StreamBitrates = stream_bitrates
-        ' content.StreamUrls = [stream_urls]
-        content.streams = streams
-        content.StreamUrls = stream_urls
-        content.StreamQualities = stream_qualities
-        content.StreamContentIDs = stream_content_ids
-        content.StreamStickyHttpRedirects = stream_sticky
+
+        userQualityPreference = get_user_setting("playback.video.quality", "auto")
+
+        if userQualityPreference = "highest"
+            content.setFields(metadata[1])
+        else if userQualityPreference = "auto"
+            content.setFields(metadata[0])
+        end if
     end if
+    m.top.metadata = metadata
     m.top.response = content
 end sub

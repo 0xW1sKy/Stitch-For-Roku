@@ -21,6 +21,7 @@ end function
 function onResponse()
     ' content.ignoreStreamErrors = true
     m.top.content = m.PlayVideo.response
+    m.top.contentstore = m.PlayVideo.metadata
     playContent()
 end function
 
@@ -60,7 +61,11 @@ sub playContent()
     if m.video <> invalid
         m.top.removeChild(m.video)
     end if
-    m.video = m.top.CreateChild("CustomVideo")
+    if m.top.contentRequested.contentType = "LIVE"
+        m.video = m.top.CreateChild("StitchVideo")
+    else
+        m.video = m.top.CreateChild("CustomVideo")
+    end if
     httpAgent = CreateObject("roHttpAgent")
     httpAgent.setCertificatesFile("common:/certs/ca-bundle.crt")
     httpAgent.InitClientCertificates()
@@ -79,7 +84,7 @@ sub playContent()
     else
         m.video.videoBookmarks = {}
     end if
-    ? "playContent"; m.top.content
+    ? "Quality Selection: "; m.top.content
     content = m.top.content
     if content <> invalid then
         m.video.content = content
@@ -130,6 +135,9 @@ function onKeyEvent(key, press) as boolean
             exitPlayer()
             m.top.backpressed = true
             return true
+        end if
+        if key = "replay"
+            ? "break"
         end if
     end if
 end function

@@ -249,13 +249,13 @@
             width="50"
                 height="50"
                 translation="[60,45]" />-->
-            <Poster
+            <!-- <Poster
                 id="qualitySelectButton"
                 uri="pkg:/images/icons/sliders.png"
                 width="25"
                 height="21"
                 translation="[60,51]"
-                visible="false" />
+                visible="true" /> -->
             <Poster
                 id="timeTravelButton"
                 uri="pkg:/images/TimeTravel.png"
