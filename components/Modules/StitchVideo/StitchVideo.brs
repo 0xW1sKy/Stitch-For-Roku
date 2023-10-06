@@ -99,14 +99,14 @@ sub onQualityButtonSelect()
     m.QualityDialog.setFocus(false)
     resetProgressBar()
     m.progressBar.getParent().setFocus(true)
-    ' m.top.qualityChangeRequest = m.QualityDialog.buttonSelected
-    ' m.top.qualityChangeRequestFlag = true
+    m.top.qualityChangeRequest = m.QualityDialog.buttonSelected
+    m.top.qualityChangeRequestFlag = true
 end sub
 
 sub onQualitySelectButtonPressed()
-    if m.top.content.STREAMCONTENTIDS <> invalid and m.top.content.STREAMCONTENTIDS.count() > 1
+    if m.top.qualityOptions <> invalid
         m.QualityDialog.title = "Please Choose Your Video Quality"
-        m.QualityDialog.buttons = m.top.content.STREAMCONTENTIDS
+        m.QualityDialog.buttons = m.top.qualityOptions
         m.QualityDialog.observeFieldScoped("buttonSelected", "onQualityButtonSelect")
         m.QualityDialog.visible = true
         m.lastFocusedchild = m.top.focusedChild
@@ -393,12 +393,13 @@ end function
 
 
 function onKeyEvent(key, press) as boolean
-    ? "CustomVideoKeyEvent"; key press
-    handled = false
+    ? "[StichVideo] KeyEvent: "; key press
     if press
-        if m.progressBar.visible = false
-            ? "show called"
-            showOverlay()
+        if key <> "back"
+            if m.progressBar.visible = false
+                ? "show called"
+                showOverlay()
+            end if
         end if
         m.fadeAwayTimer.control = "stop"
         m.fadeAwayTimer.control = "start"
@@ -428,9 +429,6 @@ function onKeyEvent(key, press) as boolean
             if m.progressBar.visible
                 hideOverlay()
                 return true
-            else
-                saveVideoBookmark()
-                return false
             end if
         else if key = "OK"
             selectButton()
@@ -512,5 +510,4 @@ function onKeyEvent(key, press) as boolean
             m.buttonHoldTimer.control = "stop"
         end if
     end if
-    return handled
 end function

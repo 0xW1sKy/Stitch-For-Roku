@@ -21,7 +21,7 @@ end function
 function onResponse()
     ' content.ignoreStreamErrors = true
     m.top.content = m.PlayVideo.response
-    m.top.contentstore = m.PlayVideo.metadata
+    m.top.metadata = m.PlayVideo.metadata
     playContent()
 end function
 
@@ -57,12 +57,31 @@ sub initChat()
     end if
 end sub
 
+function onQualityChangeRequested()
+    ? "[Video Wrapper] - Quality Change Requested: "; m.video.qualityChangeRequest
+    new_content = CreateObject("roSGNode", "TwitchContentNode")
+    new_content.setFields(m.top.contentRequested.getFields())
+    new_content.setFields(m.top.metadata[m.video.qualityChangeRequest])
+    m.top.content = new_content
+    m.allowBreak = false
+    exitPlayer()
+    playContent()
+    m.allowBreak = true
+end function
+
 sub playContent()
     if m.video <> invalid
         m.top.removeChild(m.video)
     end if
     if m.top.contentRequested.contentType = "LIVE"
+        quality_options = []
+        if m.top.metadata <> invalid
+            for each quality_option in m.top.metadata
+                quality_options.push(quality_option.qualityID)
+            end for
+        end if
         m.video = m.top.CreateChild("StitchVideo")
+        m.video.qualityOptions = quality_options
     else
         m.video = m.top.CreateChild("CustomVideo")
     end if
@@ -76,6 +95,7 @@ sub playContent()
     m.video.setHttpAgent(httpAgent)
     m.video.notificationInterval = 1
     m.video.observeField("toggleChat", "onToggleChat")
+    m.video.observeField("QualityChangeRequestFlag", "onQualityChangeRequested")
     videoBookmarks = get_user_setting("VideoBookmarks", "")
     m.video.video_type = m.top.contentRequested.contentType
     m.video.video_id = m.top.contentRequested.contentId
@@ -107,7 +127,6 @@ sub playContent()
         end if
         m.PlayerTask = CreateObject("roSGNode", "PlayerTask")
         m.PlayerTask.observeField("state", "taskStateChanged")
-        m.PlayerTask.observeField("QualityChangeRequestFlag", "onQualitySelectButtonPressed")
         m.PlayerTask.video = m.video
         m.PlayerTask.control = "RUN"
         initChat()
@@ -122,22 +141,21 @@ sub exitPlayer()
     end if
     m.PlayerTask = invalid
     'signal upwards that we are done
-    m.top.state = "done"
+    if m.allowBreak
+        m.top.state = "done"
+    end if
 end sub
 
 
 function onKeyEvent(key, press) as boolean
     if press
-        ? "Hero Scene Key Event: "; key
+        ? "[VideoPlayer] Key Event: "; key
         if key = "back" then
             'handle Back button, by exiting play
             m.chatWindow.callFunc("stopJobs")
             exitPlayer()
             m.top.backpressed = true
             return true
-        end if
-        if key = "replay"
-            ? "break"
         end if
     end if
 end function
@@ -148,6 +166,7 @@ sub init()
     m.chatWindow = m.top.findNode("chat")
     m.chatWindow.fontSize = get_user_setting("ChatFontSize")
     m.chatWindow.observeField("visible", "onChatVisibilityChange")
+    m.allowBreak = true
 end sub
 
 

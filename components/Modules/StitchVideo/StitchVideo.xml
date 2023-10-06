@@ -19,6 +19,7 @@
         <field id="currentProgressBarState" type="Integer" value="1" />
         <field id="video_id" type="string" />
         <field id="video_type" type="string" />
+        <field id="qualityOptions" type="array" />
     </interface>
     <script type="text/brightscript" uri="StitchVideo.brs" />
     <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
