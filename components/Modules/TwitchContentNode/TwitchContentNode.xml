@@ -25,5 +25,6 @@
         <field id="datePublished" type="string" onChange="updateRelativePublishDate" />
         <field id="relativePublishDate" type="string" />
         <field id="createdAt" type="string" />
+        <field id="QualityId" type="string" />
     </interface>
 </component>

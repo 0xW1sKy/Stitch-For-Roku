@@ -3,7 +3,7 @@
     <interface>
         <field id="contentRequested" type="Node" onChange="handleContent" />
         <field id="contentStore" type="assocarray" />
-
+        <field id="metadata" type="array" />
         <field id="content" type="node" />
 
         <!-- state - Same as Task states. -->

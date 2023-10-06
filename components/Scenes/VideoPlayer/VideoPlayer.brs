@@ -21,6 +21,7 @@ end function
 function onResponse()
     ' content.ignoreStreamErrors = true
     m.top.content = m.PlayVideo.response
+    m.top.metadata = m.PlayVideo.metadata
     playContent()
 end function
 
@@ -56,11 +57,34 @@ sub initChat()
     end if
 end sub
 
+function onQualityChangeRequested()
+    ? "[Video Wrapper] - Quality Change Requested: "; m.video.qualityChangeRequest
+    new_content = CreateObject("roSGNode", "TwitchContentNode")
+    new_content.setFields(m.top.contentRequested.getFields())
+    new_content.setFields(m.top.metadata[m.video.qualityChangeRequest])
+    m.top.content = new_content
+    m.allowBreak = false
+    exitPlayer()
+    playContent()
+    m.allowBreak = true
+end function
+
 sub playContent()
     if m.video <> invalid
         m.top.removeChild(m.video)
     end if
-    m.video = m.top.CreateChild("CustomVideo")
+    if m.top.contentRequested.contentType = "LIVE"
+        quality_options = []
+        if m.top.metadata <> invalid
+            for each quality_option in m.top.metadata
+                quality_options.push(quality_option.qualityID)
+            end for
+        end if
+        m.video = m.top.CreateChild("StitchVideo")
+        m.video.qualityOptions = quality_options
+    else
+        m.video = m.top.CreateChild("CustomVideo")
+    end if
     httpAgent = CreateObject("roHttpAgent")
     httpAgent.setCertificatesFile("common:/certs/ca-bundle.crt")
     httpAgent.InitClientCertificates()
@@ -71,6 +95,7 @@ sub playContent()
     m.video.setHttpAgent(httpAgent)
     m.video.notificationInterval = 1
     m.video.observeField("toggleChat", "onToggleChat")
+    m.video.observeField("QualityChangeRequestFlag", "onQualityChangeRequested")
     videoBookmarks = get_user_setting("VideoBookmarks", "")
     m.video.video_type = m.top.contentRequested.contentType
     m.video.video_id = m.top.contentRequested.contentId
@@ -79,7 +104,7 @@ sub playContent()
     else
         m.video.videoBookmarks = {}
     end if
-    ? "playContent"; m.top.content
+    ? "Quality Selection: "; m.top.content
     content = m.top.content
     if content <> invalid then
         m.video.content = content
@@ -102,7 +127,6 @@ sub playContent()
         end if
         m.PlayerTask = CreateObject("roSGNode", "PlayerTask")
         m.PlayerTask.observeField("state", "taskStateChanged")
-        m.PlayerTask.observeField("QualityChangeRequestFlag", "onQualitySelectButtonPressed")
         m.PlayerTask.video = m.video
         m.PlayerTask.control = "RUN"
         initChat()
@@ -117,13 +141,15 @@ sub exitPlayer()
     end if
     m.PlayerTask = invalid
     'signal upwards that we are done
-    m.top.state = "done"
+    if m.allowBreak
+        m.top.state = "done"
+    end if
 end sub
 
 
 function onKeyEvent(key, press) as boolean
     if press
-        ? "Hero Scene Key Event: "; key
+        ? "[VideoPlayer] Key Event: "; key
         if key = "back" then
             'handle Back button, by exiting play
             m.chatWindow.callFunc("stopJobs")
@@ -140,6 +166,7 @@ sub init()
     m.chatWindow = m.top.findNode("chat")
     m.chatWindow.fontSize = get_user_setting("ChatFontSize")
     m.chatWindow.observeField("visible", "onChatVisibilityChange")
+    m.allowBreak = true
 end sub
 
 
@@ -162,166 +189,6 @@ sub onChatVisibilityChange()
         m.video.height = 0
     end if
 end sub
-
-
-' function handleContent()
-'     if m.top.contentRequested.contentType = "CLIP"
-'         playClip()
-'     else
-'         ? "Type: "; m.top.contentRequested.contentType
-'         m.getTwitchDataTask = CreateObject("roSGNode", "TwitchApiTask")
-'         m.getTwitchDataTask.observeField("response", "handleResponse")
-'         if m.top.contentRequested.contentType = "VOD"
-'             request = {
-'                 type: "getVodPlayerWrapperQuery"
-'                 params: {
-'                     id: m.top.contentRequested.contentId
-'                 }
-'             }
-'         end if
-'         if m.top.contentRequested.contentType = "LIVE"
-'             request = {
-'                 type: "getStreamPlayerQuery"
-'                 params: {
-'                     id: m.top.contentRequested.streamerLogin
-'                 }
-'             }
-'         end if
-'         m.getTwitchDataTask.request = request
-'         m.getTwitchDataTask.functionName = request.type
-'         m.getTwitchDataTask.control = "run"
-'     end if
-' end function
-
-' function handleResponse()
-'     if m.top.contentRequested.contentType = "VOD"
-'         usherUrl = "https://usher.ttvnw.net/vod/" + m.gettwitchdatatask.response.data.video.id + ".m3u8?playlist_include_framerate=true&allow_source=true&player_type=pulsar&player_backend=mediaplayer&nauth=" + m.gettwitchdatatask.response.data.video.playbackAccessToken.value.EncodeUri() + "&nauthsig=" + m.gettwitchdatatask.response.data.video.playbackAccessToken.signature
-'     else if m.top.contentRequested.contentType = "LIVE"
-'         usherUrl = "https://usher.ttvnw.net/api/channel/hls/" + m.gettwitchdatatask.response.data.user.login + ".m3u8?playlist_include_framerate=true&allow_source=true&player_type=pulsar&player_backend=mediaplayer&lr=true&token=" + m.gettwitchdatatask.response.data.user.stream.playbackaccesstoken.value.EncodeUri() + "&sig=" + m.gettwitchdatatask.response.data.user.stream.playbackaccesstoken.signature
-'     end if
-'     ' return usherUrl
-'     m.usherRequestTask = createObject("roSGNode", "httpRequest")
-'     m.usherRequestTask.observeField("response", "handleUsherResponse")
-'     m.usherRequestTask.request = {
-'         url: usherUrl
-'         headers: {
-'             "Accept": "*/*"
-'             "Origin": "https://switch.tv.twitch.tv"
-'             "Referer": "https://switch.tv.twitch.tv/"
-'         }
-'         method: "GET"
-'     }
-'     m.usherRequestTask.control = "RUN"
-' end function
-
-' function handleUsherResponse()
-'     rsp = m.usherRequestTask.response.data
-'     list = rsp.Split(chr(10))
-'     first_stream_link = ""
-'     last_stream_link = ""
-'     link = ""
-'     cnt = 0
-'     ' streamitems_all = []
-'     stream_objects = []
-'     for line = 2 to list.Count() - 1
-'         stream_info = list[line + 1].Split(",")
-'         streamobject = {}
-'         for info = 0 to stream_info.Count() - 1
-'             info_parsed = stream_info[info].Split("=")
-'             streamobject[info_parsed[0].replace("#EXT-X-STREAM-INF:", "")] = toString(info_parsed[1], true).replace(chr(34), "")
-'         end for
-'         streamobject["URL"] = list[line + 2]
-'         stream_objects.push(streamobject)
-'         line += 2
-'     end for
-'     stream_bitrates = []
-'     stream_urls = []
-'     stream_qualities = []
-'     stream_content_ids = []
-'     stream_sticky = []
-'     for each stream_item in stream_objects
-'         if stream_item["VIDEO"] = "chunked"
-'             res = stream_item["RESOLUTION"].split("x")[1]
-'             if stream_item["FRAME-RATE"] <> invalid
-'                 fps = stream_item["FRAME-RATE"].split(".")[0]
-'             end if
-'             value = res + "p"
-'             if fps <> invalid
-'                 value = value + fps
-'             end if
-'         else
-'             value = stream_item["VIDEO"]
-'         end if
-'         if Int(Val(stream_item["RESOLUTION"].split("x")[1])) >= 720
-'             stream_quality = "HD"
-'         else
-'             stream_quality = "SD"
-'         end if
-'         resolution = value.split("p")[0]
-'         fps = value.split("p")[1]
-'         if resolution <> invalid
-'             if resolution.ToInt() > get_user_setting("VideoQualitySetting").ToInt()
-'                 ? "Res Skip: "; value
-'                 continue for
-'             end if
-'         end if
-'         if fps <> invalid
-'             if fps.ToInt() > get_user_setting("VideoFramerateSetting").ToInt()
-'                 ? "Fps Skip: "; value
-'                 continue for
-'             end if
-'         end if
-'         stream_qualities.push(stream_quality)
-'         stream_content_ids.push(value)
-'         stream_urls.push(stream_item["URL"])
-'         stream_bitrates.push(Int(Val(stream_item["BANDWIDTH"])) / 1000)
-'         stream_sticky.push("false")
-'     end for
-'     ' The stream needs a couple of seconds to load on AWS's server side before we display back to user.
-'     ' The idea is that this will provide a better user experience by removing stuttering.
-'     playVideo({
-'         streamUrls: stream_urls
-'         streamQualities: stream_qualities
-'         streamContentIDs: stream_content_ids
-'         streamBitrates: stream_bitrates
-'         streamStickyHttpRedirects: stream_sticky
-'     })
-' end function
-
-
-
-' function playVideo(data)
-'     vidContent = createObject("roSGNode", "ContentNode")
-'     vidContent.title = m.top.contentRequested.contentTitle
-'     vidContent.url = data.streamUrls[0]
-'     vidContent.streamFormat = "hls"
-'     ? "break"
-'     m.video.video_id = m.top.contentRequested.contentId
-'     m.video.video_type = "VOD"
-'     m.video.streamUrls = data.streamUrls
-'     m.video.streamQualities = data.streamQualities
-'     m.video.streamContentIds = data.streamContentIds
-'     m.video.streamBitrates = data.streamBitrates
-'     m.video.streamStickyHttpRedirects = data.streamStickyHttpRedirects
-'     m.video.channelUsername = m.top.contentRequested.streamerDisplayName
-'     m.video.channelAvatar = m.top.contentRequested.streamerProfileImageUrl
-'     m.video.videoTitle = m.top.contentRequested.contentTitle
-'     m.video.content = vidContent
-'     m.video.visible = true
-'     m.video.setFocus(true)
-'     m.video.enableCookies()
-'     checkBookmarks()
-'     m.video.control = "play"
-'     ' I'm too tired to do this better, but channel_id needs to be set before channel
-'     m.chatWindow.channel_id = m.top.contentRequested.streamerId
-'     m.chatWindow.channel = m.top.contentRequested.streamerLogin
-'     if get_user_setting("ChatOption", "true") = "true"
-'         m.chatWindow.visible = true
-'         m.video.chatIsVisible = m.chatWindow.visible
-'     else
-'         m.chatWindow.visible = false
-'     end if
-' end function
 
 function checkBookmarks()
     ' ? "Check the bookmark"

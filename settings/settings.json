@@ -152,5 +152,22 @@
                 "id": "ASC_followerCount"
             }
         ]
+    },
+        {
+        "title": "Preferred Video Quality",
+        "description": "Determines the default behavior of video quality selection when starting a stream.",
+        "settingName": "playback.video.quality",
+        "type": "radio",
+        "default": "auto",
+        "options": [
+            {
+                "title": "Automatic (Adjust based on network conditions)",
+                "id": "auto"
+            },
+            {
+                "title": "Highest (Choose highest possible option)",
+                "id": "highest"
+            }
+        ]
     }
 ]
