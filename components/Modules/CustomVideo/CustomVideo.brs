@@ -12,7 +12,7 @@ function init()
     m.controlButton = m.top.findNode("controlButton")
     m.timeTravelButton = m.top.findNode("timeTravelButton")
     m.messagesButton = m.top.findNode("messagesButton")
-    m.qualitySelectButton = m.top.findNode("qualitySelectButton")
+    ' m.qualitySelectButton = m.top.findNode("qualitySelectButton")
     m.QualityDialog = m.top.findNode("QualityDialog")
     m.glow = m.top.findNode("bg-glow")
     m.timeTravelRect = m.top.findNode("timeTravelRect")
@@ -100,7 +100,7 @@ function resetProgressBar()
     m.controlButton.blendColor = "0xFFFFFFFF"
     m.messagesButton.blendColor = "0xFFFFFFFF"
     m.timeTravelButton.blendColor = "0xFFFFFFFF"
-    m.qualitySelectButton.blendColor = "0xFFFFFFFF"
+    ' m.qualitySelectButton.blendColor = "0xFFFFFFFF"
     m.currentProgressBarState = 0
     m.thumbnailImage.visible = false
     m.progressBar.visible = false
@@ -146,7 +146,7 @@ function hideOverlay()
     m.controlButton.blendColor = "0xFFFFFFFF"
     m.messagesButton.blendColor = "0xFFFFFFFF"
     m.timeTravelButton.blendColor = "0xFFFFFFFF"
-    m.qualitySelectButton.blendColor = "0xFFFFFFFF"
+    ' m.qualitySelectButton.blendColor = "0xFFFFFFFF"
     m.currentProgressBarState = 0
     m.thumbnailImage.visible = false
     m.progressBar.visible = false
@@ -400,7 +400,7 @@ function onKeyEvent(key, press) as boolean
                 m.controlButton.blendColor = "0xBD00FFFF"
             else if m.currentProgressBarState = 8
                 m.currentProgressBarState = 3
-                m.qualitySelectButton.blendColor = "0xFFFFFFFF"
+                ' m.qualitySelectButton.blendColor = "0xFFFFFFFF"
                 w = m.timeTravelButton.width
                 h = m.timeTravelButton.height
                 m.glow.translation = [m.timeTravelButton.translation[0] - 30 + w / 2, m.timeTravelButton.translation[1] - 30 + h / 2]
