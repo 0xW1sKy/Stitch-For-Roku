@@ -98,7 +98,7 @@ sub main()
 
 
         if m.top.contentRequested.contentType = "VOD"
-            usherUrl = "https://usher.ttvnw.net/vod/" + rsp.data.video.id + ".m3u8?playlist_include_framerate=true&allow_source=true&player_type=pulsar&player_backend=mediaplayer&reassignments_supported=true&nauth=" + rsp.data.video.playbackAccessToken.value.EncodeUri() + "&nauthsig=" + rsp.data.video.playbackAccessToken.signature
+            usherUrl = "https://usher.ttvnw.net/vod/" + rsp.data.video.id + ".m3u8?playlist_include_framerate=true&allow_source=true&player_type=pulsar&player_backend=mediaplayer&reassignments_supported=true&supported_codecs=avc1&transcode_mode=cbr_v1&nauth=" + rsp.data.video.playbackAccessToken.value.EncodeUri() + "&nauthsig=" + rsp.data.video.playbackAccessToken.signature
         else if m.top.contentRequested.contentType = "LIVE"
             ' if m.top.contentRequested.streamerLogin = "primevideo"
             '     ? "Detected Prime Video"
@@ -110,15 +110,15 @@ sub main()
             drm_needed = false
             if m.top.contentRequested.streamerLogin = "primevideo"
                 drm_needed = true
-                appData = get_drm_data(rsp.data.user.login, rsp.data.user.stream.playbackaccesstoken.value, rsp.data.user.stream.playbackaccesstoken.signature)
+                drm_data = get_drm_data(rsp.data.user.login, rsp.data.user.stream.playbackaccesstoken.value, rsp.data.user.stream.playbackaccesstoken.signature)
                 drm_params = {
-                    appData: appData
-                    keySystem: "Widevine"
-                    licenseServerURL: "https://wv-keyos-twitch.licensekeyserver.com/"
+                    keySystem: "widevine",
+                    licenseServerUrl: "https://wv-keyos-twitch.licensekeyserver.com/",
+                    appData: drm_data
                     ' licenseRenewURL:  'Optional?
                     ' serializationURL: "" 'Optional?
                     ' serviceCert: "" 'Optional?
-                    ' lic_acq_window: "" 'Optional?
+                    lic_acq_window: "1000" 'Optional?
                 }
                 ' authUrl = "https://usher.ttvnw.net/api/authxml/" + rsp.data.user.login + "?token=" + rsp.data.user.stream.playbackaccesstoken.value.EncodeUriComponent() + "&sig=" + rsp.data.user.stream.playbackaccesstoken.signature.EncodeUriComponent()
                 ' authreq = HttpRequest({
@@ -249,6 +249,7 @@ sub main()
                 StreamContentIds: [value]
                 StreamBitrates: [Int(Val(stream_item["BANDWIDTH"])) / 1000]
                 drmParams: drm_params
+                ignoreStreamErrors: true
             }
             )
         end for
@@ -261,6 +262,8 @@ sub main()
             StreamQualities: stream_qualities
             StreamContentIDs: stream_content_ids
             StreamStickyHttpRedirects: stream_sticky
+            drmParams: drm_params
+            ignoreStreamErrors: true
         })
 
         responseObj = []

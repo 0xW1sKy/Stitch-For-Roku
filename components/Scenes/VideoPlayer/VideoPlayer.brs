@@ -69,6 +69,27 @@ function onQualityChangeRequested()
     m.allowBreak = true
 end function
 
+function build_drm_httpagent(appdata)
+    drmhttpAgent = CreateObject("roHttpAgent")
+    drmhttpAgent.setCertificatesFile("common:/certs/ca-bundle.crt")
+    drmhttpAgent.InitClientCertificates()
+    drmhttpAgent.AddHeader("X-Roku-Reserved-Dev-Id", "")
+    drmhttpAgent.enableCookies()
+    drmhttpAgent.addheader("Accept", "*/*")
+    drmhttpAgent.addHeader("content-type", "application/octet-stream")
+    drmhttpAgent.addheader("authority", "wv-keyos-twitch.licensekeyserver.com")
+    drmhttpAgent.addheader("method", "POST")
+    drmhttpAgent.addheader("path", "/")
+    drmhttpAgent.addheader("scheme", "https")
+    drmhttpAgent.addheader("accept-encoding", "gzip, deflate, br")
+    drmhttpAgent.addheader("accept-language", "en-US,en;q=0.9")
+    drmhttpAgent.addheader("cache-control", "no-cache")
+    drmhttpAgent.addheader("Origin", "https://switch.tv.twitch.tv")
+    drmhttpAgent.addheader("Referer", "https://switch.tv.twitch.tv/")
+    drmhttpAgent.addheader("customdata", appdata)
+    return drmhttpAgent
+end function
+
 sub playContent()
     if m.video <> invalid
         m.top.removeChild(m.video)
@@ -90,8 +111,6 @@ sub playContent()
     httpAgent.InitClientCertificates()
     httpAgent.enableCookies()
     httpAgent.addheader("Accept", "*/*")
-    httpAgent.addHeader("content-type", "application/octet-stream")
-    httpAgent.addheader("authority", "wv-keyos-twitch.licensekeyserver.com")
     httpAgent.addheader("Origin", "https://switch.tv.twitch.tv")
     httpAgent.addheader("Referer", "https://switch.tv.twitch.tv/")
     m.video.setHttpAgent(httpAgent)
@@ -108,6 +127,10 @@ sub playContent()
     end if
     ? "Quality Selection: "; m.top.content
     content = m.top.content
+    if content?.drmParams?.appdata <> invalid
+        drmhttpagent = build_drm_httpagent(content.drmParams.appdata)
+        m.video.drmHttpAgent = drmhttpAgent
+    end if
     if content <> invalid then
         m.video.content = content
         if content.streamerProfileImageUrl <> invalid
