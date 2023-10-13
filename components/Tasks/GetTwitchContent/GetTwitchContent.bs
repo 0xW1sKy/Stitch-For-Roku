@@ -70,12 +70,75 @@ sub main()
                 }
             })
         end if
+        ' if m.top.contentRequested.streamerLogin = "primevideo"
+        '     rsp = TwitchGraphQLRequest({
+        '         operationName: "PlaybackAccessToken_Template"
+        '         query: `query PlaybackAccessToken_Template(
+        '             $login: String!,
+        '             $isLive: Boolean!,
+        '             $vodID: ID!,
+        '             $isVod: Boolean!,
+        '             $playerType: String!) {
+        '                   streamPlaybackAccessToken(
+        '                     channelName: $login,
+        '                     params: {
+        '                         platform: \"web\",
+        '                         playerBackend: \"mediaplayer\",
+        '                         playerType: $playerType
+        '                     }) @include(if: $isLive) {    value    signature   authorization { isForbidden forbiddenReasonCode }   __typename  }  videoPlaybackAccessToken(id: $vodID, params: {platform: \"web\", playerBackend: \"mediaplayer\", playerType: $playerType}) @include(if: $isVod) {    value    signature   __typename  }}`
+        '         variables: {
+        '             "isLive": true,
+        '             "login": "primevideo",
+        '             "isVod": false,
+        '             "vodID": "",
+        '             "playerType": "site"
+        '     } }
+        '     )
+        ' end if
 
 
         if m.top.contentRequested.contentType = "VOD"
             usherUrl = "https://usher.ttvnw.net/vod/" + rsp.data.video.id + ".m3u8?playlist_include_framerate=true&allow_source=true&player_type=pulsar&player_backend=mediaplayer&reassignments_supported=true&nauth=" + rsp.data.video.playbackAccessToken.value.EncodeUri() + "&nauthsig=" + rsp.data.video.playbackAccessToken.signature
         else if m.top.contentRequested.contentType = "LIVE"
-            usherUrl = "https://usher.ttvnw.net/api/channel/hls/" + rsp.data.user.login + ".m3u8?allow_source=true&token=" + rsp.data.user.stream.playbackaccesstoken.value.EncodeUriComponent() + "&sig=" + rsp.data.user.stream.playbackaccesstoken.signature.EncodeUriComponent()
+            ' if m.top.contentRequested.streamerLogin = "primevideo"
+            '     ? "Detected Prime Video"
+            '     usherUrl = "https://usher.ttvnw.net/api/channel/hls/" + m.top.contentRequested.streamerLogin + ".m3u8?allow_source=true&token=" + rsp.data.streamplaybackaccesstoken.value.EncodeUriComponent() + "&fast_bread=true&player_backend=mediaplayer&playlist_include_framerate=true&reassignments_supported=true&supported_codecs=avc1&transcode_mode=cbr_v1&cdm=wv&player_version=1.22.0" + "&sig=" + rsp.data.streamplaybackaccesstoken.signature.EncodeUriComponent()
+            '     ' usherUrl = usherUrl +
+            '     ? "usher Url: "; usherUrl
+            ' else
+            drm_params = invalid
+            drm_needed = false
+            if m.top.contentRequested.streamerLogin = "primevideo"
+                drm_needed = true
+                appData = get_drm_data(rsp.data.user.login, rsp.data.user.stream.playbackaccesstoken.value, rsp.data.user.stream.playbackaccesstoken.signature)
+                drm_params = {
+                    appData: appData
+                    keySystem: "Widevine"
+                    licenseServerURL: "https://wv-keyos-twitch.licensekeyserver.com/"
+                    ' licenseRenewURL:  'Optional?
+                    ' serializationURL: "" 'Optional?
+                    ' serviceCert: "" 'Optional?
+                    ' lic_acq_window: "" 'Optional?
+                }
+                ' authUrl = "https://usher.ttvnw.net/api/authxml/" + rsp.data.user.login + "?token=" + rsp.data.user.stream.playbackaccesstoken.value.EncodeUriComponent() + "&sig=" + rsp.data.user.stream.playbackaccesstoken.signature.EncodeUriComponent()
+                ' authreq = HttpRequest({
+                '     url: authUrl
+                '     headers: {
+                '         "Accept": "*/*"
+                '         "authority": "usher.ttvnw.net"
+                '         "Origin": "https://switch.tv.twitch.tv"
+                '         "Referer": "https://switch.tv.twitch.tv/"
+                '     }
+                '     method: "GET"
+                ' })
+            end if
+            usherUrl = "https://usher.ttvnw.net/api/channel/hls/" + rsp.data.user.login + ".m3u8?pbac=true&pblm=normal&cdm=wv&allow_source=true&token=" + rsp.data.user.stream.playbackaccesstoken.value.EncodeUriComponent() + "&sig=" + rsp.data.user.stream.playbackaccesstoken.signature.EncodeUriComponent()
+            ' end if
+
+
+
+            '&p=9547729
+            '&play_session_id=84a927ffdc7aa8dddab6de3669adc969
             ' "https://usher.ttvnw.net/api/channel/hls/ironmouse.m3u8?token=%7B%22adblock%22:false,%22authorization%22:%7B%22forbidden%22:false,%22reason%22:%22%22%7D,%22blackout_enabled%22:false,%22channel%22:%22ironmouse%22,%22channel_id%22:175831187,%22chansub%22:%7B%22restricted_bitrates%22:%5B%5D,%22view_until%22:1924905600%7D,%22ci_gb%22:false,%22geoblock_reason%22:%22%22,%22device_id%22:%22oN9A4HDHKYyKaVJYHhyPnD2gpXrEESEnw9v24aL9%22,%22expires%22:1690923984,%22extended_history_allowed%22:false,%22game%22:%22%22,%22hide_ads%22:true,%22https_required%22:true,%22mature%22:false,%22partner%22:false,%22platform%22:%22switch_web_tv%22,%22player_type%22:%22pulsar%22,%22private%22:%7B%22allowed_to_view%22:true%7D,%22privileged%22:false,%22role%22:%22%22,%22server_ads%22:true,%22show_ads%22:false,%22subscriber%22:false,%22turbo%22:true,%22user_id%22:116527123,%22user_ip%22:%2276.196.110.129%22,%22version%22:2%7D&sig=f8fe10963eee2c38b982c463fc552bcde6fb5aad"
         end if
         req = HttpRequest({
@@ -94,8 +157,19 @@ sub main()
             end if
             sleep(10)
         end while
+        if usher_rsp.Left(1) = "["
+            usher_rsp = invalid
+            while true
+                usher_rsp = ParseJson(req.send())
+                if usher_rsp <> invalid
+                    exit while
+                end if
+                sleep(10)
+            end while
+            ? "break"
+        end if
 
-
+        main_stream_format = "hls"
         list = usher_rsp.Split(chr(10))
         first_stream_link = ""
         last_stream_link = ""
@@ -155,7 +229,7 @@ sub main()
             stream_sticky.push(false)
             stream_content_ids.push(value)
             stream_urls.push(stream_item["URL"])
-            stream_formats.push("hls")
+            stream_formats.push(main_stream_format)
             stream = {
                 url: stream_item["URL"]
                 stickyredirects: false
@@ -163,6 +237,7 @@ sub main()
                 contentid: value
                 bitrate: Int(Val(stream_item["BANDWIDTH"])) / 1000
             }
+
             streams.push(stream)
             metadata.push(
             {
@@ -173,6 +248,7 @@ sub main()
                 StreamQualities: [stream_quality]
                 StreamContentIds: [value]
                 StreamBitrates: [Int(Val(stream_item["BANDWIDTH"])) / 1000]
+                drmParams: drm_params
             }
             )
         end for
@@ -201,4 +277,30 @@ sub main()
     end if
     m.top.metadata = metadata
     m.top.response = content
+    ? "break"
 end sub
+
+
+function get_drm_data(login, playbacktoken, signature)
+    authUrl = "https://usher.ttvnw.net/api/authxml/" + login + "?token=" + playbacktoken.EncodeUriComponent() + "&sig=" + signature.EncodeUriComponent()
+    authreq = HttpRequest({
+        url: authUrl
+        headers: {
+            "authority": "usher.ttvnw.net"
+            "Accept": "*/*"
+            "Origin": "https://switch.tv.twitch.tv"
+            "Referer": "https://switch.tv.twitch.tv/"
+        }
+        method: "GET"
+    })
+    while true
+        auth_rsp = authreq.send().getString()
+        if auth_rsp <> invalid
+            exit while
+        end if
+        sleep(10)
+    end while
+    ? "DRM Response: "; auth_rsp
+    ? "break"
+    return auth_rsp
+end function
