@@ -69,7 +69,8 @@ sub updateMenuOptions()
             font.size = m.top.menuFontSize
             font.uri = m.top.menuFontUri
             newItem.textFont = font
-            newItem.minChars = div_ceiling(109, m.top.menuOptionsText.count())
+            newItem.minChars = div_ceiling(108, m.top.menuOptionsText.count())
+            newItem.minWidth = 240
             newItem.focusedTextFont = font
             newItem.textColor = m.top.menuTextColor
             newItem.focusedTextColor = m.top.menuFocusColor
