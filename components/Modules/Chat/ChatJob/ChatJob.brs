@@ -3,6 +3,22 @@ function init()
     m.delay = 29
 end function
 
+function loginToChat(tcpListen)
+    tcpListen.SendStr("CAP REQ :twitch.tv/tags twitch.tv/commands" + Chr(13) + Chr(10))
+    user_auth_token = get_user_setting("access_token")
+    m.loggedinUserName = get_user_setting("login")
+    if m.loggedInUsername <> "" and user_auth_token <> invalid and user_auth_token <> ""
+        '? "PASS "
+        tcpListen.SendStr("PASS oauth:" + user_auth_token + Chr(13) + Chr(10))
+        '? "USER "
+        tcpListen.SendStr("USER " + m.loggedinUsername + " 8 * :" + m.loggedinUsername + Chr(13) + Chr(10))
+        '? "NICK "
+        tcpListen.SendStr("NICK " + m.loggedinUsername + Chr(13) + Chr(10))
+    else
+        tcpListen.SendStr("PASS SCHMOOPIIE" + Chr(13) + Chr(10))
+        tcpListen.SendStr("NICK justinfan32006" + Chr(13) + Chr(10))
+    end if
+end function
 
 function main()
     ? "[ChatJob] - main"
@@ -13,11 +29,13 @@ function main()
         addr.SetAddress("irc.chat.twitch.tv:6667")
         tcpListen.SetSendToAddress(addr)
         tcpListen.notifyReadable(true)
-        '? "connect "
         tcpListen.Connect()
-        tcpListen.SendStr("CAP REQ :twitch.tv/tags twitch.tv/commands" + Chr(13) + Chr(10))
-        tcpListen.SendStr("PASS SCHMOOPIIE" + Chr(13) + Chr(10))
-        tcpListen.SendStr("NICK justinfan32006" + Chr(13) + Chr(10))
+        loginToChat(tcpListen)
+        tcpListen.eOK()
+        tcpListen.IsReadable()
+        tcpListen.IsWritable()
+        tcpListen.IsException()
+        tcpListen.eSuccess()
         ? "[ChatJob] - JOIN - "; m.top.channel
         tcpListen.SendStr("JOIN #" + m.top.channel + Chr(13) + Chr(10))
         queue = createObject("roArray", 300, true)
@@ -39,9 +57,7 @@ function main()
                 tcpListen = createObject("roStreamSocket")
                 tcpListen.SetSendToAddress(addr)
                 tcpListen.Connect()
-                tcpListen.SendStr("CAP REQ :twitch.tv/tags twitch.tv/commands" + Chr(13) + Chr(10))
-                tcpListen.SendStr("PASS SCHMOOPIIE" + Chr(13) + Chr(10))
-                tcpListen.SendStr("NICK justinfan32006" + Chr(13) + Chr(10))
+                loginToChat(tcpListen)
                 tcpListen.SendStr("JOIN #" + m.top.channel + Chr(13) + Chr(10))
             end if
             if not received = ""
@@ -56,6 +72,16 @@ function main()
                 ' Check if delay is complete using irc timestamp
                 oldestComment = queue.peek()
                 _parsedMessage = MessageParser(oldestComment)
+                if _parsedMessage?.command?.command <> invalid
+                    command = _parsedMessage.command.command
+                    if command <> "PRIVMSG" and command <> "USERNOTICE" and command <> "USERSTATE"
+                        ? "Chat Command: "; FormatJson(_parsedMessage, 256)
+                    end if
+                    if command = "USERNOTICE" or command = "USERSTATE"
+                        ? "pauseable event"
+                        sleep(5)
+                    end if
+                end if
                 currentTimestamp = CreateObject("roDateTime").AsSeconds()
                 if _parsedMessage?.tags?.tmi_sent_ts <> invalid
                     commentTimeStamp = Val(_parsedMessage.tags.tmi_sent_ts.left(10), 10)
@@ -172,11 +198,12 @@ function parseTags(tags)
         end if
         if parsedTag[0] = "badges" or parsedTag[0] = "badge-info"
             if tagValue <> invalid
-                dict = {}
+                dict = []
                 badges = tagValue.split(",")
                 for each pair in badges
-                    badgeParts = pair.split("/")
-                    dict[badgeParts[0]] = badgeParts[1]
+                    ' badgeParts = pair.split("/")
+                    dict.push(pair)
+                    ' dict[badgeParts[0]] = badgeParts[1]
                 end for
                 dictParsedtags[parsedTag[0].replace("-", "_")] = dict
             else
@@ -257,8 +284,13 @@ end function
 function parseCommand(rawCommandComponent)
     parsedCommand = invalid
     commandParts = rawCommandComponent.split(" ")
-
-    if commandParts[0] = "JOIN" or commandParts[0] = "PART" or commandParts[0] = "NOTICE" or commandParts[0] = "CLEARCHAT" or commandParts[0] = "HOSTTARGET" or commandParts[0] = "PRIVMSG"
+    if commandParts[0] = "JOIN" or commandParts[0] = "PART" or commandParts[0] = "NOTICE" or commandParts[0] = "HOSTTARGET" or commandParts[0] = "PRIVMSG"
+        parsedCommand = {
+            command: commandParts[0]
+            channel: commandParts[1]
+        }
+    else if commandParts[0] = "USERNOTICE"
+        ' User Subscribed Event
         parsedCommand = {
             command: commandParts[0]
             channel: commandParts[1]
@@ -290,19 +322,24 @@ function parseCommand(rawCommandComponent)
         parsedCommand = {
             command: commandParts[0]
         }
+    else if commandParts[0] = "CLEARMSG" or commandParts[0] = "CLEARCHAT"
+        ? "Twitch is requesting a message to be cleared"; formatJSON(commandParts, 256)
+    else if commandParts[0] = "WHISPER"
+        ? "WhisperReceived"; formatJSON(commandParts, 256)
     else if commandParts[0] = "421"
-        ? "Unsupported IRC command: "; commandParts[2]
+        ? "Unsupported IRC command: "; formatJSON(commandParts, 256)
         return invalid
     else if commandParts[0] = "001"
+        ' Welcome Message
         parsedCommand = {
             command: commandParts[0]
             channel: commandParts[1]
         }
     else if commandParts[0] = "002" or commandParts[0] = "003" or commandParts[0] = "004" or commandParts[0] = "353" or commandParts[0] = "366" or commandParts[0] = "372" or commandParts[0] = "375" or commandParts[0] = "376"
-        ? "Numeric Message: "; commandParts[0]
+        ? "Numeric Message: "; formatJSON(commandParts, 256)
         return invalid
     else
-        ? "Unexpected Command: "; commandParts[0]
+        ? "Unexpected Command: ";formatJSON(commandParts, 256)
         return invalid
     end if
     return parsedCommand

@@ -265,8 +265,9 @@ sub onNewCommentObj()
         end if
         badges = []
         if comment?.tags?.badges <> invalid
-            for each key in comment.tags.badges.keys()
-                badgeID = key + "/" + comment.tags.badges[key]
+            for each key in comment.tags.badges
+                ' badgeID = key + "/" + comment.tags.badges[key]
+                badgeID = key
                 badges.push(badgeID)
             end for
         end if
