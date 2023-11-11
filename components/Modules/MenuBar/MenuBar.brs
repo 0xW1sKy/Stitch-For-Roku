@@ -62,7 +62,6 @@ sub updateMenuOptions()
         yoffset = m.menuOptions.translation[1]
         m.menuOptions.translation = "[" + xoffset.ToStr() + "," + yoffset.ToStr() + "]"
     end if
-    buttonSpace = m.global.constants.screenWidth
     icons = []
     if m.top.showSearchIcon
         icons.push(buildIcon("Search"))
@@ -73,9 +72,6 @@ sub updateMenuOptions()
     if m.top.showLoginIcon
         icons.push(buildIcon("LoginPage"))
     end if
-    for each icon in icons
-        buttonSpace = buttonSpace - icon.localboundingrect().width
-    end for
     m.addedTranslation = 0
     menuButtons = []
     for i = 0 to (m.top.menuOptionsText.count() - 1)
@@ -84,7 +80,7 @@ sub updateMenuOptions()
             font = CreateObject("roSGNode", "Font")
             font.size = m.top.menuFontSize
             font.uri = m.top.menuFontUri
-            newItem.minWidth = buttonSpace / 4
+            newItem.minWidth = 245
             newItem.textFont = font
             newItem.focusedTextFont = font
             newItem.textColor = m.top.menuTextColor
