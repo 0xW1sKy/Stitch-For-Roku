@@ -33,12 +33,13 @@ function buildIcon(icon)
         "settings": m.global.constants.defaultIcons.settings
         "loginpage": get_user_setting("profile_image_url", m.global.constants.defaultIcons.login)
     }
-    newItem = createObject("roSGNode", "JFButton")
+    newItem = createObject("roSGNode", "Button")
     newItem.id = icon
     newItem.textColor = m.top.menuTextColor
     newItem.focusedTextColor = m.top.menuTextColor
     newItem.iconUri = map[icon]
     newItem.focusedIconUri = map[icon]
+    newItem.minWidth = 0
     newItem.height = m.top.menuOptionsHeight
     newItem.focusFootprintBitmapUri = "pkg:/images/FocusFootprint.9.png"
     newItem.focusBitmapUri = "pkg:/images/FocusFootprint.9.png"
@@ -49,7 +50,7 @@ function buildIcon(icon)
     newItem.getchild(4).blendColor = m.top.menuFocusColor
     newItem.getchild(4).width = m.top.menuFontSize * 2
     newItem.getchild(4).height = m.top.menuFontSize * 2
-    m.menuOptions.appendChild(newItem)
+    return newItem
 end function
 
 sub updateMenuOptions()
@@ -61,16 +62,30 @@ sub updateMenuOptions()
         yoffset = m.menuOptions.translation[1]
         m.menuOptions.translation = "[" + xoffset.ToStr() + "," + yoffset.ToStr() + "]"
     end if
+    buttonSpace = m.global.constants.screenWidth
+    icons = []
+    if m.top.showSearchIcon
+        icons.push(buildIcon("Search"))
+    end if
+    if m.top.showSettingsIcon
+        icons.push(buildIcon("Settings"))
+    end if
+    if m.top.showLoginIcon
+        icons.push(buildIcon("LoginPage"))
+    end if
+    for each icon in icons
+        buttonSpace = buttonSpace - icon.localboundingrect().width
+    end for
     m.addedTranslation = 0
+    menuButtons = []
     for i = 0 to (m.top.menuOptionsText.count() - 1)
         if m.top.menuOptionsText[i] <> ""
-            newItem = createObject("roSGNode", "JFButton")
+            newItem = createObject("roSGNode", "Button")
             font = CreateObject("roSGNode", "Font")
             font.size = m.top.menuFontSize
             font.uri = m.top.menuFontUri
+            newItem.minWidth = buttonSpace / 4
             newItem.textFont = font
-            newItem.minChars = div_ceiling(108, m.top.menuOptionsText.count())
-            newItem.minWidth = 240
             newItem.focusedTextFont = font
             newItem.textColor = m.top.menuTextColor
             newItem.focusedTextColor = m.top.menuFocusColor
@@ -82,18 +97,15 @@ sub updateMenuOptions()
             newItem.showFocusFootprint = false
             newItem.id = m.top.menuOptionsText[i]
             newItem.text = tr(m.top.menuOptionsText[i])
-            m.menuOptions.appendChild(newItem)
+            menuButtons.push(newItem)
         end if
     end for
-    if m.top.showSearchIcon
-        buildIcon("Search")
-    end if
-    if m.top.showSettingsIcon
-        buildIcon("Settings")
-    end if
-    if m.top.showLoginIcon
-        buildIcon("LoginPage")
-    end if
+    for each menuButton in menuButtons
+        m.menuOptions.appendChild(menuButton)
+    end for
+    for each icon in icons
+        m.menuOptions.appendchild(icon)
+    end for
 end sub
 
 sub handleUserLoginResponse()

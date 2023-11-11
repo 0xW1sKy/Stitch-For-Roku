@@ -1,5 +1,5 @@
 sub init()
-    m.top.observeFieldScoped("text", "onTextChanged")
+    ' m.top.observeFieldScoped("text", "onTextChanged")
     m.top.iconUri = ""
     m.top.focusedIconUri = ""
     m.top.showFocusFootprint = false
