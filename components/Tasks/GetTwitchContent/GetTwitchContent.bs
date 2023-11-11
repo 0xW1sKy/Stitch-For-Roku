@@ -198,7 +198,7 @@ sub main()
         else if userQualityPreference = "auto"
             content.setFields(metadata[0])
         end if
+        m.top.metadata = metadata
     end if
-    m.top.metadata = metadata
     m.top.response = content
 end sub
