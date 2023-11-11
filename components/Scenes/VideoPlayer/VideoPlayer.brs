@@ -141,8 +141,10 @@ sub exitPlayer()
     end if
     m.PlayerTask = invalid
     'signal upwards that we are done
+    ? "Allow Break?: "; m.allowBreak
     if m.allowBreak
         m.top.state = "done"
+        m.top.backpressed = true
     end if
 end sub
 
