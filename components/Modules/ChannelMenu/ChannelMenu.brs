@@ -16,42 +16,44 @@ sub onGetfocus()
     end if
 end sub
 
-function buildIcon(icon)
-    map = {}
-    if m.top.isFollowing
-        map["follow"] = "pkg:/images/heart.png"
-    else
-        map["follow"] = "pkg:/images/heart-0.png"
-    end if
-    newItem = createObject("roSGNode", "JFButton")
-    newItem.id = icon
-    newItem.textColor = m.top.menuTextColor
-    newItem.focusedTextColor = m.top.menuTextColor
-    newItem.iconUri = map[icon]
-    newItem.focusedIconUri = map[icon]
-    newItem.height = m.top.menuOptionsHeight
-    newItem.focusFootprintBitmapUri = "pkg:/images/FocusFootprint.9.png"
-    newItem.focusBitmapUri = "pkg:/images/FocusFootprint.9.png"
-    newItem.showFocusFootprint = false
-    newItem.getchild(3).blendColor = m.top.menuTextColor
-    newItem.getchild(3).width = m.top.menuFontSize * 2
-    newItem.getchild(3).height = m.top.menuFontSize * 2
-    newItem.getchild(4).blendColor = m.top.menuFocusColor
-    newItem.getchild(4).width = m.top.menuFontSize * 2
-    newItem.getchild(4).height = m.top.menuFontSize * 2
-    m.menuOptions.appendChild(newItem)
-end function
+' function buildIcon(icon)
+'     map = {}
+'     if m.top.isFollowing
+'         map["follow"] = "pkg:/images/heart.png"
+'     else
+'         map["follow"] = "pkg:/images/heart-0.png"
+'     end if
+'     newItem = createObject("roSGNode", "Button")
+'     newItem.id = icon
+'     newItem.textColor = m.top.menuTextColor
+'     newItem.focusedTextColor = m.top.menuTextColor
+'     newItem.iconUri = map[icon]
+'     newItem.focusedIconUri = map[icon]
+'     newItem.height = m.top.menuOptionsHeight
+'     newItem.minWidth = 0
+'     newItem.focusFootprintBitmapUri = "pkg:/images/FocusFootprint.9.png"
+'     newItem.focusBitmapUri = "pkg:/images/FocusFootprint.9.png"
+'     newItem.showFocusFootprint = false
+'     newItem.getchild(3).blendColor = m.top.menuTextColor
+'     newItem.getchild(3).width = m.top.menuFontSize * 2
+'     newItem.getchild(3).height = m.top.menuFontSize * 2
+'     newItem.getchild(4).blendColor = m.top.menuFocusColor
+'     newItem.getchild(4).width = m.top.menuFontSize * 2
+'     newItem.getchild(4).height = m.top.menuFontSize * 2
+'     m.menuOptions.appendChild(newItem)
+' end function
 
 sub updateMenuOptions()
     m.addedTranslation = 0
+    menuButtons = []
     for i = 0 to (m.top.menuOptionsText.count() - 1)
         if m.top.menuOptionsText[i] <> ""
-            newItem = createObject("roSGNode", "JFButton")
+            newItem = createObject("roSGNode", "Button")
             font = CreateObject("roSGNode", "Font")
             font.size = m.top.menuFontSize
             font.uri = m.top.menuFontUri
+            newItem.minWidth = 0
             newItem.textFont = font
-            newItem.minChars = 1
             newItem.focusedTextFont = font
             newItem.textColor = m.top.menuTextColor
             newItem.focusedTextColor = m.top.menuFocusColor
@@ -71,8 +73,11 @@ sub updateMenuOptions()
             else
                 newItem.text = tr(m.top.menuOptionsText[i])
             end if
-            m.menuOptions.appendChild(newItem)
+            menuButtons.push(newItem)
         end if
+    end for
+    for each menuButton in menuButtons
+        m.menuOptions.appendChild(menuButton)
     end for
     width = 0
     for i = 0 to (m.menuOptions.getChildCount() - 1)
