@@ -52,7 +52,7 @@ sub updateMenuOptions()
             font = CreateObject("roSGNode", "Font")
             font.size = m.top.menuFontSize
             font.uri = m.top.menuFontUri
-            newItem.minWidth = 0
+            newItem.minWidth = 220
             newItem.textFont = font
             newItem.focusedTextFont = font
             newItem.textColor = m.top.menuTextColor
