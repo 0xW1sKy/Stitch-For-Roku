@@ -1,0 +1,409 @@
+
+' function GIF_PARSER(params as object) as object
+'     if invalid <> params and invalid <> params["name"]
+'         p = { __version__: "0.0.0" }
+'         ' if "xmkr" = params["trackingmode"] or "hls" = params["trackingmode"]
+'         '     p = RAFX_getAdobeHLSPlugin(params)'
+'         ' else if "simple" = params["trackingmode"]'
+'         '     p = RAFX_getAdobeSimplePlugin(params)'
+'         ' end if
+'         ' p["__version__"] = "0b.47.34.14"
+'         p["__name__"] = params["name"]
+'         return p
+'     end if
+' end function
+
+' function GIF_PARSER_getBase(params as object) as object
+'     gp = {}
+'     gp.init = function(params = invalid as object) as void
+'         m.arrayUtil = ArrayUtil()
+'         m.logLevel = 0
+'         if invalid <> params
+'             if invalid <> params["logLevel"] then m.logLevel = params.logLevel
+'         end if
+'     end function
+'     gp.bitsToNum = function(ba)
+'         reduceFunc = function(s, n)
+'             return s * 2 + n
+'         end function
+'         return m.arrUtil.reduce(ba, reduceFunc, 0)
+'     end function
+
+'     gp.byteToBitArr = function(bite)
+'         a = []
+'         for i = 7 to 0 step -1
+'             a.push((bite (1 << i)) <> 0)
+'         end for
+'         return a
+'     end function
+' end function
+
+sub init()
+    m.top.functionName = "parse"
+    m.gifName = ""
+end sub
+
+function bitsToNum(ba)
+    ' reduceFunc = function(acc, element, index, arr)
+    '     return acc + element
+    ' end function
+    ' arrUtil = ArrayUtil()
+    ' arr = [5, 2, 3, 2, 1]
+    ' arrUtil.reduce(arr, reduceFunc)    // 13
+    ' arrUtil.reduce(arr, reduceFunc, 5) // 18
+    reduceFunc = function(s, n)
+        return s * 2 + n
+    end function
+    return m.arrUtil.reduce(ba, reduceFunc, 0)
+end function
+
+function byteToBitArr(bite)
+    a = []
+    for i = 7 to 0 step -1
+        a.push((bite (1 << i)) <> 0)
+    end for
+    return a
+end function
+
+class Stream
+    public data as string
+    public len as integer
+    public pos as integer
+
+    ' Constructor
+    public function init(data as string)
+        m.data = data
+        m.len = len(data)
+        m.pos = 0
+    end function
+
+    ' Method to read a byte
+    public function readByte() as integer
+        if m.pos >= m.len
+            throw "Attempted to read past end of stream."
+        end if
+        result = asc(mid(m.data, m.pos + 1, 1)) and &hFF
+        m.pos = m.pos + 1
+        return result
+    end function
+
+    ' Method to read n bytes
+    public function readBytes(n as integer) as object
+        bytes = []
+        for i = 1 to n
+            bytes.push(m.readByte())
+        end for
+        return bytes
+    end function
+
+    ' Method to read n characters and return as a string
+    public function read(n as integer) as string
+        s = ""
+        for i = 1 to n
+            s = s + chr(m.readByte())
+        end for
+        return s
+    end function
+
+    ' Method to read an unsigned value (Little-endian)
+    public function readUnsigned() as integer
+        a = m.readBytes(2)
+        return (a[1] << 8) + a[0]
+    end function
+end class
+
+function lzwDecode(minCodeSize as integer, data as string) as object
+    _pos = 0
+
+    ' Function to read a code of a given size
+    readCode = function(size as integer) as integer
+        code = 0
+        for i = 0 to size - 1
+            if (asc(mid(data, _pos >> 3 + 1, 1)) and (1 << (_pos and 7))) <> 0
+                code = code or (1 << i)
+            end if
+            _pos = _pos + 1
+        end for
+        return code
+    end function
+
+    output = []
+    clearCode = 1 << minCodeSize
+    eoiCode = clearCode + 1
+    codeSize = minCodeSize + 1
+    dict = []
+
+    ' Function to clear the dictionary
+    clear = function()
+        dict = []
+        codeSize = minCodeSize + 1
+        for i = 0 to clearCode - 1
+            dict[i] = [i]
+        end for
+        dict[clearCode] = []
+        dict[eoiCode] = invalid
+    end function
+
+
+    while true
+        last = code
+        code = readCode(codeSize)
+
+        if code = clearCode
+            clear()
+            continue while
+        end if
+        if code = eoiCode
+            exit while
+        end if
+
+        if code < len(dict)
+            if last <> clearCode
+                dict.push(dict[last] + dict[code][0])
+            end if
+        else
+            if code <> len(dict)
+                throw "Invalid LZW code."
+            end if
+            dict.push(dict[last] + dict[last][0])
+        end if
+        output.push(dict[code])
+        if len(dict) = 2 ^ codeSize and codeSize < 12
+            codeSize = codeSize + 1
+        end if
+    end while
+    return output
+end function
+
+function arraySlice(arr as object, start = 0 as integer, finish = -1 as integer, step_ = 1 as integer) as object:
+    if GetInterface(arr, "ifArray") = invalid then print "ValueError: arr not ifArray much" : stop
+    if step_ = 0 then print "ValueError: slice step cannot be zero" : stop
+    if start < 0 then start += arr.count() 'adjust, negative counts backwards from the end'
+    if finish < 0 then finish += arr.count()
+    res = []
+    for i = start to finish step step_:
+        res.push(arr[i])
+    next
+    return res
+end function
+
+function parseGIF(data as string, handler as object)
+    if handler = invalid
+        handler = {}
+    end if
+    ' Function to parse color table
+    parseCT = function(entries as integer) as object
+        ct = []
+        for i = 1 to entries
+            ct.push(m.readBytes(3))
+        end for
+        return ct
+    end function
+
+    ' Function to read sub-blocks
+    readSubBlocks = function() as string
+        data = ""
+        while true
+            size = m.readByte()
+            if size = 0
+                exit while
+            end if
+            data = data + m.read(size)
+        end while
+        return data
+    end function
+
+    ' Function to parse header
+    parseHeader = function()
+        hdr = {}
+        hdr.sig = m.read(3)
+        hdr.ver = m.read(3)
+        if hdr.sig <> "GIF"
+            throw "Not a GIF file."
+        end if
+
+        hdr.width = m.readUnsigned()
+        hdr.height = m.readUnsigned()
+
+        bits = byteToBitArr(m.readByte())
+        hdr.gctFlag = bits[0]
+        hdr.colorRes = bitsToNum([bits[1], bits[2], bits[3]])
+        hdr.sorted = bits[4]
+        hdr.gctSize = bitsToNum([bits[5], bits[6], bits[7]])
+        hdr.bgColor = m.readByte()
+        hdr.pixelAspectRatio = m.readByte()
+
+        if hdr.gctFlag
+            hdr.gct = parseCT(2 ^ (hdr.gctSize + 1))
+        end if
+
+        handler.hdr(hdr)
+    end function
+
+    ' Function to parse extension blocks
+    parseExt = function(block)
+        ' theType = block.type
+        if block.type = "0xF9"
+            block.extType = "gce"
+            parseGCExt(block)
+        else if block.type = "0xFE"
+            block.extType = "com"
+            parseComExt(block)
+        else if block.type = "0x01"
+            block.extType = "pte"
+            parsePTExt(block)
+        else if block.type = "0xFF"
+            block.extType = "app"
+            parseAppExt(block)
+        else
+            block.extType = "unknown"
+            parseUnknownExt(block)
+        end if
+    end function
+
+    ' Function to parse graphics control extension
+    parseGCExt = function(block as object)
+        blockSize = m.readByte()
+        bits = byteToBitArr(m.readByte())
+        block.reserved = [arrayslice(bits, 0, 2)]
+        block.disposalMethod = bitsToNum(arraySlice(bits, 3, 5))
+        block.userInput = bits[6]
+        block.transparencyGiven = bits[7]
+        block.delayTime = m.readUnsigned()
+        block.transparencyIndex = m.readByte()
+        block.terminator = m.readByte()
+        handler.gce(block)
+    end function
+
+    ' Function to parse comment extension
+    parseComExt = function(block as object)
+        block.comment = readsubblocks()
+        handler.com(block)
+    end function
+
+    ' Function to parse plain text extension
+    parsePTExt = function(block as object)
+        ' No one *ever* uses this. If you use it, deal with parsing it yourself.
+        blockSize = m.readByte()
+        block.ptHeader = m.readBytes(12)
+        block.ptData = readsubblocks()
+        handler.pte(block)
+    end function
+
+    ' Function to parse application extension
+    parseAppExt = function(block as object)
+        ' Function to parse Netscape extension
+        parseNetscapeExt = function(block as object)
+            blockSize = m.readByte()
+            block.unknown = m.readByte()
+            block.iterations = m.readUnsigned()
+            block.terminator = m.readByte()
+            handler.app.NETSCAPE(block)
+        end function
+
+        ' Function to parse unknown application extension
+        parseUnknownAppExt = function(block as object)
+            block.appData = readsubblocks()
+            ' FIXME: This won't work if a handler wants to match on any identifier.
+            if handler.app[block.identifier] <> invalid
+                handler.app[block.identifier](block)
+            end if
+        end function
+
+        blockSize = m.readByte()
+        block.identifier = m.read(8)
+        block.authCode = m.read(3)
+        if block.identifier = "NETSCAPE"
+            parseNetscapeExt(block)
+        else
+            parseUnknownAppExt(block)
+        end if
+    end function
+
+    ' Function to parse unknown extension
+    parseUnknownExt = function(block as object)
+        block.data = readsubblocks()
+        handler.unknown(block)
+    end function
+
+    ' Function to parse image data
+    parseImg = function(img as object)
+        ' Function to deinterlace image
+        deinterlace = function(pixels as object, width as integer) as object
+            newPixels = createObject("roArray", pixels.length(), false)
+            rows = pixels.length() / width
+            cpRow = function(toRow, fromRow)
+                fromPixels = arraySlice(pixels, (fromRow * width), ((fromRow + 1) * width))
+                newPixels.push(fromPixels)
+            end function
+
+            ' See appendix E.
+            offsets = [0, 4, 2, 1]
+            steps = [8, 8, 4, 2]
+            fromRow = 0
+            for pass = 0 to 3
+                for toRow = offsets[pass] to rows - 1 step steps[pass]
+                    cpRow(toRow, fromRow)
+                    fromRow = fromRow + 1
+                end for
+            end for
+            return newPixels
+        end function
+
+        img.leftPos = m.readUnsigned()
+        img.topPos = m.readUnsigned()
+        img.width = m.readUnsigned()
+        img.height = m.readUnsigned()
+        bits = byteToBitArr(m.readByte())
+        img.lctFlag = bits[0]
+        img.interlaced = bits[1]
+        img.sorted = bits[2]
+        img.reserved = [bits[3], bits[4]]
+        img.lctSize = bitsToNum([bits[5], bits[6], bits[7]])
+
+        if img.lctFlag
+            img.lct = parseCT(2 ^ (img.lctSize + 1))
+        end if
+        img.lzwMinCodeSize = m.readByte()
+        lzwData = readsubblocks()
+        img.pixels = lzwDecode(img.lzwMinCodeSize, lzwData)
+
+        if img.interlaced
+            img.pixels = deinterlace(img.pixels, img.width)
+        end if
+
+        handler.img(img)
+    end function
+
+    ' Function to parse individual blocks
+    parseBlock = function()
+        block = {}
+        block.sentinel = m.readByte()
+        if chr(block.sentinel) = "!"
+            block.type = "ext"
+            parseExt(block)
+        else if chr(block.sentinel) = ","
+            block.type = "img"
+            parseImg(block)
+        else if chr(block.sentinel) = ";"
+            block.type = "eof"
+            handler.eof(block)
+        else
+            ' throw "Unknown block: 0x" + hex(block.sentinel)
+        end if
+
+        if block.type <> "eof"
+            ' Process the next block
+            m.top.callFunc(parseBlock)
+        end if
+    end function
+
+    ' Function to start parsing
+    parse = function()
+        parseHeader()
+        m.top.callFunc(parseBlock)
+    end function
+
+    ' Initialize the parsing process
+    parse()
+end function

@@ -1,0 +1,74 @@
+class RequestData
+    public variables as object
+    public query as string
+end class
+
+class TwitchRoles
+    public isPartner as boolean
+end class
+
+class TwitchGame
+    public id as string
+    public displayName as string
+    public avatarURL as string
+    public description as string
+    public followersCount as integer
+end class
+class SimpleTwitchStream
+    public id as string
+    public title as string
+    public previewImageURL as string
+    public type as string
+    public viewersCount as integer
+    public game as TwitchGame
+    public broadcaster as SimpleTwitchUser
+end class
+class TwitchStream extends SimpleTwitchStream
+    public createdAt as roDate
+    public broadcaster as TwitchUser
+end class
+
+class SimpleTwitchUser
+    public id as string
+    public displayName as string
+    public login as string
+    public profileImageURL as string
+end class
+
+class TwitchUser extends SimpleTwitchUser
+    public description as string
+    public createdAt as roDate
+    public roles as TwitchRoles
+    public stream as TwitchStream
+end class
+
+class NodeStream
+    public node as TwitchStream
+end class
+
+class TrendingStream
+    public edges as array
+    sub new(edges as array)
+        m.edges = function(edges)
+            for each edge in edges
+                m.edges.push(new NodeStream(new TwitchStream(edge)))
+            end for
+        end function
+    end sub
+end class
+
+class TwitchResponseData
+    public user as TwitchUser
+    public game as TwitchGame
+    public streams as TrendingStream
+end class
+
+class TwitchResponse
+    public data as object
+end class
+
+class TwitchError
+    public message as string
+    public locations as array
+end class
+

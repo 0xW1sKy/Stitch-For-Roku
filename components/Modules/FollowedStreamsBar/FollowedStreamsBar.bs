@@ -1,3 +1,5 @@
+import "pkg:/components/roArray/roArray.bs"
+
 sub init()
     m.backgroundBar = m.top.findNode("backgroundBar")
     m.xTranslation = 15
@@ -42,6 +44,17 @@ sub numberToText(number) as object
     end if
     return result
 end sub
+
+function my_function(stream) as dynamic
+    group = createObject("roSGNode", "SidebarItem")
+    group.twitch_id = stream.streamerLogin
+    group.streamerProfileImage = stream.streamerProfileImageUrl
+    group.display_name = stream.streamerDisplayName
+    group.game = stream.gameDisplayName
+    group.content = stream
+    group.translation = [m.xTranslation, translation]
+    translation += 60
+end function
 
 sub onFollowedStreamsChange()
     translation = 50

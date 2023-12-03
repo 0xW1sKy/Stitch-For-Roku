@@ -10,7 +10,7 @@
     </interface>
 
     <script type="text/brightscript" uri="pkg:/source/utils/config.brs" />
-    <script type="text/brightscript" uri="FollowedStreamsBar.brs" />
+    <script type="text/brightscript" uri="FollowedStreamsBar.bs" />
 
     <children>
 

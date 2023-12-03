@@ -1,16 +1,16 @@
 <component name="GIFDecoder" extends="Task">
-    <interface>
-        <!-- Callback listener -->
-        <field id="uri" type="uri" />
-        <field id="frames" type="roArray" />
-        <field id="frameDelay" type="roArray" />
-        <field id="fps" type="float" />
-        <field id="finished" type="bool" />
+  <interface>
+    <!-- Callback listener -->
+    <field id="uri" type="uri" />
+    <field id="frames" type="roArray" />
+    <field id="frameDelay" type="roArray" />
+    <field id="fps" type="float" />
+    <field id="finished" type="bool" />
 
-        <!-- Extracts the frames of the given GIF and stores them locally as individual GIF files.
+    <!-- Extracts the frames of the given GIF and stores them locally as individual GIF files.
       - Parameter {String} gifUrl: The url of the GIF to decode. -->
-        <!-- <function name="decodeGIF" /> -->
-    </interface>
-
-    <script type="text/brightscript" uri="GIFDecoder.brs" />
+    <!-- <function name="decodeGIF" /> -->
+  </interface>
+  <script type="text/brightscript" uri="pkg:/source/utils/array.brs" />
+  <script type="text/brightscript" uri="GIFDecoder.bs" />
 </component>

@@ -1,7 +1,71 @@
 sub init()
     m.top.functionName = "runDecoder"
     m.gifName = ""
+    m.arrUtil = ArrayUtil()
 end sub
+
+function lzwDecode(minCodeSize as integer, data as string) as object
+    _pos = 0
+
+    ' Function to read a code of a given size
+    readCode = function(size as integer) as integer
+        code = 0
+        for i = 0 to size - 1
+            if (asc(mid(data, _pos >> 3 + 1, 1)) and (1 << (_pos and 7))) <> 0
+                code = code or (1 << i)
+            end if
+            _pos = _pos + 1
+        end for
+        return code
+    end function
+
+    output = []
+    clearCode = 1 << minCodeSize
+    eoiCode = clearCode + 1
+    codeSize = minCodeSize + 1
+    dict = []
+
+    ' Function to clear the dictionary
+    clear = function()
+        dict = []
+        codeSize = minCodeSize + 1
+        for i = 0 to clearCode - 1
+            dict[i] = [i]
+        end for
+        dict[clearCode] = []
+        dict[eoiCode] = invalid
+    end function
+
+
+    while true
+        last = code
+        code = readCode(codeSize)
+
+        if code = clearCode
+            clear()
+            continue while
+        end if
+        if code = eoiCode
+            exit while
+        end if
+
+        if code < len(dict)
+            if last <> clearCode
+                dict.push(dict[last] + dict[code][0])
+            end if
+        else
+            if code <> len(dict)
+                throw "Invalid LZW code."
+            end if
+            dict.push(dict[last] + dict[last][0])
+        end if
+        output.push(dict[code])
+        if len(dict) = 2 ^ codeSize and codeSize < 12
+            codeSize = codeSize + 1
+        end if
+    end while
+    return output
+end function
 
 sub runDecoder()
     m.gifName = CreateObject("roPath", m.top.uri).split().basename
