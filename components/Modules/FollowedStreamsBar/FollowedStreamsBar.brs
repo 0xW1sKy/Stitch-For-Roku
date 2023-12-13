@@ -44,29 +44,31 @@ sub numberToText(number) as object
 end sub
 
 sub onFollowedStreamsChange()
-    translation = 50
-    '? "we got there"
-    m.top.removeChildren(m.children)
-    if get_user_setting("FollowBarOption", "true") = "true"
-        m.currentIndex = 0
-        m.min = 0
-        m.max = 9
-        if m.followBarJob.result <> invalid and m.followBarJob.result.Count() > 0
-            for each stream in m.followBarJob.result
-                group = createObject("roSGNode", "SidebarItem")
-                group.twitch_id = stream.streamerLogin
-                group.streamerProfileImage = stream.streamerProfileImageUrl
-                group.display_name = stream.streamerDisplayName
-                group.game = stream.gameDisplayName
-                group.content = stream
-                group.translation = [m.xTranslation, translation]
-                m.top.appendChild(group)
-                translation += 60
-            end for
-            m.children = []
-            for child = 2 to m.top.getChildCount() - 1
-                m.children.push(m.top.getChild(child))
-            end for
+    if m.top.itemHasFocus = false
+        translation = 50
+        '? "we got there"
+        m.top.removeChildren(m.children)
+        if get_user_setting("FollowBarOption", "true") = "true"
+            m.currentIndex = 0
+            m.min = 0
+            m.max = 9
+            if m.followBarJob.result <> invalid and m.followBarJob.result.Count() > 0
+                for each stream in m.followBarJob.result
+                    group = createObject("roSGNode", "SidebarItem")
+                    group.twitch_id = stream.streamerLogin
+                    group.streamerProfileImage = stream.streamerProfileImageUrl
+                    group.display_name = stream.streamerDisplayName
+                    group.game = stream.gameDisplayName
+                    group.content = stream
+                    group.translation = [m.xTranslation, translation]
+                    m.top.appendChild(group)
+                    translation += 60
+                end for
+                m.children = []
+                for child = 2 to m.top.getChildCount() - 1
+                    m.children.push(m.top.getChild(child))
+                end for
+            end if
         end if
     end if
 end sub

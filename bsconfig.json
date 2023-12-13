@@ -3,9 +3,9 @@
     "host": "10.0.0.37",
     "username": "rokudev",
     "password": "1111",
-    "deploy": false,
+    "deploy": true,
     "stagingDir": "./out/.debugStaging",
-    "sourceMap": true,
+    "sourceMap": false,
     "retainStagingDir": true,
     "files": [
         "source/**/*",
