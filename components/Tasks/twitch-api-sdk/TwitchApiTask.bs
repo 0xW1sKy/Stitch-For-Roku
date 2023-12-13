@@ -37,8 +37,54 @@ function TwitchGraphQLRequest(data)
         method: "POST"
         data: data
     })
+    rspData = req.send()
+    if rspData <> invalid
+        rsp = ParseJSON(rspData)
+        return rsp
+    else
+        return invalid
+    end if
+end function
+
+function validateOauthToken() as object
+    access_token = invalid
+    device_code = invalid
+    ' doubled up here in stead of defaulting to "" because access_token is dependent on device_code
+    if get_user_setting("device_code") <> invalid
+        device_code = get_user_setting("device_code")
+        if get_user_setting("access_token") <> invalid
+            access_token = "OAuth " + get_user_setting("access_token")
+        end if
+    else
+        return false
+    end if
+    reqHeaders = {
+        "Accept": "*/*"
+        "Client-Id": "ue6666qo983tsx6so1t0vnawi233wa"
+        "Device-ID": device_code
+        "Origin": "https://switch.tv.twitch.tv"
+        "Referer": "https://switch.tv.twitch.tv/"
+        "Accept-Language": getDeviceLocale()
+    }
+    if access_token <> invalid
+        reqHeaders["Authorization"] = access_token
+    end if
+    req = HttpRequest({
+        url: "https://id.twitch.tv/oauth2/validate"
+        headers: reqHeaders
+        method: "GET"
+    })
     rsp = ParseJSON(req.send())
-    return rsp
+    if rsp?.status <> invalid
+        if rsp.status = 401
+            m.top.response = { "tokenValid": false }
+        end if
+    end if
+    if rsp?.expires_in <> invalid
+        m.top.response = { "tokenValid": true }
+    end if
+    m.top.control = "STOP"
+    ? "pause"
 end function
 
 function getHomePageQuery() as object

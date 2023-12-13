@@ -65,7 +65,7 @@ end sub
 function setBannerImage()
     bannerGroup = m.top.findNode("banner")
     poster = createObject("roSGNode", "Poster")
-    if m.GetShellTask.response.data.userOrError.bannerImageUrl <> invalid
+    if m.GetShellTask?.response?.data?.userOrError?.bannerImageUrl <> invalid
         poster.uri = m.GetShellTask.response.data.userOrError.bannerImageUrl
     else
         poster.uri = "pkg:/images/default_banner.png"
@@ -101,8 +101,12 @@ sub updateChannelInfo()
     ' profileImageURL   : https://static-cdn.jtvnw.net/jtv_user_pictures/xqc-profile_image-9298dca608632101-70x70.jpeg
     ' profileViewCount  :
     ' m.description.infoText = m.GetcontentTask.response.data.channel.description
-    m.followers.text = numberToText(m.GetcontentTask.response.data.channel.followers.totalCount) + " " + tr("followers")
-    m.avatar.uri = m.GetcontentTask.response.data.channel.profileImageUrl
+    if m.GetcontentTask?.response?.data?.channel?.followers?.totalcount <> invalid
+        m.followers.text = numberToText(m.GetcontentTask.response.data.channel.followers.totalCount) + " " + tr("followers")
+    end if
+    if m.GetcontentTask?.response?.data?.channel?.profileimageurl <> invalid
+        m.avatar.uri = m.GetcontentTask.response.data.channel.profileImageUrl
+    end if
 end sub
 
 

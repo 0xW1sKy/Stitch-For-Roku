@@ -63,12 +63,12 @@ sub handleRecommendedSections()
                 m.top.maxedOut = true
             end if
         end if
+        updateRowList(contentCollection)
     else
         for each error in m.GetContentTask.response.errors
             ' ? "RESP: "; error.message
         end for
     end if
-    updateRowList(contentCollection)
     m.top.buffer = false
 end sub
 

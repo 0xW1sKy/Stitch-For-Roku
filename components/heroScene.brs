@@ -1,4 +1,12 @@
 sub init()
+    m.validateOauthToken = CreateObject("roSGNode", "TwitchApiTask")
+    m.validateOauthToken.observeField("response", "ValidateUserLogin")
+    m.validateOauthToken.functionName = "validateOauthToken"
+    m.validateOauthToken.control = "run"
+    '''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    ' Anything important needs to run before this sleep.
+    '''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    sleep(10000)
     VersionJobs()
     m.top.backgroundUri = ""
     m.top.backgroundColor = m.global.constants.colors.hinted.grey1
@@ -29,7 +37,44 @@ sub init()
         onMenuSelection()
     end if
     m.footprints = []
+
+
 end sub
+
+function cleanUserData()
+    active_user = get_setting("active_user", "$default$")
+    if active_user <> "$default$"
+        unset_user_setting("access_token")
+        unset_user_setting("device_code")
+        ? "default Registry keys: "; getRegistryKeys("$default$")
+        NukeRegistry(active_user)
+        set_setting("active_user", "$default$")
+        ? "active User: "; get_setting("active_user", "$default$")
+    else
+        for each key in getRegistryKeys("$default$")
+            if key <> "temp_device_code"
+                if key <> "device_code"
+                    unset_user_setting(key)
+                end if
+            end if
+        end for
+    end if
+end function
+
+function ValidateUserLogin()
+    if m.validateOauthToken?.response?.tokenValid <> invalid
+        tokenValid = m.validateOauthToken.response.tokenValid
+    else
+        tokenValid = false
+    end if
+    if tokenValid
+        ? "User Token Seems Valid"
+    else
+        cleanUserData()
+        m.menu.updateUserIcon = true
+        ? "pause"
+    end if
+end function
 
 function focusedMenuItem()
     focusedItem = ""
@@ -169,7 +214,16 @@ end sub
 
 sub onBackPressed()
     ? "backpress detected from: "; m.activeNode.id
+    fmi = focusedMenuItem()
     if m.activeNode.backPressed <> invalid and m.activeNode.backPressed
+        ? "fmi ping"
+        if m.activeNode.id = "StreamerChannelPage"
+            if m.footprints[0].id = "LoginPage"
+                m.footprints.pop()
+            end if
+            m.top.removeChild(m.activeNode)
+            m.menu.buttonFocus = 0
+        end if
         if m.footprints.Count() > 0
             m.top.removeChild(m.activeNode)
             m.activeNode = m.footprints.pop()

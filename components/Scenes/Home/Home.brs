@@ -103,7 +103,7 @@ end function
 
 sub handleRecommendedSections()
     ? "handleRecommendedSections: "; TimeStamp()
-    contentCollection = []
+    contentCollection = invalid
     if m.GetContentTask.response.data <> invalid and m.GetContentTask.response.data.shelves <> invalid
         contentCollection = buildContentNodeFromShelves(m.GetContentTask.response.data.shelves.edges)
     else
@@ -111,7 +111,7 @@ sub handleRecommendedSections()
             ? "RESP: "; error.message
         end for
     end if
-    if contentCollection.count() > 0
+    if contentCollection <> invalid
         updateRowList(contentCollection)
     end if
 end sub
